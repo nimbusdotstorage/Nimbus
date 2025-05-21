@@ -138,7 +138,7 @@ export function FileBrowser() {
             <tbody>
               {files.map((file) => (
                 <tr key={file.id} className="border-t hover:bg-accent/10 transition-colors">
-                  <td className="p-3 flex items-center gap-2">
+                  <td className="p-4 flex items-center gap-2">
                     {file.type === "folder" ? (
                       <Folder className="h-4 w-4 text-primary" />
                     ) : (

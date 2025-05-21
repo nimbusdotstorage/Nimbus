@@ -1,15 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import { ChevronDown, ChevronRight, Clock, Cloud, Folder, HardDrive, Share, Star, Trash } from "lucide-react"
+import { ChevronDown, ChevronRight, Clock, Plus, Folder, HardDrive, Share, Star, Trash } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
-import { Separator } from "@/components/ui/separator"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 
 export function Sidebar() {
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
 
   // Sample folders
   const folders = [
@@ -21,10 +20,10 @@ export function Sidebar() {
   ]
 
   return (
-    <div className="w-64 border-r bg-background p-4 flex flex-col h-full">
+    <div className="w-64 border-r bg-background p-4 flex flex-col min-h-full">
       <div className="flex flex-col flex-grow overflow-y-auto">
         <Button className="w-full justify-start gap-2 mb-6">
-          <Cloud className="h-4 w-4" />
+          <Plus className="h-4 w-4" />
           New Upload
         </Button>
 
@@ -34,7 +33,7 @@ export function Sidebar() {
               <Button variant="ghost" className="w-full justify-between" onClick={() => setIsOpen(!isOpen)}>
                 <div className="flex items-center gap-2">
                   <HardDrive className="h-4 w-4" />
-                  <span>My Drive</span>
+                  <span>My Cloud</span>
                 </div>
                 {isOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
               </Button>
@@ -68,12 +67,11 @@ export function Sidebar() {
         </nav>
       </div>
 
-      <div className="mt-auto pt-4">
-        <Separator className="my-4" />
+      <div className="p-4 border-t bg-background">
         <div className="space-y-2">
           <h3 className="text-sm font-medium">Storage</h3>
-          <Progress value={33} className="h-2" />
-          <p className="text-xs text-muted-foreground">3.3 GB of 15 GB used</p>
+          <Progress value={8} className="h-2" />
+          <p className="text-xs text-muted-foreground">158.3 GB of 2 TB used</p>
         </div>
         <div className="mt-4">
           <Button variant="outline" className="w-full">

@@ -17,14 +17,14 @@ import {
 export function Header() {
   return (
     <header className="border-b bg-background">
-      <div className="flex h-16 items-center px-4 gap-4">
+      <div className="flex h-16 items-center px-4 gap-4 justify-between">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="p-0 flex items-center gap-2 font-semibold">
               <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
-                <span className="text-primary-foreground font-bold">D</span>
+                <span className="text-primary-foreground font-bold"><img src="/cloud.svg" alt="cloud" /></span>
               </div>
-              <span>DrivePlus</span>
+              <span>Nimbus</span>
               <ChevronDown className="h-4 w-4 ml-1" />
             </Button>
           </DropdownMenuTrigger>
@@ -33,7 +33,7 @@ export function Header() {
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <HardDrive className="mr-2 h-4 w-4" />
-              <span>My Drive</span>
+              <span>My Cloud</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Cloud className="mr-2 h-4 w-4" />
