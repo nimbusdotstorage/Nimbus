@@ -33,7 +33,7 @@ export function Header() {
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <HardDrive className="mr-2 h-4 w-4" />
-              <span>My Cloud</span>
+              <span>My Files</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Cloud className="mr-2 h-4 w-4" />

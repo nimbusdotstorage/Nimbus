@@ -33,7 +33,7 @@ export function Sidebar() {
               <Button variant="ghost" className="w-full justify-between" onClick={() => setIsOpen(!isOpen)}>
                 <div className="flex items-center gap-2">
                   <HardDrive className="h-4 w-4" />
-                  <span>My Cloud</span>
+                  <span>My Files</span>
                 </div>
                 {isOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
               </Button>

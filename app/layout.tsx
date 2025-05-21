@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "0Drive - Better Cloud Storage",
+  title: "Nimbus - Better Cloud Storage",
   description: "A modern cloud storage solution",
 }
 
