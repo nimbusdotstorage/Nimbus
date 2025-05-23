@@ -10,8 +10,12 @@
     "lint": "eslint src/**/*.ts"
   },
   "dependencies": {
+    "@google-cloud/local-auth": "^2.1.0",
+    "better-auth": "^1.2.8",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.43.1",
+    "googleapis": "^105.0.0",
+    "hono": "^4.7.10",
     "pg": "^8.16.0",
     "zod": "^3.22.4"
   },

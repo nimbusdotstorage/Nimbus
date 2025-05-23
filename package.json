@@ -1,25 +1,6 @@
 {
   "name": "nimbus",
   "version": "0.1.0",
-  "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "scripts": {
-    "dev:ui": "bun --cwd=apps/ui run dev",
-    "dev:server": "bun --cwd=apps/server run dev",
-    "dev": "bun run dev:ui & bun run dev:server",
-    "build:ui": "bun --cwd=apps/ui run build",
-    "build:server": "bun --cwd=apps/server run build",
-    "build": "bun run build:ui && bun run build:server",
-    "start:ui": "bun --cwd=apps/ui run start",
-    "start:server": "bun --cwd=apps/server run start",
-    "start": "bun run start:ui & bun run start:server",
-    "lint": "bun run lint:ui & bun run lint:server",
-    "lint:ui": "bun --cwd=apps/ui run lint",
-    "lint:server": "bun --cwd=apps/server run lint"
-  },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
@@ -31,5 +12,24 @@
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.0",
     "typescript": "^5"
-  }
+  },
+  "private": true,
+  "scripts": {
+    "dev:web": "bun --cwd=apps/web run dev",
+    "dev:server": "bun --cwd=apps/server run dev",
+    "dev": "bun run dev:web & bun run dev:server",
+    "build:web": "bun --cwd=apps/web run build",
+    "build:server": "bun --cwd=apps/server run build",
+    "build": "bun run build:web && bun run build:server",
+    "start:web": "bun --cwd=apps/web run start",
+    "start:server": "bun --cwd=apps/server run start",
+    "start": "bun run start:web & bun run start:server",
+    "lint": "bun run lint:web & bun run lint:server",
+    "lint:web": "bun --cwd=apps/web run lint",
+    "lint:server": "bun --cwd=apps/server run lint"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }
