@@ -5,12 +5,12 @@ import { Header } from "components/header";
 import { Sidebar } from "components/sidebar";
 import { UploadButton } from "components/upload-button";
 import { authClient } from "@/packages/auth/src/auth-client";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
 const session = authClient.getSession();
 
 if (!session) {
-  useRouter().push("/login");
+  redirect("/login");
 }
 
 export default function DrivePage() {

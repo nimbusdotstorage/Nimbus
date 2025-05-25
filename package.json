@@ -18,15 +18,12 @@
     "dev:web": "bun --cwd=apps/web run dev",
     "dev:server": "bun --cwd=apps/server run dev",
     "dev": "bun run dev:web & bun run dev:server",
-    "build:web": "bun --cwd=apps/web run build",
-    "build:server": "bun --cwd=apps/server run build",
+    "db:up": "docker compose up",
+    "db:down": "docker compose down",
+    "db:reset": "docker compose down -v && docker compose up",
+    "db:migrate": "cd packages/db && npx drizzle-kit generate && npx drizzle-kit migrate",
     "build": "bun run build:web && bun run build:server",
-    "start:web": "bun --cwd=apps/web run start",
-    "start:server": "bun --cwd=apps/server run start",
-    "start": "bun run start:web & bun run start:server",
-    "lint": "bun run lint:web & bun run lint:server",
-    "lint:web": "bun --cwd=apps/web run lint",
-    "lint:server": "bun --cwd=apps/server run lint"
+    "start": "bun run start:web && bun run start:server"
   },
   "workspaces": [
     "apps/*",
