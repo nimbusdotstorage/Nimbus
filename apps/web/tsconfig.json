@@ -36,7 +36,8 @@
       "@/server/*": ["../server/*"],
       "@/packages/*": ["../../packages/*"],
       "@/components/*": ["./components/*"],
-      "@/web/*": ["./*"]
+      "@/web/*": ["./*"],
+      "@/public/*": ["./public/*"]
     }
   },
   "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],

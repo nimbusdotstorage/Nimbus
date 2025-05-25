@@ -14,6 +14,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
+import AzureIcon from "@/public/azure";
+import GoogleCloudIcon from "@/public/gcp";
+import AWSIcon from "@/public/aws";
+import ICloudIcon from "@/public/icloud";
+import OneDriveIcon from "@/public/onedrive";
+import GoogleDriveIcon from "@/public/googledrive";
 
 export function Header() {
   return (
@@ -40,32 +46,40 @@ export function Header() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="w-56">
-            <DropdownMenuLabel>File Sources</DropdownMenuLabel>
+            <DropdownMenuLabel>Sources</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <HardDrive className="mr-2 h-4 w-4" />
-              <span>My Files</span>
+              <span>Local Files</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Cloud className="mr-2 h-4 w-4" />
+              <GoogleDriveIcon className="mr-2 h-4 w-4" />
               <span>Google Drive</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Cloud className="mr-2 h-4 w-4" />
+              <OneDriveIcon className="mr-2 h-4 w-4" />
               <span>OneDrive</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Box className="mr-2 h-4 w-4" />
-              <span>Dropbox</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Box className="mr-2 h-4 w-4" />
-              <span>Box</span>
+              <ICloudIcon className="mr-2 h-4 w-4" />
+              <span>iCloud</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
+              <AWSIcon className="mr-2 h-4 w-4" />
+              <span>S3</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <GoogleCloudIcon className="mr-2 h-4 w-4" />
+              <span>GCP</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <AzureIcon className="mr-2 h-4 w-4" />
+              <span>Azure</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem>
               <Server className="mr-2 h-4 w-4" />
-              <span>Personal Server</span>
+              <span>NAS</span>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <Plus className="mr-2 h-4 w-4" />

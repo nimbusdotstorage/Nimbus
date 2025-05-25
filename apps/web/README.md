@@ -1,6 +1,6 @@
 # Web
 
-### This si the front end application
+### This is the front end application
 
 To run the application:
 
