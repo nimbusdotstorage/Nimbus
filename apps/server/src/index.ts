@@ -12,37 +12,10 @@ app.on(["POST", "GET"], "/api/auth/*", (c) => {
 });
 
 app.get("/", (c) =>
-  c.text("Nimbus is flying! The server is running on port 7777")
+  c.text("Nimbus is flying! The server is running on port 1284")
 );
 
-app.get("/api/gd/get-credentials", async (c) => {
-  const session = await auth.api.getSession({
-    headers: c.req.raw.headers,
-  });
-
-  if (!session) {
-    return c.text("Unauthorized", 401);
-  }
-
-  try {
-    const driveManager = new GoogleDriveManager({
-      auth: {
-        refreshToken: session.session.token,
-      },
-    });
-
-    const credentials = driveManager.listFiles({
-      folderId: "1n5PvwYC-LfsEdUmunwH2CC1nnMe7XCmP",
-    });
-
-    return c.json(credentials);
-  } catch (error) {
-    console.error(error);
-    return c.text("Error retrieving credentials: " + error, 500);
-  }
-});
-
 export default {
-  port: 7777,
+  port: 1284,
   fetch: app.fetch,
 };
