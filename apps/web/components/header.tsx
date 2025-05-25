@@ -13,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Image from "next/image";
+// import Image from "next/image";
 import AzureIcon from "@/public/azure";
 import GoogleCloudIcon from "@/public/gcp";
 import AWSIcon from "@/public/aws";
