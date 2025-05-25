@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ModeToggle } from "@/components/mode-toggle";
-import { Box, ChevronDown, Cloud, Plus, Server } from "lucide-react";
+import { ChevronDown, Plus, Server } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,7 +31,8 @@ export function Header() {
               variant="ghost"
               className="p-0 flex items-center gap-2 font-semibold"
             >
-              <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
+              {/* Need a logo */}
+              {/* <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
                 <span className="text-primary-foreground font-bold">
                   <Image
                     width={24}
@@ -40,7 +41,7 @@ export function Header() {
                     alt="cloud"
                   />
                 </span>
-              </div>
+              </div>*/}
               <span>Nimbus</span>
               <ChevronDown className="h-4 w-4 ml-1" />
             </Button>

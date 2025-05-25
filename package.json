@@ -15,15 +15,15 @@
   },
   "private": true,
   "scripts": {
-    "dev:web": "bun --cwd=apps/web run dev",
-    "dev:server": "bun --cwd=apps/server run dev",
-    "dev": "bun run dev:web & bun run dev:server",
+    "dev:web": "bun --cwd=apps/web dev",
+    "dev:server": "bun --cwd=apps/server dev",
+    "dev": "bun --cwd=apps/web dev & bun --cwd=apps/server dev",
     "db:up": "docker compose up",
     "db:down": "docker compose down",
     "db:reset": "docker compose down -v && docker compose up",
     "db:migrate": "cd packages/db && npx drizzle-kit generate && npx drizzle-kit migrate",
-    "build": "bun run build:web && bun run build:server",
-    "start": "bun run start:web && bun run start:server"
+    "build": "bun --cwd=apps/web run build",
+    "start": "bun --cwd=apps/web run start"
   },
   "workspaces": [
     "apps/*",
