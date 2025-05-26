@@ -33,6 +33,8 @@ export function Sidebar() {
     { id: "5", name: "Work" },
   ];
 
+  // const userInfo = await getUserInfo
+
   return (
     <div className="w-64 border-r bg-background p-4 flex flex-col min-h-full">
       <div className="flex flex-col flex-grow overflow-y-auto">
@@ -96,6 +98,8 @@ export function Sidebar() {
             Trash
           </Button>
         </nav>
+      </div>
+      <div>
       </div>
 
       <div className="p-4 border-t bg-background">

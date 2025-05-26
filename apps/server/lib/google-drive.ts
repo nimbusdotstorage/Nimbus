@@ -18,6 +18,7 @@ export interface DriveFile {
   webViewLink?: string;
   iconLink?: string;
   parents?: string[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   $raw?: any;
 }
 
@@ -196,6 +197,7 @@ export class GoogleDriveManager {
   ): Promise<T> {
     try {
       return await fn();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error(
         `Error in GoogleDriveManager.${operation}:`,

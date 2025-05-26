@@ -1,0 +1,21 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const vitest_1 = require("vitest");
+const en_js_1 = require("../../../locales/en.js");
+(0, vitest_1.test)("parsedType", () => {
+    (0, vitest_1.expect)((0, en_js_1.parsedType)("string")).toBe("string");
+    (0, vitest_1.expect)((0, en_js_1.parsedType)(1)).toBe("number");
+    (0, vitest_1.expect)((0, en_js_1.parsedType)(true)).toBe("boolean");
+    (0, vitest_1.expect)((0, en_js_1.parsedType)(null)).toBe("null");
+    (0, vitest_1.expect)((0, en_js_1.parsedType)(undefined)).toBe("undefined");
+    (0, vitest_1.expect)((0, en_js_1.parsedType)([])).toBe("array");
+    (0, vitest_1.expect)((0, en_js_1.parsedType)({})).toBe("object");
+    (0, vitest_1.expect)((0, en_js_1.parsedType)(new Date())).toBe("Date");
+    (0, vitest_1.expect)((0, en_js_1.parsedType)(new Map())).toBe("Map");
+    (0, vitest_1.expect)((0, en_js_1.parsedType)(new Set())).toBe("Set");
+    (0, vitest_1.expect)((0, en_js_1.parsedType)(new Error())).toBe("Error");
+    const nullPrototype = Object.create(null);
+    (0, vitest_1.expect)((0, en_js_1.parsedType)(nullPrototype)).toBe("object");
+    const doubleNullPrototype = Object.create(Object.create(null));
+    (0, vitest_1.expect)((0, en_js_1.parsedType)(doubleNullPrototype)).toBe("object");
+});
