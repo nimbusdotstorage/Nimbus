@@ -13,14 +13,14 @@ Thank you for your interest in contributing to Nimbus! This guide will help you 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/nimbus.git
-cd nimbus
+git clone https://github.com/logscore/Nimbus.git
+cd Nimbus
 ```
 
 ### 2. Install Dependencies
 
 ```bash
-bun install
+bun i
 ```
 
 ### 3. Set Up Postgres with Docker
@@ -30,7 +30,7 @@ We use Docker to run a PostgreSQL database for local development. Follow these s
 1. **Start the database**:
 
    ```bash
-   docker compose up
+   bun db:up
    ```
 
    This will start a Postgres container with default credentials:
@@ -41,7 +41,7 @@ We use Docker to run a PostgreSQL database for local development. Follow these s
    - Username: `postgres`
    - Password: `postgres`
 
-2. **Verify the database is running**:
+2. **Verify the database is running if running a detatched container**:
 
    ```bash
    docker compose ps
@@ -57,10 +57,15 @@ We use Docker to run a PostgreSQL database for local development. Follow these s
 
 ### 4. Environment Setup
 
-Copy the `.env.example` file to `.env` and fill in the values using this command, `cp .env.example .env`:
+Copy the `.env.example` file to `.env` using this command, `cp .env.example .env` and fill in these values:
 
-```env
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/nimbus
+```bash
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
+# To generate a secret, just run `openssl rand -base64 32`
+BETTER_AUTH_SECRET=
+BETTER_AUTH_URL=http://localhost:3000
 ```
 
 ### 5. Run Database Migrations
