@@ -18,7 +18,7 @@
     "dev:web": "bun --cwd=apps/web dev",
     "dev:server": "bun --cwd=apps/server dev",
     "dev": "bun --cwd=apps/web dev & bun --cwd=apps/server dev",
-    "db:up": "docker compose up",
+    "db:up": "docker compose up -d",
     "db:down": "docker compose down",
     "db:reset": "docker compose down -v && docker compose up",
     "db:migrate": "cd packages/db && npx drizzle-kit generate && npx drizzle-kit migrate",
