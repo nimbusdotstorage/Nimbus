@@ -1,6 +1,5 @@
-# Nimbus cloud storage
-A better cloud
-
+# CentralNote cloud storage
+Centralize your local workflow
 ## Getting Started
 
 First, run the development server:
