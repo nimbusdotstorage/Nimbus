@@ -1,12 +1,10 @@
-import type { JSX } from "react";
+import type { JSX } from "react"
 
 interface ICloudIconProps {
-  className?: string;
+  className?: string
 }
 
-export default function ICloudIcon({
-  className,
-}: ICloudIconProps): JSX.Element {
+export default function ICloudIcon({ className }: ICloudIconProps): JSX.Element {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -25,8 +23,8 @@ export default function ICloudIcon({
         y2="21.46"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset=".309" stop-color="#33bef0"></stop>
-        <stop offset="1" stop-color="#0a85d9"></stop>
+        <stop offset=".309" stopColor="#33bef0"></stop>
+        <stop offset="1" stopColor="#0a85d9"></stop>
       </linearGradient>
       <ellipse
         cx="14.279"
@@ -43,8 +41,8 @@ export default function ICloudIcon({
         y2="27.813"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset=".309" stop-color="#33bef0"></stop>
-        <stop offset="1" stop-color="#0a85d9"></stop>
+        <stop offset=".309" stopColor="#33bef0"></stop>
+        <stop offset="1" stopColor="#0a85d9"></stop>
       </linearGradient>
       <path
         fill="url(#iSZtP6eSr5wqIgT3aj5c_b_06SDYXN73bSC_gr2)"
@@ -58,8 +56,8 @@ export default function ICloudIcon({
         y2="7.309"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset=".404" stop-color="#33bef0"></stop>
-        <stop offset="1" stop-color="#0a85d9"></stop>
+        <stop offset=".404" stopColor="#33bef0"></stop>
+        <stop offset="1" stopColor="#0a85d9"></stop>
       </linearGradient>
       <path
         fill="url(#iSZtP6eSr5wqIgT3aj5c_c_06SDYXN73bSC_gr3)"
@@ -73,8 +71,8 @@ export default function ICloudIcon({
         y2="11.822"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset=".309" stop-color="#33bef0"></stop>
-        <stop offset="1" stop-color="#0a85d9"></stop>
+        <stop offset=".309" stopColor="#33bef0"></stop>
+        <stop offset="1" stopColor="#0a85d9"></stop>
       </linearGradient>
       <ellipse
         cx="27.07"
@@ -91,8 +89,8 @@ export default function ICloudIcon({
         y2="21.568"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset=".246" stop-color="#33bef0"></stop>
-        <stop offset="1" stop-color="#0a85d9"></stop>
+        <stop offset=".246" stopColor="#33bef0"></stop>
+        <stop offset="1" stopColor="#0a85d9"></stop>
       </linearGradient>
       <path
         fill="url(#iSZtP6eSr5wqIgT3aj5c_e_06SDYXN73bSC_gr5)"
@@ -106,9 +104,9 @@ export default function ICloudIcon({
         y2="9.592"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset=".415" stop-color="#33bef0"></stop>
-        <stop offset=".652" stop-color="#1797e0"></stop>
-        <stop offset=".795" stop-color="#0a85d9"></stop>
+        <stop offset=".415" stopColor="#33bef0"></stop>
+        <stop offset=".652" stopColor="#1797e0"></stop>
+        <stop offset=".795" stopColor="#0a85d9"></stop>
       </linearGradient>
       <path
         fill="url(#iSZtP6eSr5wqIgT3aj5c_f_06SDYXN73bSC_gr6)"
@@ -122,13 +120,13 @@ export default function ICloudIcon({
         y2="19.674"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset=".309" stop-color="#33bef0"></stop>
-        <stop offset="1" stop-color="#0a85d9"></stop>
+        <stop offset=".309" stopColor="#33bef0"></stop>
+        <stop offset="1" stopColor="#0a85d9"></stop>
       </linearGradient>
       <path
         fill="url(#iSZtP6eSr5wqIgT3aj5c_g_06SDYXN73bSC_gr7)"
         d="M28.605,28.185c0,1.582,0.417,3.063,1.136,4.346c5.21-1.228,9.096-5.952,9.096-11.606	c0-0.483-0.037-0.956-0.092-1.424c-0.47-0.08-0.95-0.131-1.443-0.131C32.499,19.37,28.605,23.317,28.605,28.185z"
       ></path>
     </svg>
-  );
+  )
 }

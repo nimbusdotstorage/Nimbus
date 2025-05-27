@@ -1,16 +1,10 @@
 interface AzureIconProps {
-  className?: string;
+  className?: string
 }
 
 export default function AzureIcon({ className }: AzureIconProps) {
   return (
-    <svg
-      width="150"
-      height="150"
-      viewBox="0 0 96 96"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-    >
+    <svg width="150" height="150" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" className={className}>
       <defs>
         <linearGradient
           id="e399c19f-b68f-429d-b176-18c2117ff73c"
@@ -21,8 +15,8 @@ export default function AzureIcon({ className }: AzureIconProps) {
           gradientTransform="matrix(1 0 0 -1 1075 158)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0" stop-color="#114a8b" />
-          <stop offset="1" stop-color="#0669bc" />
+          <stop offset="0" stopColor="#114a8b" />
+          <stop offset="1" stopColor="#0669bc" />
         </linearGradient>
         <linearGradient
           id="ac2a6fc2-ca48-4327-9a3c-d4dcc3256e15"
@@ -33,11 +27,11 @@ export default function AzureIcon({ className }: AzureIconProps) {
           gradientTransform="matrix(1 0 0 -1 1075 158)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0" stop-opacity=".3" />
-          <stop offset=".071" stop-opacity=".2" />
-          <stop offset=".321" stop-opacity=".1" />
-          <stop offset=".623" stop-opacity=".05" />
-          <stop offset="1" stop-opacity="0" />
+          <stop offset="0" stopOpacity=".3" />
+          <stop offset=".071" stopOpacity=".2" />
+          <stop offset=".321" stopOpacity=".1" />
+          <stop offset=".623" stopOpacity=".05" />
+          <stop offset="1" stopOpacity="0" />
         </linearGradient>
         <linearGradient
           id="a7fee970-a784-4bb1-af8d-63d18e5f7db9"
@@ -48,8 +42,8 @@ export default function AzureIcon({ className }: AzureIconProps) {
           gradientTransform="matrix(1 0 0 -1 1075 158)"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0" stop-color="#3ccbf4" />
-          <stop offset="1" stop-color="#2892df" />
+          <stop offset="0" stopColor="#3ccbf4" />
+          <stop offset="1" stopColor="#2892df" />
         </linearGradient>
       </defs>
       <path
@@ -69,5 +63,5 @@ export default function AzureIcon({ className }: AzureIconProps) {
         d="M66.595 9.364a4.145 4.145 0 0 0-3.928-2.82H33.648a4.146 4.146 0 0 1 3.928 2.82l25.184 74.62a4.146 4.146 0 0 1-3.928 5.472h29.02a4.146 4.146 0 0 0 3.927-5.472z"
       />
     </svg>
-  );
+  )
 }
