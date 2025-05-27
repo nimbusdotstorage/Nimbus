@@ -1,8 +1,5 @@
 "use client";
 
-import { FileText, Folder, Grid, List, MoreVertical, X } from "lucide-react";
-import { useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
@@ -14,6 +11,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FileText, Folder, Grid, List, MoreVertical, X } from "lucide-react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useMemo, useState } from "react";
 
 interface FileItem {
 	id: string;
@@ -24,6 +25,9 @@ interface FileItem {
 }
 
 export function FileBrowser() {
+	const searchParams = useSearchParams();
+	const filter = searchParams.get("filter");
+
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 	const [selectedFile, setSelectedFile] = useState<FileItem | null>(null);
 	const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -34,57 +38,68 @@ export function FileBrowser() {
 	};
 
 	// Sample data
-	const files: FileItem[] = [
-		{
-			id: "1",
-			name: "Documents",
-			type: "folder",
-			modified: "May 15, 2024",
-		},
-		{
-			id: "2",
-			name: "Images",
-			type: "folder",
-			modified: "May 12, 2024",
-		},
-		{
-			id: "3",
-			name: "Project Proposal",
-			type: "document",
-			size: "2.4 MB",
-			modified: "May 10, 2024",
-		},
-		{
-			id: "4",
-			name: "Quarterly Report",
-			type: "document",
-			size: "4.2 MB",
-			modified: "May 8, 2024",
-		},
-		{
-			id: "5",
-			name: "Meeting Notes",
-			type: "document",
-			size: "1.1 MB",
-			modified: "May 5, 2024",
-		},
-		{
-			id: "6",
-			name: "Videos",
-			type: "folder",
-			modified: "May 3, 2024",
-		},
-	];
+	const files: FileItem[] = useMemo(() => {
+		const items: FileItem[] = [
+			{
+				id: "1",
+				name: "Documents",
+				type: "folder",
+				modified: "May 15, 2024",
+			},
+			{
+				id: "2",
+				name: "Images",
+				type: "folder",
+				modified: "May 12, 2024",
+			},
+			{
+				id: "3",
+				name: "Project Proposal",
+				type: "document",
+				size: "2.4 MB",
+				modified: "May 10, 2024",
+			},
+			{
+				id: "4",
+				name: "Quarterly Report",
+				type: "document",
+				size: "4.2 MB",
+				modified: "May 8, 2024",
+			},
+			{
+				id: "5",
+				name: "Meeting Notes",
+				type: "document",
+				size: "1.1 MB",
+				modified: "May 5, 2024",
+			},
+			{
+				id: "6",
+				name: "Videos",
+				type: "folder",
+				modified: "May 3, 2024",
+			},
+		];
+		return items.filter((file) => !filter || file.type === filter);
+	}, [filter]);
 
 	return (
 		<div className={`space-y-4 ${isPreviewOpen ? "blur-sm transition-all" : ""}`}>
 			<div className="flex items-center justify-between">
-				<Tabs defaultValue="all" className="w-[400px]">
+				<Tabs value={filter ?? "all"} className="w-[400px]">
 					<TabsList>
-						<TabsTrigger value="all">All</TabsTrigger>
-						<TabsTrigger value="folders">Folders</TabsTrigger>
-						<TabsTrigger value="documents">Documents</TabsTrigger>
-						<TabsTrigger value="media">Media</TabsTrigger>
+						<TabsTrigger asChild value="all">
+							<Link href="/">All</Link>
+						</TabsTrigger>
+						<TabsTrigger asChild value="folder">
+							<Link href="/?filter=folder">Folders</Link>
+						</TabsTrigger>
+						<TabsTrigger asChild value="document">
+							<Link href="/?filter=document">Documents</Link>
+						</TabsTrigger>
+						<TabsTrigger asChild value="media">
+							<Link href="/?filter=media">Media</Link>
+						</TabsTrigger>
 					</TabsList>
 				</Tabs>
 				<div className="flex items-center gap-2">
@@ -123,6 +138,10 @@ export function FileBrowser() {
 							</CardFooter>
 						</Card>
 					))}
+					{/* zero case */}
+					{files.length === 0 && (
+						<div className="col-span-full text-center py-8 text-muted-foreground text-sm">Nothing here :(</div>
+					)}
 				</div>
 			) : (
 				<div className="border rounded-md overflow-hidden">
