@@ -1,59 +1,131 @@
-import { FlatCompat } from "@eslint/eslintrc";
-import typescriptEslintParser from "@typescript-eslint/parser";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
+import js from "@eslint/js";
+import nextPlugin from "@next/eslint-plugin-next";
+import prettierConfig from "eslint-config-prettier";
+import reactPlugin from "eslint-plugin-react";
+import reactHooksPlugin from "eslint-plugin-react-hooks";
+import unusedImports from "eslint-plugin-unused-imports";
+import globals from "globals";
+import tseslint from "typescript-eslint";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const reactRecommended = reactPlugin.configs.recommended;
 
-const compat = new FlatCompat({
-	baseDirectory: __dirname,
-});
-
-const eslintConfig = [
-	...compat.extends("next/core-web-vitals", "next/typescript"),
+/** @type {import('eslint').Linter.Config[]} */
+const config = [
+	// Base configuration
 	{
-		files: ["**/*.ts", "**/*.tsx"],
+		ignores: [
+			"**/node_modules",
+			"**/.next",
+			"**/dist",
+			"**/build",
+			"**/coverage",
+			"**/out",
+		],
+	},
+
+	// JavaScript and TypeScript
+	{
+		files: ["**/*.{js,jsx,ts,tsx}"],
 		languageOptions: {
-			parser: typescriptEslintParser,
+			ecmaVersion: "latest",
+			sourceType: "module",
+			parser: tseslint.parser,
 			parserOptions: {
-				project: "./tsconfig.json",
+				ecmaFeatures: {
+					jsx: true,
+				},
+				ecmaVersion: "latest",
+				sourceType: "module",
+				project: ["./**/tsconfig.json"],
+				tsconfigRootDir: import.meta.dirname,
+			},
+			globals: {
+				...globals.browser,
+				...globals.node,
+				...globals.es2021,
+			},
+		},
+		plugins: {
+			"@typescript-eslint": tseslint.plugin,
+			"unused-imports": unusedImports,
+			react: reactPlugin,
+			"react-hooks": reactHooksPlugin,
+		},
+		settings: {
+			react: {
+				version: "detect",
+			},
+			next: {
+				rootDir: ["apps/*/"],
 			},
 		},
 	},
-	{
-		rules: {
-			// Async/Await rules
-			"@typescript-eslint/await-thenable": "error",
-			"@typescript-eslint/require-await": "error",
-			"@typescript-eslint/no-floating-promises": [
-				"error",
-				{ ignoreVoid: false },
-			],
-			"@typescript-eslint/no-misused-promises": [
-				"error",
-				{ checksVoidReturn: false },
-			],
-			"@typescript-eslint/promise-function-async": "error",
-			"@typescript-eslint/no-unused-vars": [
-				"error",
-				{ argsIgnorePattern: "^_" },
-			],
 
-			// Code quality rules
-			"@typescript-eslint/return-await": ["error", "always"],
-			"@typescript-eslint/consistent-type-imports": [
-				"error",
-				{ prefer: "type-imports" },
-			],
-			"@typescript-eslint/no-unnecessary-condition": "warn",
+	// React specific rules
+	{
+		files: ["**/*.{jsx,tsx}"],
+		settings: {
+			react: {
+				version: "detect",
+			},
+		},
+		rules: {
+			...reactRecommended.rules,
+			...reactHooksPlugin.configs.recommended.rules,
+			"react/react-in-jsx-scope": "off", // Not needed with Next.js
+			"react/prop-types": "off", // Not needed with TypeScript
+			"react-hooks/exhaustive-deps": "warn",
+		},
+	},
+
+	// Next.js specific rules
+	{
+		files: ["**/*.{js,jsx,ts,tsx}"],
+		plugins: {
+			"@next/next": nextPlugin,
+		},
+		rules: {
+			...nextPlugin.configs.recommended.rules,
+			...nextPlugin.configs["core-web-vitals"].rules,
+			"@next/next/no-html-link-for-pages": "off", // If you're using the pages directory
+			"@next/next/no-img-element": "off", // If you need to use img instead of next/image
+		},
+	},
+
+	// TypeScript specific rules
+	{
+		files: ["**/*.{ts,tsx}"],
+		rules: {
+			...tseslint.configs.recommended.rules,
+			...tseslint.configs.stylistic.rules,
 			"@typescript-eslint/no-explicit-any": "warn",
-			"@typescript-eslint/explicit-function-return-type": [
+			"@typescript-eslint/explicit-function-return-type": "off",
+			"@typescript-eslint/explicit-module-boundary-types": "off",
+			"@typescript-eslint/no-floating-promises": "error",
+			"@typescript-eslint/no-unused-vars": [
 				"warn",
-				{ allowExpressions: true, allowTypedFunctionExpressions: true },
+				{
+					argsIgnorePattern: "^_",
+					varsIgnorePattern: "^_",
+					caughtErrorsIgnorePattern: "^_",
+				},
+			],
+			"unused-imports/no-unused-imports": "error",
+			"unused-imports/no-unused-vars": [
+				"warn",
+				{
+					vars: "all",
+					varsIgnorePattern: "^_",
+					args: "after-used",
+					argsIgnorePattern: "^_",
+				},
 			],
 		},
 	},
+
+	// General JavaScript/TypeScript rules
+	js.configs.recommended,
+	prettierConfig,
 ];
 
-export default eslintConfig;
+export default config;
