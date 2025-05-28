@@ -52,11 +52,11 @@ export function Header() {
 	const userInitials = getInitials(userName);
 
 	return (
-		<header className="border-b bg-background">
-			<div className="flex h-16 items-center px-4 gap-4 justify-between">
+		<header className='border-b bg-background'>
+			<div className='flex h-16 items-center px-4 gap-4 justify-between'>
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
-						<Button variant="ghost" className="p-0 flex items-center gap-2 font-semibold">
+						<Button variant='ghost' className='p-0 flex items-center gap-2 font-semibold'>
 							{/* Need a logo */}
 							{/* <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
                 <span className="text-primary-foreground font-bold">
@@ -69,47 +69,47 @@ export function Header() {
                 </span>
               </div>*/}
 							<span>Nimbus</span>
-							<ChevronDown className="h-4 w-4 ml-1" />
+							<ChevronDown className='h-4 w-4 ml-1' />
 						</Button>
 					</DropdownMenuTrigger>
-					<DropdownMenuContent align="start" className="w-56">
+					<DropdownMenuContent align='start' className='w-56'>
 						<DropdownMenuLabel>Sources</DropdownMenuLabel>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem>
-							<HardDrive className="mr-2 h-4 w-4" />
+							<HardDrive className='mr-2 h-4 w-4' />
 							<span>Local Files</span>
 						</DropdownMenuItem>
 						<DropdownMenuItem>
-							<GoogleDriveIcon className="mr-2 h-4 w-4" />
+							<GoogleDriveIcon className='mr-2 h-4 w-4' />
 							<span>Google Drive</span>
 						</DropdownMenuItem>
 						<DropdownMenuItem>
-							<OneDriveIcon className="mr-2 h-4 w-4" />
+							<OneDriveIcon className='mr-2 h-4 w-4' />
 							<span>OneDrive</span>
 						</DropdownMenuItem>
 						<DropdownMenuItem>
-							<ICloudIcon className="mr-2 h-4 w-4" />
+							<ICloudIcon className='mr-2 h-4 w-4' />
 							<span>iCloud</span>
 						</DropdownMenuItem>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem>
-							<AWSIcon className="mr-2 h-4 w-4" />
+							<AWSIcon className='mr-2 h-4 w-4' />
 							<span>S3</span>
 						</DropdownMenuItem>
 						<DropdownMenuItem>
-							<GoogleCloudIcon className="mr-2 h-4 w-4" />
+							<GoogleCloudIcon className='mr-2 h-4 w-4' />
 							<span>GCP</span>
 						</DropdownMenuItem>
 						<DropdownMenuItem>
-							<AzureIcon className="mr-2 h-4 w-4" />
+							<AzureIcon className='mr-2 h-4 w-4' />
 							<span>Azure</span>
 						</DropdownMenuItem>
 						<DropdownMenuItem>
-							<Server className="mr-2 h-4 w-4" />
+							<Server className='mr-2 h-4 w-4' />
 							<span>NAS</span>
 						</DropdownMenuItem>
 						<DropdownMenuItem>
-							<Plus className="mr-2 h-4 w-4" />
+							<Plus className='mr-2 h-4 w-4' />
 							<span>Add New Source</span>
 						</DropdownMenuItem>
 					</DropdownMenuContent>
@@ -138,26 +138,26 @@ export function Header() {
 								</Avatar>
 							</Button>
 						</DropdownMenuTrigger>
-						<DropdownMenuContent align="end">
+						<DropdownMenuContent align='end'>
 							{isPending ? (
 								<DropdownMenuItem>Loading...</DropdownMenuItem>
 							) : session?.user ? (
 								<>
 									<DropdownMenuLabel>My Account</DropdownMenuLabel>
 									<DropdownMenuSeparator />
-									<DropdownMenuItem className="flex flex-col items-start focus:bg-transparent cursor-default">
-										<div className="font-medium">{userName || "User"}</div>
-										<div className="text-xs text-muted-foreground">{userEmail || "No email"}</div>
+									<DropdownMenuItem className='flex flex-col items-start focus:bg-transparent cursor-default'>
+										<div className='font-medium'>{userName || "User"}</div>
+										<div className='text-xs text-muted-foreground'>{userEmail || "No email"}</div>
 									</DropdownMenuItem>
 									<DropdownMenuSeparator />
-									<DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
-										<LogOut className="mr-2 h-4 w-4" />
+									<DropdownMenuItem onClick={handleSignOut} className='cursor-pointer'>
+										<LogOut className='mr-2 h-4 w-4' />
 										<span>Sign Out</span>
 									</DropdownMenuItem>
 								</>
 							) : (
-								<DropdownMenuItem asChild className="cursor-pointer">
-									<Link href="/login">Log In</Link>
+								<DropdownMenuItem asChild className='cursor-pointer'>
+									<Link href='/login'>Log In</Link>
 								</DropdownMenuItem>
 							)}
 						</DropdownMenuContent>

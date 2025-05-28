@@ -1,4 +1,5 @@
 # Nimbus cloud storage
+
 A better cloud
 
 ## Quickstart
@@ -73,7 +74,8 @@ bun db:migrate
 
 In a new terminal, start the development server:
 
-> NOTE: this starts both the web and server development servers, to run just one, use `bun dev:web` or `bun dev:server`. Both will need the db running to work.
+> NOTE: this starts both the web and server development servers, to run just one, use `bun dev:web` or `bun dev:server`.
+> Both will need the db running to work.
 
 ```bash
 bun dev

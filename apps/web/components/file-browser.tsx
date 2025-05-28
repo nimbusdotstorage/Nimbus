@@ -120,8 +120,8 @@ export function FileBrowser() {
 								</div>
 							</div>
 						) : (
-							<div className="text-center py-8 text-muted-foreground">
-								<Folder className="h-12 w-12 mx-auto mb-2" />
+							<div className='text-center py-8 text-muted-foreground'>
+								<Folder className='h-12 w-12 mx-auto mb-2' />
 								<p>Folder preview not available</p>
 							</div>
 						)}
@@ -136,12 +136,12 @@ function FileActions() {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button variant="ghost" size="icon" className="h-8 w-8">
-					<MoreVertical className="h-4 w-4" />
-					<span className="sr-only">Open menu</span>
+				<Button variant='ghost' size='icon' className='h-8 w-8'>
+					<MoreVertical className='h-4 w-4' />
+					<span className='sr-only'>Open menu</span>
 				</Button>
 			</DropdownMenuTrigger>
-			<DropdownMenuContent align="end">
+			<DropdownMenuContent align='end'>
 				<DropdownMenuItem>Open</DropdownMenuItem>
 				<DropdownMenuItem>Share</DropdownMenuItem>
 				<DropdownMenuItem>Download</DropdownMenuItem>
