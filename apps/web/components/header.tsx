@@ -41,7 +41,7 @@ export function Header() {
 	const handleSignOut = async () => {
 		try {
 			await authClient.signOut();
-		} catch (error) {
+		} catch (error: any) {
 			console.error("Error signing out:", error);
 		}
 	};

@@ -3,7 +3,6 @@
 */.next/
 */dist/
 */build/
-*package.json
 *package-lock.json
 *bun.lock
 

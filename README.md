@@ -59,7 +59,6 @@ GOOGLE_CLIENT_SECRET=
 
 # To generate a secret, just run `openssl rand -base64 32`
 BETTER_AUTH_SECRET=
-BETTER_AUTH_URL=http://localhost:3000
 ```
 
 ### 5. Run Database Migrations

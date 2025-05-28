@@ -65,7 +65,6 @@ GOOGLE_CLIENT_SECRET=
 
 # To generate a secret, just run `openssl rand -base64 32`
 BETTER_AUTH_SECRET=
-BETTER_AUTH_URL=http://localhost:3000
 ```
 
 ### 5. Run Database Migrations
@@ -114,7 +113,7 @@ Add the original repo as a remote:
 git remote add upstream https://github.com/logscore/nimbus.git
 ```
 
-> Make sure to pull from the upstream repo to keep your fork up to date
+> Make sure to pull from the upstream repo to keep your fork up to date using `git pull upstream main`
 
 ### Commit your changes
 
