@@ -5,6 +5,7 @@ import { GoogleDriveManager } from "lib/google-drive";
   
 const app = new Hono();  
   
+// Handling cors for resoliving pre-flight requests .
 app.use(cors({  
   origin: "http://localhost:3000",  
   credentials: true,  
