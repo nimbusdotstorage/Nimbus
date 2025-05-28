@@ -1,10 +1,8 @@
-import { Bell, HelpCircle, Settings, HardDrive } from "lucide-react";
+import { Bell, HardDrive, HelpCircle, Settings } from "lucide-react";
 
+import { ModeToggle } from "@/components/mode-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ModeToggle } from "@/components/mode-toggle";
-import { ChevronDown, Plus, Server } from "lucide-react";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -13,15 +11,17 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import { ChevronDown, Plus, Server } from "lucide-react";
 // import Image from "next/image";
+import { authClient } from "@/packages/auth/src/auth-client";
+import AWSIcon from "@/public/aws";
 import AzureIcon from "@/public/azure";
 import GoogleCloudIcon from "@/public/gcp";
-import AWSIcon from "@/public/aws";
+import GoogleDriveIcon from "@/public/googledrive";
 import ICloudIcon from "@/public/icloud";
 import OneDriveIcon from "@/public/onedrive";
-import GoogleDriveIcon from "@/public/googledrive";
-import { Search, LogOut } from "lucide-react";
-import { authClient } from "@/packages/auth/src/auth-client";
+import { LogOut, Search } from "lucide-react";
 import Link from "next/link";
 
 const getInitials = (name?: string | null) => {
@@ -133,7 +133,7 @@ export function Header() {
 						<DropdownMenuTrigger asChild>
 							<Button variant='ghost' size='icon' className='rounded-full'>
 								<Avatar className='h-8 w-8'>
-									<AvatarImage src={userImage || "/placeholder.svg?height=32&width=32"} alt={userName || "User"} />
+									{userImage && <AvatarImage src={userImage} alt={userName || "User"} />}
 									<AvatarFallback>{isPending ? "..." : userInitials}</AvatarFallback>
 								</Avatar>
 							</Button>

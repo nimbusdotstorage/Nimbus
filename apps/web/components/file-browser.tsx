@@ -1,8 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { FileText, Folder, Grid, List, MoreVertical, X } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
@@ -12,18 +9,19 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet";
-
-interface FileItem {
-	id: string;
-	name: string;
-	type: "folder" | "document" | "image" | "video";
-	size?: string;
-	modified: string;
-}
+import { FileText, Folder, Grid, List, Loader2, MoreVertical, X } from "lucide-react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useCallback, useState } from "react";
+import useRequest from "../hooks/useRequest";
+import type { FileItem } from "../lib/types";
 
 export function FileBrowser() {
+	const searchParams = useSearchParams();
+	const type = searchParams.get("type");
+
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 	const [selectedFile, setSelectedFile] = useState<FileItem | null>(null);
 	const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -33,58 +31,30 @@ export function FileBrowser() {
 		setIsPreviewOpen(true);
 	};
 
-	// Sample data
-	const files: FileItem[] = [
-		{
-			id: "1",
-			name: "Documents",
-			type: "folder",
-			modified: "May 15, 2024",
-		},
-		{
-			id: "2",
-			name: "Images",
-			type: "folder",
-			modified: "May 12, 2024",
-		},
-		{
-			id: "3",
-			name: "Project Proposal",
-			type: "document",
-			size: "2.4 MB",
-			modified: "May 10, 2024",
-		},
-		{
-			id: "4",
-			name: "Quarterly Report",
-			type: "document",
-			size: "4.2 MB",
-			modified: "May 8, 2024",
-		},
-		{
-			id: "5",
-			name: "Meeting Notes",
-			type: "document",
-			size: "1.1 MB",
-			modified: "May 5, 2024",
-		},
-		{
-			id: "6",
-			name: "Videos",
-			type: "folder",
-			modified: "May 3, 2024",
-		},
-	];
+	const requestFunction = useCallback(async () => await fetch(`/api/files?${type ? `type=${type}` : ""}`), [type]);
+
+	const { data, fetchData, loading, error } = useRequest<FileItem[]>({
+		request: requestFunction,
+		triggers: [type],
+	});
 
 	return (
-		<div className={`space-y-4 ${isPreviewOpen ? "blur-sm transition-all" : ""}`}>
+		<div className={`space-y-4 flex-1 flex flex-col ${isPreviewOpen ? "blur-sm transition-all" : ""}`}>
 			<div className='flex items-center justify-between'>
-				<Tabs defaultValue='all' className='w-[400px]'>
+				<Tabs value={type ?? "all"} className='w-[400px]'>
 					<TabsList>
-						<TabsTrigger value='all'>All</TabsTrigger>
-						<TabsTrigger value='folders'>Folders</TabsTrigger>
-						<TabsTrigger value='documents'>Documents</TabsTrigger>
-						<TabsTrigger value='media'>Media</TabsTrigger>
+						<TabsTrigger asChild value='all'>
+							<Link href='/'>All</Link>
+						</TabsTrigger>
+						<TabsTrigger asChild value='folder'>
+							<Link href='/?type=folder'>Folders</Link>
+						</TabsTrigger>
+						<TabsTrigger asChild value='document'>
+							<Link href='/?type=document'>Documents</Link>
+						</TabsTrigger>
+						<TabsTrigger asChild value='media'>
+							<Link href='/?type=media'>Media</Link>
+						</TabsTrigger>
 					</TabsList>
 				</Tabs>
 				<div className='flex items-center gap-2'>
@@ -96,71 +66,25 @@ export function FileBrowser() {
 					</Button>
 				</div>
 			</div>
-
-			{viewMode === "grid" ? (
-				<div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3'>
-					{files.map(file => (
-						<Card
-							key={file.id}
-							className='overflow-hidden bg-card hover:bg-accent/10 transition-colors cursor-pointer'
-							onClick={() => handleFileClick(file)}
-						>
-							<CardContent className='p-0'>
-								<div className='aspect-square flex items-center justify-center bg-muted/50 p-4'>
-									{file.type === "folder" ? (
-										<Folder className='h-12 w-12 text-primary' />
-									) : (
-										<FileText className='h-12 w-12 text-primary' />
-									)}
-								</div>
-							</CardContent>
-							<CardFooter className='flex items-center justify-between p-2'>
-								<div className='truncate'>
-									<h3 className='text-xs font-medium truncate'>{file.name}</h3>
-									<p className='text-[10px] text-muted-foreground'>{file.modified}</p>
-								</div>
-								<FileActions />
-							</CardFooter>
-						</Card>
-					))}
+			
+			{loading ? (
+				<div className='flex items-center justify-center flex-1 py-8'>
+					<Loader2 className='animate-spin' />
 				</div>
+			) : error ? (
+				<div className='space-y-2 flex-1 flex flex-col items-center justify-center'>
+					<p>{error.message}</p>
+					<Button onClick={fetchData}>Try again</Button>
+				</div>
+			) : viewMode === "grid" ? (
+				<FilesGrid data={data || []} handleFileClick={handleFileClick} />
 			) : (
-				<div className='border rounded-md overflow-hidden'>
-					<table className='w-full'>
-						<thead>
-							<tr className='bg-muted/50'>
-								<th className='text-left p-3 font-medium'>Name</th>
-								<th className='text-left p-3 font-medium'>Modified</th>
-								<th className='text-left p-3 font-medium'>Size</th>
-								<th className='p-3 w-10'></th>
-							</tr>
-						</thead>
-						<tbody>
-							{files.map(file => (
-								<tr key={file.id} className='border-t hover:bg-accent/10 transition-colors'>
-									<td className='p-4 flex items-center gap-2'>
-										{file.type === "folder" ? (
-											<Folder className='h-4 w-4 text-primary' />
-										) : (
-											<FileText className='h-4 w-4 text-primary' />
-										)}
-										{file.name}
-									</td>
-									<td className='p-3 text-sm text-muted-foreground'>{file.modified}</td>
-									<td className='p-3 text-sm text-muted-foreground'>{file.size || "—"}</td>
-									<td className='p-3'>
-										<FileActions />
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
-				</div>
+				<FilesList data={data || []} handleFileClick={handleFileClick} />
 			)}
-
+			
 			{/* Document Preview Drawer */}
 			<Sheet open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
-				<SheetContent className='w-[400px] sm:w-[540px] overflow-y-auto'>
+				<SheetContent className='w-[400px] sm:w-[540px] overflow-y-auto' closeButton={false}>
 					<SheetHeader className='mb-4'>
 						<div className='flex items-center justify-between'>
 							<SheetTitle>{selectedFile?.name}</SheetTitle>
@@ -228,5 +152,80 @@ function FileActions() {
 				<DropdownMenuItem className='text-destructive'>Delete</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
+	);
+}
+
+function FilesGrid({ data, handleFileClick }: { data: FileItem[]; handleFileClick: (file: FileItem) => void }) {
+	return (
+		<div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3'>
+			{data?.map(file => (
+				<Card
+					key={file.id}
+					className='overflow-hidden bg-card hover:bg-accent/10 transition-colors cursor-pointer'
+					onClick={() => handleFileClick(file)}
+				>
+					<CardContent className='p-0'>
+						<div className='aspect-square flex items-center justify-center bg-muted/50 p-4'>
+							{file.type === "folder" ? (
+								<Folder className='h-12 w-12 text-primary' />
+							) : (
+								<FileText className='h-12 w-12 text-primary' />
+							)}
+						</div>
+					</CardContent>
+					<CardFooter className='flex items-center justify-between p-2'>
+						<div className='truncate'>
+							<h3 className='text-xs font-medium truncate'>{file.name}</h3>
+							<p className='text-[10px] text-muted-foreground'>{file.modified}</p>
+						</div>
+						<FileActions />
+					</CardFooter>
+				</Card>
+			))}
+			{/* zero case */}
+			{data?.length === 0 && (
+				<div className='col-span-full text-center py-8 text-muted-foreground text-sm'>Nothing here :(</div>
+			)}
+		</div>
+	);
+}
+
+function FilesList({ data, handleFileClick }: { data: FileItem[]; handleFileClick: (file: FileItem) => void }) {
+	return (
+		<div className='border rounded-md overflow-hidden'>
+			<table className='w-full'>
+				<thead>
+					<tr className='bg-muted/50'>
+						<th className='text-left p-3 font-medium'>Name</th>
+						<th className='text-left p-3 font-medium'>Modified</th>
+						<th className='text-left p-3 font-medium'>Size</th>
+						<th className='p-3 w-10'></th>
+					</tr>
+				</thead>
+				<tbody>
+					{data?.map(file => (
+						<tr
+							key={file.id}
+							className='border-t hover:bg-accent/10 transition-colors cursor-pointer'
+							onClick={() => handleFileClick(file)}
+						>
+							<td className='p-4 flex items-center gap-2'>
+								{file.type === "folder" ? (
+									<Folder className='h-4 w-4 text-primary' />
+								) : (
+									<FileText className='h-4 w-4 text-primary' />
+								)}
+								{file.name}
+							</td>
+							<td className='p-3 text-sm text-muted-foreground'>{file.modified}</td>
+							<td className='p-3 text-sm text-muted-foreground'>{file.size || "—"}</td>
+							<td className='p-3'>
+								<FileActions />
+							</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</div>
 	);
 }
