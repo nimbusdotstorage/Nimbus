@@ -1,4 +1,4 @@
-name: Prettier Check
+name: Prettier & Lint Check
 
 on:
   pull_request:
@@ -23,3 +23,4 @@ jobs:
 
       - name: Run Prettier check
         run: bun run check-format
+        run: bun run lint
