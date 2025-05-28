@@ -1,38 +1,35 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-function useRequest<T>({ request, triggers }: { request: () => Promise<Response>; triggers: unknown[] }) {
-	const [data, setData] = useState<T | null>(null);
+function useRequest<ResponseBody>({ request, triggers }: { request: () => Promise<Response>; triggers: unknown[] }) {
+	const [data, setData] = useState<ResponseBody | null>(null);
 	const [error, setError] = useState<Error | null>(null);
 	const [loading, setLoading] = useState(false);
+	const cancelledRef = useRef(false);
+
+	const fetchData = useCallback(async () => {
+		setLoading(true);
+		setError(null);
+		try {
+			const res = await request();
+			if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+			const json = (await res.json()) as ResponseBody;
+			if (!cancelledRef.current) setData(json);
+		} catch (err) {
+			if (!cancelledRef.current) setError(err instanceof Error ? err : new Error(String(err)));
+		} finally {
+			if (!cancelledRef.current) setLoading(false);
+		}
+	}, [request]);
 
 	useEffect(() => {
-		let cancelled = false;
-
-		async function fetchData() {
-			setLoading(true);
-			setError(null);
-			try {
-				const res = await request();
-				if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-				const json = (await res.json()) as T;
-				if (!cancelled) setData(json);
-			} catch (err) {
-				if (!cancelled) setError(err instanceof Error ? err : new Error(String(err)));
-			} finally {
-				if (!cancelled) setLoading(false);
-			}
-		}
-
-		fetchData();
-
+		cancelledRef.current = false;
+		void fetchData();
 		return () => {
-			cancelled = true;
+			cancelledRef.current = true;
 		};
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, triggers);
 
-	return { data, error, loading };
+	return { data, fetchData, loading, error };
 }
 
 export default useRequest;

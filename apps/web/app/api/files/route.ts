@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+// TODO: feel free to delete this sample API route when we have a real API
+
 export async function GET(request: Request) {
 	const sampleData = [
 		{

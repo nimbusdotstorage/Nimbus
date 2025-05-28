@@ -20,7 +20,7 @@ export default function DrivePage() {
 			<Header />
 			<div className='flex flex-1 overflow-hidden'>
 				<Sidebar />
-				<main className='flex-1 overflow-auto p-6'>
+				<main className='flex-1 overflow-auto p-6 flex flex-col'>
 					<div className='flex items-center justify-between mb-6'>
 						<h1 className='text-2xl font-semibold'>My Files</h1>
 						<UploadButton />

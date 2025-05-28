@@ -33,13 +33,13 @@ export function FileBrowser() {
 
 	const requestFunction = useCallback(async () => await fetch(`/api/files?${type ? `type=${type}` : ""}`), [type]);
 
-	const { data, loading } = useRequest<FileItem[]>({
+	const { data, fetchData, loading, error } = useRequest<FileItem[]>({
 		request: requestFunction,
 		triggers: [type],
 	});
 
 	return (
-		<div className={`space-y-4 ${isPreviewOpen ? "blur-sm transition-all" : ""}`}>
+		<div className={`space-y-4 flex-1 flex flex-col ${isPreviewOpen ? "blur-sm transition-all" : ""}`}>
 			<div className='flex items-center justify-between'>
 				<Tabs value={type ?? "all"} className='w-[400px]'>
 					<TabsList>
@@ -68,17 +68,20 @@ export function FileBrowser() {
 			</div>
 
 			{loading && (
-				<div className='flex items-center justify-center h-full'>
+				<div className='flex items-center justify-center flex-1 py-8'>
 					<Loader2 className='animate-spin' />
 				</div>
 			)}
 
-			{!loading && data && (
-				<>
-					{viewMode === "grid" && <FilesGrid data={data} handleFileClick={handleFileClick} />}
-					{viewMode === "list" && <FilesList data={data} handleFileClick={handleFileClick} />}
-				</>
+			{error && (
+				<div className='space-y-2 flex-1 flex flex-col items-center justify-center'>
+					<p>{error.message}</p>
+					<Button onClick={fetchData}>Try again</Button>
+				</div>
 			)}
+
+			{data && viewMode === "grid" && <FilesGrid data={data} handleFileClick={handleFileClick} />}
+			{data && viewMode === "list" && <FilesList data={data} handleFileClick={handleFileClick} />}
 
 			{/* Document Preview Drawer */}
 			<Sheet open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
