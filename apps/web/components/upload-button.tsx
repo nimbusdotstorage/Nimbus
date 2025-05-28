@@ -12,22 +12,22 @@ export function UploadButton() {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button className='gap-2'>
-					<Plus className='h-4 w-4' />
+				<Button className="gap-2">
+					<Plus className="h-4 w-4" />
 					New
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent>
 				<DropdownMenuItem>
-					<Upload className='h-4 w-4 mr-2' />
+					<Upload className="h-4 w-4 mr-2" />
 					Upload file
 				</DropdownMenuItem>
 				<DropdownMenuItem>
-					<Upload className='h-4 w-4 mr-2' />
+					<Upload className="h-4 w-4 mr-2" />
 					Upload folder
 				</DropdownMenuItem>
 				<DropdownMenuItem>
-					<Folder className='h-4 w-4 mr-2' />
+					<Folder className="h-4 w-4 mr-2" />
 					Create folder
 				</DropdownMenuItem>
 			</DropdownMenuContent>
