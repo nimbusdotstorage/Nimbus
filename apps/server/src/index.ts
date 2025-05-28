@@ -28,5 +28,5 @@ app.get("/", (c) =>
   
 export default {  
   port: 1284,  
-  fetch: app.fetch,  
+  fetch: app.fetch,
 };
