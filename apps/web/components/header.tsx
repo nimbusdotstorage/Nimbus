@@ -114,25 +114,25 @@ export function Header() {
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>
-				<div className="relative flex-1 max-w-xl">
-					<Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-					<Input type="search" placeholder="Search in Drive" className="w-full pl-8 bg-muted/50" />
+				<div className='relative flex-1 max-w-xl'>
+					<Search className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground' />
+					<Input type='search' placeholder='Search in Drive' className='w-full pl-8 bg-muted/50' />
 				</div>
-				<div className="flex items-center gap-2">
+				<div className='flex items-center gap-2'>
 					<ModeToggle />
-					<Button variant="ghost" size="icon">
-						<HelpCircle className="h-5 w-5" />
+					<Button variant='ghost' size='icon'>
+						<HelpCircle className='h-5 w-5' />
 					</Button>
-					<Button variant="ghost" size="icon">
-						<Settings className="h-5 w-5" />
+					<Button variant='ghost' size='icon'>
+						<Settings className='h-5 w-5' />
 					</Button>
-					<Button variant="ghost" size="icon">
-						<Bell className="h-5 w-5" />
+					<Button variant='ghost' size='icon'>
+						<Bell className='h-5 w-5' />
 					</Button>
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
-							<Button variant="ghost" size="icon" className="rounded-full">
-								<Avatar className="h-8 w-8">
+							<Button variant='ghost' size='icon' className='rounded-full'>
+								<Avatar className='h-8 w-8'>
 									{userImage && <AvatarImage src={userImage} alt={userName || "User"} />}
 									<AvatarFallback>{isPending ? "..." : userInitials}</AvatarFallback>
 								</Avatar>

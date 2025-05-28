@@ -46,9 +46,9 @@ export async function GET(request: Request) {
 	const { searchParams } = new URL(request.url);
 	const type = searchParams.get("type")?.toLowerCase() || "";
 
-	const filteredData = sampleData.filter((item) => !type || item.type.toLowerCase().includes(type));
+	const filteredData = sampleData.filter(item => !type || item.type.toLowerCase().includes(type));
 
-	await new Promise((resolve) => setTimeout(resolve, 1000));
+	await new Promise(resolve => setTimeout(resolve, 1000));
 
 	return NextResponse.json(filteredData);
 }

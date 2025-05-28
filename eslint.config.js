@@ -13,14 +13,7 @@ const reactRecommended = reactPlugin.configs.recommended;
 const config = [
 	// Base configuration
 	{
-		ignores: [
-			"**/node_modules",
-			"**/.next",
-			"**/dist",
-			"**/build",
-			"**/coverage",
-			"**/out",
-		],
+		ignores: ["**/node_modules", "**/.next", "**/dist", "**/build", "**/coverage", "**/out"],
 	},
 
 	// JavaScript and TypeScript
