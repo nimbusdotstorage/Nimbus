@@ -80,7 +80,8 @@ bun db:migrate
 
 In a new terminal, start the development server:
 
-> NOTE: this starts both the web and server development servers, to run just one, use `bun dev:web` or `bun dev:server`. Both will need the db running to work.
+> NOTE: this starts both the web and server development servers, to run just one, use `bun dev:web` or `bun dev:server`.
+> Both will need the db running to work.
 
 ```bash
 bun dev
@@ -149,9 +150,12 @@ git push origin feature/your-feature-name
 ## Troubleshooting
 
 - **Port conflicts**: If port 5432 is already in use, just change the port mapping in `docker-compose.yml`
-- **Permission issues**: On Linux, you might need to run Docker commands with `sudo` or add your user to the `docker` group with the command `sudo usermod -aG docker $USER`
-- **Database connection issues**: Ensure the database is running and the connection string in your `.env` file is correct
+- **Permission issues**: On Linux, you might need to run Docker commands with `sudo` or add your user to the `docker`
+  group with the command `sudo usermod -aG docker $USER`
+- **Database connection issues**: Ensure the database is running and the connection string in your `.env` file is
+  correct
 
 ## License
 
-By contributing to this project, you agree that your contributions will be licensed under its [Apache License 2.0](LICENSE).
+By contributing to this project, you agree that your contributions will be licensed under its
+[Apache License 2.0](LICENSE).

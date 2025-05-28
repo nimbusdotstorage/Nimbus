@@ -7,15 +7,13 @@ const app = new Hono();
 
 app.use(cors());
 
-app.on(["POST", "GET"], "/api/auth/*", (c) => {
-  return auth.handler(c.req.raw);
+app.on(["POST", "GET"], "/api/auth/*", c => {
+	return auth.handler(c.req.raw);
 });
 
-app.get("/", (c) =>
-  c.text("Nimbus is flying! The server is running on port 1284")
-);
+app.get("/", c => c.text("Nimbus is flying! The server is running on port 1284"));
 
 export default {
-  port: 1284,
-  fetch: app.fetch,
+	port: 1284,
+	fetch: app.fetch,
 };
