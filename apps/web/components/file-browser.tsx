@@ -66,23 +66,22 @@ export function FileBrowser() {
 					</Button>
 				</div>
 			</div>
-
-			{loading && (
+			
+			{loading ? (
 				<div className='flex items-center justify-center flex-1 py-8'>
 					<Loader2 className='animate-spin' />
 				</div>
-			)}
-
-			{error && (
+			) : error ? (
 				<div className='space-y-2 flex-1 flex flex-col items-center justify-center'>
 					<p>{error.message}</p>
 					<Button onClick={fetchData}>Try again</Button>
 				</div>
+			) : viewMode === "grid" ? (
+				<FilesGrid data={data || []} handleFileClick={handleFileClick} />
+			) : (
+				<FilesList data={data || []} handleFileClick={handleFileClick} />
 			)}
-
-			{data && viewMode === "grid" && <FilesGrid data={data} handleFileClick={handleFileClick} />}
-			{data && viewMode === "list" && <FilesList data={data} handleFileClick={handleFileClick} />}
-
+			
 			{/* Document Preview Drawer */}
 			<Sheet open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
 				<SheetContent className='w-[400px] sm:w-[540px] overflow-y-auto' closeButton={false}>
