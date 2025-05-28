@@ -1,7 +1,6 @@
 import { Hono } from "hono";  
 import { auth } from "@/packages/auth/src/auth";  
 import { cors } from "hono/cors";  
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { GoogleDriveManager } from "lib/google-drive";  
   
 const app = new Hono();  
