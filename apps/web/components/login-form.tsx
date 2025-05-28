@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { signIn } from "@/packages/auth/src/auth-client";
+import type { ComponentProps } from "react";
 
-export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
+export function LoginForm({ className, ...props }: ComponentProps<"div">) {
 	return (
 		<div className={cn("flex flex-col gap-0", className)} {...props}>
 			<Card className='py-8 gap-6'>
