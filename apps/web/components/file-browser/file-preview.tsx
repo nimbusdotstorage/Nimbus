@@ -14,7 +14,14 @@ export function FilePreview() {
 	const id = searchParams.get("id");
 
 	const { data, fetchData, loading, error } = useRequest<FileItem>({
-		request: (signal: AbortSignal) => fetch(`/api/files/${id}`, { signal }),
+		request: (signal: AbortSignal) =>
+			fetch(
+				(process.env.NODE_ENV === "development" ? "http://localhost:1284" : "https://api.nimbus.storage") +
+					`/files/${id}`,
+				{
+					signal,
+				}
+			),
 		triggers: [id],
 		manual: true,
 	});
@@ -23,8 +30,7 @@ export function FilePreview() {
 		if (id && id !== data?.id) {
 			void fetchData();
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [id, data?.id]);
+	}, [id, data?.id, fetchData]);
 
 	const handleClose = () => {
 		if (!id) return;

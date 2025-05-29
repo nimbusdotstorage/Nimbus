@@ -1,0 +1,15 @@
+import { Hono } from "hono";
+import { auth } from "@/packages/auth/src/auth";
+
+const app = new Hono();
+
+app.on(["POST", "GET"], "/*", async c => {
+	try {
+		return await auth.handler(c.req.raw);
+	} catch (error: any) {
+		console.error("Auth handler error:", error);
+		return c.json({ error: "Internal server error", details: error.message }, 500);
+	}
+});
+
+export default app;

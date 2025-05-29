@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { toQueryString } from "@/web/utils/toQuesryString";
+import { toQueryString } from "@/web/utils/toQueryString";
 import { Grid, List } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
@@ -21,7 +21,13 @@ export function FileBrowser() {
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
 	const requestFunction = useCallback(
-		(signal: AbortSignal) => fetch("/api/files" + toQueryString({ type }), { signal }),
+		(signal: AbortSignal) =>
+			fetch(
+				(process.env.NODE_ENV === "development" ? "http://localhost:1284" : "https://api.nimbus.storage") +
+					"/files" +
+					toQueryString({ type }),
+				{ signal }
+			),
 		[type]
 	);
 
