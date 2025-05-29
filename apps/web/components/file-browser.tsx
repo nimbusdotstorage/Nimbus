@@ -17,6 +17,7 @@ import { useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 import useRequest from "../hooks/useRequest";
 import type { FileItem } from "../lib/types";
+import { parseError } from "../utils/error/parse";
 
 export function FileBrowser() {
 	const searchParams = useSearchParams();
@@ -73,7 +74,7 @@ export function FileBrowser() {
 				</div>
 			) : error ? (
 				<div className="space-y-2 flex-1 flex flex-col items-center justify-center">
-					<p>{error.message}</p>
+					<p>{parseError(error)}</p>
 					<Button onClick={fetchData}>Try again</Button>
 				</div>
 			) : viewMode === "grid" ? (
