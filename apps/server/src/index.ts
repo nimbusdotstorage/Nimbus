@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import filesRoutes from "./routes/files";
-import auth from "./routes/auth";
+import authRoutes from "./routes/auth";
 
 const app = new Hono();
 
@@ -18,7 +18,7 @@ app.use(
 app.get("/ka-me-ha-me", c => c.text("HAAAAAAAAAAAAAA"));
 
 app.route("/files", filesRoutes);
-app.route("/api/auth", auth);
+app.route("/api/auth", authRoutes);
 
 export default {
 	port: 1284,
