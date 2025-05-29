@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { parseError } from "../utils/error/parse";
 
-function useRequest<ResponseBody>({
+export function useRequest<ResponseBody>({
 	request,
 	triggers,
+	manual,
 }: {
 	request: (signal: AbortSignal) => Promise<Response>;
 	triggers: unknown[];
+	manual?: boolean;
 }) {
 	const [data, setData] = useState<ResponseBody | null>(null);
 	const [error, setError] = useState<Error | null>(null);
@@ -22,7 +24,10 @@ function useRequest<ResponseBody>({
 		setError(null);
 		try {
 			const res = await request(controller.signal);
-			if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+			if (!res.ok) {
+				const error = (await res.json()) as { message: string };
+				throw new Error(error.message);
+			}
 			const json = (await res.json()) as ResponseBody;
 			setData(json);
 		} catch (err) {
@@ -31,10 +36,10 @@ function useRequest<ResponseBody>({
 		} finally {
 			if (!controller.signal.aborted) setLoading(false);
 		}
-	}, [request]);
+	}, [request, manual]);
 
 	useEffect(() => {
-		void fetchData();
+		if (!manual) void fetchData();
 		return () => {
 			abortControllerRef.current?.abort();
 		};
@@ -42,5 +47,3 @@ function useRequest<ResponseBody>({
 
 	return { data, fetchData, loading, error };
 }
-
-export default useRequest;
