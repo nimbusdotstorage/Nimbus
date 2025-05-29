@@ -28,11 +28,9 @@ export class GoogleDriveManager {
 	constructor(public config: DriveManagerConfig) {
 		this.auth = new OAuth2Client(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_SECRET);
 
+		// Should have to just call getAccessToken from betterauth and pass token to setCredentials
 		if (config.auth) {
-			this.auth.setCredentials({
-				refresh_token: config.auth.refreshToken,
-				scope: this.getScope(),
-			});
+			this.auth.setCredentials({});
 		}
 
 		this.drive = google.drive({ version: "v3", auth: this.auth });

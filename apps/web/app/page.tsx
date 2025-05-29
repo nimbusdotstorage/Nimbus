@@ -1,18 +1,10 @@
 "use client";
 
-import { authClient } from "@/packages/auth/src/auth-client";
 import { FileBrowser } from "components/file-browser";
 import { Header } from "components/header";
 import { Sidebar } from "components/sidebar";
 import { UploadButton } from "components/upload-button";
-import { redirect } from "next/navigation";
 import { Suspense } from "react";
-
-const session = authClient.getSession();
-
-if (!session) {
-	redirect("/login");
-}
 
 export default function DrivePage() {
 	return (

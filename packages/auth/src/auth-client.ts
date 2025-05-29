@@ -1,11 +1,12 @@
 import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient({
-	baseURL: "http://localhost:3000",
+	baseURL: process.env.NODE_ENV === "development" ? "http://localhost:1284" : "https://api.nimbus.cloud",
 });
 
 export const signIn = async () => {
-	const data = await authClient.signIn.social({
+	await authClient.signIn.social({
 		provider: "google",
+		callbackURL: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://nimbus.cloud",
 	});
 };
