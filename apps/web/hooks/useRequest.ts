@@ -1,31 +1,42 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { parseError } from "../utils/error/parse";
 
-function useRequest<ResponseBody>({ request, triggers }: { request: () => Promise<Response>; triggers: unknown[] }) {
+function useRequest<ResponseBody>({
+	request,
+	triggers,
+}: {
+	request: (signal: AbortSignal) => Promise<Response>;
+	triggers: unknown[];
+}) {
 	const [data, setData] = useState<ResponseBody | null>(null);
 	const [error, setError] = useState<Error | null>(null);
 	const [loading, setLoading] = useState(false);
-	const cancelledRef = useRef(false);
+	const abortControllerRef = useRef<AbortController | null>(null);
 
 	const fetchData = useCallback(async () => {
+		abortControllerRef.current?.abort(); // abort previous request
+		const controller = new AbortController();
+		abortControllerRef.current = controller;
+
 		setLoading(true);
 		setError(null);
 		try {
-			const res = await request();
+			const res = await request(controller.signal);
 			if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 			const json = (await res.json()) as ResponseBody;
-			if (!cancelledRef.current) setData(json);
+			setData(json);
 		} catch (err) {
-			if (!cancelledRef.current) setError(err instanceof Error ? err : new Error(String(err)));
+			if (controller.signal.aborted) return; // ignore abort errors
+			setError(new Error(parseError(err)));
 		} finally {
-			if (!cancelledRef.current) setLoading(false);
+			if (!controller.signal.aborted) setLoading(false);
 		}
 	}, [request]);
 
 	useEffect(() => {
-		cancelledRef.current = false;
 		void fetchData();
 		return () => {
-			cancelledRef.current = true;
+			abortControllerRef.current?.abort();
 		};
 	}, triggers);
 

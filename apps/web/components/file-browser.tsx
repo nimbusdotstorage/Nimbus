@@ -32,7 +32,10 @@ export function FileBrowser() {
 		setIsPreviewOpen(true);
 	};
 
-	const requestFunction = useCallback(async () => await fetch(`/api/files?${type ? `type=${type}` : ""}`), [type]);
+	const requestFunction = useCallback(
+		(signal: AbortSignal) => fetch(`/api/files?${type ? `type=${type}` : ""}`, { signal }),
+		[type]
+	);
 
 	const { data, fetchData, loading, error } = useRequest<FileItem[]>({
 		request: requestFunction,
