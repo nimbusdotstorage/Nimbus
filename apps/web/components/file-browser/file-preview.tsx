@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { FileText, Folder, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useRequest } from "../../hooks/useRequest";
 import type { FileItem } from "../../lib/types";
 import { parseError } from "../../utils/error/parse";
@@ -13,8 +13,10 @@ export function FilePreview() {
 	const searchParams = useSearchParams();
 	const id = searchParams.get("id");
 
+	const requestFunction = useCallback((signal: AbortSignal) => fetch(`/api/files/${id}`, { signal }), [id]);
+
 	const { data, refetch, isLoading, error } = useRequest<FileItem>({
-		request: (signal: AbortSignal) => fetch(`/api/files/${id}`, { signal }),
+		request: requestFunction,
 		triggers: [id],
 		manual: true,
 	});
