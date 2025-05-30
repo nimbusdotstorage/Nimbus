@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { createRequest } from "@/web/hooks/createRequest";
 import { FileText, Folder, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useRequest } from "../../hooks/useRequest";
 import type { FileItem } from "../../lib/types";
-import { parseError } from "../../utils/error/parse";
+import { parseError } from "../../utils/error";
 import { Loader } from "../loader";
 
 export function FilePreview() {
@@ -13,27 +14,24 @@ export function FilePreview() {
 	const searchParams = useSearchParams();
 	const id = searchParams.get("id");
 
-	const { data, fetchData, loading, error } = useRequest<FileItem>({
-		request: (signal: AbortSignal) =>
-			fetch(
-				(process.env.NODE_ENV === "development" ? "http://localhost:1284" : "https://api.nimbus.storage") +
-					`/files/${id}`,
-				{
-					signal,
-				}
-			),
+	const fetchFile = createRequest({
+		url: "/api/files/:id",
+		pathParams: { id },
+	});
+
+	const { data, refetch, isLoading, error } = useRequest<FileItem>({
+		request: fetchFile,
 		triggers: [id],
 		manual: true,
 	});
 
 	useEffect(() => {
 		if (id && id !== data?.id) {
-			void fetchData();
+			void refetch();
 		}
 	}, [id, data?.id, fetchData]);
 
 	const handleClose = () => {
-		if (!id) return;
 		const params = new URLSearchParams(searchParams.toString());
 		params.delete("id");
 		router.replace(`?${params.toString()}`);
@@ -44,7 +42,7 @@ export function FilePreview() {
 			<SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto" closeButton={false}>
 				<SheetHeader className="mb-4">
 					<div className="flex items-center justify-between">
-						<SheetTitle>{!loading && data ? data.name : "PLACEHOLDER_HERE"}</SheetTitle>
+						<SheetTitle>{!isLoading && data ? data.name : "PLACEHOLDER_HERE"}</SheetTitle>
 						<SheetClose asChild>
 							<Button variant="ghost" size="icon">
 								<X className="h-4 w-4" />
@@ -52,7 +50,7 @@ export function FilePreview() {
 						</SheetClose>
 					</div>
 					<SheetDescription>
-						{!loading && data
+						{!isLoading && data
 							? data.type === "document"
 								? "Document Preview"
 								: "Folder Contents"
@@ -61,12 +59,12 @@ export function FilePreview() {
 				</SheetHeader>
 
 				<div className="space-y-4">
-					{loading ? (
+					{isLoading ? (
 						<Loader />
 					) : error ? (
 						<div className="space-y-2 flex-1 flex flex-col items-center justify-center">
 							<p>{parseError(error)}</p>
-							<Button onClick={fetchData}>Try again</Button>
+							<Button onClick={refetch}>Try again</Button>
 						</div>
 					) : data?.type === "document" ? (
 						<div className="border rounded-md p-4 bg-muted/30">
