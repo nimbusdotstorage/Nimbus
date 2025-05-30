@@ -33,7 +33,6 @@ export function FilePreview() {
 	}, [id, data?.id]);
 
 	const handleClose = () => {
-		if (!id) return;
 		const params = new URLSearchParams(searchParams.toString());
 		params.delete("id");
 		router.replace(`?${params.toString()}`);
