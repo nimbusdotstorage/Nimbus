@@ -16,9 +16,10 @@ type UseRequestReturn<ResponseBody> = {
 
 /**
  * A hook that fetches data from an API and returns the data, refetch function, error, and loading state.
- * @param request - The function that fetches the data.
- * @param triggers - The triggers array that cause the request to be made.
- * @param manual - Whether the request should be made manually.
+ * @param options - The options for the request.
+ * @param options.request - The function that fetches the data.
+ * @param options.triggers - The triggers array that cause the request to be made.
+ * @param options.manual - Whether the request should be made manually.
  * @returns The data, refetch function, error, and loading state.
  */
 export function useRequest<ResponseBody>({
