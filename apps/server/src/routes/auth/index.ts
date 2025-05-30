@@ -8,7 +8,7 @@ app.on(["POST", "GET"], "/*", async c => {
 		return await auth.handler(c.req.raw);
 	} catch (error: any) {
 		console.error("Auth handler error:", error);
-		return c.json({ error: "Internal server error", details: error.message }, 500);
+		return c.json({ error: "Authentication failed" }, 500);
 	}
 });
 
