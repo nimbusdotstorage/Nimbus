@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { useRequest } from "../../hooks/useRequest";
 import type { FileItem } from "../../lib/types";
-import { parseError } from "../../utils/error/parse";
+import { parseError } from "../../utils/error";
 import { Loader } from "../loader";
 
 export function FilePreview() {

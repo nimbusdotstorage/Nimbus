@@ -1,3 +1,8 @@
+/**
+ * Builds a query string from a set of parameters.
+ * @param params - The parameters to build the query string from.
+ * @returns The query string.
+ */
 export function buildQueryString(params: Record<string, string | number | null | undefined>): string {
 	const searchParams = new URLSearchParams();
 

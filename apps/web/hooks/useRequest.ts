@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { parseError } from "../utils/error/parse";
+import { parseError } from "../utils/error";
 
 type UseRequestParams = {
 	request: (signal: AbortSignal) => Promise<Response>;
