@@ -5,13 +5,13 @@ import { toQueryString } from "@/web/utils/toQueryString";
 import { Grid, List } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
-import { useRequest } from "../../hooks/useRequest";
-import type { FileItem } from "../../lib/types";
-import { ErrorMessageWithRetry } from "../error-message/with-retry";
-import { Loader } from "../loader";
-import { FileBrowserData } from "./file-browser-data";
-import { FilePreview } from "./file-preview";
-import { FileTabs } from "./file-tabs";
+import { useRequest } from "@/web/hooks/useRequest";
+import type { FileItem } from "@/web/lib/types";
+import { ErrorMessageWithRetry } from "@/components/error-message/with-retry";
+import { Loader } from "@/components/loader";
+import { FileBrowserData } from "@/components/file-browser/file-browser-data";
+import { FilePreview } from "@/components/file-browser/file-preview";
+import { FileTabs } from "@/components/file-browser/file-tabs";
 
 export function FileBrowser() {
 	const searchParams = useSearchParams();

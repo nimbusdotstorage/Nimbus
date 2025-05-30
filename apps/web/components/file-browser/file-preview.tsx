@@ -3,10 +3,10 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTi
 import { FileText, Folder, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { useRequest } from "../../hooks/useRequest";
-import type { FileItem } from "../../lib/types";
-import { parseError } from "../../utils/error/parse";
-import { Loader } from "../loader";
+import { useRequest } from "@/web/hooks/useRequest";
+import type { FileItem } from "@/web/lib/types";
+import { parseError } from "@/web/utils/error/parse";
+import { Loader } from "@/components/loader";
 
 export function FilePreview() {
 	const router = useRouter();
