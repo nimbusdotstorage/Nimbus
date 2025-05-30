@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { toQueryString } from "@/web/utils/toQueryString";
+import { createRequest } from "@/web/hooks/createRequest";
 import { Grid, List } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { useRequest } from "@/web/hooks/useRequest";
 import type { FileItem } from "@/web/lib/types";
 import { ErrorMessageWithRetry } from "@/components/error-message/with-retry";
@@ -20,19 +20,13 @@ export function FileBrowser() {
 
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-	const requestFunction = useCallback(
-		(signal: AbortSignal) =>
-			fetch(
-				(process.env.NODE_ENV === "development" ? "http://localhost:1284" : "https://api.nimbus.storage") +
-					"/files" +
-					toQueryString({ type }),
-				{ signal }
-			),
-		[type]
-	);
+	const fetchFiles = createRequest({
+		url: "/api/files",
+		queryParams: { type },
+	});
 
-	const { data, fetchData, loading, error } = useRequest<FileItem[]>({
-		request: requestFunction,
+	const { data, refetch, isLoading, error } = useRequest<FileItem[]>({
+		request: fetchFiles,
 		triggers: [type],
 	});
 
@@ -51,10 +45,10 @@ export function FileBrowser() {
 				</div>
 			</div>
 
-			{loading ? (
+			{isLoading ? (
 				<Loader />
 			) : error ? (
-				<ErrorMessageWithRetry error={error} retryFn={fetchData} />
+				<ErrorMessageWithRetry error={error} retryFn={refetch} />
 			) : (
 				data && <FileBrowserData viewMode={viewMode} data={data} />
 			)}

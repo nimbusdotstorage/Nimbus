@@ -1,4 +1,4 @@
-import { parseError } from "@/web/utils/error/parse";
+import { parseError } from "@/web/utils/error";
 import { Button } from "@/components/ui/button";
 
 export function ErrorMessageWithRetry({ error, retryFn }: { error: unknown; retryFn: () => void }) {

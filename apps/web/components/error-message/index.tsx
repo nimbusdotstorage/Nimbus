@@ -1,4 +1,4 @@
-import { parseError } from "@/web/utils/error/parse";
+import { parseError } from "@/web/utils/error";
 
 export function ErrorMessage({ error }: { error: unknown }) {
 	return (
