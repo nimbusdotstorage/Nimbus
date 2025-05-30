@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // TODO: feel free to delete this sample API route when we have a real API
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
 	const sampleData = [
 		{ id: "1", name: "Documents", type: "folder", modified: "May 15, 2024" },
 		{ id: "2", name: "Images", type: "folder", modified: "May 12, 2024" },
@@ -12,12 +12,15 @@ export async function GET(request: Request) {
 		{ id: "6", name: "Videos", type: "folder", modified: "May 3, 2024" },
 	];
 
-	const { searchParams } = new URL(request.url);
-	const type = searchParams.get("type")?.toLowerCase() || "";
+	const id = request.nextUrl.pathname.split("/").pop();
 
-	const filteredData = sampleData.filter(item => !type || item.type.toLowerCase().includes(type));
+	const file = sampleData.find(item => item.id === id);
 
 	await new Promise(resolve => setTimeout(resolve, 1000));
 
-	return NextResponse.json(filteredData);
+	if (!file) {
+		return NextResponse.json({ message: "File not found" }, { status: 404 });
+	}
+
+	return NextResponse.json(file);
 }

@@ -1,35 +1,66 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { parseError } from "../utils/error";
 
-function useRequest<ResponseBody>({ request, triggers }: { request: () => Promise<Response>; triggers: unknown[] }) {
+type UseRequestParams = {
+	request: (signal: AbortSignal) => Promise<Response>;
+	triggers?: unknown[];
+	manual?: boolean;
+};
+
+type UseRequestReturn<ResponseBody> = {
+	data: ResponseBody | null;
+	error: Error | null;
+	isLoading: boolean;
+	refetch: () => void;
+};
+
+/**
+ * A hook that fetches data from an API and returns the data, refetch function, error, and loading state.
+ * @param options - The options for the request.
+ * @param options.request - The function that fetches the data.
+ * @param options.triggers - The triggers array that cause the request to be made.
+ * @param options.manual - Whether the request should be made manually.
+ * @returns The data, refetch function, error, and loading state.
+ */
+export function useRequest<ResponseBody>({
+	request,
+	triggers = [],
+	manual = false,
+}: UseRequestParams): UseRequestReturn<ResponseBody> {
 	const [data, setData] = useState<ResponseBody | null>(null);
 	const [error, setError] = useState<Error | null>(null);
-	const [loading, setLoading] = useState(false);
-	const cancelledRef = useRef(false);
+	const [isLoading, setIsLoading] = useState(false);
+	const abortControllerRef = useRef<AbortController | null>(null);
 
 	const fetchData = useCallback(async () => {
-		setLoading(true);
+		abortControllerRef.current?.abort(); // abort previous request
+		const controller = new AbortController();
+		abortControllerRef.current = controller;
+
+		setIsLoading(true);
 		setError(null);
 		try {
-			const res = await request();
-			if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+			const res = await request(controller.signal);
+			if (!res.ok) {
+				const error = (await res.json()) as { message: string };
+				throw new Error(error.message);
+			}
 			const json = (await res.json()) as ResponseBody;
-			if (!cancelledRef.current) setData(json);
+			setData(json);
 		} catch (err) {
-			if (!cancelledRef.current) setError(err instanceof Error ? err : new Error(String(err)));
+			if (controller.signal.aborted) return; // ignore abort errors
+			setError(new Error(parseError(err)));
 		} finally {
-			if (!cancelledRef.current) setLoading(false);
+			if (!controller.signal.aborted) setIsLoading(false);
 		}
 	}, [request]);
 
 	useEffect(() => {
-		cancelledRef.current = false;
-		void fetchData();
+		if (!manual) void fetchData();
 		return () => {
-			cancelledRef.current = true;
+			abortControllerRef.current?.abort();
 		};
 	}, triggers);
 
-	return { data, fetchData, loading, error };
+	return { data, refetch: fetchData, isLoading, error };
 }
-
-export default useRequest;
