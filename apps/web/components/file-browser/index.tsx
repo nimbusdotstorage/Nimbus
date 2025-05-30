@@ -25,7 +25,7 @@ export function FileBrowser() {
 		[type]
 	);
 
-	const { data, fetchData, loading, error } = useRequest<FileItem[]>({
+	const { data, refetch, isLoading, error } = useRequest<FileItem[]>({
 		request: requestFunction,
 		triggers: [type],
 	});
@@ -45,10 +45,10 @@ export function FileBrowser() {
 				</div>
 			</div>
 
-			{loading ? (
+			{isLoading ? (
 				<Loader />
 			) : error ? (
-				<ErrorMessageWithRetry error={error} retryFn={fetchData} />
+				<ErrorMessageWithRetry error={error} retryFn={refetch} />
 			) : (
 				data && <FileBrowserData viewMode={viewMode} data={data} />
 			)}

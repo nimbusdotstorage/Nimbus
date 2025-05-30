@@ -1,18 +1,34 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { parseError } from "../utils/error/parse";
 
+type UseRequestParams = {
+	request: (signal: AbortSignal) => Promise<Response>;
+	triggers?: unknown[];
+	manual?: boolean;
+};
+
+type UseRequestReturn<ResponseBody> = {
+	data: ResponseBody | null;
+	error: Error | null;
+	isLoading: boolean;
+	refetch: () => void;
+};
+
+/**
+ * A hook that fetches data from an API and returns the data, refetch function, error, and loading state.
+ * @param request - The function that fetches the data.
+ * @param triggers - The triggers array that cause the request to be made.
+ * @param manual - Whether the request should be made manually.
+ * @returns The data, refetch function, error, and loading state.
+ */
 export function useRequest<ResponseBody>({
 	request,
-	triggers,
-	manual,
-}: {
-	request: (signal: AbortSignal) => Promise<Response>;
-	triggers: unknown[];
-	manual?: boolean;
-}) {
+	triggers = [],
+	manual = false,
+}: UseRequestParams): UseRequestReturn<ResponseBody> {
 	const [data, setData] = useState<ResponseBody | null>(null);
 	const [error, setError] = useState<Error | null>(null);
-	const [loading, setLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 	const abortControllerRef = useRef<AbortController | null>(null);
 
 	const fetchData = useCallback(async () => {
@@ -20,7 +36,7 @@ export function useRequest<ResponseBody>({
 		const controller = new AbortController();
 		abortControllerRef.current = controller;
 
-		setLoading(true);
+		setIsLoading(true);
 		setError(null);
 		try {
 			const res = await request(controller.signal);
@@ -34,7 +50,7 @@ export function useRequest<ResponseBody>({
 			if (controller.signal.aborted) return; // ignore abort errors
 			setError(new Error(parseError(err)));
 		} finally {
-			if (!controller.signal.aborted) setLoading(false);
+			if (!controller.signal.aborted) setIsLoading(false);
 		}
 	}, [request, manual]);
 
@@ -45,5 +61,5 @@ export function useRequest<ResponseBody>({
 		};
 	}, triggers);
 
-	return { data, fetchData, loading, error };
+	return { data, refetch: fetchData, isLoading, error };
 }
