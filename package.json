@@ -12,6 +12,7 @@
 		"@types/react-dom": "^19",
 		"@typescript-eslint/eslint-plugin": "^8.32.1",
 		"@typescript-eslint/parser": "^8.32.1",
+		"concurrently": "^9.1.2",
 		"eslint": "^9.27.0",
 		"eslint-config-prettier": "^10.1.5",
 		"eslint-plugin-react": "^7.37.5",
@@ -26,7 +27,7 @@
 	"scripts": {
 		"dev:web": "bun --cwd=apps/web dev",
 		"dev:server": "bun --cwd=apps/server dev",
-		"dev": "bun --cwd=apps/web dev & bun --cwd=apps/server dev",
+		"dev": "concurrently --names \"WEB,SERVER\" --prefix-colors \"cyan,magenta\" --prefix \"[{name}]\" --kill-others-on-fail \"bun --cwd=apps/web dev\" \"bun --cwd=apps/server dev\"",
 		"db:up": "docker compose up -d",
 		"db:down": "docker compose down",
 		"db:reset": "docker compose down -v && docker compose up -d",
