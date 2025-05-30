@@ -21,7 +21,7 @@ export function FileBrowser() {
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
 	const fetchFiles = createRequest({
-		url: "/api/files",
+		path: "/files",
 		queryParams: { type },
 	});
 

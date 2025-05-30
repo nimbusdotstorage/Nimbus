@@ -1,4 +1,4 @@
-import type React from "react";
+import type { ReactNode } from "react";
 import "@/web/app/globals.css";
 import { Inter } from "next/font/google";
 
@@ -11,7 +11,7 @@ export const metadata = {
 	description: "A modern cloud storage solution",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body className={inter.className}>

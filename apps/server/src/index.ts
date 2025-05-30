@@ -1,6 +1,7 @@
 import { Hono } from "hono";
-import { auth } from "@/packages/auth/src/auth";
 import { cors } from "hono/cors";
+import filesRoutes from "./routes/files";
+import auth from "./routes/auth";
 
 const app = new Hono();
 
@@ -13,16 +14,11 @@ app.use(
 	})
 );
 
-app.on(["POST", "GET"], "/api/auth/*", async c => {
-	try {
-		return await auth.handler(c.req.raw);
-	} catch (error: any) {
-		console.error("Auth handler error:", error);
-		return c.json({ error: "Internal server error", details: error.message }, 500);
-	}
-});
+// Health check
+app.get("/ka-me-ha-me", c => c.text("HAAAAAAAAAAAAAA"));
 
-app.get("/", c => c.text("Nimbus is flying! The server is running on port 1284"));
+app.route("/files", filesRoutes);
+app.route("/api/auth", auth);
 
 export default {
 	port: 1284,
