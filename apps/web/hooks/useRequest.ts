@@ -52,7 +52,7 @@ export function useRequest<ResponseBody>({
 		} finally {
 			if (!controller.signal.aborted) setIsLoading(false);
 		}
-	}, [request, manual]);
+	}, [request]);
 
 	useEffect(() => {
 		if (!manual) void fetchData();
