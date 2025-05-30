@@ -20,8 +20,9 @@ export function createRequest({ path, pathParams = {}, queryParams = {} }: Creat
 		const baseUrl = process.env.NODE_ENV === "development" ? "http://localhost:1284" : "https://api.nimbus.storage";
 
 		// Replace path params in the URL
+		let currentPath = path;
 		for (const [key, value] of Object.entries(pathParams)) {
-			path = path.replace(`:${key}`, encodeURIComponent(String(value)));
+			currentPath = currentPath.replace(`:${key}`, encodeURIComponent(String(value)));
 		}
 
 		// Append query string
@@ -35,7 +36,7 @@ export function createRequest({ path, pathParams = {}, queryParams = {} }: Creat
 		const query = queryString ? `?${queryString}` : "";
 
 		// Construct the full URL
-		const fullUrl = `${baseUrl}${path}${query}`;
+		const fullUrl = `${baseUrl}${currentPath}${query}`;
 
 		return fetch(fullUrl, { signal });
 	};
