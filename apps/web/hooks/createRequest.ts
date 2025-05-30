@@ -1,7 +1,7 @@
 type Params = Record<string, string | number | null | undefined>;
 
 type CreateRequestOptions = {
-	url: string;
+	path: string;
 	pathParams?: Params;
 	queryParams?: Params;
 };
@@ -9,17 +9,19 @@ type CreateRequestOptions = {
 /**
  * Creates a request function that can be used to fetch data from an API.
  * @param options - The options for the request.
- * @param options.url - The URL to fetch data from.
+ * @param options.path - The URL to fetch data from (without the base URL).
  * @param options.pathParams - The path parameters to replace in the URL.
  * @param options.queryParams - The query parameters to append to the URL.
  * @returns A function that can be used to fetch data from an API.
  */
-export function createRequest({ url, pathParams = {}, queryParams = {} }: CreateRequestOptions) {
+export function createRequest({ path, pathParams = {}, queryParams = {} }: CreateRequestOptions) {
 	return (signal: AbortSignal) => {
+		// Get the base URL based on environment
+		const baseUrl = process.env.NODE_ENV === "development" ? "http://localhost:1284" : "https://api.nimbus.storage";
+
 		// Replace path params in the URL
-		let resolvedUrl = url;
 		for (const [key, value] of Object.entries(pathParams)) {
-			resolvedUrl = resolvedUrl.replace(`:${key}`, encodeURIComponent(String(value)));
+			path = path.replace(`:${key}`, encodeURIComponent(String(value)));
 		}
 
 		// Append query string
@@ -30,10 +32,11 @@ export function createRequest({ url, pathParams = {}, queryParams = {} }: Create
 			}
 		}
 		const queryString = searchParams.toString();
-		if (queryString) {
-			resolvedUrl += `?${queryString}`;
-		}
+		const query = queryString ? `?${queryString}` : "";
 
-		return fetch(resolvedUrl, { signal });
+		// Construct the full URL
+		const fullUrl = `${baseUrl}${path}${query}`;
+
+		return fetch(fullUrl, { signal });
 	};
 }

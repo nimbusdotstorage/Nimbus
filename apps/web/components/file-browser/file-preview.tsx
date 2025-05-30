@@ -15,7 +15,7 @@ export function FilePreview() {
 	const id = searchParams.get("id");
 
 	const fetchFile = createRequest({
-		url: "/api/files/:id",
+		path: "/files/:id",
 		pathParams: { id },
 	});
 
@@ -29,7 +29,7 @@ export function FilePreview() {
 		if (id && id !== data?.id) {
 			void refetch();
 		}
-	}, [id, data?.id, fetchData]);
+	}, [id, data?.id]);
 
 	const handleClose = () => {
 		const params = new URLSearchParams(searchParams.toString());
@@ -42,7 +42,7 @@ export function FilePreview() {
 			<SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto" closeButton={false}>
 				<SheetHeader className="mb-4">
 					<div className="flex items-center justify-between">
-						<SheetTitle>{!isLoading && data ? data.name : "PLACEHOLDER_HERE"}</SheetTitle>
+						<SheetTitle>{!isLoading && data ? data.name : "Loading..."}</SheetTitle>
 						<SheetClose asChild>
 							<Button variant="ghost" size="icon">
 								<X className="h-4 w-4" />
@@ -54,7 +54,7 @@ export function FilePreview() {
 							? data.type === "document"
 								? "Document Preview"
 								: "Folder Contents"
-							: "PLACEHOLDER_HERE"}
+							: "Loading file information..."}
 					</SheetDescription>
 				</SheetHeader>
 

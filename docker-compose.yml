@@ -1,12 +1,12 @@
 services:
   postgres:
-    image: postgres:latest
+    image: postgres:16
     container_name: nimbus-db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: nimbus
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-nimbus}
     ports:
       - "5432:5432"
     volumes:
