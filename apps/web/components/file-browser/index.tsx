@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { buildQueryString } from "@/web/utils/toQuesryString";
+import { createRequest } from "@/web/hooks/createRequest";
 import { Grid, List } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { useRequest } from "../../hooks/useRequest";
 import type { FileItem } from "../../lib/types";
 import { ErrorMessageWithRetry } from "../error-message/with-retry";
@@ -20,13 +20,13 @@ export function FileBrowser() {
 
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-	const requestFunction = useCallback(
-		(signal: AbortSignal) => fetch("/api/files" + buildQueryString({ type }), { signal }),
-		[type]
-	);
+	const fetchFiles = createRequest({
+		url: "/api/files",
+		queryParams: { type },
+	});
 
 	const { data, refetch, isLoading, error } = useRequest<FileItem[]>({
-		request: requestFunction,
+		request: fetchFiles,
 		triggers: [type],
 	});
 
