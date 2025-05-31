@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import Link from "next/link";
 import { signIn } from "@/packages/auth/src/auth-client";
 import type { ComponentProps } from "react";
+import { Google } from "./icons/google";
 
 export function LoginForm({ className, ...props }: ComponentProps<"div">) {
 	return (
@@ -18,6 +19,7 @@ export function LoginForm({ className, ...props }: ComponentProps<"div">) {
 				<CardContent>
 					<div className="flex flex-col gap-6">
 						<Button variant="outline" className="w-full" onClick={signIn}>
+							<Google />
 							Login with Google
 						</Button>
 					</div>

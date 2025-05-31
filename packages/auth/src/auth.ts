@@ -3,7 +3,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/packages/db/src/index";
 import { config } from "dotenv";
 import path from "path";
-import schema from "@/packages/db/auth-schema";
+import schema from "@/packages/db/schema";
 
 // Load env variables from the root .env file
 config({ path: path.resolve(process.cwd(), "../../.env") });

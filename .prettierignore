@@ -17,7 +17,7 @@
 tailwind.config.js
 
 # Generated files
-auth-schema.ts
+schema.ts
 drizzle/
 
 # Cache directories

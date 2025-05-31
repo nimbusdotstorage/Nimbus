@@ -18,6 +18,7 @@ import { authClient } from "@/packages/auth/src/auth-client";
 import { LogOut, Search } from "lucide-react";
 import Link from "next/link";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { redirect } from "next/navigation";
 
 const getInitials = (name?: string | null) => {
 	if (!name) return "SG";
@@ -36,6 +37,7 @@ export function Header() {
 	const handleSignOut = async () => {
 		try {
 			await authClient.signOut();
+			redirect("/");
 		} catch (error: any) {
 			console.error("Error signing out:", error);
 		}
