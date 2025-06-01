@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import "@/web/app/globals.css";
 
+import promoImage from "@/web/app/public/images/preview.png";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ReactQueryProvider } from "@/web/components/providers/query-provider";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -14,17 +15,30 @@ export const metadata = {
 		description: "A better cloud storage solution.",
 		url: "https://nimbus.storage",
 		siteName: "Nimbus",
-		// images: [
-		// 	{
-		// 		// TODO: Add promo image
-		// 		url: "/images/promo.png",
-		// 		width: 1200,
-		// 		height: 630,
-		// 		alt: "Nimbus",
-		// 	},
-		// ],
+		images: [
+			{
+				url: promoImage.src,
+				width: promoImage.width,
+				height: promoImage.height,
+				alt: "Nimbus",
+			},
+		],
 		locale: "en_US",
 		type: "website",
+	},
+	twitter: {
+		title: "Nimbus",
+		description: "A better cloud storage solution.",
+		site: "@nimbusdotcloud",
+		card: "summary_large_image",
+		images: [
+			{
+				url: promoImage.src,
+				width: promoImage.width,
+				height: promoImage.height,
+				alt: "Nimbus",
+			},
+		],
 	},
 };
 
