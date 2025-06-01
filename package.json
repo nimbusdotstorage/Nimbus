@@ -31,7 +31,7 @@
 		"db:up": "docker compose up -d",
 		"db:down": "docker compose down",
 		"db:reset": "docker compose down -v && docker compose up -d",
-		"db:migrate": "cd packages/db && npx drizzle-kit generate && npx drizzle-kit migrate",
+		"db:migrate": "cd packages/db && bunx drizzle-kit generate && bunx drizzle-kit migrate",
 		"build": "bun --cwd=apps/web run build",
 		"start": "bun --cwd=apps/web run start",
 		"format": "bunx prettier --write .",
@@ -41,5 +41,8 @@
 	"workspaces": [
 		"apps/*",
 		"packages/*"
-	]
+	],
+	"dependencies": {
+		"@vercel/analytics": "^1.5.0"
+	}
 }

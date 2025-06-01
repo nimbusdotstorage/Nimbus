@@ -4,10 +4,10 @@ import { createRequest } from "@/web/hooks/createRequest";
 import { FileText, Folder, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { useRequest } from "../../hooks/useRequest";
-import type { FileItem } from "../../lib/types";
-import { parseError } from "../../utils/error";
-import { Loader } from "../loader";
+import { useRequest } from "@/web/hooks/useRequest";
+import type { FileItem } from "@/web/lib/types";
+import { parseError } from "@/web/utils/error";
+import { Loader } from "@/components/loader";
 
 export function FilePreview() {
 	const router = useRouter();

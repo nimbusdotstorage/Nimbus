@@ -11,16 +11,14 @@ const sampleData = [
 	{ id: "6", name: "Videos", type: "folder", modified: "May 3, 2024" },
 ];
 
-app.get("/", async c => {
+app.get("/", c => {
 	const type = c.req.query("type")?.toLowerCase() || "";
 	const filteredData = sampleData.filter(item => !type || item.type.toLowerCase().includes(type));
-	await new Promise(resolve => setTimeout(resolve, 1000));
 	return c.json(filteredData);
 });
 
-app.get("/:id", async c => {
+app.get("/:id", c => {
 	const { id } = c.req.param();
-	await new Promise(resolve => setTimeout(resolve, 1000));
 	const file = sampleData.find(item => item.id === id);
 
 	if (!file) {

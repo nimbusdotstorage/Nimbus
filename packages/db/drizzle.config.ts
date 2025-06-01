@@ -8,7 +8,7 @@ config({ path: path.resolve(process.cwd(), "../../.env") });
 
 export default defineConfig({
 	out: "./drizzle",
-	schema: "./auth-schema.ts",
+	schema: "./schema.ts",
 	dialect: "postgresql",
 	dbCredentials: {
 		url: process.env.DATABASE_URL!,

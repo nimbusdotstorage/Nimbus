@@ -9,8 +9,8 @@ import {
 import { FileText, Folder, MoreVertical } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import type { FileItem } from "../../lib/types";
-import { Button } from "../ui/button";
+import type { FileItem } from "@/web/lib/types";
+import { Button } from "@/components/ui/button";
 
 export function FileBrowserData({ viewMode, data }: { viewMode: "grid" | "list"; data: FileItem[] }) {
 	return viewMode === "grid" ? <FilesGrid data={data} /> : <FilesList data={data} />;
