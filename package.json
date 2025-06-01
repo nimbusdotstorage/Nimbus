@@ -41,5 +41,8 @@
 	"workspaces": [
 		"apps/*",
 		"packages/*"
-	]
+	],
+	"dependencies": {
+		"@vercel/analytics": "^1.5.0"
+	}
 }
