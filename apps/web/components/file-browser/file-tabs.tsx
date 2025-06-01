@@ -6,16 +6,16 @@ export function FileTabs({ type }: { type: string | null }) {
 		<Tabs value={type ?? "all"} className="w-[400px]">
 			<TabsList>
 				<TabsTrigger asChild value="all">
-					<Link href="/">All</Link>
+					<Link href="/app">All</Link>
 				</TabsTrigger>
 				<TabsTrigger asChild value="folder">
-					<Link href="/?type=folder">Folders</Link>
+					<Link href="/app/?type=folder">Folders</Link>
 				</TabsTrigger>
 				<TabsTrigger asChild value="document">
-					<Link href="/?type=document">Documents</Link>
+					<Link href="/app/?type=document">Documents</Link>
 				</TabsTrigger>
 				<TabsTrigger asChild value="media">
-					<Link href="/?type=media">Media</Link>
+					<Link href="/app/?type=media">Media</Link>
 				</TabsTrigger>
 			</TabsList>
 		</Tabs>

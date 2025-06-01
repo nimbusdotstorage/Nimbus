@@ -10,6 +10,8 @@
 		"lint": "eslint src/**/*.ts"
 	},
 	"dependencies": {
+		"@nimbus/auth": "workspace:../../packages/auth",
+		"@nimbus/db": "workspace:../../packages/db",
 		"@google-cloud/local-auth": "^2.1.0",
 		"@hono/zod-validator": "^0.7.0",
 		"better-auth": "^1.2.8",

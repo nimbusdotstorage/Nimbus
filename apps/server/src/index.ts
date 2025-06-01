@@ -1,13 +1,10 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import filesRoutes from "./routes/files";
-import authRoutes from "./routes/auth";
-import waitlistRoutes from "./routes/waitlist";
-import { auth } from "@/packages/auth/src/auth";
+import filesRoutes from "@/apps/server/src/routes/files";
+import authRoutes from "@/apps/server/src/routes/auth";
+import waitlistRoutes from "@/apps/server/src/routes/waitlist";
 
-const app = new Hono<{
-	Variables: { user: typeof auth.$Infer.Session.user | null; session: typeof auth.$Infer.Session.session | null };
-}>();
+const app = new Hono();
 
 app.use(
 	cors({
@@ -18,22 +15,8 @@ app.use(
 	})
 );
 
-app.use("*", async (c, next) => {
-	const session = await auth.api.getSession({ headers: c.req.raw.headers });
-
-	if (!session) {
-		c.set("user", null);
-		c.set("session", null);
-		return next();
-	}
-
-	c.set("user", session.user);
-	c.set("session", session.session);
-	return next();
-});
-
 // Health check
-app.get("/ka-me-ha-me", c => c.text("HAAAAAAAAAAAAAA"));
+app.get("/kamehame", c => c.text("HAAAAAAAAAAAAAA"));
 
 app.route("/files", filesRoutes);
 app.route("/api/auth", authRoutes);

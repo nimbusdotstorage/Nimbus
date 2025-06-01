@@ -21,9 +21,7 @@ type FormSchema = z.infer<typeof formSchema>;
 
 // API functions for Hono backend
 async function getWaitlistCount(): Promise<{ count: number }> {
-	return fetch(
-		`${process.env.NODE_ENV === "development" ? "http://localhost:1284" : "https://api.nimbus.storage"}/waitlist/count`
-	).then(res => {
+	return fetch("/api/waitlist/count").then(res => {
 		if (!res.ok) {
 			throw new Error("Failed to get waitlist count");
 		}
@@ -32,16 +30,13 @@ async function getWaitlistCount(): Promise<{ count: number }> {
 }
 
 async function joinWaitlist(email: string): Promise<void> {
-	const response = await fetch(
-		`${process.env.NODE_ENV === "development" ? "http://localhost:1284" : "https://api.nimbus.storage"}/waitlist/join`,
-		{
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ email }),
-		}
-	);
+	const response = await fetch("/api/waitlist/join", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ email }),
+	});
 
 	if (!response.ok) {
 		const errorData = await response.json().catch(() => ({}));

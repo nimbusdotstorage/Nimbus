@@ -1,3 +1,5 @@
+// TODO: Get server running on cloudflare workers. Need to set up db connections so that they open and close in the request to prevent hangups with worker. Also work on importing ENV vars to project, likely through hono context.
+
 import { Hono } from "hono";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";

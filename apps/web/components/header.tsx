@@ -13,7 +13,6 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-// import Image from "next/image";
 import { authClient } from "@/packages/auth/src/auth-client";
 import { LogOut, Search } from "lucide-react";
 import Link from "next/link";

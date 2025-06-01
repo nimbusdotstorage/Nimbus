@@ -11,10 +11,14 @@ export default function Header() {
 			<h1 className="text-lg font-bold font-sans">Nimbus</h1>
 			<div className="flex items-center gap-4">
 				<Button variant="ghost" aria-label="Discord">
-					<Discord />
+					<a href="https://discord.gg/c9nWy26ubK" target="_blank" rel="noopener noreferrer">
+						<Discord />
+					</a>
 				</Button>
 				<Button variant="ghost" aria-label="X (Twitter)">
-					<XPlatform />
+					<a href="https://x.com/nimbusdotcloud" target="_blank" rel="noopener noreferrer">
+						<XPlatform />
+					</a>
 				</Button>
 				<ModeToggle />
 			</div>
