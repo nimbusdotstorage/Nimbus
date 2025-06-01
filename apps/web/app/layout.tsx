@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import "@/web/app/globals.css";
 
-import promoImage from "/public/images/preview.png";
+import promoImage from "@/public/images/preview.png";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ReactQueryProvider } from "@/web/components/providers/query-provider";
 import { Geist, Geist_Mono } from "next/font/google";
