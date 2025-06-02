@@ -82,7 +82,7 @@ export default function SidebarFolders() {
 									</TooltipProvider>
 									{folder.subfolders && (
 										<CollapsibleContent>
-											<SidebarMenuSub className="!px-0 !mx-0 ml-3.5">
+											<SidebarMenuSub>
 												{folder.subfolders.map(subfolder => (
 													<SidebarMenuSubItem key={subfolder.name}>
 														<SidebarMenuSubButton className="w-full">
