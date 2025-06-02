@@ -24,6 +24,16 @@ node_modules
 .DS_Store
 *.pem
 
+#### editors
+
+# Firebase studio
+/.idx
+
+# duh
+/.vscode
+
+# add others
+
 # debug
 npm-debug.log*
 yarn-debug.log*

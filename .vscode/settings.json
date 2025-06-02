@@ -1,4 +1,6 @@
 {
     "prettier.configPath": ".prettierrc",
-    "prettier.ignorePath": ".prettierignore"
+    "prettier.ignorePath": ".prettierignore",
+    "IDX.aI.enableInlineCompletion": true,
+    "IDX.aI.enableCodebaseIndexing": true
 }
