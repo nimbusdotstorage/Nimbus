@@ -32,7 +32,7 @@ export default function TagMenu() {
 		<SidebarGroup>
 			<SidebarGroupLabel>
 				Tags
-				<Button variant="ghost" size="icon" className="ml-auto h-6 w-6 p-0">
+				<Button variant="ghost" size="icon" className="ml-auto h-6 w-6 pl-4">
 					<Plus className="size-3" />
 					<span className="sr-only">Add Tag</span>
 				</Button>
@@ -44,20 +44,20 @@ export default function TagMenu() {
 							<TooltipProvider>
 								<Tooltip>
 									<TooltipTrigger asChild>
-										<div className="flex items-center w-full group">
-											<SidebarMenuButton className="flex-1">
+										<div className="relative flex items-center w-full group">
+											<SidebarMenuButton className="flex-1 pr-10">
 												<span className={`size-3 rounded-full ${tag.color} group-data-[collapsible=icon]:mx-auto`} />
 												<span className="group-data-[collapsible=icon]:hidden">{tag.name}</span>
-												<span className="ml-auto text-xs text-sidebar-foreground/70 group-data-[collapsible=icon]:hidden">
-													{tag.count}
-												</span>
 											</SidebarMenuButton>
+											<span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-sidebar-foreground/70 group-hover:hidden group-data-[collapsible=icon]:hidden">
+												{tag.count}
+											</span>
 											<DropdownMenu>
 												<DropdownMenuTrigger asChild>
 													<Button
 														variant="ghost"
 														size="sm"
-														className="ml-1 h-6 w-6 p-0 opacity-0 group-hover:opacity-100 group-data-[collapsible=icon]:hidden"
+														className="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-data-[collapsible=icon]:hidden"
 													>
 														<MoreHorizontal className="size-3" />
 														<span className="sr-only">Tag options</span>

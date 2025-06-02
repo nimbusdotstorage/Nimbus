@@ -68,10 +68,10 @@ export default function SidebarFolders() {
 													<SidebarMenuButton>
 														<folder.icon className="size-4" />
 														<span className="group-data-[collapsible=icon]:sr-only">{folder.name}</span>
-														<span className="ml-auto text-xs text-sidebar-foreground/70 group-data-[collapsible=icon]:sr-only">{folder.count}</span>
 														{folder.subfolders && (
 															<ChevronDown className="ml-1 size-4 transition-transform duration-300 group-data-[state=open]/collapsible:rotate-180" />
 														)}
+														<span className="ml-auto text-xs text-sidebar-foreground/70 group-data-[collapsible=icon]:sr-only">{folder.count}</span>
 													</SidebarMenuButton>
 												</CollapsibleTrigger>
 											</TooltipTrigger>
@@ -82,10 +82,10 @@ export default function SidebarFolders() {
 									</TooltipProvider>
 									{folder.subfolders && (
 										<CollapsibleContent>
-											<SidebarMenuSub>
+											<SidebarMenuSub className="!px-0 !mx-0 ml-3.5">
 												{folder.subfolders.map(subfolder => (
 													<SidebarMenuSubItem key={subfolder.name}>
-														<SidebarMenuSubButton>
+														<SidebarMenuSubButton className="w-full">
 															<span>{subfolder.name}</span>
 															<span className="ml-auto text-xs text-sidebar-foreground/70">{subfolder.count}</span>
 														</SidebarMenuSubButton>
