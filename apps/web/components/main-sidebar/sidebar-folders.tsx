@@ -11,6 +11,7 @@ import {
 	SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
 const folders = [
 	{
@@ -60,16 +61,25 @@ export default function SidebarFolders() {
 						{folders.map(folder => (
 							<Collapsible key={folder.name} className="group/collapsible">
 								<SidebarMenuItem>
-									<CollapsibleTrigger asChild>
-										<SidebarMenuButton>
-											<folder.icon className="size-4" />
-											<span>{folder.name}</span>
-											<span className="ml-auto text-xs text-sidebar-foreground/70">{folder.count}</span>
-											{folder.subfolders && (
-												<ChevronDown className="ml-1 size-4 transition-transform duration-300 group-data-[state=open]/collapsible:rotate-180" />
-											)}
-										</SidebarMenuButton>
-									</CollapsibleTrigger>
+									<TooltipProvider>
+										<Tooltip>
+											<TooltipTrigger asChild>
+												<CollapsibleTrigger asChild>
+													<SidebarMenuButton>
+														<folder.icon className="size-4" />
+														<span className="group-data-[collapsible=icon]:sr-only">{folder.name}</span>
+														<span className="ml-auto text-xs text-sidebar-foreground/70 group-data-[collapsible=icon]:sr-only">{folder.count}</span>
+														{folder.subfolders && (
+															<ChevronDown className="ml-1 size-4 transition-transform duration-300 group-data-[state=open]/collapsible:rotate-180" />
+														)}
+													</SidebarMenuButton>
+												</CollapsibleTrigger>
+											</TooltipTrigger>
+											<TooltipContent side="right" className="group-data-[collapsible=open]:hidden">
+												<p className="font-semibold">{folder.name} ({folder.count})</p>
+											</TooltipContent>
+										</Tooltip>
+									</TooltipProvider>
 									{folder.subfolders && (
 										<CollapsibleContent>
 											<SidebarMenuSub>
