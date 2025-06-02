@@ -3,7 +3,7 @@ import { Progress } from "@/components/ui/progress";
 import { SidebarFooter } from "@/components/ui/sidebar";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
-// TODO: Get actualy data from api, fix collapsed styling
+// TODO: Get actual data from api, fix collapsed styling
 export default function StorageFooter() {
 	const storageUsed = 69;
 	return (
