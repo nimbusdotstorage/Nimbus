@@ -50,11 +50,12 @@ export function FilePreview() {
 		}
 	}, [id, data?.id]);
 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => {
 		if (data?.type === "folder") {
 			void refetchFolderContents();
 		}
-	}, [data?.type, refetchFolderContents]);
+	}, [data?.type]);
 
 	const handleClose = () => {
 		const params = new URLSearchParams(searchParams.toString());
@@ -137,7 +138,11 @@ export function FilePreview() {
 							</div>
 							<div className="mt-6 pt-6 border-t">
 								<h4 className="font-medium mb-2">Folder Contents</h4>
-								{folderContents && folderContents.length > 0 ? (
+								{folderContentsLoading ? (
+									<div className="flex justify-center p-4">
+										<Loader />
+									</div>
+								) : folderContents && folderContents.length > 0 ? (
 									<div className="space-y-1 max-h-60 overflow-y-auto pr-2">
 										{folderContents.map((item) => (
 											<div key={item.id} className="flex items-center space-x-2 p-2 rounded hover:bg-muted">
