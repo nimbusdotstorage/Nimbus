@@ -16,7 +16,6 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const tags = [
 	{ name: "Important", color: "bg-red-500", count: 12 },
@@ -32,7 +31,7 @@ export default function TagMenu() {
 		<SidebarGroup>
 			<SidebarGroupLabel>
 				Tags
-				<Button variant="ghost" size="icon" className="ml-auto h-6 w-6 pl-4">
+				<Button variant="ghost" size="icon" className="ml-auto h-6 w-6 ">
 					<Plus className="size-3" />
 					<span className="sr-only">Add Tag</span>
 				</Button>
@@ -40,45 +39,33 @@ export default function TagMenu() {
 			<SidebarGroupContent>
 				<SidebarMenu>
 					{tags.map(tag => (
-						<SidebarMenuItem key={tag.name}>
-							<TooltipProvider>
-								<Tooltip>
-									<TooltipTrigger asChild>
-										<div className="relative flex items-center w-full group">
-											<SidebarMenuButton className="flex-1 pr-10">
-												<span className={`size-3 rounded-full ${tag.color} group-data-[collapsible=icon]:mx-auto`} />
-												<span className="group-data-[collapsible=icon]:hidden">{tag.name}</span>
-											</SidebarMenuButton>
-											<span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-sidebar-foreground/70 group-hover:hidden group-data-[collapsible=icon]:hidden">
-												{tag.count}
-											</span>
-											<DropdownMenu>
-												<DropdownMenuTrigger asChild>
-													<Button
-														variant="ghost"
-														size="sm"
-														className="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 group-data-[collapsible=icon]:hidden"
-													>
-														<MoreHorizontal className="size-3" />
-														<span className="sr-only">Tag options</span>
-													</Button>
-												</DropdownMenuTrigger>
-												<DropdownMenuContent align="end">
-													<DropdownMenuItem>Edit Tag</DropdownMenuItem>
-													<DropdownMenuItem>Change Color</DropdownMenuItem>
-													<DropdownMenuSeparator />
-													<DropdownMenuItem className="text-destructive">Delete Tag</DropdownMenuItem>
-												</DropdownMenuContent>
-											</DropdownMenu>
+						<SidebarMenuItem key={tag.name} className="group/item">
+							<SidebarMenuButton
+								className="flex items-center w-full peer pl-3 group-data-[collapsible=icon]:justify-center justify-between"
+								tooltip={`${tag.name} (${tag.count})`}
+							>
+								<div className="flex items-center gap-1">
+									<span className={`size-3 rounded-full ${tag.color}`} />
+									<span className="ml-2 group-data-[collapsible=icon]:hidden">{tag.name}</span>
+									<span className="ml-2 text-xs text-sidebar-foreground/70 group-data-[collapsible=icon]:hidden">
+										{tag.count}
+									</span>
+								</div>
+								<DropdownMenu>
+									<DropdownMenuTrigger asChild>
+										<div className="px-1.5 opacity-0 group-hover/item:opacity-100 group-data-[collapsible=icon]:hidden">
+											<MoreHorizontal className="size-3" />
+											<span className="sr-only">Tag options</span>
 										</div>
-									</TooltipTrigger>
-									<TooltipContent side="right" className="group-data-[collapsible=open]:hidden">
-										<p className="font-semibold">
-											{tag.name} ({tag.count})
-										</p>
-									</TooltipContent>
-								</Tooltip>
-							</TooltipProvider>
+									</DropdownMenuTrigger>
+									<DropdownMenuContent align="end">
+										<DropdownMenuItem>Edit Tag</DropdownMenuItem>
+										<DropdownMenuItem>Change Color</DropdownMenuItem>
+										<DropdownMenuSeparator />
+										<DropdownMenuItem className="text-destructive">Delete Tag</DropdownMenuItem>
+									</DropdownMenuContent>
+								</DropdownMenu>
+							</SidebarMenuButton>
 						</SidebarMenuItem>
 					))}
 				</SidebarMenu>
