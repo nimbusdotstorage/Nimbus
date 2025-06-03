@@ -58,12 +58,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 			<body className={`${geistSans.variable} ${geistMono.variable}`}>
 				<ReactQueryProvider>
 					<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-						<div className="relative min-h-screen">
-							<main className="flex-1 flex justify-center ">
+						<main> {/* please, no classnames in the root layout */}
 								{children}
 								<Analytics />
 							</main>
-						</div>
 					</ThemeProvider>
 				</ReactQueryProvider>
 			</body>
