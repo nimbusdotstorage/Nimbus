@@ -4,7 +4,7 @@ import RateLimiter from "next-rate-limit";
 
 // @ts-ignore
 const limiter = new RateLimiter({
-	interval: 60 * 5000, 
+	interval: 60 * 5000,
 	uniqueTokenPerInterval: 500,
 });
 
@@ -13,7 +13,7 @@ export async function middleware(request: NextRequest) {
 
 	// Apply strict rate limiting to all waitlist API routes
 	if (pathname.startsWith("/api/waitlist")) {
-		const ip = request.ip || request.headers.get("x-forwarded-for") || "anonymous";
+		const ip = request.headers.get("x-forwarded-for") || "anonymous";
 
 		try {
 			await limiter.check(5, `waitlist:${ip}`);
