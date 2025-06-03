@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 				<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 					<SidebarProvider>
 						<AppSidebar variant="inset" />
-						<SidebarInset>
+						<SidebarInset className="md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-0">
 							<main className="flex-1 p-1">{children}</main>
 						</SidebarInset>
 					</SidebarProvider>

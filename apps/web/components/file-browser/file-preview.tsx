@@ -34,14 +34,14 @@ export function FilePreview() {
 		pathParams: { id },
 	});
 
-	const { 
-		data: folderContents, 
+	const {
+		data: folderContents,
 		isLoading: folderContentsLoading,
-		refetch: refetchFolderContents
+		refetch: refetchFolderContents,
 	} = useRequest<FolderContentItem[]>({
 		request: fetchFolderContents,
 		triggers: [id],
-		manual: true
+		manual: true,
 	});
 
 	useEffect(() => {
@@ -64,7 +64,7 @@ export function FilePreview() {
 	};
 
 	const getFileIcon = (type: string) => {
-		switch(type) {
+		switch (type) {
 			case "folder":
 				return <Folder className="h-4 w-4 text-muted-foreground" />;
 			case "image":
@@ -144,7 +144,7 @@ export function FilePreview() {
 									</div>
 								) : folderContents && folderContents.length > 0 ? (
 									<div className="space-y-1 max-h-60 overflow-y-auto pr-2">
-										{folderContents.map((item) => (
+										{folderContents.map(item => (
 											<div key={item.id} className="flex items-center space-x-2 p-2 rounded hover:bg-muted">
 												{getFileIcon(item.type)}
 												<span className="text-sm truncate">{item.name}</span>
