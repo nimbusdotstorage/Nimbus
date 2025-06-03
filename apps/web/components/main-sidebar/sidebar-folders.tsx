@@ -61,23 +61,26 @@ export default function SidebarFolders() {
 							<Collapsible key={folder.name} className="group/collapsible">
 								<SidebarMenuItem>
 									<CollapsibleTrigger asChild>
-										<SidebarMenuButton>
+										<SidebarMenuButton className="px-3" tooltip={`${folder.name} (${folder.count})`}>
 											<folder.icon className="size-4" />
-											<span>{folder.name}</span>
-											<span className="ml-auto text-xs text-sidebar-foreground/70">{folder.count}</span>
+											<span className="group-data-[collapsible=icon]:sr-only">{folder.name}</span>
+											<span className="ml-1 text-xs text-sidebar-foreground/70 group-data-[collapsible=icon]:sr-only">
+												{folder.count}
+											</span>
 											{folder.subfolders && (
-												<ChevronDown className="ml-1 size-4 transition-transform duration-300 group-data-[state=open]/collapsible:rotate-180" />
+												<ChevronDown className="ml-auto size-4 transition-transform duration-300 group-data-[state=open]/collapsible:rotate-180" />
 											)}
 										</SidebarMenuButton>
 									</CollapsibleTrigger>
+
 									{folder.subfolders && (
 										<CollapsibleContent>
-											<SidebarMenuSub>
+											<SidebarMenuSub className="group-data-[collapsible=icon]:hidden">
 												{folder.subfolders.map(subfolder => (
 													<SidebarMenuSubItem key={subfolder.name}>
-														<SidebarMenuSubButton>
+														<SidebarMenuSubButton className="w-full">
 															<span>{subfolder.name}</span>
-															<span className="ml-auto text-xs text-sidebar-foreground/70">{subfolder.count}</span>
+															<span className="ml-1 text-xs text-sidebar-foreground/70">{subfolder.count}</span>
 														</SidebarMenuSubButton>
 													</SidebarMenuSubItem>
 												))}
