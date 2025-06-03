@@ -102,12 +102,12 @@ export function WaitlistForm({ className }: WaitlistFormProps) {
 					onSubmit={handleSubmit(handleJoinWaitlist)}
 				>
 					<Input
-						placeholder="example@0.email"
+						placeholder="you@example.com" // Easier to understand
 						className="h-11 w-full rounded-lg bg-white px-4 text-base font-medium outline outline-neutral-200 placeholder:font-medium placeholder:text-muted-foreground md:text-base"
 						{...register("email")}
 					/>
 					<Button
-						className="h-11 w-full pr-3 pl-4 text-base sm:w-fit rounded-lg relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-1000 before:ease-in-out"
+						className="h-11 w-full pr-3 pl-4 hover:cursor-pointer text-base sm:w-fit rounded-lg relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-1000 before:ease-in-out"
 						type="submit"
 					>
 						Join Waitlist
