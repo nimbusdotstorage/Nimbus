@@ -3,6 +3,7 @@ import {
   text,
   timestamp,
   boolean,
+  integer,
 } from "drizzle-orm/pg-core";
 
 // Auth schema
@@ -75,12 +76,20 @@ export const waitlist = pgTable("waitlist", {
     .notNull(),
 });
 
+// Rate Limiting Schema
+export const rateLimitAttempts = pgTable("rate_limit_attempts", {
+  identifier: text("identifier").primaryKey(), // e.g., IP address
+  count: integer("count").notNull().default(1),
+  expiresAt: timestamp("expires_at", { mode: "date", withTimezone: true }).notNull(),
+});
+
 const schema = {
   user,
   session,
   account,
   verification,
   waitlist,
+  rateLimitAttempts,
 };
 
 export default schema;
