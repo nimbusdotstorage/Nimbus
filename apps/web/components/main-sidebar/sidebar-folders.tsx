@@ -11,7 +11,6 @@ import {
 	SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
 const folders = [
 	{
@@ -61,33 +60,27 @@ export default function SidebarFolders() {
 						{folders.map(folder => (
 							<Collapsible key={folder.name} className="group/collapsible">
 								<SidebarMenuItem>
-									<TooltipProvider>
-										<Tooltip>
-											<TooltipTrigger asChild>
-												<CollapsibleTrigger asChild>
-													<SidebarMenuButton>
-														<folder.icon className="size-4" />
-														<span className="group-data-[collapsible=icon]:sr-only">{folder.name}</span>
-														{folder.subfolders && (
-															<ChevronDown className="ml-1 size-4 transition-transform duration-300 group-data-[state=open]/collapsible:rotate-180" />
-														)}
-														<span className="ml-auto text-xs text-sidebar-foreground/70 group-data-[collapsible=icon]:sr-only">{folder.count}</span>
-													</SidebarMenuButton>
-												</CollapsibleTrigger>
-											</TooltipTrigger>
-											<TooltipContent side="right" className="group-data-[collapsible=open]:hidden">
-												<p className="font-semibold">{folder.name} ({folder.count})</p>
-											</TooltipContent>
-										</Tooltip>
-									</TooltipProvider>
+									<CollapsibleTrigger asChild>
+										<SidebarMenuButton className="px-3" tooltip={`${folder.name} (${folder.count})`}>
+											<folder.icon className="size-4" />
+											<span className="group-data-[collapsible=icon]:sr-only">{folder.name}</span>
+											<span className="ml-1 text-xs text-sidebar-foreground/70 group-data-[collapsible=icon]:sr-only">
+												{folder.count}
+											</span>
+											{folder.subfolders && (
+												<ChevronDown className="ml-auto size-4 transition-transform duration-300 group-data-[state=open]/collapsible:rotate-180" />
+											)}
+										</SidebarMenuButton>
+									</CollapsibleTrigger>
+
 									{folder.subfolders && (
 										<CollapsibleContent>
-											<SidebarMenuSub>
+											<SidebarMenuSub className="group-data-[collapsible=icon]:hidden">
 												{folder.subfolders.map(subfolder => (
 													<SidebarMenuSubItem key={subfolder.name}>
 														<SidebarMenuSubButton className="w-full">
 															<span>{subfolder.name}</span>
-															<span className="ml-auto text-xs text-sidebar-foreground/70">{subfolder.count}</span>
+															<span className="ml-1 text-xs text-sidebar-foreground/70">{subfolder.count}</span>
 														</SidebarMenuSubButton>
 													</SidebarMenuSubItem>
 												))}
