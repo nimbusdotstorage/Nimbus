@@ -23,14 +23,32 @@ export default function StorageFooter() {
 						</Button>
 					</div>
 				</div>
-				
+
 				{/* Circular view - shown when collapsed with tooltip */}
 				<Tooltip>
 					<TooltipTrigger asChild>
 						<div className="hidden group-data-[collapsible=icon]:flex transition-opacity duration-200 ease-linear opacity-0 group-data-[collapsible=icon]:opacity-100 group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:relative group-data-[collapsible=icon]:rounded-lg group-data-[collapsible=icon]:bg-sidebar-accent group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:items-center">
 							<svg className="group-data-[collapsible=icon]:size-6 -rotate-90" viewBox="0 0 48 48">
-								<circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" strokeOpacity="0.2" strokeWidth="4" pathLength="100" />
-								<circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" strokeWidth="4" pathLength="100" strokeDasharray={`${storageUsed} 100`} />
+								<circle
+									cx="24"
+									cy="24"
+									r="20"
+									fill="none"
+									stroke="currentColor"
+									strokeOpacity="0.2"
+									strokeWidth="4"
+									pathLength="100"
+								/>
+								<circle
+									cx="24"
+									cy="24"
+									r="20"
+									fill="none"
+									stroke="currentColor"
+									strokeWidth="4"
+									pathLength="100"
+									strokeDasharray={`${storageUsed} 100`}
+								/>
 							</svg>
 						</div>
 					</TooltipTrigger>
