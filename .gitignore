@@ -32,7 +32,8 @@ node_modules
 # duh
 /.vscode
 
-# add others
+.vscode/*
+!.vscode/settings.json
 
 # debug
 npm-debug.log*
