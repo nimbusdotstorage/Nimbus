@@ -158,3 +158,71 @@ git push origin feature/your-feature-name
 
 By contributing to this project, you agree that your contributions will be licensed under its
 [Apache License 2.0](LICENSE).
+
+---
+
+## For new contributors
+
+We want everyone to be able to contribute something to Nimbus. So we set up a list of a few items that can get you
+started contributing to the project. You can also check out the [roadmap](https://nimbus.nolt.io/) for ideas. This will
+be updated as needed.
+
+### 1. Storage source support
+
+If you have experience with the APIs or specs for S3, R2, OneDrive, or any other storage source, we would love it if you
+help us add support for it. Try to stay as close to the API spec as possible, especially for S3 storage so we can
+support S3 compatible storage sources like MinIO.
+
+### 2. UI/UX improvements
+
+Some items to get started with:
+
+- Add a missing page or component
+- Add error or loading states to a page or component
+- Add custom file icons for specific file types
+- Create modals for file actions (add, delete, rename, move, etc.)
+- Create modals for adding new storage sources
+- Create modals for tag management (add, delete, edit, rename, etc.)
+- Create pop ups for uploading files & folders
+- Notification dropdown
+- A settings page that functions with the providers and user settings
+- Add folder tree navigation, breadcrumbs, or a file previewer
+
+We realize that many of these changes will not have total functionality hooked up yet. Thats fine, just make sure to add
+dummy data so we can see the UI and make sure it works as expected before adding real data.
+
+### 3. Backend Improvements
+
+Some items to get started with:
+
+- Any security related changes
+- tRPC support with [Hono](https://hono.dev/docs/guides/rpc). Add the provider and migrate a few routes that haven't
+  been migrated.
+- Add in storage support drivers like OneDrive, S3, etc.
+- Add account linking to the Better-Auth config if needed.
+- Add authentication to the API routes if needed.
+- Add rate limiting to the API routes if needed.
+- Add database tables and migrations if needed for new features.
+- Add or improve logging with a lightweight logger.
+- Improve error handling.
+
+### 4. Design
+
+Some items to get started with:
+
+- We need a logo.
+- Tag color selection
+- Visual hierarchy improvements
+- Transitions and component design
+- Any errors in spacing, margin, sizing, mode toggling, or responsiveness that you can find.
+
+### 5. General Improvements/Features
+
+Some items to get started with:
+
+- Update the README.md or CONTRIBUTING.md if they are out of date.
+- Improve error messages on both the frontend and backend.
+- Add tests to the backend using Vitest
+- Add tests to the frontend using Playwright
+- Help us build a public API for Nimbus
+- Build a CLI for that API to upload/download/manage files form the terminal
