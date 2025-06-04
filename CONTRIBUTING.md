@@ -13,7 +13,7 @@ Thank you for your interest in contributing to Nimbus! This guide will help you 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/logscore/Nimbus.git
+git clone https://github.com/nimbusdotstorage/Nimbus.git
 cd Nimbus
 ```
 
@@ -110,7 +110,7 @@ git checkout -b feature/your-feature-name
 Add the original repo as a remote:
 
 ```bash
-git remote add upstream https://github.com/logscore/nimbus.git
+git remote add upstream https://github.com/nimbusdotstorage/nimbus.git
 ```
 
 > Make sure to pull from the upstream repo to keep your fork up to date using `git pull upstream main`
