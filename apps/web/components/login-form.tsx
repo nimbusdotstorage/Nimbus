@@ -27,7 +27,7 @@ export function LoginForm({ className, ...props }: ComponentProps<"div">) {
             </Button>
           </div>
           <div className="gap-2 pt-6">
-            <CardTitle className="text-center whitespace-nowrap overflow-none">Welcome back to Nimbus.cloud</CardTitle>
+            <CardTitle className="text-center whitespace-nowrap overflow-none">Welcome back to Nimbus.storage</CardTitle>
             <CardDescription className="text-center">You do the files, we store them. </CardDescription> {/* Made this slogan up, hope you like it */}
           </div>
 				</CardHeader>
