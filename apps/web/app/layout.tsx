@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ReactQueryProvider } from "@/web/components/providers/query-provider";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { Toaster } from "sonner";
 
 export const metadata = {
 	title: "Nimbus",
@@ -59,10 +60,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 				<ReactQueryProvider>
 					<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 						<div className="relative min-h-screen">
-							<main className="flex-1 flex justify-center ">
+							<main className="flex-1 flex justify-center">
 								{children}
 								<Analytics />
 							</main>
+							<Toaster position="top-center" richColors />
 						</div>
 					</ThemeProvider>
 				</ReactQueryProvider>
