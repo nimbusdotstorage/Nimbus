@@ -17,7 +17,7 @@ export const auth = betterAuth({
 	}),
 	trustedOrigins: [process.env.FRONTEND_URL!, process.env.BACKEND_URL!],
 	socialProviders:
-		process.env.GOOGLE_CLIENT_ID?.length==0 && process.env.GOOGLE_CLIENT_SECRET?.length==0 // Check if google is supported
+		process.env.GOOGLE_CLIENT_ID! && process.env.GOOGLE_CLIENT_SECRET! 
 			? {
 					google: {
 						clientId: process.env.GOOGLE_CLIENT_ID as string,
