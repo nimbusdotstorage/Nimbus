@@ -13,7 +13,7 @@ Thank you for your interest in contributing to Nimbus! This guide will help you 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/logscore/Nimbus.git
+git clone https://github.com/nimbusdotstorage/Nimbus.git
 cd Nimbus
 ```
 
@@ -57,7 +57,8 @@ We use Docker to run a PostgreSQL database for local development. Follow these s
 
 ### 4. Environment Setup
 
-Copy the `.env.example` file to `.env` using this command, `cp .env.example .env` and fill in these values:
+Copy the `.env.example` file to `.env` using this command, `cp .env.example .env` and fill in these values. Follow the
+instructions on the first step of this [guide](https://www.better-auth.com/docs/authentication/google).
 
 ```bash
 GOOGLE_CLIENT_ID=
