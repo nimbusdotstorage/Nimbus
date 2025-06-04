@@ -1,14 +1,14 @@
 "use client";
-import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import NumberFlow from "@number-flow/react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/web/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import NumberFlow from "@number-flow/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 import { GitHub } from "../icons/github";
 
 const formSchema = z.object({
@@ -40,7 +40,7 @@ async function joinWaitlist(email: string): Promise<void> {
 
 	if (!response.ok) {
 		const errorData = await response.json().catch(() => ({}));
-		throw new Error(errorData.message || "Failed to join waitlist");
+		throw new Error(errorData.error || "Failed to join waitlist");
 	}
 }
 
@@ -61,8 +61,9 @@ function useWaitlistCount() {
 				count: (query.data?.count ?? 0) + 1,
 			});
 		},
-		onError: () => {
-			toast.error("Something went wrong. Please try again.");
+		onError: error => {
+			const errorMessage = error instanceof Error ? error.message : "Something went wrong. Please try again.";
+			toast.error(errorMessage);
 		},
 	});
 

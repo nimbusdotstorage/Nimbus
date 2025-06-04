@@ -1,9 +1,9 @@
+import { rateLimitAttempts, waitlist } from "@/packages/db/schema";
+import { db } from "@/packages/db/src/index";
+import { eq, sql } from "drizzle-orm";
+import { nanoid } from "nanoid";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { db } from "@/packages/db/src/index";
-import { waitlist, rateLimitAttempts } from "@/packages/db/schema";
-import { nanoid } from "nanoid";
-import { eq, sql } from "drizzle-orm";
 
 // Database-backed rate limiting function
 async function checkRateLimitDB(ip: string, limit: number = 3, windowMs: number = 120000) {
@@ -60,7 +60,7 @@ const emailSchema = z.object({
 			if (labels.length < 2 || labels.length > 3) return false;
 			const tld = labels.at(-1)!;
 			return /^[a-z]{2,63}$/i.test(tld);
-		}, "Email domain or TLD is not allowed"),
+		}, "Invalid email, please try again"),
 });
 
 // POST /api/waitlist/join - Add email to waitlist
@@ -88,7 +88,9 @@ export async function POST(request: NextRequest) {
 		const result = emailSchema.safeParse(body);
 
 		if (!result.success) {
-			return NextResponse.json({ success: false, error: result.error.format() }, { status: 400 });
+			// Handle Zod error
+			const errorMessage = result.error.errors[0]?.message;
+			return NextResponse.json({ success: false, error: errorMessage }, { status: 400 });
 		}
 
 		const { email } = result.data;
