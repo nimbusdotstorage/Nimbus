@@ -7,7 +7,7 @@ A better cloud
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/logscore/Nimbus.git
+git clone https://github.com/nimbusdotstorage/Nimbus.git
 cd Nimbus
 ```
 

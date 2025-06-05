@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ReactQueryProvider } from "@/web/components/providers/query-provider";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { Toaster } from "sonner";
 
 export const metadata = {
 	title: "Nimbus",
@@ -58,10 +59,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 			<body className={`${geistSans.variable} ${geistMono.variable}`}>
 				<ReactQueryProvider>
 					<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-						<main> {/* please, no classnames in the root layout */}
-								{children}
+            <div className="relative min-h-screen">
+						  <main> {/* please, no classnames in the root layout */}
+							  {children}
 								<Analytics />
 							</main>
+              <Toaster position="top-center" richColors />
+            </div>
+            {/* Fixed conflict, please suggest edits */}
 					</ThemeProvider>
 				</ReactQueryProvider>
 			</body>
