@@ -103,7 +103,7 @@ export function WaitlistForm({ className }: WaitlistFormProps) {
 					onSubmit={handleSubmit(handleJoinWaitlist)}
 				>
 					<Input
-						placeholder="you@example.com" // Easier to understand
+						placeholder="example@0.email"
 						className="h-11 w-full rounded-lg bg-white px-4 text-base font-medium outline outline-neutral-200 placeholder:font-medium placeholder:text-muted-foreground md:text-base"
 						{...register("email")}
 					/>
