@@ -44,7 +44,7 @@ export function LoginForm({ className, ...props }: ComponentProps<"div">) {
             <div className="flex flex-col gap-4 justify-center items-center">
               <div className="flex flex-col gap-0.5 w-full">
                 <div className="font-semibold text-sm text-muted-foreground pl-1">Email</div>
-                <Input placeholder="you@example.com" type="email" className="placeholder:text-sm shadow-md"/>
+                <Input placeholder="example@0.email" type="email" className="placeholder:text-sm shadow-md"/>
               </div>
               <div className="flex flex-col gap-0.5 w-full">
                 <div className="font-semibold text-sm text-muted-foreground pl-1">Password</div>
