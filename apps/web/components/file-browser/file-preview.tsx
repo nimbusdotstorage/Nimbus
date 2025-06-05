@@ -50,7 +50,6 @@ export function FilePreview() {
 		}
 	}, [id, data?.id]);
 
-	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => {
 		if (data?.type === "folder") {
 			void refetchFolderContents();
