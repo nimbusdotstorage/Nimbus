@@ -13,17 +13,21 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export function LoginForm({ className, ...props }: ComponentProps<"div">) {
 	return (
-		<div className={cn("flex flex-col gap-0 size-full items-center justify-center", className)} {...props}>
+		<div className={cn("flex flex-col gap-0 size-full items-center justify-center select-none", className)} {...props}>
 			<Card className="gap-6 w-full pb-0">
 				<CardHeader>
-          <div className="flex flex-row justify-between items-center -mx-6 border-b">
-            <Button className="px-6 py-6 rounded-none font-semibold cursor-pointer" variant="link" onClick={() => redirect('/')}>
-              <ArrowLeft/>
-              Go back
+          <div className="flex flex-row justify-between items-center -mx-6 border-b gap-0">
+            <Button className="pl-6 py-6 rounded-none font-semibold cursor-pointer" variant="link" asChild>
+              <Link href={`/`}>
+                <ArrowLeft/>
+                Go back
+              </Link>
             </Button>
-            <Button className="px-6 py-6 rounded-none font-semibold cursor-pointer" variant="link" onClick={() => redirect('/signup')}>
-              Sign Up
-              <ArrowRight/>
+            <Button className="pr-6 py-6 rounded-none font-semibold cursor-pointer" variant="link" asChild>
+              <Link href={`/signup`}>
+                Sign Up
+                <ArrowRight/>
+              </Link>
             </Button>
           </div>
           <div className="gap-2 pt-6">
