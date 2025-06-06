@@ -1,15 +1,15 @@
 "use client";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/web/lib/utils";
-import { zodResolver } from "@hookform/resolvers/zod";
 import NumberFlow from "@number-flow/react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { GitHub } from "../icons/github";
+import { cn } from "@/web/lib/utils";
+import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
-import { GitHub } from "../icons/github";
 
 const formSchema = z.object({
 	email: z.string().email(),
@@ -135,7 +135,7 @@ export function WaitlistForm({ className }: WaitlistFormProps) {
 			{waitlist.success ? (
 				<div className="flex flex-col items-center justify-center gap-4 text-center">
 					<p className="text-xl font-semibold">Welcome to the waitlist! 🎉</p>
-					<p className="text-base text-muted-foreground">
+					<p className="text-muted-foreground text-base">
 						We&apos;ll let you know when we&#39;re ready to show you what we&#39;ve been working on.
 					</p>
 				</div>
@@ -146,11 +146,11 @@ export function WaitlistForm({ className }: WaitlistFormProps) {
 				>
 					<Input
 						placeholder="example@0.email"
-						className="h-11 w-full rounded-lg bg-white px-4 text-base font-medium outline outline-neutral-200 placeholder:font-medium placeholder:text-muted-foreground md:text-base"
+						className="placeholder:text-muted-foreground h-11 w-full rounded-lg bg-white px-4 text-base font-medium outline outline-neutral-200 placeholder:font-medium md:text-base"
 						{...register("email")}
 					/>
 					<Button
-						className="h-11 w-full pr-3 pl-4 text-base sm:w-fit rounded-lg relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-1000 before:ease-in-out"
+						className="relative h-11 w-full overflow-hidden rounded-lg pr-3 pl-4 text-base before:absolute before:inset-0 before:translate-x-[-100%] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent before:transition-transform before:duration-1000 before:ease-in-out hover:before:translate-x-[100%] sm:w-fit"
 						type="submit"
 					>
 						Join Waitlist

@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
 import "@/web/app/globals.css";
 
-import promoImage from "@/public/images/preview.png";
-import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ReactQueryProvider } from "@/web/components/providers/query-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import promoImage from "@/public/images/preview.png";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "sonner";
@@ -60,7 +60,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 				<ReactQueryProvider>
 					<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 						<div className="relative min-h-screen">
-							<main className="flex-1 flex justify-center">
+							<main className="flex flex-1 justify-center">
 								{children}
 								<Analytics />
 							</main>

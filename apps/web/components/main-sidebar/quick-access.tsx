@@ -8,8 +8,8 @@ import {
 } from "@/components/ui/sidebar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
-import { useState } from "react";
 import { Star } from "lucide-react";
+import { useState } from "react";
 
 export function QuickAccess() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -26,10 +26,10 @@ export function QuickAccess() {
 					<SidebarGroupContent>
 						<SidebarMenu>
 							<SidebarMenuItem>
-								<SidebarMenuButton tooltip="Starred">
-									<Star className="size-4 dark:text-yellow-500 text-yellow-500" />
+								<SidebarMenuButton tooltip="Starred" className="cursor-pointer">
+									<Star className="size-4 text-yellow-500 dark:text-yellow-500" />
 									<span>Starred</span>
-									<span className="ml-auto text-xs text-sidebar-foreground/70">23</span>
+									<span className="text-sidebar-foreground/70 ml-auto text-xs">23</span>
 								</SidebarMenuButton>
 							</SidebarMenuItem>
 						</SidebarMenu>
