@@ -43,12 +43,22 @@ We use Docker to run a PostgreSQL database for local development. Follow these s
 
    You should see the `nimbus-db` container in the list with a status of "Up".
 
+3. **Connect to the database** (optional):
+
+   ```bash
+   # Using psql client inside the container
+   docker compose exec postgres psql -U postgres -d nimbus
+   ```
+
 ### 4. Environment Setup
 
 Copy the `.env.example` file to `.env` using this command, `cp .env.example .env` and fill in these values. Follow the
 instructions on the first step of this [guide](https://www.better-auth.com/docs/authentication/google).
 
 ```bash
+# For more information on how to get these values, see https://www.better-auth.com/docs/authentication/google
+# Authorised JavaScript origins: http://localhost:1284
+# Authorised redirect URIs: http://localhost:1284/api/auth/callback/google
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 
