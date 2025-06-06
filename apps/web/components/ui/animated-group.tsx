@@ -1,6 +1,6 @@
 "use client";
-import type { ReactNode, JSX } from "react";
 import { motion, type Variants } from "motion/react";
+import type { ReactNode, JSX } from "react";
 import React from "react";
 
 export type PresetType =
