@@ -54,6 +54,7 @@ export function CreateFolderDialog({ open, onOpenChange, onCreateFolder }: Creat
 							onChange={e => setFolderName(e.target.value)}
 							required
 							className="focus-visible:ring-2 focus-visible:ring-ring"
+							maxLength={255}
 						/>
 					</div>
 
