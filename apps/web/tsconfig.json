@@ -36,6 +36,7 @@
 			"@/server/*": ["../server/*"],
 			"@/packages/*": ["../../packages/*"],
 			"@/components/*": ["./components/*"],
+			"@/lib/*": ["./lib/*"],
 			"@/web/*": ["./*"],
 			"@/public/*": ["./public/*"]
 		}

@@ -1,3 +1,5 @@
+"use client";
+
 import { Bell, HelpCircle, Settings } from "lucide-react";
 
 import { ModeToggle } from "@/components/mode-toggle";
@@ -18,6 +20,8 @@ import { LogOut, Search } from "lucide-react";
 import Link from "next/link";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { redirect } from "next/navigation";
+import { SearchDialog } from "@/components/search/search-dialog";
+import { useState } from "react";
 
 const getInitials = (name?: string | null) => {
 	if (!name) return "SG";
@@ -32,6 +36,7 @@ const getInitials = (name?: string | null) => {
 
 export function Header() {
 	const { data: session, isPending } = authClient.useSession();
+	const [isSearchOpen, setIsSearchOpen] = useState(false);
 
 	const handleSignOut = async () => {
 		try {
@@ -53,7 +58,21 @@ export function Header() {
 				<SidebarTrigger />
 				<div className="relative flex-1 max-w-xl">
 					<Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-					<Input type="search" placeholder="Search in Drive" className="w-full pl-8 bg-muted/50" />
+					<Input
+						type="search"
+						placeholder="Search smarter with AI"
+						className="w-full pl-8 pr-12 bg-muted/50"
+						onFocus={() => setIsSearchOpen(true)}
+					/>
+					<Button
+						variant="ghost"
+						size="icon"
+						className="absolute right-1 top-1 h-8 w-8 text-muted-foreground hover:text-primary"
+						onClick={() => setIsSearchOpen(true)}
+					>
+						<Search className="h-4 w-4" />
+						<span className="sr-only">Advanced Search</span>
+					</Button>
 				</div>
 				<div className="flex items-center gap-2">
 					<ModeToggle />
@@ -101,6 +120,8 @@ export function Header() {
 					</DropdownMenu>
 				</div>
 			</div>
+
+			<SearchDialog open={isSearchOpen} onOpenChange={setIsSearchOpen} />
 		</header>
 	);
 }
