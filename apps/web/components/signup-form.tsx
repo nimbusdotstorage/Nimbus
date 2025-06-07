@@ -8,11 +8,13 @@ import { signInGoogle } from "@/packages/auth/src/auth-client";
 import { useState, type ComponentProps } from "react";
 import { Google } from "./icons/google";
 import { Input } from "./ui/input";
-import { redirect } from "next/navigation"; // Keep for login redirect
-import { ArrowLeft, ArrowDown } from "lucide-react";
+import { ArrowLeft, ArrowDown, Eye, EyeClosed } from "lucide-react"; // EyeClosed is correctly imported
 import { Separator } from "./ui/separator";
 import { Checkbox } from "./ui/checkbox";
 import { Label } from "./ui/label";
+import { useSearchParams } from 'next/navigation'
+import { string } from "zod";
+import { SegmentedProgress } from "./ui/segmented-progress";
 
 // Basic email validation function
 const isValidEmail = (email: string): boolean => {
@@ -22,19 +24,35 @@ const isValidEmail = (email: string): boolean => {
 export function SignupForm({ className, ...props }: ComponentProps<"div">) {
   const [showPasswordAndTos, setShowPasswordAndTos] = useState(false);
   const [errorContent, setErrorContent] = useState("");
+  
+  // email for mailing list
+  const searchParams = useSearchParams()
 
-  const [email, setEmail] = useState("");
+  const urlEmail = searchParams.get('email');
+  const [email, setEmail] = useState(urlEmail? urlEmail : "");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [tosAccepted, setTosAccepted] = useState(false);
 
+  // State for password visibility
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+
   const handleContinue = () => {
     setErrorContent(""); // Clear previous errors
-    if (!isValidEmail(email)) { // Relies on the button being enabled by valid email
+    if (!isValidEmail(email)) {
       setErrorContent("Please enter a valid email address.");
       return;
     }
     setShowPasswordAndTos(true);
+  };
+
+  const handleGoBack = () => {
+    setShowPasswordAndTos(false);
+    setErrorContent(""); // Clear any errors from the password step
+    // Optionally, clear password fields when going back
+    // setPassword("");
+    // setRepeatPassword("");
   };
 
   const handleSignUp = () => {
@@ -63,25 +81,32 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
     alert("Sign up successful (check console for details)!"); // Placeholder for success
   };
 
+  // Toggle password visibility functions
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible((prev) => !prev);
+  };
+
+
   // Determine if the sign-up button should be disabled
-  const isSignUpButtonDisabled = 
-    !password || 
-    !repeatPassword || 
-    password !== repeatPassword || 
+  const isSignUpButtonDisabled =
+    !password ||
+    !repeatPassword ||
+    password !== repeatPassword ||
     !tosAccepted;
 
   return (
-    <div className={cn("flex flex-col gap-0 size-full items-center justify-center", className)} {...props}>
+    <div className={cn("flex flex-col gap-0 size-full items-center justify-center select-none", className)} {...props}>
       <Card className="gap-6 w-full pb-0">
-        <CardHeader>
+        <CardHeader className="overflow-x-hidden">
           <div className="flex flex-row justify-start items-center -mx-6 border-b">
             <Button className="px-6 py-6 rounded-none font-semibold cursor-pointer" variant="link" asChild>
               <Link href={`/login`}>
-                <ArrowLeft/>
+                <ArrowLeft />
                 Log In
               </Link>
             </Button>
           </div>
+          <SegmentedProgress segments={2} value={showPasswordAndTos? 2:1} />
           <div className="gap-2 pt-6">
             <CardTitle className="text-center whitespace-nowrap overflow-none">Sign up for Nimbus.storage</CardTitle>
             <CardDescription className="text-center">{!showPasswordAndTos ? "Let's create your Nimbus storage account" : "Let's secure your account"}</CardDescription>
@@ -89,7 +114,7 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
         </CardHeader>
         <CardContent className="px-0">
           <div className="flex flex-col gap-4 px-4 pb-6">
-            
+
             {/* log in with Google */}
             {!showPasswordAndTos &&
               <>
@@ -101,26 +126,35 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
                 <div className="text-center text-muted-foreground text-sm">OR</div>
               </>
             }
-            
+
             {/* login with email */}
             <div className="flex flex-col gap-4 justify-center items-center">
               <div className="flex flex-col gap-0.5 w-full">
                 <div className="font-semibold text-sm text-muted-foreground pl-1">Email</div>
-                <Input 
-                  placeholder="you@example.com" 
-                  type="email" 
-                  className="placeholder:text-sm shadow-md"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={showPasswordAndTos} // Optionally disable email after continuing
-                />
-              </div> 
-              
+                <div className="flex flex-row gap-2">
+                  <Input
+                    placeholder="example@0.email"
+                    type="email"
+                    className="placeholder:text-sm shadow-md truncate"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={showPasswordAndTos} // Optionally disable email after continuing
+                  />
+                  {showPasswordAndTos && 
+                    <Button variant="outline" onClick={handleGoBack} className="self-start"> {/* Updated Go Back button */}
+                      <ArrowLeft className="mr-2 h-4 w-4" />
+                      Go Back
+                    </Button>
+                  }
+                </div>
+                {/* ------------- add turnstile here (pls don't use recaptcha, it is google spyware) ------------- */}
+              </div>
+
               {/* Email validation error display (only if password section is NOT shown) */}
               {!showPasswordAndTos && errorContent && (
                 <div className="w-full text-sm text-red-500 pl-1 -mt-2 mb-1">{errorContent}</div>
               )}
-              
+
               {/* Continue Button - Conditionally Rendered */}
               {!showPasswordAndTos && (
                 <div className="w-full mt-1">
@@ -143,34 +177,41 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
                 <>
                   {/* Password Section */}
                   <div className="flex flex-col w-full gap-3">
-                    <Button >
-                      Go Back
-                    </Button>
-                    <Separator  className="mt-2"/>
+                    <Separator className="my-1" /> {/* Adjusted margin for separator */}
                     <div className="flex flex-col gap-0.5 w-full">
                       <div className="font-semibold text-sm text-muted-foreground pl-1">Password</div>
-                      <Input 
-                        placeholder="password" 
-                        type="password" 
-                        className="text-2xl tracking-wider text-primary/75 placeholder:text-muted-foreground placeholder:tracking-normal placeholder:text-sm shadow-md"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
+                      <div className="flex flex-row gap-2">
+                        <Input
+                          placeholder="password"
+                          type={isPasswordVisible ? "text" : "password"}
+                          className="text-2xl tracking-wider text-primary/75 placeholder:text-muted-foreground placeholder:tracking-normal placeholder:text-sm shadow-md"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <Button variant="outline" size="icon" onClick={togglePasswordVisibility}> {/* Add onClick */}
+                          {!isPasswordVisible ? <EyeClosed /> : <Eye />} {/* Toggle icon */}
+                        </Button>
+                      </div>
                     </div>
                     <div className="flex flex-col gap-0.5 w-full">
-                      <div className="font-semibold text-sm text-muted-foreground pl-1">Repeat Password</div>
-                      <Input 
-                        placeholder="repeat password" 
-                        type="password" 
-                        className="text-2xl tracking-wider text-primary/75 placeholder:text-muted-foreground placeholder:tracking-normal placeholder:text-sm shadow-md"
-                        value={repeatPassword}
-                        onChange={(e) => setRepeatPassword(e.target.value)}
-                      />
+                      <div className="font-semibold text-sm text-muted-foreground pl-1">Repeat Password - make sure that passwords match.</div>
+                      <div className="flex flex-row gap-2">
+                        <Input
+                          placeholder="repeat password"
+                          type={isPasswordVisible ? "text" : "password"}
+                          className="text-2xl tracking-wider text-primary/75 placeholder:text-muted-foreground placeholder:tracking-normal placeholder:text-sm shadow-md"
+                          value={repeatPassword}
+                          onChange={(e) => setRepeatPassword(e.target.value)}
+                        />
+                        {/* <Button variant="outline" size="icon" onClick={togglePasswordVisibility}> Add onClick
+                          {isPasswordVisible ? <EyeClosed /> : <Eye />} Toggle icon
+                        </Button> */}
+                      </div>
                     </div>
                   </div>
 
                   {/* TOS compliance section */}
-                  <div className="flex flex-row w-full items-center">
+                  <div className="flex flex-row w-full items-center mt-2"> {/* Added small margin-top for spacing */}
                     <Label className="flex items-start gap-3 w-full rounded-lg border p-3 hover:border-neutral-500 hover:bg-neutral-800 has-[[aria-checked=true]]:border-neutral-600 has-[[aria-checked=true]]:bg-neutral-800 transition-all duration-200">
                       <Checkbox
                         id="tos-checkbox"
@@ -183,21 +224,21 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
                           Accept Terms and conditions
                         </p>
                         <p className="text-muted-foreground text-sm">
-                        Check this box if you have read and agree with the terms of service and privacy policy
+                          Check this box if you have read and agree with the terms of service and privacy policy
                         </p>
                       </div>
                     </Label>
                   </div>
-                  
+
                   {/* Sign Up Button - Conditionally Rendered */}
-                  <div className="w-full mt-1">
+                  <div className="w-full mt-3"> {/* Adjusted margin-top for spacing */}
                     {/* Error display for password/TOS/signup (only if password section IS shown) */}
                     {errorContent && (
                       <div className="pl-1 mb-2 font-semibold text-sm text-red-500 ">{errorContent}</div>
                     )}
-                    <Button 
-                      onClick={handleSignUp} 
-                      disabled={isSignUpButtonDisabled} 
+                    <Button
+                      onClick={handleSignUp}
+                      disabled={isSignUpButtonDisabled}
                       className="w-full cursor-pointer font-semibold"
                     >
                       Sign Up
