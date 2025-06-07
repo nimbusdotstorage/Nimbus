@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import type { RequestInit, RequestInfo, BodyInit } from "./internal/builtin-types";
@@ -154,9 +155,9 @@ export interface ClientOptions {
 }
 
 /**
- * API Client for interfacing with the Googledrive API.
+ * API Client for interfacing with the Google Drive API.
  */
-export class Googledrive {
+export class GoogleDrive {
 	accessToken: string | null;
 
 	baseURL: string;
@@ -172,7 +173,7 @@ export class Googledrive {
 	private _options: ClientOptions;
 
 	/**
-	 * API Client for interfacing with the Googledrive API.
+	 * API Client for interfacing with the GoogleDrive API.
 	 *
 	 * @param {string | null | undefined} [opts.accessToken=process.env['GOOGLEDRIVE_API_KEY'] ?? null]
 	 * @param {string} [opts.baseURL=process.env['GOOGLEDRIVE_BASE_URL'] ?? https://www.googleapis.com/drive/v3] - Override the default base URL for the API.
@@ -195,7 +196,7 @@ export class Googledrive {
 		};
 
 		this.baseURL = options.baseURL!;
-		this.timeout = options.timeout ?? Googledrive.DEFAULT_TIMEOUT /* 1 minute */;
+		this.timeout = options.timeout ?? GoogleDrive.DEFAULT_TIMEOUT /* 1 minute */;
 		this.logger = options.logger ?? console;
 		const defaultLogLevel = "warn";
 		// Set default logLevel early so that we can log a warning in parseLogLevel.
@@ -248,7 +249,7 @@ export class Googledrive {
 		);
 	}
 
-	protected authHeaders(opts: FinalRequestOptions): NullableHeaders | undefined {
+	protected authHeaders(_opts: FinalRequestOptions): NullableHeaders | undefined {
 		if (this.accessToken == null) {
 			return undefined;
 		}
@@ -296,7 +297,7 @@ export class Googledrive {
 	/**
 	 * Used as a callback for mutating the given `FinalRequestOptions` object.
 	 */
-	protected async prepareOptions(options: FinalRequestOptions): Promise<void> {}
+	protected async prepareOptions(_options: FinalRequestOptions): Promise<void> {}
 
 	/**
 	 * Used as a callback for mutating the given `RequestInit` object.
@@ -305,7 +306,7 @@ export class Googledrive {
 	 * the request properties, e.g. `method` or `url`.
 	 */
 	protected async prepareRequest(
-		request: RequestInit,
+		_request: RequestInit,
 		{ url, options }: { url: string; options: FinalRequestOptions }
 	): Promise<void> {}
 
@@ -701,10 +702,9 @@ export class Googledrive {
 		}
 	}
 
-	static Googledrive = this;
 	static DEFAULT_TIMEOUT = 60000; // 1 minute
 
-	static GoogledriveError = Errors.GoogledriveError;
+	static GoogleDriveError = Errors.GoogleDriveError;
 	static APIError = Errors.APIError;
 	static APIConnectionError = Errors.APIConnectionError;
 	static APIConnectionTimeoutError = Errors.APIConnectionTimeoutError;
@@ -728,14 +728,15 @@ export class Googledrive {
 	files: API.Files = new API.Files(this);
 	teamdrives: API.Teamdrives = new API.Teamdrives(this);
 }
-Googledrive.About = About;
-Googledrive.Apps = Apps;
-Googledrive.Changes = Changes;
-Googledrive.Channels = Channels;
-Googledrive.Drives = Drives;
-Googledrive.Files = Files;
-Googledrive.Teamdrives = Teamdrives;
-export declare namespace Googledrive {
+GoogleDrive.About = About;
+GoogleDrive.Apps = Apps;
+GoogleDrive.Changes = Changes;
+GoogleDrive.Channels = Channels;
+GoogleDrive.Drives = Drives;
+GoogleDrive.Files = Files;
+GoogleDrive.Teamdrives = Teamdrives;
+// eslint-disable-next-line no-redeclare
+export declare namespace GoogleDrive {
 	export type RequestOptions = Opts.RequestOptions;
 
 	export {
