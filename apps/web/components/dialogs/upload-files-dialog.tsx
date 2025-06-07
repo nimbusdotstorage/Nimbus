@@ -66,7 +66,7 @@ export function UploadFileDialog({ open, onOpenChange, onUpload }: UploadFileDia
 		<Dialog open={open} onOpenChange={onOpenChange}>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
-					<DialogTitle className="text-xl font-semibold">Upload File</DialogTitle>
+					<DialogTitle className="text-xl font-semibold">Upload Files</DialogTitle>
 					<DialogDescription>Click or drag and drop files below to upload.</DialogDescription>
 				</DialogHeader>
 				<form onSubmit={handleUploadFile}>

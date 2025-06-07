@@ -9,7 +9,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { UploadFileDialog } from "./dialogs/upload-file-dialog";
+import { UploadFileDialog } from "./dialogs/upload-files-dialog";
 import { UploadFolderDialog } from "./dialogs/upload-folder-dialog";
 import { CreateFolderDialog } from "./dialogs/create-folder-dialog";
 

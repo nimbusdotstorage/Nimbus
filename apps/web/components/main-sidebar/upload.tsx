@@ -8,7 +8,7 @@ import { SidebarGroup, SidebarGroupContent } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Upload, FolderOpen, ChevronDown, File } from "lucide-react";
 import { useState } from "react";
-import { UploadFileDialog } from "@/components/dialogs/upload-file-dialog";
+import { UploadFileDialog } from "@/components/dialogs/upload-files-dialog";
 import { UploadFolderDialog } from "@/components/dialogs/upload-folder-dialog";
 
 export default function UploadButton() {
