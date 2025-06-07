@@ -1,22 +1,22 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { Googledrive as default } from './client';
+export { GoogleDrive as default } from "./client";
 
-export { type Uploadable, toFile } from './core/uploads';
-export { APIPromise } from './core/api-promise';
-export { Googledrive, type ClientOptions } from './client';
+export { type Uploadable, toFile } from "./core/uploads";
+export { APIPromise } from "./core/api-promise";
+export { GoogleDrive, type ClientOptions } from "./client";
 export {
-  GoogledriveError,
-  APIError,
-  APIConnectionError,
-  APIConnectionTimeoutError,
-  APIUserAbortError,
-  NotFoundError,
-  ConflictError,
-  RateLimitError,
-  BadRequestError,
-  AuthenticationError,
-  InternalServerError,
-  PermissionDeniedError,
-  UnprocessableEntityError,
-} from './core/error';
+	GoogleDriveError,
+	APIError,
+	APIConnectionError,
+	APIConnectionTimeoutError,
+	APIUserAbortError,
+	NotFoundError,
+	ConflictError,
+	RateLimitError,
+	BadRequestError,
+	AuthenticationError,
+	InternalServerError,
+	PermissionDeniedError,
+	UnprocessableEntityError,
+} from "./core/error";

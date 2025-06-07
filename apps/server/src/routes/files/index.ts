@@ -1,7 +1,10 @@
 import { Hono } from "hono";
+import type { ReqVariables } from "@/apps/server/src/index";
+import { getActiveAccount } from "lib/utils/accounts";
 
-const app = new Hono();
+const app = new Hono<{ Variables: ReqVariables }>();
 
+// Sample data for testing
 const sampleData = [
 	{ id: "1", name: "Documents", type: "folder", modified: "May 15, 2024" },
 	{ id: "2", name: "Images", type: "folder", modified: "May 12, 2024" },
@@ -11,10 +14,19 @@ const sampleData = [
 	{ id: "6", name: "Videos", type: "folder", modified: "May 3, 2024" },
 ];
 
-app.get("/", c => {
-	const type = c.req.query("type")?.toLowerCase() || "";
-	const filteredData = sampleData.filter(item => !type || item.type.toLowerCase().includes(type));
-	return c.json(filteredData);
+// Existing sample data endpoints
+app.get("/", async c => {
+	// const type = c.req.query("type")?.toLowerCase() || "";
+	// const filteredData = sampleData.filter(item => !type || item.type.toLowerCase().includes(type));
+	// return c.json(filteredData);
+	const user = c.get("user");
+	console.log(user);
+	if (!user) {
+		return c.json({ error: "User not authenticated" }, 401);
+	}
+	const accessToken = await getActiveAccount(user, c.req.raw.headers);
+	return c.text(JSON.stringify(accessToken));
+	// Need to set context with db and auth data for access token
 });
 
 app.get("/:id", c => {
