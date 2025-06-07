@@ -1,4 +1,9 @@
-import { Bell, HelpCircle, Settings } from "lucide-react";
+import { AnimateIcon } from "@/components/animate-ui/icons/icon";
+import { Bell } from "@/components/animate-ui/icons/bell";
+import { MessageCircleQuestion } from "@/components/animate-ui/icons/message-circle-question";
+import { Search } from "lucide-react";
+import { Settings } from "@/components/animate-ui/icons/settings";
+import { LogOut } from "@/components/animate-ui/icons/log-out";
 
 import { ModeToggle } from "@/components/mode-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -14,7 +19,6 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { authClient } from "@/packages/auth/src/auth-client";
-import { LogOut, Search } from "lucide-react";
 import Link from "next/link";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { redirect } from "next/navigation";
@@ -57,15 +61,21 @@ export function Header() {
 				</div>
 				<div className="flex items-center gap-2">
 					<ModeToggle />
-					<Button variant="ghost" size="icon">
-						<HelpCircle className="h-5 w-5" />
-					</Button>
-					<Button variant="ghost" size="icon">
-						<Settings className="h-5 w-5" />
-					</Button>
-					<Button variant="ghost" size="icon">
-						<Bell className="h-5 w-5" />
-					</Button>
+					<AnimateIcon animateOnHover>
+						<Button variant="ghost" size="icon">
+							<MessageCircleQuestion className="h-5 w-5 text-muted-foreground" />
+						</Button>
+					</AnimateIcon>
+					<AnimateIcon animateOnHover>
+						<Button variant="ghost" size="icon">
+							<Settings className="h-5 w-5 text-muted-foreground" />
+						</Button>
+					</AnimateIcon>
+					<AnimateIcon animateOnHover>
+						<Button variant="ghost" size="icon">
+							<Bell className="h-5 w-5 text-muted-foreground" />
+						</Button>
+					</AnimateIcon>
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant="ghost" size="icon" className="rounded-full">
