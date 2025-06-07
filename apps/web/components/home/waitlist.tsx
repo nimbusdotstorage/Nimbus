@@ -150,7 +150,7 @@ export function WaitlistForm({ className }: WaitlistFormProps) {
 						{...register("email")}
 					/>
 					<Button
-						className="h-11 w-full pr-3 pl-4 text-base sm:w-fit rounded-lg relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-1000 before:ease-in-out"
+						className="h-11 w-full pr-3 pl-4 hover:cursor-pointer text-base sm:w-fit rounded-lg relative overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent before:translate-x-[-100%] hover:before:translate-x-[100%] before:transition-transform before:duration-1000 before:ease-in-out"
 						type="submit"
 					>
 						Join Waitlist
