@@ -73,7 +73,7 @@ export function UploadFolderDialog({ open, onOpenChange, onUpload }: UploadFolde
 				</DialogHeader>
 				<form onSubmit={handleUploadFolder}>
 					<UploadZone
-						onFilesSelected={setSelectedFolder}
+						onFilesSelected={files => setSelectedFolder(files as FileList)}
 						isFolder={true}
 						isUploading={isUploading}
 						uploadProgress={uploadProgress}

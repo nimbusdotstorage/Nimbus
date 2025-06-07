@@ -70,7 +70,11 @@ export function UploadFileDialog({ open, onOpenChange, onUpload }: UploadFileDia
 					<DialogDescription>Click or drag and drop files below to upload.</DialogDescription>
 				</DialogHeader>
 				<form onSubmit={handleUploadFile}>
-					<UploadZone onFilesSelected={setSelectedFiles} isUploading={isUploading} uploadProgress={uploadProgress} />
+					<UploadZone
+						onFilesSelected={files => setSelectedFiles(files as FileList)}
+						isUploading={isUploading}
+						uploadProgress={uploadProgress}
+					/>
 					<DialogFooter>
 						{!isUploading && (
 							<>
