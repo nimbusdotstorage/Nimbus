@@ -13,11 +13,11 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { authClient } from "@/packages/auth/src/auth-client";
+import { authClient } from "@/repo/auth/src/auth-client";
 import { LogOut, Search } from "lucide-react";
 import Link from "next/link";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { signOut } from "@repo/auth/methods";
+import { signOut } from "@/repo/auth/methods";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
