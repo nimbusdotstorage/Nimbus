@@ -10,7 +10,7 @@ export default function Header() {
 	return (
 		<header className="absolute top-0 left-0 right-0 z-50 items-center justify-between p-4 flex">
 			<h1 className="text-lg font-bold font-sans flex items-center gap-2">
-				<Logo className="size-9" />
+				<Logo className="h-9 w-9" aria-hidden="true" />
 				Nimbus
 			</h1>{" "}
 			<div className="flex items-center gap-4">
