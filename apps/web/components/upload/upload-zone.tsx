@@ -1,4 +1,3 @@
-import React from "react";
 import { useDropzone } from "react-dropzone";
 import { useState, useRef, useCallback, type ChangeEvent } from "react";
 import { Upload, Folder } from "lucide-react";
