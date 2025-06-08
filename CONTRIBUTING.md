@@ -73,11 +73,11 @@ BETTER_AUTH_SECRET=
 
 - Navigate to Google Cloud [console](https://console.cloud.google.com/).
 
-- Create a new project and navigate to it's dashboard.
+- Create a new project and navigate to its dashboard.
 
 - Under <b>API & Services</b>, navigate to <b>Oauth Consent Screen</b> and enter the details.
 
-- After that create a client. Add <b>Authorised Javascript origin</b> as `http://localhost:3000` and <b> Authorised redirect uri</b> as `http://localhost:1284/api/auth/callback/google` and get your 
+- Now create a client. Add <b>Authorised Javascript origin</b> as `http://localhost:3000` and <b> Authorised redirect uri</b> as `http://localhost:1284/api/auth/callback/google` and get your 
 `client_id` and `client_secret`.
 
 - Now navigate to <b>Audience</b> and add <b>Test users</b>.
