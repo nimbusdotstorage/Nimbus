@@ -64,7 +64,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 								{children}
 								<Analytics />
 							</main>
-							<Toaster position="top-center" richColors />
+							<Toaster position="top-center" richColors theme="system" />
 						</div>
 					</ThemeProvider>
 				</ReactQueryProvider>
