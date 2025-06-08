@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { SVGMotionProps, useAnimation, type AnimationControls, type Variants } from "motion/react";
+import { useAnimation, type SVGMotionProps, type AnimationControls, type Variants } from "motion/react";
 
 import { cn } from "@/web/lib/utils";
 
