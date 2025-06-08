@@ -12,7 +12,7 @@ export default function Header() {
 			<h1 className="text-lg font-bold font-sans flex items-center gap-2">
 				<Logo className="h-9 w-9" aria-hidden="true" />
 				Nimbus
-			</h1>{" "}
+			</h1>
 			<div className="flex items-center gap-4">
 				<Button variant="ghost" aria-label="Discord">
 					<a href="https://discord.gg/c9nWy26ubK" target="_blank" rel="noopener noreferrer">
