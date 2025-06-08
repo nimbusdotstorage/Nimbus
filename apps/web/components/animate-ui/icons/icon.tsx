@@ -126,7 +126,7 @@ function AnimateIcon({
 		});
 	}, [localAnimate, controls, onAnimateStart, onAnimateEnd]);
 
-	const handleMouseEnter = (e: MouseEvent) => {
+	const handleMouseEnter = (e: React.MouseEvent<HTMLElement>) => {
 		if (animateOnHover) startAnimation(animateOnHover);
 		children.props?.onMouseEnter?.(e);
 	};
@@ -239,10 +239,12 @@ function IconWrapper<T extends string>({
 	);
 }
 
-function getVariants<V extends { default: T; [key: string]: T }, T extends Record<string, Variants>>(animations: V): T {
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const { animation: animationType, loop, loopDelay } = useAnimateIconContext();
-
+function getVariants<V extends { default: T; [key: string]: T }, T extends Record<string, Variants>>(
+	animations: V,
+	animationType: string,
+	loop: boolean,
+	loopDelay: number
+): T {
 	let result: T;
 
 	if (animationType in staticAnimations) {
