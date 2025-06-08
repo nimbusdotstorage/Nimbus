@@ -34,7 +34,6 @@
 		"baseUrl": ".",
 		"paths": {
 			"@/server/*": ["../server/*"],
-			"@/packages/*": ["../../packages/*"],
 			"@/components/*": ["./components/*"],
 			"@/web/*": ["./*"],
 			"@/public/*": ["./public/*"],
