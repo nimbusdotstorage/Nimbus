@@ -17,7 +17,9 @@ import { authClient } from "@/packages/auth/src/auth-client";
 import { LogOut, Search } from "lucide-react";
 import Link from "next/link";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { redirect } from "next/navigation";
+import { signOut } from "@repo/auth/methods";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const getInitials = (name?: string | null) => {
 	if (!name) return "SG";
@@ -32,12 +34,15 @@ const getInitials = (name?: string | null) => {
 
 export function Header() {
 	const { data: session, isPending } = authClient.useSession();
+	const router = useRouter();
 
 	const handleSignOut = async () => {
 		try {
-			await authClient.signOut();
-			redirect("/");
+			await signOut();
+			toast.success("Signed out successfully");
+			router.push("/");
 		} catch (error: any) {
+			toast.error(error.message);
 			console.error("Error signing out:", error);
 		}
 	};
@@ -94,7 +99,7 @@ export function Header() {
 								</>
 							) : (
 								<DropdownMenuItem asChild className="cursor-pointer">
-									<Link href="/login">Log In</Link>
+									<Link href="/signin">Log In</Link>
 								</DropdownMenuItem>
 							)}
 						</DropdownMenuContent>
