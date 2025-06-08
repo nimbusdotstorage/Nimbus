@@ -1,14 +1,13 @@
 "use client";
 
-import React from "react";
-
-import { useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Search, FileText, Folder, Tag, Filter } from "lucide-react";
+import { Search, FileText, Folder, Tag, Filter, X } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { motion, AnimatePresence } from "motion/react";
+import type { KeyboardEvent } from "react";
 
 interface SearchResult {
 	id: string;
@@ -125,6 +124,22 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 	const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
 	const [extractedKeywords, setExtractedKeywords] = useState<string[]>([]);
 
+	useEffect(() => {
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.key === "Escape" && open) {
+				handleOpenChange(false);
+			}
+		};
+
+		if (open) {
+			document.addEventListener("keydown", handleKeyDown);
+		}
+
+		return () => {
+			document.removeEventListener("keydown", handleKeyDown);
+		};
+	}, [open]);
+
 	const handleSearch = () => {
 		if (!query.trim()) {
 			setSearchResults([]);
@@ -149,7 +164,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 		setSearchResults(results);
 	};
 
-	const handleKeyPress = (e: React.KeyboardEvent) => {
+	const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Enter") {
 			handleSearch();
 		}
@@ -208,214 +223,268 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 	};
 
 	return (
-		<Dialog open={open} onOpenChange={handleOpenChange}>
-			<DialogContent className="max-w-4xl max-h-[85vh] h-[85vh] overflow-hidden flex flex-col">
-				<DialogHeader className="flex-shrink-0">
-					<DialogTitle className="flex items-center gap-2">
-						<Search className="h-5 w-5 text-blue-500" />
-						Advanced Search
-					</DialogTitle>
-					<DialogDescription>Search through your files and organize them with tags</DialogDescription>
-				</DialogHeader>
+		<AnimatePresence>
+			{open && (
+				<>
+					{/* Backdrop */}
+					<motion.div
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+						transition={{ duration: 0.2 }}
+						className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+						onClick={() => handleOpenChange(false)}
+					/>
 
-				<div className="flex-shrink-0 space-y-3">
-					<div className="flex gap-2">
-						<div className="relative flex-1">
-							<Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-							<Input
-								placeholder="Search for files, documents, folders..."
-								value={query}
-								onChange={e => setQuery(e.target.value)}
-								onKeyPress={handleKeyPress}
-								className="pl-10"
-								autoFocus
-							/>
-						</div>
-						<Button onClick={handleSearch} disabled={!query.trim()}>
-							<Search className="h-4 w-4 mr-2" />
-							Search
-						</Button>
-					</div>
-
-					{/* Quick Search Examples */}
-					<div className="flex gap-2 flex-wrap">
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => {
-								setQuery("spreadsheet billing");
-								setTimeout(handleSearch, 100);
+					{/* Dialog Content */}
+					<div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+						<motion.div
+							initial={{
+								opacity: 0,
+								scale: 0.95,
+								y: -20,
 							}}
-						>
-							<FileText className="h-3 w-3 mr-1" />
-							Billing spreadsheets
-						</Button>
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => {
-								setQuery("financial report");
-								setTimeout(handleSearch, 100);
+							animate={{
+								opacity: 1,
+								scale: 1,
+								y: 0,
 							}}
-						>
-							<FileText className="h-3 w-3 mr-1" />
-							Financial reports
-						</Button>
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => {
-								setQuery("presentation client");
-								setTimeout(handleSearch, 100);
+							exit={{
+								opacity: 0,
+								scale: 0.95,
+								y: -20,
 							}}
+							transition={{
+								duration: 0.2,
+								ease: [0.16, 1, 0.3, 1], // Custom easing for smooth feel
+							}}
+							className="relative w-full max-w-4xl max-h-[85vh] h-[85vh] bg-background border rounded-lg shadow-lg overflow-hidden flex flex-col"
+							onClick={e => e.stopPropagation()}
 						>
-							<FileText className="h-3 w-3 mr-1" />
-							Client presentations
-						</Button>
-						{selectedFiles.size > 0 && (
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={() => addTagToSelected("important")}
-								className="border-blue-500 text-blue-600"
-							>
-								<Tag className="h-3 w-3 mr-1" />
-								Tag Selected ({selectedFiles.size})
-							</Button>
-						)}
-					</div>
-
-					{/* Keywords */}
-					{extractedKeywords.length > 0 && (
-						<div>
-							<div className="flex items-center gap-2 mb-2">
-								<Filter className="h-4 w-4 text-primary" />
-								<span className="text-sm font-medium">Search terms:</span>
+							{/* Header */}
+							<div className="flex-shrink-0 p-6 border-b">
+								<div className="flex items-center justify-between">
+									<div>
+										<div className="flex items-center gap-2">
+											<Search className="h-5 w-5 text-blue-500" />
+											<h2 className="text-lg font-semibold">Advanced Search</h2>
+										</div>
+										<p className="text-sm text-muted-foreground mt-1">
+											Search through your files and organize them with tags
+										</p>
+									</div>
+									<Button variant="ghost" size="icon" onClick={() => handleOpenChange(false)} className="h-8 w-8">
+										<X className="h-4 w-4" />
+									</Button>
+								</div>
 							</div>
-							<div className="flex flex-wrap gap-1">
-								{extractedKeywords.map((keyword, index) => (
-									<Badge key={index} variant="secondary" className="text-xs">
-										{keyword}
-									</Badge>
-								))}
-							</div>
-						</div>
-					)}
-				</div>
 
-				{/* Results */}
-				<div className="flex-1 min-h-0 overflow-hidden flex flex-col">
-					{searchResults.length > 0 ? (
-						<div className="flex flex-col h-full">
-							<div className="flex-shrink-0 flex items-center justify-between py-3 border-b">
-								<h3 className="text-lg font-semibold">
-									Found {searchResults.length} result{searchResults.length !== 1 ? "s" : ""}
-								</h3>
-								{selectedFiles.size > 0 && (
-									<div className="flex items-center gap-2">
-										<span className="text-sm text-muted-foreground">{selectedFiles.size} selected</span>
-										<Button size="sm" onClick={() => addTagToSelected("important")}>
+							{/* Search Controls */}
+							<div className="flex-shrink-0 p-6 space-y-3">
+								<div className="flex gap-2">
+									<div className="relative flex-1">
+										<Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+										<Input
+											placeholder="Search for files, documents, folders..."
+											value={query}
+											onChange={e => setQuery(e.target.value)}
+											onKeyPress={handleKeyPress}
+											className="pl-10"
+											autoFocus
+										/>
+									</div>
+									<Button onClick={handleSearch} disabled={!query.trim()}>
+										<Search className="h-4 w-4 mr-2" />
+										Search
+									</Button>
+								</div>
+
+								{/* Quick Search Examples */}
+								<div className="flex gap-2 flex-wrap">
+									<Button
+										variant="outline"
+										size="sm"
+										onClick={() => {
+											setQuery("spreadsheet billing");
+											setTimeout(handleSearch, 100);
+										}}
+									>
+										<FileText className="h-3 w-3 mr-1" />
+										Billing spreadsheets
+									</Button>
+									<Button
+										variant="outline"
+										size="sm"
+										onClick={() => {
+											setQuery("financial report");
+											setTimeout(handleSearch, 100);
+										}}
+									>
+										<FileText className="h-3 w-3 mr-1" />
+										Financial reports
+									</Button>
+									<Button
+										variant="outline"
+										size="sm"
+										onClick={() => {
+											setQuery("presentation client");
+											setTimeout(handleSearch, 100);
+										}}
+									>
+										<FileText className="h-3 w-3 mr-1" />
+										Client presentations
+									</Button>
+									{selectedFiles.size > 0 && (
+										<Button
+											variant="outline"
+											size="sm"
+											onClick={() => addTagToSelected("important")}
+											className="border-blue-500 text-blue-600"
+										>
 											<Tag className="h-3 w-3 mr-1" />
-											Add Tag
+											Tag Selected ({selectedFiles.size})
 										</Button>
+									)}
+								</div>
+
+								{/* Keywords */}
+								{extractedKeywords.length > 0 && (
+									<div>
+										<div className="flex items-center gap-2 mb-2">
+											<Filter className="h-4 w-4 text-primary" />
+											<span className="text-sm font-medium">Search terms:</span>
+										</div>
+										<div className="flex flex-wrap gap-1">
+											{extractedKeywords.map((keyword, index) => (
+												<Badge key={index} variant="secondary" className="text-xs">
+													{keyword}
+												</Badge>
+											))}
+										</div>
 									</div>
 								)}
 							</div>
 
-							<div className="flex-1 overflow-y-auto py-3">
-								<div className="grid gap-3">
-									{searchResults.map(file => (
-										<Card
-											key={file.id}
-											className={`cursor-pointer transition-colors hover:bg-accent/50 ${
-												selectedFiles.has(file.id) ? "ring-2 ring-blue-500 bg-blue-50/50" : ""
-											}`}
-											onClick={() => toggleFileSelection(file.id)}
-										>
-											<CardContent className="p-4">
-												<div className="flex items-start justify-between">
-													<div className="flex items-center gap-3 flex-1">
-														{getFileIcon(file.type)}
-														<div className="flex-1 min-w-0">
-															<h4 className="font-medium truncate">{file.name}</h4>
-															<div className="flex items-center gap-2 text-sm text-muted-foreground">
-																<span>{file.modified}</span>
-																<span>•</span>
-																<span>{file.size}</span>
-																<span>•</span>
-																<span className="capitalize">{file.type}</span>
-															</div>
-														</div>
-													</div>
-													<div className="flex flex-wrap gap-1 ml-4">
-														{file.tags.map(tag => (
-															<Badge key={tag.id} variant="secondary" className={`text-xs ${tag.color} text-white`}>
-																{tag.name}
-															</Badge>
-														))}
-													</div>
+							{/* Results */}
+							<div className="flex-1 min-h-0 overflow-hidden flex flex-col px-6">
+								{searchResults.length > 0 ? (
+									<div className="flex flex-col h-full">
+										<div className="flex-shrink-0 flex items-center justify-between py-3 border-b">
+											<h3 className="text-lg font-semibold">
+												Found {searchResults.length} result{searchResults.length !== 1 ? "s" : ""}
+											</h3>
+											{selectedFiles.size > 0 && (
+												<div className="flex items-center gap-2">
+													<span className="text-sm text-muted-foreground">{selectedFiles.size} selected</span>
+													<Button size="sm" onClick={() => addTagToSelected("important")}>
+														<Tag className="h-3 w-3 mr-1" />
+														Add Tag
+													</Button>
 												</div>
-											</CardContent>
-										</Card>
-									))}
-								</div>
-							</div>
-						</div>
-					) : query && query.trim() ? (
-						<div className="flex-1 flex items-center justify-center text-center py-12">
-							<div className="text-muted-foreground">
-								<Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
-								<p className="text-lg mb-2">No results found</p>
-								<p className="text-sm">Try different keywords or check your spelling</p>
-							</div>
-						</div>
-					) : (
-						<div className="flex-1 flex items-center justify-center text-center py-12">
-							<div className="text-muted-foreground">
-								<Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
-								<p className="text-lg mb-2">Start searching</p>
-								<p className="text-sm">Enter keywords to find your files or try the examples above</p>
-							</div>
-						</div>
-					)}
-				</div>
+											)}
+										</div>
 
-				{/* Quick Actions */}
-				{searchResults.length > 0 && (
-					<div className="flex-shrink-0 border-t pt-3 mt-3">
-						<div className="flex items-center gap-2 mb-2">
-							<Tag className="h-4 w-4 text-primary" />
-							<span className="text-sm font-medium">Quick actions:</span>
-						</div>
-						<div className="flex flex-wrap gap-2">
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={() => addTagToSelected("important")}
-								disabled={selectedFiles.size === 0}
-							>
-								Tag as Important
-							</Button>
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={() => addTagToSelected("work")}
-								disabled={selectedFiles.size === 0}
-							>
-								Tag as Work
-							</Button>
-							<Button
-								variant="outline"
-								size="sm"
-								onClick={() => addTagToSelected("archive")}
-								disabled={selectedFiles.size === 0}
-							>
-								Tag as Archive
-							</Button>
-						</div>
+										<div className="flex-1 overflow-y-auto py-3">
+											<div className="grid gap-3">
+												{searchResults.map(file => (
+													<Card
+														key={file.id}
+														className={`cursor-pointer transition-colors hover:bg-accent/50 ${
+															selectedFiles.has(file.id) ? "ring-2 ring-blue-500 bg-blue-50/50" : ""
+														}`}
+														onClick={() => toggleFileSelection(file.id)}
+													>
+														<CardContent className="p-4">
+															<div className="flex items-start justify-between">
+																<div className="flex items-center gap-3 flex-1">
+																	{getFileIcon(file.type)}
+																	<div className="flex-1 min-w-0">
+																		<h4 className="font-medium truncate">{file.name}</h4>
+																		<div className="flex items-center gap-2 text-sm text-muted-foreground">
+																			<span>{file.modified}</span>
+																			<span>•</span>
+																			<span>{file.size}</span>
+																			<span>•</span>
+																			<span className="capitalize">{file.type}</span>
+																		</div>
+																	</div>
+																</div>
+																<div className="flex flex-wrap gap-1 ml-4">
+																	{file.tags.map(tag => (
+																		<Badge
+																			key={tag.id}
+																			variant="secondary"
+																			className={`text-xs ${tag.color} text-white`}
+																		>
+																			{tag.name}
+																		</Badge>
+																	))}
+																</div>
+															</div>
+														</CardContent>
+													</Card>
+												))}
+											</div>
+										</div>
+									</div>
+								) : query && query.trim() ? (
+									<div className="flex-1 flex items-center justify-center text-center py-12">
+										<div className="text-muted-foreground">
+											<Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
+											<p className="text-lg mb-2">No results found</p>
+											<p className="text-sm">Try different keywords or check your spelling</p>
+										</div>
+									</div>
+								) : (
+									<div className="flex-1 flex items-center justify-center text-center py-12">
+										<div className="text-muted-foreground">
+											<Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
+											<p className="text-lg mb-2">Start searching</p>
+											<p className="text-sm">Enter keywords to find your files or try the examples above</p>
+										</div>
+									</div>
+								)}
+							</div>
+
+							{/* Quick Actions */}
+							{searchResults.length > 0 && (
+								<div className="flex-shrink-0 border-t p-6">
+									<div className="flex items-center gap-2 mb-2">
+										<Tag className="h-4 w-4 text-primary" />
+										<span className="text-sm font-medium">Quick actions:</span>
+									</div>
+									<div className="flex flex-wrap gap-2">
+										<Button
+											variant="outline"
+											size="sm"
+											onClick={() => addTagToSelected("important")}
+											disabled={selectedFiles.size === 0}
+										>
+											Tag as Important
+										</Button>
+										<Button
+											variant="outline"
+											size="sm"
+											onClick={() => addTagToSelected("work")}
+											disabled={selectedFiles.size === 0}
+										>
+											Tag as Work
+										</Button>
+										<Button
+											variant="outline"
+											size="sm"
+											onClick={() => addTagToSelected("archive")}
+											disabled={selectedFiles.size === 0}
+										>
+											Tag as Archive
+										</Button>
+									</div>
+								</div>
+							)}
+						</motion.div>
 					</div>
-				)}
-			</DialogContent>
-		</Dialog>
+				</>
+			)}
+		</AnimatePresence>
 	);
 }
