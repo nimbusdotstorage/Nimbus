@@ -2,7 +2,7 @@
 
 import { Discord } from "@/components/icons/discord";
 import { Button } from "@/components/ui/button";
-import { XPlatform } from "../icons/x";
+import { XPlatform } from "@/components/icons/x";
 import { ModeToggle } from "@/components/mode-toggle";
 
 export default function Header() {

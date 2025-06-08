@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { motion, type Variants } from "motion/react";
 
 import { getVariants, useAnimateIconContext, IconWrapper, type IconProps } from "@/components/animate-ui/icons/icon";
@@ -33,8 +32,8 @@ const animations = {
 } as const;
 
 function IconComponent({ size, ...props }: BellProps) {
-	const { controls, animation, loop, loopDelay } = useAnimateIconContext();
-	const variants = getVariants(animations, animation, loop, loopDelay);
+	const { controls } = useAnimateIconContext();
+	const variants = getVariants(animations);
 
 	return (
 		<motion.svg

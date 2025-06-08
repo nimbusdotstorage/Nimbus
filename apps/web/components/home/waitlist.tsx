@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { GitHub } from "../icons/github";
+import { GitHub } from "@/components/icons/github";
 
 const formSchema = z.object({
 	email: z.string().email(),
