@@ -25,9 +25,7 @@ app.use(
 
 app.use("*", async (c, next) => {
 	c.set("db", db);
-	console.log(c.req.raw.headers);
 	const session = await auth.api.getSession({ headers: c.req.raw.headers });
-	// console.log(session);
 	c.set("user", session?.user);
 	await next();
 });

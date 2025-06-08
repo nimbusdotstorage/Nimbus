@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import type { ReqVariables } from "@/apps/server/src/index";
-import { getActiveAccount } from "lib/utils/accounts";
+import { getAccount } from "lib/utils/accounts";
 
 const app = new Hono<{ Variables: ReqVariables }>();
 
@@ -20,12 +20,11 @@ app.get("/", async c => {
 	// const filteredData = sampleData.filter(item => !type || item.type.toLowerCase().includes(type));
 	// return c.json(filteredData);
 	const user = c.get("user");
-	console.log(user);
 	if (!user) {
 		return c.json({ error: "User not authenticated" }, 401);
 	}
-	const accessToken = await getActiveAccount(user, c.req.raw.headers);
-	return c.text(JSON.stringify(accessToken));
+	const account = await getAccount(user, c.req.raw.headers);
+	return c.json({ account });
 	// Need to set context with db and auth data for access token
 });
 
