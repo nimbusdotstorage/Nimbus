@@ -1,7 +1,6 @@
 "use client";
 import type React from "react";
-import { useState } from "react";
-import { Folder, Upload, MoreVertical } from "lucide-react";
+import { Upload, Plus, FolderPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -12,53 +11,41 @@ import {
 import { UploadFileDialog } from "./dialogs/upload-files-dialog";
 import { UploadFolderDialog } from "./dialogs/upload-folder-dialog";
 import { CreateFolderDialog } from "./dialogs/create-folder-dialog";
+import { useUpload } from "@/hooks/useUpload";
 
 export function UploadButton() {
-	const [uploadFileOpen, setUploadFileOpen] = useState(false);
-	const [uploadFolderOpen, setUploadFolderOpen] = useState(false);
-	const [createFolderOpen, setCreateFolderOpen] = useState(false);
-
-	const handleFileUpload = (files: FileList) => {
-		console.log(
-			"Uploading files:",
-			Array.from(files).map(f => f.name)
-		);
-		// Handle file upload logic here
-	};
-
-	const handleFolderUpload = (files: FileList) => {
-		console.log(
-			"Uploading folder with files:",
-			Array.from(files).map(f => f.webkitRelativePath || f.name)
-		);
-		// Handle folder upload logic here
-	};
-
-	const handleCreateFolder = (folderName: string) => {
-		console.log("Creating folder:", folderName);
-		// Handle folder creation logic here
-	};
+	const {
+		uploadFileOpen,
+		uploadFolderOpen,
+		createFolderOpen,
+		setUploadFileOpen,
+		setUploadFolderOpen,
+		setCreateFolderOpen,
+		handleFileUpload,
+		handleFolderUpload,
+		handleCreateFolder,
+	} = useUpload();
 
 	return (
 		<>
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
-					<Button variant="outline" size="icon">
-						<MoreVertical className="h-4 w-4" />
+					<Button variant="outline" size="icon" className="cursor-pointer">
+						<Plus className="h-4 w-4" />
 						<span className="sr-only">Open menu</span>
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end">
-					<DropdownMenuItem onClick={() => setUploadFileOpen(true)}>
+					<DropdownMenuItem onClick={() => setUploadFileOpen(true)} className="cursor-pointer">
 						<Upload className="h-4 w-4 mr-2" />
 						Upload files
 					</DropdownMenuItem>
-					<DropdownMenuItem onClick={() => setUploadFolderOpen(true)}>
+					<DropdownMenuItem onClick={() => setUploadFolderOpen(true)} className="cursor-pointer">
 						<Upload className="h-4 w-4 mr-2" />
 						Upload folder
 					</DropdownMenuItem>
-					<DropdownMenuItem onClick={() => setCreateFolderOpen(true)}>
-						<Folder className="h-4 w-4 mr-2" />
+					<DropdownMenuItem onClick={() => setCreateFolderOpen(true)} className="cursor-pointer">
+						<FolderPlus className="h-4 w-4 mr-2" />
 						Create folder
 					</DropdownMenuItem>
 				</DropdownMenuContent>

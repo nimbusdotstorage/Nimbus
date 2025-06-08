@@ -1,6 +1,6 @@
 import React from "react";
 import { useDropzone } from "react-dropzone";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, type ChangeEvent } from "react";
 import { Upload, Folder } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
@@ -54,7 +54,7 @@ export function UploadZone({
 		return `${start}...${end}.${extension}`;
 	};
 
-	const handleManualSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleManualSelect = (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files) {
 			const files = Array.from(e.target.files);
 			setSelectedFiles(files);
@@ -79,7 +79,9 @@ export function UploadZone({
 				<div
 					{...getRootProps()}
 					className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer ${
-						isDragActive ? "border-primary bg-primary/5" : "border-gray-300 hover:border-gray-400 hover:bg-gray-950"
+						isDragActive
+							? "border-primary bg-primary/5"
+							: "border-neutral-300 hover:border-neutral-400 hover:bg-neutral-950"
 					}`}
 					onClick={() => fileInputRef.current?.click()}
 				>
