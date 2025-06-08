@@ -38,6 +38,6 @@ export function createRequest({ path, pathParams = {}, queryParams = {} }: Creat
 		// Construct the full URL
 		const fullUrl = `${baseUrl}${currentPath}${query}`;
 
-		return fetch(fullUrl, { signal });
+		return fetch(fullUrl, { signal, credentials: "include" });
 	};
 }
