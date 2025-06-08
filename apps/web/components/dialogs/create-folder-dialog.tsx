@@ -1,5 +1,5 @@
 import type React from "react";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -22,7 +22,7 @@ interface CreateFolderDialogProps {
 export function CreateFolderDialog({ open, onOpenChange, onCreateFolder }: CreateFolderDialogProps) {
 	const [folderName, setFolderName] = useState("");
 
-	const handleCreateFolder = (event: React.FormEvent) => {
+	const handleCreateFolder = (event: FormEvent) => {
 		event.preventDefault();
 		if (!folderName.trim()) return;
 
@@ -63,11 +63,11 @@ export function CreateFolderDialog({ open, onOpenChange, onCreateFolder }: Creat
 							type="button"
 							variant="ghost"
 							onClick={() => onOpenChange(false)}
-							className="text-muted-foreground hover:text-foreground"
+							className="text-muted-foreground hover:text-foreground cursor-pointer"
 						>
 							Cancel
 						</Button>
-						<Button type="submit" disabled={!folderName.trim()}>
+						<Button type="submit" disabled={!folderName.trim()} className="cursor-pointer">
 							Create
 						</Button>
 					</DialogFooter>

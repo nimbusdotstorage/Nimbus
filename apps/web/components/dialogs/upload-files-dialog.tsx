@@ -1,5 +1,5 @@
 import type React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -55,7 +55,7 @@ export function UploadFileDialog({ open, onOpenChange, onUpload }: UploadFileDia
 		}, 100);
 	};
 
-	const handleUploadFile = (event: React.FormEvent) => {
+	const handleUploadFile = (event: FormEvent) => {
 		event.preventDefault();
 		if (selectedFiles && selectedFiles.length > 0) {
 			simulateUploadProgress();
@@ -85,10 +85,15 @@ export function UploadFileDialog({ open, onOpenChange, onUpload }: UploadFileDia
 										onOpenChange(false);
 										setSelectedFiles(null);
 									}}
+									className="cursor-pointer"
 								>
 									Cancel
 								</Button>
-								<Button type="submit" disabled={!selectedFiles || selectedFiles.length === 0}>
+								<Button
+									type="submit"
+									disabled={!selectedFiles || selectedFiles.length === 0}
+									className="cursor-pointer"
+								>
 									Upload {selectedFiles && selectedFiles.length > 0 ? `(${selectedFiles.length})` : ""}
 								</Button>
 							</>
