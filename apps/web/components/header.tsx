@@ -56,24 +56,20 @@ export function Header() {
 		<header className="border-b bg-background">
 			<div className="flex h-16 items-center px-4 gap-4 justify-between">
 				<SidebarTrigger />
-				<div className="relative flex-1 max-w-xl">
-					<Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-					<Input
-						type="search"
-						placeholder="Search smarter with AI"
-						className="w-full pl-8 pr-12 bg-muted/50"
-						onFocus={() => setIsSearchOpen(true)}
-					/>
-					<Button
-						variant="ghost"
-						size="icon"
-						className="absolute right-1 top-1 h-8 w-8 text-muted-foreground hover:text-primary"
-						onClick={() => setIsSearchOpen(true)}
-					>
-						<Search className="h-4 w-4" />
-						<span className="sr-only">Advanced Search</span>
-					</Button>
+
+				{/* Search section with flexbox - removed duplicate right icon */}
+				<div className="flex items-center flex-1 max-w-xl">
+					<div className="relative flex items-center w-full">
+						<Search className="absolute left-2.5 h-4 w-4 text-muted-foreground pointer-events-none" />
+						<Input
+							type="search"
+							placeholder="Search smarter with AI"
+							className="w-full pl-8 bg-muted/50"
+							onFocus={() => setIsSearchOpen(true)}
+						/>
+					</div>
 				</div>
+
 				<div className="flex items-center gap-2">
 					<ModeToggle />
 					<Button variant="ghost" size="icon">
