@@ -63,17 +63,17 @@ export function Header() {
 					<ModeToggle />
 					<AnimateIcon animateOnHover>
 						<Button variant="ghost" size="icon">
-							<MessageCircleQuestion className="h-5 w-5 text-muted-foreground" />
+							<MessageCircleQuestion className="h-5 w-5" />
 						</Button>
 					</AnimateIcon>
 					<AnimateIcon animateOnHover>
 						<Button variant="ghost" size="icon">
-							<Settings className="h-5 w-5 text-muted-foreground" />
+							<Settings className="h-5 w-5" />
 						</Button>
 					</AnimateIcon>
 					<AnimateIcon animateOnHover>
 						<Button variant="ghost" size="icon">
-							<Bell className="h-5 w-5 text-muted-foreground" />
+							<Bell className="h-5 w-5" />
 						</Button>
 					</AnimateIcon>
 					<DropdownMenu>
