@@ -149,7 +149,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 		setSearchResults(results);
 	};
 
-	const handleKeyPress = (e: React.KeyboardEvent) => {
+	const handleKeyPress = (e: KeyboardEvent) => {
 		if (e.key === "Enter") {
 			handleSearch();
 		}
