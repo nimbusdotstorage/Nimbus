@@ -37,7 +37,8 @@
 			"@/packages/*": ["../../packages/*"],
 			"@/components/*": ["./components/*"],
 			"@/web/*": ["./*"],
-			"@/public/*": ["./public/*"]
+			"@/public/*": ["./public/*"],
+			"@/hooks/*": ["./hooks/*"]
 		}
 	},
 	"include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],
