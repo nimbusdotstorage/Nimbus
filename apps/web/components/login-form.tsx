@@ -2,9 +2,9 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { signIn } from "@/packages/auth/src/auth-client";
+import { Google } from "@/components/icons/google";
 import { Button } from "@/components/ui/button";
 import type { ComponentProps } from "react";
-import { Google } from "./icons/google";
 import { cn } from "@/web/lib/utils";
 import Link from "next/link";
 

@@ -1,11 +1,11 @@
 "use client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { GitHub } from "@/components/icons/github";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import NumberFlow from "@number-flow/react";
 import { useForm } from "react-hook-form";
-import { GitHub } from "../icons/github";
 import { cn } from "@/web/lib/utils";
 import { useState } from "react";
 import { toast } from "sonner";
