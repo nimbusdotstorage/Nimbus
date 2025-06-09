@@ -383,7 +383,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 											)}
 										</div>
 
-										<div className="flex-1 overflow-y-auto py-3">
+										<div className="flex-1 overflow-y-auto py-3 px-1">
 											<div className="grid gap-3">
 												{searchResults.map(file => (
 													<Card
