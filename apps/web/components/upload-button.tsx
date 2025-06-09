@@ -1,17 +1,17 @@
 "use client";
-import type React from "react";
-import { Upload, Plus, FolderPlus } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { UploadFileDialog } from "@/components/dialogs/upload-files-dialog";
 import { UploadFolderDialog } from "@/components/dialogs/upload-folder-dialog";
 import { CreateFolderDialog } from "@/components/dialogs/create-folder-dialog";
+import { UploadFileDialog } from "@/components/dialogs/upload-files-dialog";
+import { Upload, Plus, FolderPlus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useUpload } from "@/hooks/useUpload";
+import type React from "react";
 
 export function UploadButton() {
 	const {
@@ -37,15 +37,15 @@ export function UploadButton() {
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end">
 					<DropdownMenuItem onClick={() => setUploadFileOpen(true)} className="cursor-pointer">
-						<Upload className="h-4 w-4 mr-2" />
+						<Upload className="mr-2 h-4 w-4" />
 						Upload files
 					</DropdownMenuItem>
 					<DropdownMenuItem onClick={() => setUploadFolderOpen(true)} className="cursor-pointer">
-						<Upload className="h-4 w-4 mr-2" />
+						<Upload className="mr-2 h-4 w-4" />
 						Upload folder
 					</DropdownMenuItem>
 					<DropdownMenuItem onClick={() => setCreateFolderOpen(true)} className="cursor-pointer">
-						<FolderPlus className="h-4 w-4 mr-2" />
+						<FolderPlus className="mr-2 h-4 w-4" />
 						Create folder
 					</DropdownMenuItem>
 				</DropdownMenuContent>

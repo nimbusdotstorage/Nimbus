@@ -1,17 +1,17 @@
 "use client";
 
-import { cn } from "@/web/lib/utils";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import Link from "next/link";
 import { signIn } from "@/packages/auth/src/auth-client";
-import type { ComponentProps } from "react";
 import { Google } from "@/components/icons/google";
+import { Button } from "@/components/ui/button";
+import type { ComponentProps } from "react";
+import { cn } from "@/web/lib/utils";
+import Link from "next/link";
 
 export function LoginForm({ className, ...props }: ComponentProps<"div">) {
 	return (
 		<div className={cn("flex flex-col gap-0", className)} {...props}>
-			<Card className="py-8 gap-6">
+			<Card className="gap-6 py-8">
 				<CardHeader className="gap-2">
 					<CardTitle className="text-center">Login to experience Nimbus</CardTitle>
 					<CardDescription className="text-center">Your data just got better. </CardDescription>
@@ -27,7 +27,7 @@ export function LoginForm({ className, ...props }: ComponentProps<"div">) {
 			</Card>
 			<div className="mt-4 text-center text-sm text-neutral-600">
 				By signing in, you agree to our{" "}
-				<Link href="/terms" className="underline underline-offset-4 cursor-pointer">
+				<Link href="/terms" className="underline underline-offset-4">
 					terms of service
 				</Link>
 				.

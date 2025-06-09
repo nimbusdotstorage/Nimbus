@@ -12,5 +12,6 @@
     "tabWidth": 2,
     "trailingComma": "es5",
     "useTabs": true,
-	"printWidth": 120
+    "printWidth": 120,
+    "plugins": ["prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"]
 }

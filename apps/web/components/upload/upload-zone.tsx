@@ -1,8 +1,9 @@
-import { useDropzone } from "react-dropzone";
 import { useState, useRef, useCallback, type ChangeEvent } from "react";
-import { Upload, Folder } from "lucide-react";
-import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
+import { Label } from "@/components/ui/label";
+import { Upload, Folder } from "lucide-react";
+import { useDropzone } from "react-dropzone";
+import React from "react";
 
 interface UploadZoneProps {
 	onFilesSelected: (files: FileList | File[]) => void;
@@ -77,7 +78,7 @@ export function UploadZone({
 			{!isUploading && (
 				<div
 					{...getRootProps()}
-					className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer ${
+					className={`cursor-pointer rounded-lg border-2 border-dashed p-8 text-center transition-colors ${
 						isDragActive
 							? "border-primary bg-primary/5"
 							: "border-neutral-300 hover:border-neutral-400 hover:bg-neutral-100 dark:border-neutral-700 dark:hover:border-neutral-600 dark:hover:bg-neutral-900"
@@ -87,12 +88,12 @@ export function UploadZone({
 					<input {...getInputProps()} />
 
 					{isFolder ? (
-						<Folder className="mx-auto h-12 w-12 text-neutral-400 mb-4" />
+						<Folder className="mx-auto mb-4 h-12 w-12 text-neutral-400" />
 					) : (
-						<Upload className="mx-auto h-12 w-12 text-neutral-400 mb-4" />
+						<Upload className="mx-auto mb-4 h-12 w-12 text-neutral-400" />
 					)}
 
-					<p className="text-sm text-neutral-600 dark:text-neutral-200 mb-2">
+					<p className="mb-2 text-sm text-neutral-600 dark:text-neutral-200">
 						{isDragActive
 							? `Drop ${isFolder ? "folder" : "files"} here`
 							: `Click here or drag and drop ${isFolder ? "a folder" : "files"}`}
@@ -108,7 +109,7 @@ export function UploadZone({
 				<div className="space-y-4">
 					<Label>Uploading...</Label>
 					<Progress value={uploadProgress} className="w-full" />
-					<p className="text-sm text-center">{uploadProgress}% complete</p>
+					<p className="text-center text-sm">{uploadProgress}% complete</p>
 				</div>
 			)}
 
@@ -116,29 +117,29 @@ export function UploadZone({
 			{selectedFiles.length > 0 && !isUploading && (
 				<div className="space-y-2">
 					<Label>Selected {isFolder ? "folder contents" : "files"}:</Label>
-					<div className="max-h-32 overflow-y-auto space-y-1">
+					<div className="max-h-32 space-y-1 overflow-y-auto">
 						{selectedFiles.slice(0, 10).map((file, index) => {
 							const fileWithPath = file as FileWithPath;
 							return (
 								<div
 									key={index}
-									className="flex items-center gap-2 text-sm bg-neutral-50 dark:bg-neutral-800 p-2 rounded"
+									className="flex items-center gap-2 rounded bg-neutral-50 p-2 text-sm dark:bg-neutral-800"
 								>
 									<Upload className="h-4 w-4 shrink-0 text-black dark:text-neutral-200" />
 									<span
-										className="flex-1 text-black min-w-0 font-mono dark:text-neutral-200"
+										className="min-w-0 flex-1 font-mono text-black dark:text-neutral-200"
 										title={fileWithPath.webkitRelativePath || file.name}
 									>
 										{truncateFilename(fileWithPath.webkitRelativePath || file.name)}
 									</span>
-									<span className="text-black text-xs shrink-0 ml-2 dark:text-neutral-200">
+									<span className="ml-2 shrink-0 text-xs text-black dark:text-neutral-200">
 										{(file.size / 1024 / 1024).toFixed(2)} MB
 									</span>
 								</div>
 							);
 						})}
 						{selectedFiles.length > 10 && (
-							<p className="text-xs text-black text-center dark:text-neutral-200">
+							<p className="text-center text-xs text-black dark:text-neutral-200">
 								... and {selectedFiles.length - 10} more files
 							</p>
 						)}

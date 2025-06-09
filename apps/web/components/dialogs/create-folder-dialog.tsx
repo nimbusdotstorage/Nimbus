@@ -1,6 +1,3 @@
-import type React from "react";
-import { useState, type FormEvent } from "react";
-import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
@@ -9,9 +6,12 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import { useState, type FormEvent } from "react";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import type React from "react";
 
 interface CreateFolderDialogProps {
 	open: boolean;
@@ -34,10 +34,10 @@ export function CreateFolderDialog({ open, onOpenChange, onCreateFolder }: Creat
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
-			<DialogContent className="sm:max-w-md rounded-2xl shadow-xl">
+			<DialogContent className="rounded-2xl shadow-xl sm:max-w-md">
 				<DialogHeader>
 					<DialogTitle className="text-xl font-semibold">Create a New Folder</DialogTitle>
-					<DialogDescription className="text-sm text-muted-foreground">
+					<DialogDescription className="text-muted-foreground text-sm">
 						Give your folder a meaningful name.
 					</DialogDescription>
 				</DialogHeader>
@@ -53,7 +53,7 @@ export function CreateFolderDialog({ open, onOpenChange, onCreateFolder }: Creat
 							value={folderName}
 							onChange={e => setFolderName(e.target.value)}
 							required
-							className="focus-visible:ring-2 focus-visible:ring-ring"
+							className="focus-visible:ring-ring focus-visible:ring-2"
 							maxLength={255}
 						/>
 					</div>

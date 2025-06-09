@@ -1,5 +1,3 @@
-import { useState, useEffect, type FormEvent } from "react";
-import { Button } from "@/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
@@ -9,7 +7,10 @@ import {
 	DialogTitle,
 } from "@/components/ui/dialog";
 import { UploadZone } from "@/components/upload/upload-zone";
+import { useState, useEffect, type FormEvent } from "react";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import React from "react";
 
 interface UploadFolderDialogProps {
 	open: boolean;

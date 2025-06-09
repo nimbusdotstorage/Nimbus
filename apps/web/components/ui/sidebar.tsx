@@ -1,18 +1,10 @@
 "use client";
 
-import { Slot } from "@radix-ui/react-slot";
-import { cva } from "class-variance-authority";
 import type { VariantProps } from "class-variance-authority";
+import { cva } from "class-variance-authority";
 import { PanelLeftIcon } from "lucide-react";
+import { Slot } from "@radix-ui/react-slot";
 
-import { useIsMobile } from "@/web/hooks/use-mobile";
-import { cn } from "@/web/lib/utils";
-import { Button } from "@/web/components/ui/button";
-import { Input } from "@/web/components/ui/input";
-import { Separator } from "@/web/components/ui/separator";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/web/components/ui/sheet";
-import { Skeleton } from "@/web/components/ui/skeleton";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/web/components/ui/tooltip";
 import {
 	createContext,
 	useCallback,
@@ -23,6 +15,14 @@ import {
 	type ComponentProps,
 	type CSSProperties,
 } from "react";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/web/components/ui/sheet";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/web/components/ui/tooltip";
+import { Separator } from "@/web/components/ui/separator";
+import { Skeleton } from "@/web/components/ui/skeleton";
+import { useIsMobile } from "@/web/hooks/use-mobile";
+import { Button } from "@/web/components/ui/button";
+import { Input } from "@/web/components/ui/input";
+import { cn } from "@/web/lib/utils";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
