@@ -1,9 +1,8 @@
-import { useState, useRef, useCallback, type ChangeEvent } from "react";
+import { useCallback, useRef, useState, type ChangeEvent } from "react";
 import { Progress } from "@/components/ui/progress";
 import { Label } from "@/components/ui/label";
-import { Upload, Folder } from "lucide-react";
+import { Folder, Upload } from "lucide-react";
 import { useDropzone } from "react-dropzone";
-import React from "react";
 
 interface UploadZoneProps {
 	onFilesSelected: (files: FileList | File[]) => void;

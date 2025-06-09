@@ -8,7 +8,7 @@ import {
 import { UploadFolderDialog } from "@/components/dialogs/upload-folder-dialog";
 import { CreateFolderDialog } from "@/components/dialogs/create-folder-dialog";
 import { UploadFileDialog } from "@/components/dialogs/upload-files-dialog";
-import { Upload, Plus, FolderPlus } from "lucide-react";
+import { FolderPlus, Plus, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUpload } from "@/hooks/useUpload";
 import type React from "react";
