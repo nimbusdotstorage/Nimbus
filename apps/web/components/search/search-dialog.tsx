@@ -338,7 +338,6 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 										<Button
 											variant="outline"
 											size="sm"
-											onClick={() => addTagToSelected("important")}
 											className="border-blue-500 text-blue-600"
 										>
 											<Tag className="h-3 w-3 mr-1" />
