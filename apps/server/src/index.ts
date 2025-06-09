@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import routes from "./routes";
+import { logger } from "hono/logger";
 
 const app = new Hono();
 
@@ -12,6 +13,7 @@ app.use(
 		allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 	})
 );
+app.use(logger());
 
 app.get("/healthcheck", c => c.text("Everything is working!"));
 
