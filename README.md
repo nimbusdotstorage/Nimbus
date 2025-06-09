@@ -99,6 +99,8 @@ bun dev
 
 The application should now be running at [http://localhost:3000](http://localhost:3000)
 
+If you want to contribute, please refer to the [contributing guide](https://github.com/nimbusdotstorage/Nimbus/blob/main/CONTRIBUTING.md)
+
 ## Our Amazing Contributors
 
 <a href="https://github.com/nimbusdotstorage/Nimbus/graphs/contributors">
