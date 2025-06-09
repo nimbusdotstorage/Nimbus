@@ -4,7 +4,9 @@
 	"type": "module",
 	"private": true,
 	"exports": {
-		"./methods": "./src/index.ts"
+		"./client": "./src/auth-client.ts",
+		"./constants": "./src/utils/constants.ts",
+		"./auth": "./src/auth.ts"
 	},
 	"devDependencies": {
 		"@types/bun": "latest"

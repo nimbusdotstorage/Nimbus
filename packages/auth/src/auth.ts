@@ -4,6 +4,8 @@ import { db } from "@/packages/db/src/index";
 import { config } from "dotenv";
 import path from "path";
 import schema from "@/packages/db/schema";
+import { sendMail } from "./utils/send-mail";
+import { extractTokenFromUrl } from "./utils/extract-token";
 
 // Load env variables from the root .env file
 config({ path: path.resolve(process.cwd(), "../../.env") });
@@ -20,6 +22,20 @@ export const auth = betterAuth({
 
 	emailAndPassword: {
 		enabled: true,
+		autoSignIn: true,
+		minPasswordLength: 8,
+		maxPasswordLength: 128,
+		resetPasswordTokenExpiresIn: 600, // 10 minutes
+		sendResetPassword: async ({ user, url }) => {
+			const token = extractTokenFromUrl(url);
+			const frontendResetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
+
+			await sendMail({
+				to: user.email,
+				subject: "Reset your password",
+				text: `Click the link to reset your password: ${frontendResetUrl}`,
+			});
+		},
 	},
 
 	socialProviders: {
