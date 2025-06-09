@@ -216,7 +216,8 @@ export const useSignOut = () => {
 				}
 			);
 		} catch (error) {
-			error instanceof Error ? error.message : "Sign out failed";
+			const errorMessage = error instanceof Error ? error.message : "Sign out failed";
+			toast.error(errorMessage);
 		} finally {
 			setIsLoading(false);
 		}
@@ -280,10 +281,10 @@ export const useResetPassword = () => {
 
 	const resetPassword = useCallback(
 		async (data: ResetPasswordFormData, token: string) => {
-			setState({ isLoading: true, error: null });
 			if (!token) {
 				throw new Error("Reset token is expired");
 			}
+			setState({ isLoading: true, error: null });
 
 			try {
 				toast.promise(

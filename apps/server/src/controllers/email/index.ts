@@ -1,7 +1,7 @@
 import type { Context } from "hono";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY!);
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendMail = async (c: Context) => {
 	try {

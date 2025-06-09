@@ -31,10 +31,10 @@ export function SocialAuthButton({ provider, action, ...props }: SocialAuthButto
 		<Button
 			variant="outline"
 			type="button"
-			className="w-full justify-between shadow-lg transition-all duration-250 shadow-blue-600/10 hover:shadow-blue-600/20 cursor-pointer"
+			className="w-full justify-between shadow-lg transition-all duration-300 shadow-blue-600/10 hover:shadow-blue-600/20 cursor-pointer"
 			{...props}
 		>
-			{IconComponent && <IconComponent />}
+			<IconComponent />
 			{getActionText()}
 			<div className="w-[0.98em]" />
 		</Button>

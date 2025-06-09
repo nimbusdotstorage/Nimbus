@@ -38,7 +38,13 @@ export async function middleware(request: NextRequest) {
 	}
 
 	// If user is authenticated and trying to access auth pages, redirect to app
-	if (isPublicRoute && (pathname === "/signin" || pathname === "/signup")) {
+	if (
+		isPublicRoute &&
+		(pathname === "/signin" ||
+			pathname === "/signup" ||
+			pathname === "/forgot-password" ||
+			pathname === "/reset-password")
+	) {
 		try {
 			const session = await authClient.getSession({
 				fetchOptions: {
@@ -53,6 +59,7 @@ export async function middleware(request: NextRequest) {
 			}
 		} catch (error) {
 			console.error("Auth check error:", error);
+			return NextResponse.redirect(new URL("/signin", request.url));
 		}
 	}
 

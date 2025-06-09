@@ -24,7 +24,7 @@ export const checkEmail = async (c: Context) => {
 export const handleAuth = async (c: Context) => {
 	try {
 		return await auth.handler(c.req.raw);
-	} catch (error: any) {
+	} catch (error) {
 		console.error("Auth handler error:", error);
 		return c.json({ error: "Authentication failed" }, 500);
 	}
