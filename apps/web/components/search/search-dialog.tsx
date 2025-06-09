@@ -414,7 +414,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 																		<Badge
 																			key={tag.id}
 																			variant="secondary"
-																			className={`text-xs ${tag.color} text-white`}
+																			className={`text-xs ${tag.color} text-white hover:bg-neutral-100 dark:hover:bg-neutral-900 hover:text-black hover:border-neutral-400 dark:hover:text-neutral-200 dark:hover:border-neutral-600`}
 																		>
 																			{tag.name}
 																		</Badge>
