@@ -3,12 +3,13 @@ import { cors } from "hono/cors";
 import filesRoutes from "@/apps/server/src/routes/files";
 import authRoutes from "@/apps/server/src/routes/auth";
 import waitlistRoutes from "@/apps/server/src/routes/waitlist";
+import { env } from "@/src/config/env";
 
 const app = new Hono();
 
 app.use(
 	cors({
-		origin: process.env.FRONTEND_URL!,
+		origin: env.FRONTEND_URL,
 		credentials: true,
 		allowHeaders: ["Content-Type", "Authorization"],
 		allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
