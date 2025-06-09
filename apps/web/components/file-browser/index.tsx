@@ -1,22 +1,21 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { createRequest } from "@/web/hooks/createRequest";
-import { Grid, List } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import { useState } from "react";
-import { useRequest } from "@/web/hooks/useRequest";
-import type { FileItem } from "@/web/lib/types";
 import { ErrorMessageWithRetry } from "@/components/error-message/with-retry";
-import { Loader } from "@/components/loader";
 import { FileBrowserData } from "@/components/file-browser/file-browser-data";
 import { FilePreview } from "@/components/file-browser/file-preview";
 import { FileTabs } from "@/components/file-browser/file-tabs";
+import { Loader } from "@/components/loader";
+import { Button } from "@/components/ui/button";
+import { createRequest } from "@/web/hooks/createRequest";
+import { useRequest } from "@/web/hooks/useRequest";
+import type { FileItem } from "@/web/lib/types";
+import { Grid, List } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 export function FileBrowser() {
 	const searchParams = useSearchParams();
 	const type = searchParams.get("type");
-	const id = searchParams.get("id");
 
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
@@ -31,7 +30,7 @@ export function FileBrowser() {
 	});
 
 	return (
-		<div className={`space-y-4 flex-1 flex flex-col ${id ? "blur-sm transition-all" : ""}`}>
+		<div className="space-y-4 flex-1 flex flex-col">
 			<div className="flex items-center justify-between">
 				<FileTabs type={type} />
 
