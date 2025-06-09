@@ -36,6 +36,7 @@
 		"format": "bunx prettier --write apps/**/*.{ts,tsx} --log-level silent",
 		"check:format": "bunx prettier --check .",
 		"lint": "eslint .",
+		"lint:fix": "eslint . --fix",
 		"prepare": "husky"
 	},
 	"workspaces": [
