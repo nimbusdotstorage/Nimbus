@@ -27,7 +27,7 @@ export function LoginForm({ className, ...props }: ComponentProps<"div">) {
 			</Card>
 			<div className="mt-4 text-center text-sm text-neutral-600">
 				By signing in, you agree to our{" "}
-				<Link href="/terms" className="cursor-pointer underline underline-offset-4">
+				<Link href="/terms" className="underline underline-offset-4">
 					terms of service
 				</Link>
 				.
