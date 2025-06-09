@@ -16,9 +16,25 @@ const config = [
 		ignores: ["**/node_modules", "**/.next", "**/dist", "**/build", "**/coverage", "**/out"],
 	},
 
-	// JavaScript and TypeScript
+	// JavaScript config files (no TypeScript parsing)
 	{
-		files: ["**/*.{js,jsx,ts,tsx}"],
+		files: ["*.config.js", "*.config.mjs", "*.js"],
+		languageOptions: {
+			ecmaVersion: "latest",
+			sourceType: "module",
+			globals: {
+				...globals.node,
+				...globals.es2021,
+			},
+		},
+		rules: {
+			...js.configs.recommended.rules,
+		},
+	},
+
+	// TypeScript and JSX files
+	{
+		files: ["**/*.{ts,tsx}", "apps/**/*.{ts,jsx}", "packages/**/*.{ts,tsx}"],
 		languageOptions: {
 			ecmaVersion: "latest",
 			sourceType: "module",
@@ -73,7 +89,7 @@ const config = [
 
 	// Next.js specific rules
 	{
-		files: ["**/*.{js,jsx,ts,tsx}"],
+		files: ["apps/**/*.{js,jsx,ts,tsx}", "packages/**/*.{js,jsx,ts,tsx}"],
 		plugins: {
 			"@next/next": nextPlugin,
 		},
