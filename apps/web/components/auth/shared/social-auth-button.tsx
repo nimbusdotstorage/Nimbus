@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Google } from "@/components/icons/google";
+import { Button } from "@/components/ui/button";
 import type { ComponentProps } from "react";
 
 type SocialProvider = "google";
@@ -31,7 +31,7 @@ export function SocialAuthButton({ provider, action, ...props }: SocialAuthButto
 		<Button
 			variant="outline"
 			type="button"
-			className="w-full justify-between shadow-lg transition-all duration-300 shadow-blue-600/10 hover:shadow-blue-600/20 cursor-pointer"
+			className="w-full cursor-pointer justify-between shadow-lg shadow-blue-600/10 transition-all duration-300 hover:shadow-blue-600/20"
 			{...props}
 		>
 			<IconComponent />

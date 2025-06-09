@@ -1,11 +1,11 @@
-import js from "@eslint/js";
-import nextPlugin from "@next/eslint-plugin-next";
-import prettierConfig from "eslint-config-prettier";
-import reactPlugin from "eslint-plugin-react";
-import reactHooksPlugin from "eslint-plugin-react-hooks";
 import unusedImports from "eslint-plugin-unused-imports";
-import globals from "globals";
+import reactHooksPlugin from "eslint-plugin-react-hooks";
+import prettierConfig from "eslint-config-prettier";
+import nextPlugin from "@next/eslint-plugin-next";
+import reactPlugin from "eslint-plugin-react";
 import tseslint from "typescript-eslint";
+import globals from "globals";
+import js from "@eslint/js";
 
 const reactRecommended = reactPlugin.configs.recommended;
 
@@ -13,7 +13,7 @@ const reactRecommended = reactPlugin.configs.recommended;
 const config = [
 	// Base configuration
 	{
-		ignores: ["**/node_modules", "**/.next", "**/dist", "**/build", "**/coverage", "**/out", "**/eslint.config.js"],
+		ignores: ["**/node_modules", "**/.next", "**/dist", "**/build", "**/coverage", "**/out"],
 	},
 
 	// JavaScript and TypeScript

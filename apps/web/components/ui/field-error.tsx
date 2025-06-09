@@ -9,7 +9,7 @@ export function FieldError({ error, className, ...props }: FieldErrorProps) {
 	if (!error) return null;
 
 	return (
-		<span className={cn("text-sm text-destructive pl-1", className)} {...props}>
+		<span className={cn("text-destructive pl-1 text-sm", className)} {...props}>
 			{error}
 		</span>
 	);

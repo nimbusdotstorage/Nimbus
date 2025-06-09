@@ -1,7 +1,7 @@
-import { Hono } from "hono";
-import { zValidator } from "@hono/zod-validator";
 import { checkEmail, handleAuth } from "@/apps/server/src/controllers";
 import { emailSchema } from "@/apps/server/src/validators";
+import { zValidator } from "@hono/zod-validator";
+import { Hono } from "hono";
 
 const authRouter = new Hono();
 

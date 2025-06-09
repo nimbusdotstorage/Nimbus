@@ -54,10 +54,23 @@ We use Docker to run a PostgreSQL database for local development. Follow these s
 
 Copy the `.env.example` file to `.env` using this command, `cp .env.example .env` and fill in these values:
 
+<details>
+<summary>How to setup Google keys?</summary>
+<br>
+
+- Navigate to Google Cloud [console](https://console.cloud.google.com/).
+
+- Create a new project and navigate to its dashboard.
+
+- Under <b>API & Services</b>, navigate to <b>Oauth Consent Screen</b> and enter the details.
+
+- Now create a client. Add <b>Authorised Javascript origin</b> as `http://localhost:3000` and <b> Authorised redirect
+  uri</b> as `http://localhost:1284/api/auth/callback/google` and get your `client_id` and `client_secret`.
+
+- Now navigate to <b>Audience</b> and add <b>Test users</b>.
+</details>
+
 ```bash
-# For more information on how to get these values, see https://www.better-auth.com/docs/authentication/google
-# Authorised JavaScript origins: http://localhost:1284
-# Authorised redirect URIs: http://localhost:1284/api/auth/callback/google
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 
@@ -85,6 +98,9 @@ bun dev
 ```
 
 The application should now be running at [http://localhost:3000](http://localhost:3000)
+
+If you want to contribute, please refer to the
+[contributing guide](https://github.com/nimbusdotstorage/Nimbus/blob/main/CONTRIBUTING.md)
 
 ## Our Amazing Contributors
 

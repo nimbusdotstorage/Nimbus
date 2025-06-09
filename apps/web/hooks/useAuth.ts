@@ -1,10 +1,10 @@
+import type { SignInFormData, SignUpFormData, ForgotPasswordFormData, ResetPasswordFormData } from "@/web/schemas";
+import { BASE_URL, CALLBACK_URL } from "@repo/auth/constants";
+import { useMutation } from "@tanstack/react-query";
+import { authClient } from "@repo/auth/client";
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
-import { authClient } from "@repo/auth/client";
-import { BASE_URL, CALLBACK_URL } from "@repo/auth/constants";
-import type { SignInFormData, SignUpFormData, ForgotPasswordFormData, ResetPasswordFormData } from "@/web/schemas";
 import axios from "axios";
 
 interface AuthState {

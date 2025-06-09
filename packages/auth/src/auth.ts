@@ -1,11 +1,11 @@
-import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { extractTokenFromUrl } from "./utils/extract-token";
 import { db } from "@/packages/db/src/index";
+import { sendMail } from "./utils/send-mail";
+import Schema from "@/packages/db/schema";
+import { betterAuth } from "better-auth";
 import { config } from "dotenv";
 import path from "path";
-import schema from "@/packages/db/schema";
-import { sendMail } from "./utils/send-mail";
-import { extractTokenFromUrl } from "./utils/extract-token";
 
 // Load env variables from the root .env file
 config({ path: path.resolve(process.cwd(), "../../.env") });
@@ -14,7 +14,7 @@ export const auth = betterAuth({
 	database: drizzleAdapter(db, {
 		provider: "pg",
 		schema: {
-			...schema,
+			...Schema,
 		},
 	}),
 

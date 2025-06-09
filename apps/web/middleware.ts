@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 import { authClient } from "@repo/auth/src/auth-client";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 const protectedRoutes = ["/app"];
 const publicRoutes = ["/", "/signin", "/signup", "/forgot-password", "/reset-password"];

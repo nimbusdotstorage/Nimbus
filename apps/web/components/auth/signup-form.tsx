@@ -1,24 +1,24 @@
 "use client";
 
-import { cn } from "lib/utils";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import Link from "next/link";
 import { useState, type ComponentProps, type ChangeEvent } from "react";
-import { Input } from "@/components/ui/input";
-import { ArrowLeft, Eye, EyeClosed, Loader2, X } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import { Label } from "@/components/ui/label";
-import { SocialAuthButton } from "./shared/social-auth-button";
 import { SegmentedProgress } from "@/components/ui/segmented-progress";
-import Image from "next/image";
-import { toast } from "sonner";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
 import { useSignUp, useCheckEmailExists } from "@/web/hooks/useAuth";
-import { FieldError } from "@/web/components/ui/field-error";
+import { ArrowLeft, Eye, EyeClosed, Loader2, X } from "lucide-react";
 import { signUpSchema, type SignUpFormData } from "@/web/schemas";
+import { SocialAuthButton } from "./shared/social-auth-button";
+import { FieldError } from "@/web/components/ui/field-error";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import Image from "next/image";
+import { cn } from "lib/utils";
+import { toast } from "sonner";
+import Link from "next/link";
+import React from "react";
 
 // async function convertImageToBase64(file: File): Promise<string> {
 // 	return new Promise((resolve, reject) => {
@@ -102,11 +102,11 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 	};
 
 	return (
-		<div className={cn("flex flex-col gap-0 size-full items-center justify-center select-none", className)} {...props}>
-			<Card className="gap-6 w-full max-w-md pb-0">
+		<div className={cn("flex size-full flex-col items-center justify-center gap-0 select-none", className)} {...props}>
+			<Card className="w-full max-w-md gap-6 pb-0">
 				<CardHeader className="overflow-x-hidden">
-					<div className="flex flex-row justify-start items-center -mx-6 border-b">
-						<Button className="px-6 py-6 rounded-none font-semibold cursor-pointer" variant="link" asChild>
+					<div className="-mx-6 flex flex-row items-center justify-start border-b">
+						<Button className="cursor-pointer rounded-none px-6 py-6 font-semibold" variant="link" asChild>
 							<Link href={`/signin`}>
 								<ArrowLeft className="mr-2" />
 								Log In
@@ -133,7 +133,7 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 									disabled={isLoading}
 								/>
 
-								<div className="text-center text-muted-foreground text-sm">OR</div>
+								<div className="text-muted-foreground text-center text-sm">OR</div>
 
 								<div className="grid grid-cols-2 gap-4">
 									<div className="grid gap-2">
@@ -177,11 +177,11 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 									<Label htmlFor="image">Profile Image (optional)</Label>
 									<div className="flex items-end gap-4">
 										{imagePreview && (
-											<div className="relative w-16 h-16 rounded-sm overflow-hidden">
+											<div className="relative h-16 w-16 overflow-hidden rounded-sm">
 												<Image src={imagePreview} alt="Profile preview" layout="fill" objectFit="cover" />
 											</div>
 										)}
-										<div className="flex items-center gap-2 w-full">
+										<div className="flex w-full items-center gap-2">
 											<Input
 												id="image"
 												type="file"
@@ -210,7 +210,7 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 								>
 									{checkEmailMutation.isPending ? (
 										<>
-											<Loader2 className="animate-spin mr-2" />
+											<Loader2 className="mr-2 animate-spin" />
 											Checking email...
 										</>
 									) : isLoading ? (
@@ -226,7 +226,7 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 							<>
 								<div className="flex flex-col gap-4">
 									<div className="flex flex-col gap-2">
-										<div className="flex justify-between items-center">
+										<div className="flex items-center justify-between">
 											<Label htmlFor="password">Password</Label>
 											<Button
 												type="button"
@@ -261,7 +261,7 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 										<FieldError error={errors.confirmPassword?.message} />
 									</div>
 
-									<div className="flex gap-4 mt-2">
+									<div className="mt-2 flex gap-4">
 										<Button type="button" variant="outline" onClick={handleGoBack} disabled={isLoading}>
 											<ArrowLeft className="mr-2 h-4 w-4" />
 											Back
@@ -277,9 +277,9 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 				</CardContent>
 
 				<CardFooter className="px-6 py-4">
-					<p className="text-center w-full text-sm text-neutral-600">
+					<p className="w-full text-center text-sm text-neutral-600">
 						By signing up, you agree to our{" "}
-						<Link href="/terms" className="underline underline-offset-4 cursor-pointer whitespace-nowrap">
+						<Link href="/terms" className="cursor-pointer whitespace-nowrap underline underline-offset-4">
 							terms of service
 						</Link>
 						.

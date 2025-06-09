@@ -1,4 +1,3 @@
-import { ChevronDown, Folder, ImageIcon, Video, Music, Archive } from "lucide-react";
 import {
 	SidebarGroup,
 	SidebarGroupContent,
@@ -11,6 +10,7 @@ import {
 	SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { ChevronDown, Folder, ImageIcon, Video, Music, Archive } from "lucide-react";
 
 const folders = [
 	{
@@ -61,10 +61,10 @@ export default function SidebarFolders() {
 							<Collapsible key={folder.name} className="group/collapsible">
 								<SidebarMenuItem>
 									<CollapsibleTrigger asChild>
-										<SidebarMenuButton className="px-3" tooltip={`${folder.name} (${folder.count})`}>
+										<SidebarMenuButton className="cursor-pointer px-3" tooltip={`${folder.name} (${folder.count})`}>
 											<folder.icon className="size-4" />
 											<span className="group-data-[collapsible=icon]:sr-only">{folder.name}</span>
-											<span className="ml-1 text-xs text-sidebar-foreground/70 group-data-[collapsible=icon]:sr-only">
+											<span className="text-sidebar-foreground/70 ml-1 text-xs group-data-[collapsible=icon]:sr-only">
 												{folder.count}
 											</span>
 											{folder.subfolders && (
@@ -78,9 +78,9 @@ export default function SidebarFolders() {
 											<SidebarMenuSub className="group-data-[collapsible=icon]:hidden">
 												{folder.subfolders.map(subfolder => (
 													<SidebarMenuSubItem key={subfolder.name}>
-														<SidebarMenuSubButton className="w-full">
+														<SidebarMenuSubButton className="w-full cursor-pointer">
 															<span>{subfolder.name}</span>
-															<span className="ml-1 text-xs text-sidebar-foreground/70">{subfolder.count}</span>
+															<span className="text-sidebar-foreground/70 ml-1 text-xs">{subfolder.count}</span>
 														</SidebarMenuSubButton>
 													</SidebarMenuSubItem>
 												))}

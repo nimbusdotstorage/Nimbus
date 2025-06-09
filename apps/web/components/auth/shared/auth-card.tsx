@@ -1,11 +1,11 @@
 "use client";
 
-import { cn } from "lib/utils";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import Link from "next/link";
+import type { ComponentProps, ReactNode } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { ComponentProps, ReactNode } from "react";
+import { cn } from "lib/utils";
+import Link from "next/link";
 
 interface AuthCardProps extends ComponentProps<"div"> {
 	title: string;
@@ -19,17 +19,17 @@ export function AuthCard({ title, description, navigationType, children, classNa
 	const oppositeActionText = navigationType === "signin" ? "Sign up" : "Log In";
 
 	return (
-		<div className={cn("flex flex-col gap-0 size-full items-center justify-center select-none", className)} {...props}>
-			<Card className="gap-6 w-full max-w-md pb-0">
+		<div className={cn("flex size-full flex-col items-center justify-center gap-0 select-none", className)} {...props}>
+			<Card className="w-full max-w-md gap-6 pb-0">
 				<CardHeader className="overflow-x-hidden">
-					<div className="flex flex-row justify-between items-center -mx-6 border-b">
-						<Button className="px-6 py-6 rounded-none font-semibold cursor-pointer" variant="link" asChild>
+					<div className="-mx-6 flex flex-row items-center justify-between border-b">
+						<Button className="cursor-pointer rounded-none px-6 py-6 font-semibold" variant="link" asChild>
 							<Link href="/">
 								<ArrowLeft />
 								Back
 							</Link>
 						</Button>
-						<Button className="px-6 py-6 rounded-none font-semibold cursor-pointer" variant="link" asChild>
+						<Button className="cursor-pointer rounded-none px-6 py-6 font-semibold" variant="link" asChild>
 							<Link href={`/${oppositeAction}`}>
 								{oppositeActionText}
 								<ArrowRight />
@@ -45,9 +45,9 @@ export function AuthCard({ title, description, navigationType, children, classNa
 				<CardContent className="px-6">{children}</CardContent>
 
 				<CardFooter className="px-6 py-4">
-					<p className="text-center w-full text-sm text-neutral-600">
+					<p className="w-full text-center text-sm text-neutral-600">
 						By {navigationType === "signin" ? "signing in" : "signing up"}, you agree to our{" "}
-						<Link href="/terms" className="underline underline-offset-4 cursor-pointer whitespace-nowrap">
+						<Link href="/terms" className="cursor-pointer whitespace-nowrap underline underline-offset-4">
 							terms of service
 						</Link>
 						.

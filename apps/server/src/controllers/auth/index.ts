@@ -1,8 +1,8 @@
-import type { Context } from "hono";
-import { auth } from "@repo/auth/auth";
-import { db } from "@repo/db";
 import { user } from "@repo/db/schema";
+import { auth } from "@repo/auth/auth";
+import type { Context } from "hono";
 import { eq } from "drizzle-orm";
+import { db } from "@repo/db";
 
 export const checkEmail = async (c: Context) => {
 	try {

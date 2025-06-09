@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, type ChangeEvent } from "react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Eye, EyeClosed } from "lucide-react";
 import type { ComponentProps } from "react";
 
@@ -23,7 +23,7 @@ export function PasswordInput({ className, ...props }: PasswordInputProps) {
 				type="button"
 				variant="ghost"
 				size="icon"
-				className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent disabled:pointer-events-none "
+				className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent disabled:pointer-events-none"
 				onClick={toggleVisibility}
 				aria-label={isVisible ? "Hide password" : "Show password"}
 			>

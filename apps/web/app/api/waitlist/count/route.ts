@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
-import { db } from "@repo/db";
 import { waitlist } from "@repo/db/schema";
+import { NextResponse } from "next/server";
 import { count } from "drizzle-orm";
+import { db } from "@repo/db";
 
 export async function GET() {
 	try {

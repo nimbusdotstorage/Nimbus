@@ -1,17 +1,17 @@
 "use client";
 
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Loader2, ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import type { ComponentProps } from "react";
-import { useForgotPassword } from "@/web/hooks/useAuth";
 import { forgotPasswordSchema, type ForgotPasswordFormData } from "@/web/schemas";
+import { useForm, type SubmitHandler } from "react-hook-form";
 import { FieldError } from "@/web/components/ui/field-error";
+import { useForgotPassword } from "@/web/hooks/useAuth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import type { ComponentProps } from "react";
+import Link from "next/link";
 
 export function ForgotPasswordForm({ ...props }: ComponentProps<"div">) {
 	const { isLoading, sendResetEmail } = useForgotPassword();
@@ -32,11 +32,11 @@ export function ForgotPasswordForm({ ...props }: ComponentProps<"div">) {
 	};
 
 	return (
-		<div className="flex flex-col gap-0 size-full items-center justify-center select-none" {...props}>
-			<Card className="gap-6 w-full max-w-md pb-0">
+		<div className="flex size-full flex-col items-center justify-center gap-0 select-none" {...props}>
+			<Card className="w-full max-w-md gap-6 pb-0">
 				<CardHeader className="overflow-x-hidden">
-					<div className="flex flex-row justify-start items-center -mx-6 border-b">
-						<Button className="px-6 py-6 rounded-none font-semibold cursor-pointer" variant="link" asChild>
+					<div className="-mx-6 flex flex-row items-center justify-start border-b">
+						<Button className="cursor-pointer rounded-none px-6 py-6 font-semibold" variant="link" asChild>
 							<Link href="/">
 								<ArrowLeft />
 								Back
@@ -69,7 +69,7 @@ export function ForgotPasswordForm({ ...props }: ComponentProps<"div">) {
 							<FieldError error={errors.email?.message} />
 						</div>
 
-						<Button type="submit" className="w-full mt-2 cursor-pointer" disabled={isLoading}>
+						<Button type="submit" className="mt-2 w-full cursor-pointer" disabled={isLoading}>
 							{isLoading ? (
 								<>
 									<Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -83,9 +83,9 @@ export function ForgotPasswordForm({ ...props }: ComponentProps<"div">) {
 				</CardContent>
 
 				<CardFooter className="px-6 py-4">
-					<p className="text-center w-full text-sm text-neutral-600">
+					<p className="w-full text-center text-sm text-neutral-600">
 						By continuing, you agree to our{" "}
-						<Link href="/terms" className="underline underline-offset-4 cursor-pointer whitespace-nowrap">
+						<Link href="/terms" className="cursor-pointer whitespace-nowrap underline underline-offset-4">
 							terms of service
 						</Link>
 						.

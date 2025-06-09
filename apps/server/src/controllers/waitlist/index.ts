@@ -1,8 +1,8 @@
-import type { Context } from "hono";
-import { db } from "@repo/db";
 import { waitlist } from "@repo/db/schema";
 import { count } from "drizzle-orm";
+import type { Context } from "hono";
 import { nanoid } from "nanoid";
+import { db } from "@repo/db";
 
 export const joinWaitlist = async (c: Context) => {
 	try {
