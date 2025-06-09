@@ -38,6 +38,7 @@
 			"@/web/*": ["./*"],
 			"@/public/*": ["./public/*"],
 			"@repo/*": ["../../packages/*"]
+			"@/hooks/*": ["./hooks/*"]
 		}
 	},
 	"include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],

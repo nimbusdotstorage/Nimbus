@@ -1,4 +1,9 @@
-import { Bell, HelpCircle, Settings } from "lucide-react";
+import { AnimateIcon } from "@/components/animate-ui/icons/icon";
+import { Bell } from "@/components/animate-ui/icons/bell";
+import { MessageCircleQuestion } from "@/components/animate-ui/icons/message-circle-question";
+import { Search } from "lucide-react";
+import { Settings } from "@/components/animate-ui/icons/settings";
+import { LogOut } from "@/components/animate-ui/icons/log-out";
 
 import { ModeToggle } from "@/components/mode-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -13,7 +18,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { authClient } from "@/repo/auth/src/auth-client";
+import { authClient } from "@/repo/auth/client";
 import { LogOut, Search } from "lucide-react";
 import Link from "next/link";
 import { SidebarTrigger } from "@/components/ui/sidebar";
@@ -62,15 +67,21 @@ export function Header() {
 				</div>
 				<div className="flex items-center gap-2">
 					<ModeToggle />
-					<Button variant="ghost" size="icon">
-						<HelpCircle className="h-5 w-5" />
-					</Button>
-					<Button variant="ghost" size="icon">
-						<Settings className="h-5 w-5" />
-					</Button>
-					<Button variant="ghost" size="icon">
-						<Bell className="h-5 w-5" />
-					</Button>
+					<AnimateIcon animateOnHover>
+						<Button variant="ghost" size="icon">
+							<MessageCircleQuestion className="h-5 w-5" />
+						</Button>
+					</AnimateIcon>
+					<AnimateIcon animateOnHover>
+						<Button variant="ghost" size="icon">
+							<Settings className="h-5 w-5" />
+						</Button>
+					</AnimateIcon>
+					<AnimateIcon animateOnHover>
+						<Button variant="ghost" size="icon">
+							<Bell className="h-5 w-5" />
+						</Button>
+					</AnimateIcon>
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant="ghost" size="icon" className="rounded-full">
@@ -92,10 +103,12 @@ export function Header() {
 										<div className="text-xs text-muted-foreground">{userEmail || "No email"}</div>
 									</DropdownMenuItem>
 									<DropdownMenuSeparator />
-									<DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
-										<LogOut className="mr-2 h-4 w-4" />
-										<span>Sign Out</span>
-									</DropdownMenuItem>
+									<AnimateIcon animateOnHover>
+										<DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
+											<LogOut className="mr-2 h-4 w-4" />
+											<span>Sign Out</span>
+										</DropdownMenuItem>
+									</AnimateIcon>
 								</>
 							) : (
 								<DropdownMenuItem asChild className="cursor-pointer">
