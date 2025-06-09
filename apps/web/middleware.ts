@@ -1,13 +1,58 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getSessionCookie } from "better-auth/cookies";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { authClient } from "@repo/auth/src/auth-client";
+
+const protectedRoutes = ["/app"];
+const publicRoutes = ["/", "/signin", "/signup", "/forgot-password", "/reset-password"];
 
 export async function middleware(request: NextRequest) {
-	const pathname = request.nextUrl.pathname;
+	const { pathname } = request.nextUrl;
 
-	if (pathname.startsWith("/app")) {
-		const sessionCookie = getSessionCookie(request);
-		if (!sessionCookie) {
-			return NextResponse.redirect(new URL("/", request.url));
+	const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
+
+	const isPublicRoute = publicRoutes.some(route => pathname === route || pathname.startsWith(route));
+
+	if (isProtectedRoute) {
+		try {
+			const session = await authClient.getSession({
+				fetchOptions: {
+					headers: {
+						cookie: request.headers.get("cookie") || "",
+					},
+				},
+			});
+
+			if (!session?.data?.session || !session?.data?.user) {
+				const signInUrl = new URL("/signin", request.url);
+				signInUrl.searchParams.set("redirect", pathname);
+				return NextResponse.redirect(signInUrl);
+			}
+
+			return NextResponse.next();
+		} catch (error) {
+			console.error("Auth middleware error:", error);
+			const signInUrl = new URL("/signin", request.url);
+			signInUrl.searchParams.set("redirect", pathname);
+			return NextResponse.redirect(signInUrl);
+		}
+	}
+
+	// If user is authenticated and trying to access auth pages, redirect to app
+	if (isPublicRoute && (pathname === "/signin" || pathname === "/signup")) {
+		try {
+			const session = await authClient.getSession({
+				fetchOptions: {
+					headers: {
+						cookie: request.headers.get("cookie") || "",
+					},
+				},
+			});
+
+			if (session?.data?.session && session?.data?.user) {
+				return NextResponse.redirect(new URL("/app", request.url));
+			}
+		} catch (error) {
+			console.error("Auth check error:", error);
 		}
 	}
 
@@ -15,5 +60,15 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-	matcher: ["/app"],
+	matcher: [
+		/*
+		 * Match all request paths except for the ones starting with:
+		 * - api (API routes)
+		 * - _next/static (static files)
+		 * - _next/image (image optimization files)
+		 * - favicon.ico (favicon file)
+		 * - public folder files
+		 */
+		"/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+	],
 };

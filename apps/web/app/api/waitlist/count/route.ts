@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { db } from "@/packages/db/src/index";
-import { waitlist } from "@/packages/db/schema";
+import { db } from "@repo/db";
+import { waitlist } from "@repo/db/schema";
 import { count } from "drizzle-orm";
 
 export async function GET() {

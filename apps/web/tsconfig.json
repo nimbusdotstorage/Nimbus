@@ -37,7 +37,7 @@
 			"@/components/*": ["./components/*"],
 			"@/web/*": ["./*"],
 			"@/public/*": ["./public/*"],
-			"@repo/*": ["../../packages/*"]
+			"@repo/*": ["../../packages/*"],
 			"@/hooks/*": ["./hooks/*"]
 		}
 	},

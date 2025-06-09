@@ -25,6 +25,7 @@
 		"@radix-ui/react-tabs": "^1.1.12",
 		"@radix-ui/react-tooltip": "^1.2.7",
 		"@tanstack/react-query": "^5.79.0",
+		"axios": "^1.9.0",
 		"better-auth": "^1.2.8",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
@@ -35,6 +36,7 @@
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
 		"react-hook-form": "^7.57.0",
+		"resend": "^4.5.2",
 		"react-dropzone": "^14.3.8",
 		"sonner": "^2.0.4",
 		"tailwind-merge": "^3.3.0"
@@ -50,6 +52,7 @@
 		"tailwindcss": "^4.1.8",
 		"tw-animate-css": "^1.3.2",
 		"@repo/auth": "workspace:*",
+		"@repo/db": "workspace:*",
 		"typescript": "^5"
 	}
 }
