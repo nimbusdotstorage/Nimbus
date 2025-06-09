@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
 	DropdownMenu,
@@ -6,11 +7,11 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import type { FileItem } from "@/web/lib/types";
 import { FileText, Folder, MoreVertical } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import type { FileItem } from "@/web/lib/types";
-import { Button } from "@/components/ui/button";
 
 export function FileBrowserData({ viewMode, data }: { viewMode: "grid" | "list"; data: FileItem[] }) {
 	return viewMode === "grid" ? <FilesGrid data={data} /> : <FilesList data={data} />;
@@ -60,42 +61,50 @@ function FilesList({ data }: { data: FileItem[] }) {
 	const searchParams = useSearchParams();
 
 	return (
-		<div className="border rounded-md overflow-hidden">
-			<table className="w-full">
-				<thead>
-					<tr className="bg-muted/50">
-						<th className="text-left p-3 font-medium">Name</th>
-						<th className="text-left p-3 font-medium">Modified</th>
-						<th className="text-left p-3 font-medium">Size</th>
-						<th className="p-3 w-10"></th>
-					</tr>
-				</thead>
-				<tbody>
+		<div className="overflow-hidden">
+			<Table>
+				<TableHeader>
+					<TableRow className="!bg-transparent h-auto pb-2 text-xs text-muted-foreground">
+						<TableHead className="h-auto pb-2 text-xs text-muted-foreground">Name</TableHead>
+						<TableHead className="h-auto pb-2 text-xs text-muted-foreground">Modified</TableHead>
+						<TableHead className="h-auto pb-2 text-xs text-muted-foreground">Size</TableHead>
+						<TableHead className="h-0 w-0" />
+					</TableRow>
+				</TableHeader>
+
+				<TableBody>
 					{data.map(file => {
 						const params = new URLSearchParams(searchParams.toString());
 						params.append("id", file.id);
 
 						return (
-							<tr key={file.id} className="border-t hover:bg-accent/10 transition-colors cursor-pointer relative">
-								<td className="p-4 flex items-center gap-2">
-									<Link href={"?" + params.toString()} className="absolute inset-0" />
-									{file.type === "folder" ? (
-										<Folder className="h-4 w-4 text-primary" />
-									) : (
-										<FileText className="h-4 w-4 text-primary" />
-									)}
-									{file.name}
-								</td>
-								<td className="p-3 text-sm text-muted-foreground">{file.modified}</td>
-								<td className="p-3 text-sm text-muted-foreground">{file.size || "—"}</td>
-								<td className="p-3">
+							<TableRow key={file.id} className="text-xs relative">
+								<TableCell className="py-1">
+									<span className="flex items-center gap-2 font-medium">
+										<Link href={"?" + params.toString()} className="absolute inset-0" />
+
+										{file.type === "folder" ? (
+											<Folder className="h-4 w-4 text-foreground" />
+										) : (
+											<FileText className="h-4 w-4 text-foreground" />
+										)}
+
+										{file.name}
+									</span>
+								</TableCell>
+
+								<TableCell className="py-1 text-muted-foreground">{file.modified}</TableCell>
+
+								<TableCell className="py-1 text-muted-foreground">{file.size || "—"}</TableCell>
+
+								<TableCell className="py-1">
 									<FileActions />
-								</td>
-							</tr>
+								</TableCell>
+							</TableRow>
 						);
 					})}
-				</tbody>
-			</table>
+				</TableBody>
+			</Table>
 		</div>
 	);
 }
@@ -104,7 +113,7 @@ function FileActions() {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button variant="ghost" size="icon" className="h-8 w-8 relative">
+				<Button variant="ghost" size="icon" className="size-8 bg-transparent relative">
 					<MoreVertical className="h-4 w-4" />
 					<span className="sr-only">Open menu</span>
 				</Button>
