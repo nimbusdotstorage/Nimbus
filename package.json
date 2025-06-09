@@ -47,9 +47,6 @@
 		"apps/*",
 		"packages/*"
 	],
-	"dependencies": {
-		"@vercel/analytics": "^1.5.0"
-	},
 	"lint-staged": {
 		"*.{js,jsx,ts,tsx}": [
 			"eslint --fix",
