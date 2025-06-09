@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import Link from "next/link";
 import { signIn } from "@/packages/auth/src/auth-client";
 import type { ComponentProps } from "react";
-import { Google } from "./icons/google";
+import { Google } from "@/components/icons/google";
 
 export function LoginForm({ className, ...props }: ComponentProps<"div">) {
 	return (
