@@ -1,13 +1,14 @@
 import { AnimatedGroup } from "@/components/ui/animated-group";
+import HeroLight from "@/web/public/images/hero-light.png";
 import { WaitlistForm } from "@/components/home/waitlist";
+import HeroDark from "@/web/public/images/hero-dark.png";
 import GoogleDriveIcon from "@/web/public/googledrive";
-import Header from "@/components/home/header";
-import { WaitlistForm } from "./waitlist";
-import Image from "next/image";
 import { TextLoop } from "@/components/ui/text-loop";
 import OneDriveIcon from "@/web/public/onedrive";
-import ICloudIcon from "@/web/public/icloud";
 import DropboxIcon from "@/web/public/dropbox";
+import Header from "@/components/home/header";
+import ICloudIcon from "@/web/public/icloud";
+import Image from "next/image";
 
 const transitionVariants = {
 	item: {
@@ -36,7 +37,7 @@ export default function Hero() {
 			<AnimatedGroup variants={transitionVariants} className="w-full">
 				<div className="flex flex-col gap-12 px-4 md:px-6">
 					<div className="flex flex-col items-center justify-center gap-3 text-center md:gap-6">
-						<h1 className=" inline-flex text-[2.5rem] leading-tight md:text-5xl lg:text-7xl gap-1.5 items-center font-semibold flex-col sm:flex-row justify-center">
+						<h1 className="inline-flex flex-col items-center justify-center gap-1.5 text-[2.5rem] leading-tight font-semibold sm:flex-row md:text-5xl lg:text-7xl">
 							The open source
 							<TextLoop
 								transition={{
@@ -66,7 +67,7 @@ export default function Hero() {
 									},
 								}}
 							>
-								<GoogleDriveIcon className="inline size-12 md:size-14 lg:size-16.5 relative top-[-2px]" />
+								<GoogleDriveIcon className="relative top-[-2px] inline size-12 md:size-14 lg:size-16.5" />
 								<OneDriveIcon className="inline size-12 md:size-14 lg:size-16.5" />
 								<DropboxIcon className="inline size-12 md:size-14 lg:size-16.5" />
 								<ICloudIcon className="inline size-12 md:size-14 lg:size-16.5" />

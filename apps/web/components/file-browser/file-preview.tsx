@@ -1,5 +1,5 @@
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { FileText, Folder, X, Image, Video } from "lucide-react";
+import { FileText, Folder, Image, Video, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createRequest } from "@/web/hooks/createRequest";
 import { useRequest } from "@/web/hooks/useRequest";
@@ -48,12 +48,16 @@ export function FilePreview() {
 		if (id && id !== data?.id) {
 			void refetch();
 		}
+		// Adding refetch breaks it
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [id, data?.id]);
 
 	useEffect(() => {
 		if (data?.type === "folder") {
 			void refetchFolderContents();
 		}
+		// Adding refetchFolderContents breaks it
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data?.type]);
 
 	const handleClose = () => {

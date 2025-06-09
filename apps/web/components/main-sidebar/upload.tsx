@@ -6,9 +6,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Upload, FolderOpen, ChevronDown, File, FolderPlus } from "lucide-react";
 import { UploadFolderDialog } from "@/components/dialogs/upload-folder-dialog";
+import { CreateFolderDialog } from "@/components/dialogs/create-folder-dialog";
 import { UploadFileDialog } from "@/components/dialogs/upload-files-dialog";
 import { SidebarGroup, SidebarGroupContent } from "@/components/ui/sidebar";
-import { CreateFolderDialog } from "@/components/dialogs/create-folder-dialog";
 import { Button } from "@/components/ui/button";
 import { useUpload } from "@/hooks/useUpload";
 
