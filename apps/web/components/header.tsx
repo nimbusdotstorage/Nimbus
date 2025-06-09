@@ -8,7 +8,6 @@ import { LogOut } from "@/components/animate-ui/icons/log-out";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-
 import { Input } from "@/components/ui/input";
 import {
 	DropdownMenu,
@@ -18,13 +17,10 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { authClient } from "@/repo/auth/client";
-import { LogOut, Search } from "lucide-react";
+import { authClient } from "@repo/auth/client";
 import Link from "next/link";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { signOut } from "@/repo/auth/methods";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useSignOut } from "@/web/hooks/useAuth";
 
 const getInitials = (name?: string | null) => {
 	if (!name) return "SG";
@@ -39,17 +35,10 @@ const getInitials = (name?: string | null) => {
 
 export function Header() {
 	const { data: session, isPending } = authClient.useSession();
-	const router = useRouter();
+	const { signOut, isLoading } = useSignOut();
 
 	const handleSignOut = async () => {
-		try {
-			await signOut();
-			toast.success("Signed out successfully");
-			router.push("/");
-		} catch (error: any) {
-			toast.error(error.message);
-			console.error("Error signing out:", error);
-		}
+		await signOut();
 	};
 
 	const userName = session?.user?.name;
@@ -103,12 +92,10 @@ export function Header() {
 										<div className="text-xs text-muted-foreground">{userEmail || "No email"}</div>
 									</DropdownMenuItem>
 									<DropdownMenuSeparator />
-									<AnimateIcon animateOnHover>
-										<DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
-											<LogOut className="mr-2 h-4 w-4" />
-											<span>Sign Out</span>
-										</DropdownMenuItem>
-									</AnimateIcon>
+									<DropdownMenuItem onClick={handleSignOut} className="cursor-pointer" disabled={isLoading}>
+										<LogOut className="mr-2 h-4 w-4" />
+										<span>{isLoading ? "Signing out..." : "Sign Out"}</span>
+									</DropdownMenuItem>
 								</>
 							) : (
 								<DropdownMenuItem asChild className="cursor-pointer">

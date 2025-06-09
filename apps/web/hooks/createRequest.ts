@@ -17,7 +17,8 @@ type CreateRequestOptions = {
 export function createRequest({ path, pathParams = {}, queryParams = {} }: CreateRequestOptions) {
 	return (signal: AbortSignal) => {
 		// Get the base URL based on environment
-		const baseUrl = process.env.NODE_ENV === "development" ? "http://localhost:1284" : "https://api.nimbus.storage";
+		const baseUrl =
+			process.env.NODE_ENV === "development" ? "http://localhost:1284/api" : "https://api.nimbus.storage/api";
 
 		// Replace path params in the URL
 		let currentPath = path;
