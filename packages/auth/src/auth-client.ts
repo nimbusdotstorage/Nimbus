@@ -7,6 +7,6 @@ export const authClient = createAuthClient({
 export const signIn = async () => {
 	await authClient.signIn.social({
 		provider: "google",
-		callbackURL: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://nimbus.storage",
+		callbackURL: process.env.NODE_ENV === "development" ? "http://localhost:3000/app" : "https://nimbus.storage/app",
 	});
 };

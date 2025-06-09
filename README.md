@@ -85,3 +85,9 @@ bun dev
 ```
 
 The application should now be running at [http://localhost:3000](http://localhost:3000)
+
+## Our Amazing Contributors
+
+<a href="https://github.com/nimbusdotstorage/Nimbus/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=nimbusdotstorage/Nimbus" />
+</a>
