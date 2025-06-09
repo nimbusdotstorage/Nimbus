@@ -14,7 +14,18 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
 export function FileBrowserData({ viewMode, data }: { viewMode: "grid" | "list"; data: FileItem[] }) {
-	return viewMode === "grid" ? <FilesGrid data={data} /> : <FilesList data={data} />;
+	return data.length > 0 ? (
+		<>
+			{viewMode === "grid" && <FilesGrid data={data} />}
+			{viewMode === "list" && <FilesList data={data} />}
+		</>
+	) : (
+		<ZeroCase />
+	);
+}
+
+function ZeroCase() {
+	return <div className="col-span-full text-center py-8 text-muted-foreground text-sm">Nothing here :(</div>;
 }
 
 function FilesGrid({ data }: { data: FileItem[] }) {
@@ -49,10 +60,6 @@ function FilesGrid({ data }: { data: FileItem[] }) {
 					</Link>
 				);
 			})}
-			{/* zero case */}
-			{data.length === 0 && (
-				<div className="col-span-full text-center py-8 text-muted-foreground text-sm">Nothing here :(</div>
-			)}
 		</div>
 	);
 }
