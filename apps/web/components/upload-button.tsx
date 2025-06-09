@@ -5,11 +5,9 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { UploadFolderDialog } from "./dialogs/upload-folder-dialog";
-import { CreateFolderDialog } from "./dialogs/create-folder-dialog";
-import { UploadFileDialog } from "./dialogs/upload-files-dialog";
-import { Upload, Plus, FolderPlus } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { UploadFileDialog } from "@/components/dialogs/upload-files-dialog";
+import { UploadFolderDialog } from "@/components/dialogs/upload-folder-dialog";
+import { CreateFolderDialog } from "@/components/dialogs/create-folder-dialog";
 import { useUpload } from "@/hooks/useUpload";
 import type React from "react";
 

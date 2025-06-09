@@ -33,8 +33,8 @@ const animations = {
 } as const;
 
 function IconComponent({ size, ...props }: BellProps) {
-	const { controls, animation, loop, loopDelay } = useAnimateIconContext();
-	const variants = getVariants(animations, animation, loop, loopDelay);
+	const { controls } = useAnimateIconContext();
+	const variants = getVariants(animations);
 
 	return (
 		<motion.svg

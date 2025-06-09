@@ -10,6 +10,7 @@ import { cn } from "@/web/lib/utils";
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
+import { GitHub } from "@/components/icons/github";
 
 const formSchema = z.object({
 	email: z.string().email(),

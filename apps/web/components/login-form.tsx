@@ -7,6 +7,7 @@ import type { ComponentProps } from "react";
 import { Google } from "./icons/google";
 import { cn } from "@/web/lib/utils";
 import Link from "next/link";
+import { Google } from "@/components/icons/google";
 
 export function LoginForm({ className, ...props }: ComponentProps<"div">) {
 	return (
