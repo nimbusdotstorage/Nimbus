@@ -1,9 +1,9 @@
 "use client";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { useSignUp, useCheckEmailExists, useGoogleAuth } from "@/web/hooks/useAuth";
 import { useState, type ComponentProps, type ChangeEvent } from "react";
 import { SegmentedProgress } from "@/components/ui/segmented-progress";
-import { useSignUp, useCheckEmailExists } from "@/web/hooks/useAuth";
 import { ArrowLeft, Eye, EyeClosed, Loader2, X } from "lucide-react";
 import { signUpSchema, type SignUpFormData } from "@/web/schemas";
 import { SocialAuthButton } from "./shared/social-auth-button";
@@ -35,7 +35,8 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 	const [showPasswordAndTos, setShowPasswordAndTos] = useState(false);
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
-	const { isLoading, signUpWithCredentials, signUpWithGoogleProvider } = useSignUp();
+	const { isLoading, signUpWithCredentials } = useSignUp();
+	const { signInWithGoogleProvider } = useGoogleAuth();
 	const checkEmailMutation = useCheckEmailExists();
 
 	const {
@@ -129,7 +130,7 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 								<SocialAuthButton
 									provider="google"
 									action="signup"
-									onClick={signUpWithGoogleProvider}
+									onClick={signInWithGoogleProvider}
 									disabled={isLoading}
 								/>
 

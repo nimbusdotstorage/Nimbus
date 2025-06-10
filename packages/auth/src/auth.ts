@@ -20,7 +20,7 @@ export const auth = betterAuth({
 		enabled: true,
 		autoSignIn: true,
 		minPasswordLength: 8,
-		maxPasswordLength: 128,
+		maxPasswordLength: 100,
 		resetPasswordTokenExpiresIn: 600, // 10 minutes
 		sendResetPassword: async ({ user, url }) => {
 			const token = extractTokenFromUrl(url);

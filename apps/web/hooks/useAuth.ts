@@ -19,9 +19,32 @@ export const signInWithGoogle = async () => {
 	});
 };
 
+export const useGoogleAuth = () => {
+	const [isLoading, setIsLoading] = useState(false);
+
+	const signInWithGoogleProvider = useCallback(async () => {
+		setIsLoading(true);
+		try {
+			toast.promise(signInWithGoogle(), {
+				loading: "Signing in with Google...",
+				success: "Signed in with Google",
+				error: error => (error instanceof Error ? error.message : "Google authentication failed"),
+			});
+		} catch (error) {
+			const errorMessage = error instanceof Error ? error.message : "Google authentication failed";
+			toast.error(errorMessage);
+		} finally {
+			setIsLoading(false);
+		}
+	}, []);
+
+	return { signInWithGoogleProvider, isLoading };
+};
+
 export const useSignIn = () => {
 	const router = useRouter();
 	const [state, setState] = useState<AuthState>({ isLoading: false, error: null });
+	const { signInWithGoogleProvider } = useGoogleAuth();
 
 	// Get redirect URL from search params
 	const getRedirectUrl = () => {
@@ -72,20 +95,6 @@ export const useSignIn = () => {
 		[router]
 	);
 
-	const signInWithGoogleProvider = useCallback(async () => {
-		setState({ isLoading: true, error: null });
-		try {
-			toast.promise(signInWithGoogle(), {
-				loading: "Signing in with Google...",
-				success: "Signed in with Google",
-				error: error => (error instanceof Error ? error.message : "Google sign-in failed"),
-			});
-		} catch (error) {
-			const errorMessage = error instanceof Error ? error.message : "Google sign-in failed";
-			setState({ isLoading: false, error: errorMessage });
-		}
-	}, []);
-
 	return {
 		...state,
 		signInWithCredentials,
@@ -96,6 +105,7 @@ export const useSignIn = () => {
 export const useSignUp = () => {
 	const router = useRouter();
 	const [state, setState] = useState<AuthState>({ isLoading: false, error: null });
+	const { signInWithGoogleProvider } = useGoogleAuth();
 
 	const signUpWithCredentials = useCallback(
 		async (data: SignUpFormData) => {
@@ -169,24 +179,10 @@ export const useSignUp = () => {
 		[router]
 	);
 
-	const signUpWithGoogleProvider = useCallback(async () => {
-		setState({ isLoading: true, error: null });
-		try {
-			toast.promise(signInWithGoogle(), {
-				loading: "Signing up with Google...",
-				success: "Signed up with Google",
-				error: error => (error instanceof Error ? error.message : "Google sign-up failed"),
-			});
-		} catch (error) {
-			const errorMessage = error instanceof Error ? error.message : "Google sign-up failed";
-			setState({ isLoading: false, error: errorMessage });
-		}
-	}, []);
-
 	return {
 		...state,
 		signUpWithCredentials,
-		signUpWithGoogleProvider,
+		signInWithGoogleProvider,
 	};
 };
 
