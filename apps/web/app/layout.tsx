@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import promoImage from "@/public/images/preview.png";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import Header from "@/components/home/header";
 import { Toaster } from "sonner";
 
 export const metadata = {
@@ -60,6 +61,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 				<ReactQueryProvider>
 					<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 						<div className="relative min-h-screen">
+							<Header />
 							<main className="flex flex-1 justify-center">
 								{children}
 								<Analytics />

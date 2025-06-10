@@ -6,7 +6,6 @@ import GoogleDriveIcon from "@/web/public/googledrive";
 import { TextLoop } from "@/components/ui/text-loop";
 import OneDriveIcon from "@/web/public/onedrive";
 import DropboxIcon from "@/web/public/dropbox";
-import Header from "@/components/home/header";
 import ICloudIcon from "@/web/public/icloud";
 import Image from "next/image";
 
@@ -33,7 +32,6 @@ const transitionVariants = {
 export default function Hero() {
 	return (
 		<div className="flex w-full flex-1 flex-col items-center justify-center gap-12 overflow-hidden px-4 py-40 md:gap-16">
-			<Header />
 			<AnimatedGroup variants={transitionVariants} className="w-full">
 				<div className="flex flex-col gap-12 px-4 md:px-6">
 					<div className="flex flex-col items-center justify-center gap-3 text-center md:gap-6">
