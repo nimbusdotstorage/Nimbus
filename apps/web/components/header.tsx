@@ -92,10 +92,13 @@ export function Header() {
 										<div className="text-muted-foreground text-xs">{userEmail || "No email"}</div>
 									</DropdownMenuItem>
 									<DropdownMenuSeparator />
-									<DropdownMenuItem onClick={handleSignOut} className="cursor-pointer" disabled={isLoading}>
-										<LogOut className="mr-2 h-4 w-4" />
-										<span>{isLoading ? "Signing out..." : "Sign Out"}</span>
-									</DropdownMenuItem>
+
+									<AnimateIcon animateOnHover>
+										<DropdownMenuItem onClick={handleSignOut} className="cursor-pointer" disabled={isLoading}>
+											<LogOut className="mr-2 h-4 w-4" />
+											<span>{isLoading ? "Signing out..." : "Sign Out"}</span>
+										</DropdownMenuItem>
+									</AnimateIcon>
 								</>
 							) : (
 								<DropdownMenuItem asChild className="cursor-pointer">
