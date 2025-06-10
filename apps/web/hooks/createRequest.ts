@@ -1,4 +1,4 @@
-import { BASE_URL } from "@repo/auth/constants";
+import { BACKEND_URL } from "@repo/auth/constants";
 
 type Params = Record<string, string | number | null | undefined>;
 
@@ -35,7 +35,7 @@ export function createRequest({ path, pathParams = {}, queryParams = {} }: Creat
 		const query = queryString ? `?${queryString}` : "";
 
 		// Construct the full URL
-		const fullUrl = `${BASE_URL}/api${currentPath}${query}`;
+		const fullUrl = `${BACKEND_URL}/api${currentPath}${query}`;
 
 		return fetch(fullUrl, { signal });
 	};

@@ -1,5 +1,5 @@
 import type { SignInFormData, SignUpFormData, ForgotPasswordFormData, ResetPasswordFormData } from "@/web/schemas";
-import { BASE_URL, CALLBACK_URL } from "@repo/auth/constants";
+import { BACKEND_URL, CALLBACK_URL } from "@repo/auth/constants";
 import { useMutation } from "@tanstack/react-query";
 import { authClient } from "@repo/auth/client";
 import { useState, useCallback } from "react";
@@ -230,7 +230,7 @@ export const useSignOut = () => {
 };
 
 const checkEmailExists = async (email: string): Promise<{ exists: boolean }> => {
-	const response = await axios.post(`${BASE_URL}/api/auth/check-email`, { email });
+	const response = await axios.post(`${BACKEND_URL}/api/auth/check-email`, { email });
 	return response.data;
 };
 
