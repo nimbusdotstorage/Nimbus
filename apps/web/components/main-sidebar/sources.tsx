@@ -1,6 +1,3 @@
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
-import { Plus, ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -9,6 +6,9 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { Plus, ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import type { ComponentType } from "react";
 
 export interface Source {
@@ -37,7 +37,7 @@ export default function Sources({
 						<SidebarMenuButton
 							size="lg"
 							tooltip="File Source"
-							className={`${selectedSource?.backgroundColor ? `data-[state=open]:${selectedSource.backgroundColor}` : ""} data-[state=open]:text-sidebar-accent-foreground`}
+							className={`${selectedSource?.backgroundColor ? `data-[state=open]:${selectedSource.backgroundColor}` : ""} data-[state=open]:text-sidebar-accent-foreground cursor-pointer`}
 						>
 							<div
 								className={`flex aspect-square size-8 items-center justify-center rounded-lg ${selectedSource?.backgroundColor} text-sidebar-primary-foreground`}
@@ -51,17 +51,21 @@ export default function Sources({
 							<ChevronDown className="ml-auto" />
 						</SidebarMenuButton>
 					</DropdownMenuTrigger>
-					<DropdownMenuContent className="w-full mx-2" align="start" side="bottom">
+					<DropdownMenuContent className="mx-2 w-full" align="start" side="bottom">
 						<DropdownMenuLabel className="flex flex-row items-center">
 							Sources
-							<Button variant="secondary" size="icon" className="ml-auto h-6 w-6 p-0">
+							<Button variant="secondary" size="icon" className="ml-auto h-6 w-6 cursor-pointer p-0">
 								<Plus className="size-4" />
 								<span className="sr-only">Add Source</span>
 							</Button>
 						</DropdownMenuLabel>
 						<DropdownMenuSeparator />
 						{fileSources.map(source => (
-							<DropdownMenuItem key={source.value} onSelect={() => setSelectedSource(source)}>
+							<DropdownMenuItem
+								key={source.value}
+								onSelect={() => setSelectedSource(source)}
+								className="cursor-pointer"
+							>
 								<source.icon className="mr-2 h-4 w-4" />
 								<span>{source.name}</span>
 							</DropdownMenuItem>

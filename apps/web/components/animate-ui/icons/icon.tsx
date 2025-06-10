@@ -1,6 +1,5 @@
 "use client";
 
-import { useAnimation, type SVGMotionProps, type AnimationControls, type Variants } from "motion/react";
 import {
 	createContext,
 	useContext,
@@ -14,6 +13,7 @@ import {
 	type ComponentType,
 	type MouseEvent,
 } from "react";
+import { useAnimation, type SVGMotionProps, type AnimationControls, type Variants } from "motion/react";
 
 import { cn } from "@/web/lib/utils";
 

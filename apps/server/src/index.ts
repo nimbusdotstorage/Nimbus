@@ -1,8 +1,8 @@
-import { Hono } from "hono";
-import { cors } from "hono/cors";
+import waitlistRoutes from "@/apps/server/src/routes/waitlist";
 import filesRoutes from "@/apps/server/src/routes/files";
 import authRoutes from "@/apps/server/src/routes/auth";
-import waitlistRoutes from "@/apps/server/src/routes/waitlist";
+import { cors } from "hono/cors";
+import { Hono } from "hono";
 
 const app = new Hono();
 

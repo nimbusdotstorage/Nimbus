@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, type Variants } from "motion/react";
+import * as React from "react";
 
 import { getVariants, useAnimateIconContext, IconWrapper, type IconProps } from "@/components/animate-ui/icons/icon";
 
