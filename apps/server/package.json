@@ -25,7 +25,6 @@
 	},
 	"devDependencies": {
 		"@types/bun": "latest",
-		"@types/morgan": "^1.9.10",
 		"@types/pg": "^8.15.2",
 		"drizzle-kit": "^0.31.1",
 		"eslint": "^9.0.0",
