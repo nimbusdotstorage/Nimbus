@@ -116,6 +116,16 @@ bun dev
 
 The application should now be running at [http://localhost:3000](http://localhost:3000)
 
+### 7. Access Authentication
+
+Once the development server is running, you can access the authentication pages:
+
+- **Sign In**: Navigate to [http://localhost:3000/signin](http://localhost:3000/signin)
+- **Sign Up**: Navigate to [http://localhost:3000/signup](http://localhost:3000/signup)
+
+Make sure you have configured the Google OAuth credentials in your `.env` file as described in step 4 for authentication
+to work properly. Additionally, configure your Resend API key for the forgot password functionality to work.
+
 If you want to contribute, please refer to the
 [contributing guide](https://github.com/nimbusdotstorage/Nimbus/blob/main/CONTRIBUTING.md)
 
