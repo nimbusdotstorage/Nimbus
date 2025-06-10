@@ -16,7 +16,7 @@ interface AuthCardProps extends ComponentProps<"div"> {
 
 export function AuthCard({ title, description, navigationType, children, className, ...props }: AuthCardProps) {
 	const oppositeAction = navigationType === "signin" ? "signup" : "signin";
-	const oppositeActionText = navigationType === "signin" ? "Sign up" : "Log In";
+	const oppositeActionText = navigationType === "signin" ? "Sign up" : "Sign in";
 
 	return (
 		<div className={cn("flex size-full flex-col items-center justify-center gap-0 select-none", className)} {...props}>
