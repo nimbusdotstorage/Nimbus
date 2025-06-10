@@ -1,8 +1,8 @@
+import { FRONTEND_URL } from "@repo/auth/constants";
 import { logger } from "hono/logger";
 import { cors } from "hono/cors";
 import routes from "./routes";
 import { Hono } from "hono";
-import { FRONTEND_URL } from "@repo/auth/constants";
 
 const app = new Hono();
 
@@ -16,7 +16,7 @@ app.use(
 );
 app.use(logger());
 
-app.get("/healthcheck", c => c.text("Everything is working!"));
+app.get("/kamehame", c => c.text("HAAAAAAAAAAAAAA"));
 
 app.route("/api", routes);
 
