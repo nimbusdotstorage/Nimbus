@@ -441,3 +441,8 @@ export interface File {
 	 */
 	writersCanShare?: boolean;
 }
+
+// Custom Route Typing
+export type FileListResponse = {
+	files: File[];
+};

@@ -1,57 +1,57 @@
 import { db } from "@/packages/db/src";
 import { auth } from "@/packages/auth/src/auth";
-import { eq } from "drizzle-orm";
-import { account } from "@/packages/db/schema";
 
-export type SessionUser =
-	| {
-			id: string;
-			name: string;
-			email: string;
-			emailVerified: boolean;
-			createdAt: Date;
-			updatedAt: Date;
-			image?: string | null | undefined | undefined;
-	  }
-	| undefined;
+export type SessionUser = {
+	id: string;
+	name: string;
+	email: string;
+	emailVerified: boolean;
+	createdAt: Date;
+	updatedAt: Date;
+	image?: string | null;
+};
+
+export class AccountError extends Error {
+	constructor(
+		message: string,
+		public code: string = "ACCOUNT_ERROR"
+	) {
+		super(message);
+		this.name = "AccountError";
+	}
+}
 
 export const getAccount = async (user: SessionUser, headers: Headers) => {
 	if (!user?.id) {
-		// Handle cases where user or userId is not available
-		throw new Error("User session or user ID is missing.");
+		throw new AccountError("User session does not exist", "USER_SESSION_DOES_NOT_EXIST");
 	}
 
-	// Query the account table for an account matching the user.userId
-	const activeAccount = await db.query.account.findFirst({
-		where: eq(account.userId, user.id),
-	});
+	try {
+		const account = await db.query.account.findFirst({
+			where: (table, { eq }) => eq(table.userId, user.id),
+		});
 
-	if (!activeAccount) {
-		throw new Error(`No account found for user ID: ${user.id}`);
+		if (!account) {
+			throw new AccountError(`No account found`, "ACCOUNT_NOT_FOUND");
+		}
+
+		const { accessToken } = await auth.api.getAccessToken({
+			body: {
+				providerId: account.providerId,
+				accountId: account.id,
+				userId: account.userId,
+			},
+			headers,
+		});
+
+		return {
+			...account,
+			accessToken: accessToken ?? account.accessToken,
+		};
+	} catch (error) {
+		if (error instanceof AccountError) {
+			throw error;
+		}
+		throw new AccountError("Failed to retrieve account information", "ACCOUNT_RETRIEVAL_FAILED");
 	}
-
-	// TODO: This throws error: APIError:
-	// Account not found
-	// status: "BAD_REQUEST",
-	// body: {
-	//   code: "ACCOUNT_NOT_FOUND",
-	//   message: "Account not found",
-	// },
-	// headers: {},
-	// statusCode: 400,
-
-	const { accessToken } = await auth.api.getAccessToken({
-		body: {
-			providerId: activeAccount?.providerId,
-			accountId: activeAccount?.accountId,
-			userId: activeAccount?.userId,
-		},
-		headers,
-	});
-
-	// Return the account details along with the accessToken
-	return {
-		...activeAccount,
-		accessToken: accessToken ?? activeAccount?.accessToken,
-	};
 };
