@@ -35,7 +35,7 @@
 		"build": "bun --cwd=apps/web run build",
 		"start": "bun --cwd=apps/web run start",
 		"format": "bunx prettier --write .",
-		"check-format": "bunx prettier --check .",
+		"format:check": "bunx prettier --check .",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
 		"prepare": "husky"

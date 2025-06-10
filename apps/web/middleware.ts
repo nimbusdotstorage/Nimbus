@@ -10,8 +10,6 @@ export async function middleware(request: NextRequest) {
 
 	const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
 
-	const isPublicRoute = publicRoutes.some(route => pathname === route || pathname.startsWith(route));
-
 	if (isProtectedRoute) {
 		try {
 			const session = await authClient.getSession({
@@ -37,32 +35,34 @@ export async function middleware(request: NextRequest) {
 		}
 	}
 
+	const isPublicRoute = publicRoutes.some(route => pathname === route || pathname.startsWith(route));
+
 	// If user is authenticated and trying to access auth pages, redirect to app
-	if (
-		isPublicRoute &&
-		(pathname === "/signin" ||
+	if (isPublicRoute && pathname !== "/") {
+		if (
+			pathname === "/signin" ||
 			pathname === "/signup" ||
 			pathname === "/forgot-password" ||
-			pathname === "/reset-password")
-	) {
-		try {
-			const session = await authClient.getSession({
-				fetchOptions: {
-					headers: {
-						cookie: request.headers.get("cookie") || "",
+			pathname === "/reset-password"
+		) {
+			try {
+				const session = await authClient.getSession({
+					fetchOptions: {
+						headers: {
+							cookie: request.headers.get("cookie") || "",
+						},
 					},
-				},
-			});
+				});
 
-			if (session?.data?.session && session?.data?.user) {
-				return NextResponse.redirect(new URL("/app", request.url));
+				if (session?.data?.session && session?.data?.user) {
+					return NextResponse.redirect(new URL("/app", request.url));
+				}
+			} catch (error) {
+				console.error("Auth check error:", error);
+				return NextResponse.redirect(new URL("/signin", request.url));
 			}
-		} catch (error) {
-			console.error("Auth check error:", error);
-			return NextResponse.redirect(new URL("/signin", request.url));
 		}
 	}
-
 	return NextResponse.next();
 }
 
