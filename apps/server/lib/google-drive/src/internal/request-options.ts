@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { NullableHeaders } from "./headers";

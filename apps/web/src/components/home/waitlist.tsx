@@ -20,7 +20,7 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>;
 
 // API functions for Hono backend
-async function getWaitlistCount(): Promise<{ count: number }> {
+function getWaitlistCount(): Promise<{ count: number }> {
 	return fetch("/api/waitlist/count").then(res => {
 		if (!res.ok) {
 			throw new Error("Failed to get waitlist count");

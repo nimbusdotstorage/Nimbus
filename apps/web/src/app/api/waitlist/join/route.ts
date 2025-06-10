@@ -1,17 +1,17 @@
 import { rateLimitAttempts, waitlist } from "@nimbus/db/schema";
-import { NextResponse, NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { eq, sql } from "drizzle-orm";
 import { db } from "@nimbus/db";
 import { nanoid } from "nanoid";
 import { z } from "zod";
 
 // Database-backed rate limiting function
-async function checkRateLimitDB(ip: string, limit: number = 3, windowMs: number = 120000) {
+async function checkRateLimitDB(ip: string, limit = 3, windowMs = 120000) {
 	const now = new Date();
 
 	const attempts = await db.select().from(rateLimitAttempts).where(eq(rateLimitAttempts.identifier, ip)).limit(1);
 
-	let currentAttempt = attempts[0];
+	const currentAttempt = attempts[0];
 
 	if (!currentAttempt || currentAttempt.expiresAt < now) {
 		// No record, or record expired, create/reset it
@@ -58,7 +58,9 @@ const emailSchema = z.object({
 			// TLD and label checks
 			const labels = domain.split(".");
 			if (labels.length < 2 || labels.length > 3) return false;
-			const tld = labels.at(-1)!;
+			const tld = labels.at(-1);
+			if (!tld) return false;
+
 			return /^[a-z]{2,63}$/i.test(tld);
 		}, "Invalid email, please try again"),
 });

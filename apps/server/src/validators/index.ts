@@ -26,7 +26,10 @@ export const emailSchema = z.object({
 
 			const labels = domain.split(".");
 			if (labels.length < 2 || labels.length > 3) return false;
-			const tld = labels.at(-1)!;
+
+			const tld = labels.at(-1);
+			if (!tld) return false;
+
 			return /^[a-z]{2,63}$/i.test(tld);
 		}, "Invalid email, please try again"),
 });
