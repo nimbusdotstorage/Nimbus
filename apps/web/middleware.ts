@@ -1,4 +1,4 @@
-import { authClient } from "@repo/auth/src/auth-client";
+import { authClient } from "@repo/auth/client";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
