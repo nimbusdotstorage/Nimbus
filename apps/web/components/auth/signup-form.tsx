@@ -109,7 +109,7 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 						<Button className="cursor-pointer rounded-none px-6 py-6 font-semibold" variant="link" asChild>
 							<Link href={`/signin`}>
 								<ArrowLeft className="mr-2" />
-								Log In
+								Sign in
 							</Link>
 						</Button>
 					</div>

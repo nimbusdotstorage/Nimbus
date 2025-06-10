@@ -99,7 +99,7 @@ export function Header() {
 								</>
 							) : (
 								<DropdownMenuItem asChild className="cursor-pointer">
-									<Link href="/signin">Log In</Link>
+									<Link href="/signin">Sign in</Link>
 								</DropdownMenuItem>
 							)}
 						</DropdownMenuContent>
