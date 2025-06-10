@@ -1,5 +1,5 @@
-import { drizzle, NodePgDatabase } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 import { config } from "dotenv";
 import path from "path";
 import schema from "../schema";
@@ -7,8 +7,6 @@ import schema from "../schema";
 // Load environment variables
 config({ path: path.resolve(process.cwd(), "../../.env") });
 
-const pool = new Pool({
-	connectionString: process.env.DATABASE_URL!,
-});
+export const client = postgres(process.env.DATABASE_URL!, { prepare: false });
 
-export const db: NodePgDatabase<typeof schema> = drizzle(pool, { schema });
+export const db = drizzle(client, { schema });
