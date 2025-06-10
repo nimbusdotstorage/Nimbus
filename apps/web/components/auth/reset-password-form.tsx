@@ -50,7 +50,7 @@ export function ResetPasswordForm({ ...props }: ComponentProps<"div">) {
 							<Button className="cursor-pointer rounded-none px-6 py-6 font-semibold" variant="link" asChild>
 								<Link href="/">
 									<ArrowLeft />
-									Back
+									Cancel
 								</Link>
 							</Button>
 						</div>
@@ -119,7 +119,7 @@ export function ResetPasswordForm({ ...props }: ComponentProps<"div">) {
 								aria-invalid={!!errors.password}
 								autoComplete="new-password"
 							/>
-							<FieldError error={errors.password?.message} />
+							<FieldError error={errors.password?.message as string} />
 						</div>
 
 						<div className="space-y-2">
@@ -135,7 +135,7 @@ export function ResetPasswordForm({ ...props }: ComponentProps<"div">) {
 								aria-invalid={!!errors.confirmPassword}
 								autoComplete="new-password"
 							/>
-							<FieldError error={errors.confirmPassword?.message} />
+							<FieldError error={errors.confirmPassword?.message as string} />
 						</div>
 
 						<Button type="submit" className="mt-2 w-full cursor-pointer" disabled={isLoading}>

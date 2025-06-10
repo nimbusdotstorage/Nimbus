@@ -37,7 +37,7 @@ export function ForgotPasswordForm({ ...props }: ComponentProps<"div">) {
 				<CardHeader className="overflow-x-hidden">
 					<div className="-mx-6 flex flex-row items-center justify-start border-b">
 						<Button className="cursor-pointer rounded-none px-6 py-6 font-semibold" variant="link" asChild>
-							<Link href="/">
+							<Link href="/signin">
 								<ArrowLeft />
 								Back
 							</Link>
