@@ -1,7 +1,8 @@
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Card, CardTitle, CardDescription } from "./ui/card";
 import useContributors from "../hooks/useContributors";
 import { Github, GitCommit } from "lucide-react";
+import Link from "next/link";
 
 interface Contributor {
 	login: string;
@@ -52,62 +53,66 @@ export default function Contributors() {
 	const sortedContributors = [...contributors].sort((a, b) => b.contributions - a.contributions);
 
 	return (
-		<div className="w-full max-w-none space-y-8 px-4 sm:px-6 lg:px-8">
-			<div className="mt-5 space-y-4 text-center">
-				<h2 className="from-primary to-primary/60 bg-gradient-to-r bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:text-4xl lg:text-5xl">
-					Our Contributors
-				</h2>
-				<p className="text-muted-foreground mx-auto max-w-3xl text-lg leading-relaxed sm:text-xl">
-					Meet the amazing people who make Nimbus possible
-				</p>
-			</div>
+		<div className="flex min-h-screen w-full flex-col pt-20">
+			<div className="flex-1 space-y-8 px-4 sm:px-6 lg:px-8">
+				<div className="space-y-4 text-center">
+					<h2 className="from-primary to-primary/60 bg-gradient-to-r bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:text-4xl lg:text-5xl">
+						Our Contributors
+					</h2>
+					<p className="text-muted-foreground mx-auto max-w-3xl text-lg leading-relaxed sm:text-xl">
+						Meet the amazing people who make Nimbus possible
+					</p>
+				</div>
 
-			<div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-				{sortedContributors.map(contributor => (
-					<Card
-						key={contributor.id}
-						className="group flex aspect-square flex-col border-white/20 bg-white/10 shadow-xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:bg-white/20 hover:shadow-2xl"
-					>
-						<CardHeader className="flex-shrink-0 pt-4 pb-2 text-center">
-							<div className="flex flex-col items-center gap-2">
-								<Avatar className="ring-primary/20 group-hover:ring-primary/40 h-10 w-10 flex-shrink-0 ring-2 transition-all duration-300">
-									<AvatarImage src={contributor.avatar_url} alt={contributor.login} />
-									<AvatarFallback className="bg-primary/10 text-xs font-semibold">
-										{contributor.login.slice(0, 2).toUpperCase()}
-									</AvatarFallback>
-								</Avatar>
-								<div className="flex h-12 w-full flex-col justify-center px-1">
-									<CardTitle className="line-clamp-2 text-sm leading-tight font-semibold break-words hyphens-auto">
-										{contributor.login}
-									</CardTitle>
-									<CardDescription className="mt-0.5 line-clamp-1 text-xs">
-										{contributor.type === "User" ? "Contributor" : contributor.type}
-									</CardDescription>
+				<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 md:gap-7 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+					{sortedContributors.map(contributor => (
+						<Card
+							key={contributor.id}
+							className="group border-border/50 bg-card/50 hover:shadow-primary/20 relative flex aspect-square flex-col overflow-hidden shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+						>
+							<div className="absolute inset-0 flex items-center justify-center opacity-5 transition-opacity duration-300 group-hover:opacity-10">
+								<Github className="text-foreground h-40 w-40" />
+							</div>
+
+							<div className="from-primary/10 absolute inset-0 bg-gradient-to-b via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+							<div className="relative z-10 flex h-full flex-col">
+								<div className="flex flex-1 flex-col items-center justify-center p-5 text-center">
+									<div className="relative mb-4">
+										<div className="from-primary/30 to-primary/10 absolute inset-0 rounded-full bg-gradient-to-r blur-md transition-all duration-300 group-hover:blur-lg" />
+										<Avatar className="ring-border group-hover:ring-primary/40 relative h-16 w-16 ring-2 transition-all duration-300">
+											<AvatarImage src={contributor.avatar_url} alt={contributor.login} />
+											<AvatarFallback className="from-primary/20 to-primary/10 text-primary-foreground bg-gradient-to-br text-sm font-bold">
+												{contributor.login.slice(0, 2).toUpperCase()}
+											</AvatarFallback>
+										</Avatar>
+									</div>
+
+									<div className="flex min-h-[4rem] flex-col justify-center">
+										<Link href={contributor.html_url}>
+											<CardTitle className="text-foreground hover:text-primary line-clamp-2 text-base leading-tight font-bold break-words hyphens-auto underline drop-shadow-sm transition-colors">
+												{contributor.login}
+											</CardTitle>
+										</Link>
+										<CardDescription className="text-muted-foreground mt-1 text-sm">Contributor</CardDescription>
+									</div>
+								</div>
+
+								<div className="flex flex-col items-center gap-3 p-4">
+									<div className="relative bottom-3 flex items-center gap-3">
+										<div className="bg-primary/20 flex h-8 w-8 items-center justify-center rounded-full">
+											<GitCommit className="text-primary h-5 w-5" />
+										</div>
+										<span className="text-foreground text-xl font-semibold">{contributor.contributions}</span>
+									</div>
 								</div>
 							</div>
-						</CardHeader>
-
-						<CardContent className="flex flex-grow flex-col justify-between space-y-3 pt-0 pb-4 text-center">
-							<div className="flex items-center justify-center gap-1">
-								<GitCommit className="text-muted-foreground h-3 w-3" />
-								<span className="text-xs font-semibold">{contributor.contributions}</span>
-							</div>
-
-							<a
-								href={contributor.html_url}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="text-muted-foreground hover:text-primary group/link mx-auto mt-auto inline-flex h-8 w-8 items-center justify-center rounded-md transition-colors hover:bg-white/10"
-								title={`View ${contributor.login}'s GitHub profile`}
-							>
-								<Github className="h-4 w-4" />
-							</a>
-						</CardContent>
-					</Card>
-				))}
+						</Card>
+					))}
+				</div>
 			</div>
 
-			<div className="mb-5 pt-6 text-center">
+			<div className="border-border/50 bg-background/50 mt-auto border-t px-4 py-6 text-center backdrop-blur-sm sm:px-6 lg:px-8">
 				<p className="text-muted-foreground text-base sm:text-lg">
 					Want to contribute?
 					<a
