@@ -1,4 +1,4 @@
-import { authClient } from "@repo/auth/client";
+import { getSessionCookie } from "better-auth/cookies";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
@@ -12,15 +12,9 @@ export async function middleware(request: NextRequest) {
 
 	if (isProtectedRoute) {
 		try {
-			const session = await authClient.getSession({
-				fetchOptions: {
-					headers: {
-						cookie: request.headers.get("cookie") || "",
-					},
-				},
-			});
+			const sessionCookie = await getSessionCookie(request.headers);
 
-			if (!session?.data?.session || !session?.data?.user) {
+			if (!sessionCookie) {
 				const signInUrl = new URL("/signin", request.url);
 				signInUrl.searchParams.set("redirect", pathname);
 				return NextResponse.redirect(signInUrl);
@@ -46,15 +40,9 @@ export async function middleware(request: NextRequest) {
 			pathname === "/reset-password"
 		) {
 			try {
-				const session = await authClient.getSession({
-					fetchOptions: {
-						headers: {
-							cookie: request.headers.get("cookie") || "",
-						},
-					},
-				});
+				const sessionCookie = await getSessionCookie(request.headers);
 
-				if (session?.data?.session && session?.data?.user) {
+				if (sessionCookie) {
 					return NextResponse.redirect(new URL("/app", request.url));
 				}
 			} catch (error) {
