@@ -48,6 +48,8 @@ export function useRequest<ResponseBody>({
 		return () => {
 			abortControllerRef.current?.abort();
 		};
+		// Adding fetchData breaks it
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, triggers);
 
 	return { data, refetch: fetchData, isLoading, error };

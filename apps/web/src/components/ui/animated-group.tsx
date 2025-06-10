@@ -15,7 +15,7 @@ export type PresetType =
 	| "rotate"
 	| "swing";
 
-export type AnimatedGroupProps = {
+export interface AnimatedGroupProps {
 	children: ReactNode;
 	className?: string;
 	variants?: {
@@ -25,7 +25,7 @@ export type AnimatedGroupProps = {
 	preset?: PresetType;
 	as?: ElementType;
 	asChild?: ElementType;
-};
+}
 
 const defaultContainerVariants: Variants = {
 	visible: {

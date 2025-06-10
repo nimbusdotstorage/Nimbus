@@ -1,7 +1,3 @@
-import { ModeToggle } from "@/components/mode-toggle";
-import { SearchDialog } from "@/components/search/search-dialog";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -10,13 +6,17 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { useSignOut } from "@/hooks/useAuth";
-import { authClient } from "@nimbus/auth/auth-client";
 import { Bell, LogOut, MessageCircleQuestion, Search, Settings } from "lucide-react";
-import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { SearchDialog } from "@/components/search/search-dialog";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { authClient } from "@nimbus/auth/auth-client";
+import { ModeToggle } from "@/components/mode-toggle";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useSignOut } from "@/hooks/useAuth";
 import { useState } from "react";
+import Link from "next/link";
 
 const getInitials = (name?: string | null) => {
 	if (!name) return "SG";

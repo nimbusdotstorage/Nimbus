@@ -16,7 +16,7 @@ interface SearchResult {
 	size: string;
 	modified: string;
 	keywords: string[];
-	tags: Array<{ id: string; name: string; color: string }>;
+	tags: { id: string; name: string; color: string }[];
 }
 
 interface SearchDialogProps {

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import {
@@ -636,7 +635,7 @@ export class GoogleDrive {
 		bodyHeaders: HeadersLike;
 		retryCount: number;
 	}): Headers {
-		let idempotencyHeaders: HeadersLike = {};
+		const idempotencyHeaders: HeadersLike = {};
 		if (this.idempotencyHeader && method !== "get") {
 			if (!options.idempotencyKey) options.idempotencyKey = this.defaultIdempotencyKey();
 			idempotencyHeaders[this.idempotencyHeader] = options.idempotencyKey;
@@ -731,7 +730,7 @@ GoogleDrive.Channels = Channels;
 GoogleDrive.Drives = Drives;
 GoogleDrive.Files = Files;
 GoogleDrive.Teamdrives = Teamdrives;
-// eslint-disable-next-line no-redeclare
+
 export declare namespace GoogleDrive {
 	export type RequestOptions = Opts.RequestOptions;
 
