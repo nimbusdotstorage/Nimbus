@@ -1,6 +1,6 @@
-import { google } from "googleapis";
-import { OAuth2Client } from "google-auth-library";
 import { drive_v3 } from "googleapis/build/src/apis/drive/v3";
+import { OAuth2Client } from "google-auth-library";
+import { google } from "googleapis";
 
 export interface DriveManagerConfig {
 	auth?: {
@@ -18,7 +18,7 @@ export interface DriveFile {
 	webViewLink?: string;
 	iconLink?: string;
 	parents?: string[];
-	$raw?: any;
+	$raw?: drive_v3.Schema$File;
 }
 
 export class GoogleDriveManager {
@@ -186,8 +186,9 @@ export class GoogleDriveManager {
 	): Promise<T> {
 		try {
 			return await fn();
-		} catch (error: any) {
-			console.error(`Error in GoogleDriveManager.${operation}:`, error.message, context);
+		} catch (error: unknown) {
+			const errorMessage = error instanceof Error ? error.message : String(error);
+			console.error(`Error in GoogleDriveManager.${operation}:`, errorMessage, context);
 			throw error;
 		}
 	}

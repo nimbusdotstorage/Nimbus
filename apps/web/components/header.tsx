@@ -1,10 +1,10 @@
-import { Bell, HelpCircle, Settings } from "lucide-react";
+import { MessageCircleQuestion } from "@/components/animate-ui/icons/message-circle-question";
+import { Settings } from "@/components/animate-ui/icons/settings";
+import { AnimateIcon } from "@/components/animate-ui/icons/icon";
+import { LogOut } from "@/components/animate-ui/icons/log-out";
+import { Bell } from "@/components/animate-ui/icons/bell";
+import { Search } from "lucide-react";
 
-import { ModeToggle } from "@/components/mode-toggle";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-
-import { Input } from "@/components/ui/input";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -13,11 +13,14 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { authClient } from "@/packages/auth/src/auth-client";
-import { LogOut, Search } from "lucide-react";
-import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { redirect } from "next/navigation";
+import { ModeToggle } from "@/components/mode-toggle";
+import { useSignOut } from "@/web/hooks/useAuth";
+import { Button } from "@/components/ui/button";
+import { authClient } from "@repo/auth/client";
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 const getInitials = (name?: string | null) => {
 	if (!name) return "SG";
@@ -32,14 +35,10 @@ const getInitials = (name?: string | null) => {
 
 export function Header() {
 	const { data: session, isPending } = authClient.useSession();
+	const { signOut, isLoading } = useSignOut();
 
 	const handleSignOut = async () => {
-		try {
-			await authClient.signOut();
-			redirect("/");
-		} catch (error: any) {
-			console.error("Error signing out:", error);
-		}
+		await signOut();
 	};
 
 	const userName = session?.user?.name;
@@ -48,27 +47,33 @@ export function Header() {
 	const userInitials = getInitials(userName);
 
 	return (
-		<header className="border-b bg-background">
-			<div className="flex h-16 items-center px-4 gap-4 justify-between">
-				<SidebarTrigger />
-				<div className="relative flex-1 max-w-xl">
-					<Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-					<Input type="search" placeholder="Search in Drive" className="w-full pl-8 bg-muted/50" />
+		<header className="bg-background border-b">
+			<div className="flex h-16 items-center justify-between gap-4 px-4">
+				<SidebarTrigger className="size-9 cursor-pointer" />
+				<div className="relative max-w-xl flex-1">
+					<Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
+					<Input type="search" placeholder="Search in Drive" className="bg-muted/50 w-full pl-8" />
 				</div>
 				<div className="flex items-center gap-2">
 					<ModeToggle />
-					<Button variant="ghost" size="icon">
-						<HelpCircle className="h-5 w-5" />
-					</Button>
-					<Button variant="ghost" size="icon">
-						<Settings className="h-5 w-5" />
-					</Button>
-					<Button variant="ghost" size="icon">
-						<Bell className="h-5 w-5" />
-					</Button>
+					<AnimateIcon animateOnHover>
+						<Button variant="ghost" size="icon">
+							<MessageCircleQuestion className="h-5 w-5" />
+						</Button>
+					</AnimateIcon>
+					<AnimateIcon animateOnHover>
+						<Button variant="ghost" size="icon">
+							<Settings className="h-5 w-5" />
+						</Button>
+					</AnimateIcon>
+					<AnimateIcon animateOnHover>
+						<Button variant="ghost" size="icon">
+							<Bell className="h-5 w-5" />
+						</Button>
+					</AnimateIcon>
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
-							<Button variant="ghost" size="icon" className="rounded-full">
+							<Button variant="ghost" size="icon" className="cursor-pointer rounded-full">
 								<Avatar className="h-8 w-8">
 									{userImage && <AvatarImage src={userImage} alt={userName || "User"} />}
 									<AvatarFallback>{isPending ? "..." : userInitials}</AvatarFallback>
@@ -82,19 +87,22 @@ export function Header() {
 								<>
 									<DropdownMenuLabel>My Account</DropdownMenuLabel>
 									<DropdownMenuSeparator />
-									<DropdownMenuItem className="flex flex-col items-start focus:bg-transparent cursor-default">
+									<DropdownMenuItem className="flex cursor-default flex-col items-start focus:bg-transparent">
 										<div className="font-medium">{userName || "User"}</div>
-										<div className="text-xs text-muted-foreground">{userEmail || "No email"}</div>
+										<div className="text-muted-foreground text-xs">{userEmail || "No email"}</div>
 									</DropdownMenuItem>
 									<DropdownMenuSeparator />
-									<DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
-										<LogOut className="mr-2 h-4 w-4" />
-										<span>Sign Out</span>
-									</DropdownMenuItem>
+
+									<AnimateIcon animateOnHover>
+										<DropdownMenuItem onClick={handleSignOut} className="cursor-pointer" disabled={isLoading}>
+											<LogOut className="mr-2 h-4 w-4" />
+											<span>{isLoading ? "Signing out..." : "Sign Out"}</span>
+										</DropdownMenuItem>
+									</AnimateIcon>
 								</>
 							) : (
 								<DropdownMenuItem asChild className="cursor-pointer">
-									<Link href="/login">Log In</Link>
+									<Link href="/signin">Sign in</Link>
 								</DropdownMenuItem>
 							)}
 						</DropdownMenuContent>

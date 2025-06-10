@@ -6,10 +6,7 @@
 	"devDependencies": {
 		"@eslint/js": "^9.27.0",
 		"@next/eslint-plugin-next": "^15.3.2",
-		"@tailwindcss/postcss": "^4",
 		"@types/bun": "latest",
-		"@types/react": "^19",
-		"@types/react-dom": "^19",
 		"@typescript-eslint/eslint-plugin": "^8.32.1",
 		"@typescript-eslint/parser": "^8.32.1",
 		"concurrently": "^9.1.2",
@@ -18,9 +15,11 @@
 		"eslint-plugin-react": "^7.37.5",
 		"eslint-plugin-react-hooks": "^5.2.0",
 		"eslint-plugin-unused-imports": "^4.1.4",
+		"husky": "^9.1.7",
+		"lint-staged": "^16.1.0",
 		"prettier": "^3.5.3",
-		"tailwindcss": "^4",
-		"tw-animate-css": "^1.3.0",
+		"prettier-plugin-sort-imports": "^1.8.8",
+		"prettier-plugin-tailwindcss": "^0.6.12",
 		"typescript": "^5",
 		"typescript-eslint": "^8.32.1"
 	},
@@ -32,17 +31,26 @@
 		"db:down": "docker compose down",
 		"db:reset": "docker compose down -v && docker compose up -d",
 		"db:migrate": "cd packages/db && bunx drizzle-kit generate && bunx drizzle-kit migrate",
+		"db:studio": "cd packages/db && bunx drizzle-kit studio",
 		"build": "bun --cwd=apps/web run build",
 		"start": "bun --cwd=apps/web run start",
 		"format": "bunx prettier --write .",
-		"check-format": "bunx prettier --check .",
-		"lint": "eslint ."
+		"format:check": "bunx prettier --check .",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix",
+		"prepare": "husky"
 	},
 	"workspaces": [
 		"apps/*",
 		"packages/*"
 	],
-	"dependencies": {
-		"@vercel/analytics": "^1.5.0"
+	"lint-staged": {
+		"*.{js,jsx,ts,tsx}": [
+			"eslint --fix",
+			"prettier --write"
+		],
+		"*.{json,md,yml,yaml}": [
+			"prettier --write"
+		]
 	}
 }

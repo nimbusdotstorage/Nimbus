@@ -1,15 +1,13 @@
+import { checkEmail, handleAuth } from "@/apps/server/src/controllers";
+import { emailSchema } from "@/apps/server/src/validators";
+import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
-import { auth } from "@/packages/auth/src/auth";
 
-const app = new Hono();
+const authRouter = new Hono();
 
-app.on(["POST", "GET"], "/*", async c => {
-	try {
-		return await auth.handler(c.req.raw);
-	} catch (error: any) {
-		console.error("Auth handler error:", error);
-		return c.json({ error: "Authentication failed" }, 500);
-	}
-});
+authRouter.post("/check-email", zValidator("json", emailSchema), checkEmail);
 
-export default app;
+// Better Auth handler for all other auth routes
+authRouter.on(["POST", "GET"], "/*", handleAuth);
+
+export default authRouter;

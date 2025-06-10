@@ -1,7 +1,7 @@
 "use client";
-import type { ReactNode, JSX } from "react";
+import type { ReactNode, JSX, ElementType } from "react";
 import { motion, type Variants } from "motion/react";
-import React from "react";
+import { Children, useMemo } from "react";
 
 export type PresetType =
 	| "fade"
@@ -23,8 +23,8 @@ export type AnimatedGroupProps = {
 		item?: Variants;
 	};
 	preset?: PresetType;
-	as?: React.ElementType;
-	asChild?: React.ElementType;
+	as?: ElementType;
+	asChild?: ElementType;
 };
 
 const defaultContainerVariants: Variants = {
@@ -108,12 +108,12 @@ function AnimatedGroup({ children, className, variants, preset, as = "div", asCh
 	const containerVariants = variants?.container || selectedVariants.container;
 	const itemVariants = variants?.item || selectedVariants.item;
 
-	const MotionComponent = React.useMemo(() => motion.create(as as keyof JSX.IntrinsicElements), [as]);
-	const MotionChild = React.useMemo(() => motion.create(asChild as keyof JSX.IntrinsicElements), [asChild]);
+	const MotionComponent = useMemo(() => motion.create(as as keyof JSX.IntrinsicElements), [as]);
+	const MotionChild = useMemo(() => motion.create(asChild as keyof JSX.IntrinsicElements), [asChild]);
 
 	return (
 		<MotionComponent initial="hidden" animate="visible" variants={containerVariants} className={className}>
-			{React.Children.map(children, (child, index) => (
+			{Children.map(children, (child, index) => (
 				<MotionChild key={index} variants={itemVariants}>
 					{child}
 				</MotionChild>
