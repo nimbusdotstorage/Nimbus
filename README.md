@@ -35,7 +35,7 @@ We use Docker to run a PostgreSQL database for local development. Follow these s
    - Username: `postgres`
    - Password: `postgres`
 
-2. **Verify the database is running if running a detatched container**:
+2. **Verify the database is running if running a detached container**:
 
    ```bash
    docker compose ps
@@ -77,6 +77,23 @@ GOOGLE_CLIENT_SECRET=
 # To generate a secret, just run `openssl rand -base64 32`
 BETTER_AUTH_SECRET=
 ```
+
+<details>
+<summary>How to get a Resend API Key?</summary>
+<br>
+
+1. Go to [Resend.com](https://resend.com) and sign up or log in to your account.
+2. From the dashboard, click on **"API Keys"** in the sidebar.
+3. Click the **"Create API Key"** button.
+4. Enter a name for your key (e.g., `nimbus-dev`) and confirm.
+5. Copy the generated API key.
+
+6. Add it to your `.env` file:
+   </details>
+
+   ```bash
+   RESEND_API_KEY=your-api-key-here
+   ```
 
 ### 5. Run Database Migrations
 
