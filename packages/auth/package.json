@@ -9,7 +9,8 @@
 		"./auth": "./src/auth.ts"
 	},
 	"devDependencies": {
-		"@types/bun": "latest"
+		"@types/bun": "latest",
+		"@repo/db": "workspace:*"
 	},
 	"peerDependencies": {
 		"typescript": "^5"

@@ -145,7 +145,7 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 											{...register("firstName")}
 											aria-invalid={!!errors.firstName}
 										/>
-										<FieldError error={errors.firstName?.message} />
+										<FieldError error={errors.firstName?.message as string} />
 									</div>
 									<div className="grid gap-2">
 										<Label htmlFor="lastName">Last name</Label>
@@ -156,7 +156,7 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 											{...register("lastName")}
 											aria-invalid={!!errors.lastName}
 										/>
-										<FieldError error={errors.lastName?.message} />
+										<FieldError error={errors.lastName?.message as string} />
 									</div>
 								</div>
 
@@ -170,7 +170,7 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 										{...register("email")}
 										aria-invalid={!!errors.email}
 									/>
-									<FieldError error={errors.email?.message} />
+									<FieldError error={errors.email?.message as string} />
 								</div>
 
 								<div className="grid gap-2">
@@ -245,7 +245,7 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 											{...register("password")}
 											aria-invalid={!!errors.password}
 										/>
-										<FieldError error={errors.password?.message} />
+										<FieldError error={errors.password?.message as string} />
 									</div>
 
 									<div className="flex flex-col gap-2">
@@ -258,7 +258,7 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 											{...register("confirmPassword")}
 											aria-invalid={!!errors.confirmPassword}
 										/>
-										<FieldError error={errors.confirmPassword?.message} />
+										<FieldError error={errors.confirmPassword?.message as string} />
 									</div>
 
 									<div className="mt-2 flex gap-4">
