@@ -2,13 +2,12 @@ import { logger } from "hono/logger";
 import { cors } from "hono/cors";
 import routes from "./routes";
 import { Hono } from "hono";
-import { FRONTEND_URL } from "@repo/auth/constants";
 
 const app = new Hono();
 
 app.use(
 	cors({
-		origin: FRONTEND_URL,
+		origin: process.env.FRONTEND_URL!,
 		credentials: true,
 		allowHeaders: ["Content-Type", "Authorization"],
 		allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
