@@ -47,6 +47,7 @@
 		"@vercel/analytics": "^1.5.0"
 	},
 	"devDependencies": {
+		"@nimbus/tsconfig": "workspace:*",
 		"@eslint/eslintrc": "^3",
 		"@tailwindcss/postcss": "^4",
 		"@types/bun": "latest",

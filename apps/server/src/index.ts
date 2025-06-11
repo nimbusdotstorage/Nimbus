@@ -1,7 +1,7 @@
-import { env } from "@/src/config/env";
 import { logger } from "hono/logger";
+import { env } from "@/config/env";
 import { cors } from "hono/cors";
-import routes from "./routes";
+import routes from "@/routes";
 import { Hono } from "hono";
 
 const app = new Hono();

@@ -4,6 +4,7 @@
 	"type": "module",
 	"private": true,
 	"devDependencies": {
+		"@nimbus/tsconfig": "workspace:*",
 		"@eslint/js": "^9.27.0",
 		"@next/eslint-plugin-next": "^15.3.2",
 		"@types/bun": "latest",

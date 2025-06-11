@@ -1,7 +1,7 @@
-import waitlistRoutes from "./waitlist";
-import filesRoutes from "./files";
-import emailRoutes from "./email";
-import authRoutes from "./auth";
+import waitlistRoutes from "@/routes/waitlist";
+import filesRoutes from "@/routes/files";
+import emailRoutes from "@/routes/email";
+import authRoutes from "@/routes/auth";
 import { Hono } from "hono";
 
 const router = new Hono();

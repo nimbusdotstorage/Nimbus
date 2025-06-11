@@ -1,0 +1,7 @@
+{
+	"name": "@nimbus/tsconfig",
+	"private": true,
+	"exports": {
+		"./base": "./base.json"
+	}
+}

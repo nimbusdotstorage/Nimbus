@@ -1,5 +1,5 @@
-import { env } from "@/src/config/env";
 import type { Context } from "hono";
+import { env } from "@/config/env";
 import { Resend } from "resend";
 
 const resend = new Resend(env.RESEND_API_KEY);

@@ -1,4 +1,4 @@
-import { getFiles, getFileById } from "@/apps/server/src/controllers";
+import { getFiles, getFileById } from "@/controllers";
 import { Hono } from "hono";
 
 const filesRouter = new Hono();
