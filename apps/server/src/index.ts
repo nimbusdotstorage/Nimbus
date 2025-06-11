@@ -1,15 +1,15 @@
-import { Hono } from "hono";
-import { cors } from "hono/cors";
+// import { FRONTEND_URL } from "@repo/auth/constants";
+import { auth } from "@repo/auth/auth";
 import { logger } from "hono/logger";
-import { db } from "@/packages/db/src/index";
-import { auth } from "@/packages/auth/src/auth";
-import filesRoutes from "@/apps/server/src/routes/files";
-import authRoutes from "@/apps/server/src/routes/auth";
-import type { SessionUser } from "@/apps/server/lib/utils/accounts";
+import { cors } from "hono/cors";
+import { db } from "@repo/db";
+import routes from "./routes";
+import { Hono } from "hono";
 
 export type ReqVariables = {
-	user: SessionUser;
-	db: typeof db;
+	user: typeof auth.$Infer.Session.user | null;
+	session: typeof auth.$Infer.Session.session | null;
+	db: typeof db | null;
 };
 
 const app = new Hono<{ Variables: ReqVariables }>();
@@ -25,20 +25,26 @@ app.use(
 );
 
 app.use("*", async (c, next) => {
-	c.set("db", db);
 	const session = await auth.api.getSession({ headers: c.req.raw.headers });
+
+	// TODO: Add auth middleware and ratelimiting to the drive operations endpoints.
 	if (!session) {
-		return c.json({ error: "Unauthorized" }, 401);
+		c.set("db", null);
+		c.set("user", null);
+		c.set("session", null);
+		// return c.json({ error: "Unauthorized" }, 401);
+		return next();
 	}
+
+	c.set("db", db);
 	c.set("user", session.user);
-	await next();
+	c.set("session", session.session);
+	return next();
 });
 
-// Health check
 app.get("/kamehame", c => c.text("HAAAAAAAAAAAAAA"));
 
-app.route("/files", filesRoutes);
-app.route("/api/auth", authRoutes);
+app.route("/api", routes);
 
 export default {
 	port: 1284,

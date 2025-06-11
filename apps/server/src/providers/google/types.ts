@@ -446,3 +446,8 @@ export interface File {
 export type FileListResponse = {
 	files: File[];
 };
+
+export type DeleteFileResponse = {
+	success: boolean;
+	message?: string;
+};

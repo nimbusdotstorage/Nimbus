@@ -1,15 +1,5 @@
-import { db } from "@/packages/db/src";
 import { auth } from "@/packages/auth/src/auth";
-
-export type SessionUser = {
-	id: string;
-	name: string;
-	email: string;
-	emailVerified: boolean;
-	createdAt: Date;
-	updatedAt: Date;
-	image?: string | null;
-};
+import { db } from "@/packages/db/src";
 
 export class AccountError extends Error {
 	constructor(
@@ -21,7 +11,7 @@ export class AccountError extends Error {
 	}
 }
 
-export const getAccount = async (user: SessionUser, headers: Headers) => {
+export const getAccount = async (user: typeof auth.$Infer.Session.user | null, headers: Headers) => {
 	if (!user?.id) {
 		throw new AccountError("User session does not exist", "USER_SESSION_DOES_NOT_EXIST");
 	}

@@ -1,8 +1,8 @@
-import { rateLimitAttempts, waitlist } from "@/packages/db/schema";
-import { db } from "@/packages/db/src/index";
+import { rateLimitAttempts, waitlist } from "@repo/db/schema";
+import { NextResponse, NextRequest } from "next/server";
 import { eq, sql } from "drizzle-orm";
+import { db } from "../temp_db/db";
 import { nanoid } from "nanoid";
-import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 // Database-backed rate limiting function
