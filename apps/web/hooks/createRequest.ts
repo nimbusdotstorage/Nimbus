@@ -1,4 +1,4 @@
-import { BACKEND_URL } from "@repo/auth/constants";
+import { BACKEND_URL } from "@nimbus/auth/constants";
 
 type Params = Record<string, string | number | null | undefined>;
 

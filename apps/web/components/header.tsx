@@ -16,9 +16,9 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ModeToggle } from "@/components/mode-toggle";
+import { authClient } from "@nimbus/auth/client";
 import { useSignOut } from "@/web/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { authClient } from "@repo/auth/client";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 

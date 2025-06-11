@@ -12,8 +12,8 @@
 	"dependencies": {
 		"@google-cloud/local-auth": "^2.1.0",
 		"@hono/zod-validator": "^0.7.0",
-		"@repo/auth": "workspace:*",
-		"@repo/db": "workspace:*",
+		"@nimbus/auth": "workspace:*",
+		"@nimbus/db": "workspace:*",
 		"better-auth": "^1.2.8",
 		"dotenv": "^16.5.0",
 		"drizzle-orm": "^0.43.1",
