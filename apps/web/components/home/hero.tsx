@@ -1,14 +1,14 @@
-import HeroDark from "@/web/public/images/hero-dark.png";
-import HeroLight from "@/web/public/images/hero-light.png";
 import { AnimatedGroup } from "@/components/ui/animated-group";
+import HeroLight from "@/web/public/images/hero-light.png";
 import { WaitlistForm } from "@/components/home/waitlist";
+import HeroDark from "@/web/public/images/hero-dark.png";
 import GoogleDriveIcon from "@/web/public/googledrive";
-import Header from "@/components/home/header";
-import Image from "next/image";
 import { TextLoop } from "@/components/ui/text-loop";
 import OneDriveIcon from "@/web/public/onedrive";
-import ICloudIcon from "@/web/public/icloud";
 import DropboxIcon from "@/web/public/dropbox";
+import Header from "@/components/home/header";
+import ICloudIcon from "@/web/public/icloud";
+import Image from "next/image";
 
 const transitionVariants = {
 	item: {
@@ -32,12 +32,12 @@ const transitionVariants = {
 
 export default function Hero() {
 	return (
-		<div className="flex flex-1 justify-center items-center w-full flex-col gap-12 overflow-hidden md:gap-16 py-40 px-4">
+		<div className="flex w-full flex-1 flex-col items-center justify-center gap-12 overflow-hidden px-4 py-40 md:gap-16">
 			<Header />
 			<AnimatedGroup variants={transitionVariants} className="w-full">
 				<div className="flex flex-col gap-12 px-4 md:px-6">
 					<div className="flex flex-col items-center justify-center gap-3 text-center md:gap-6">
-						<h1 className=" inline-flex text-[2.5rem] leading-tight md:text-5xl lg:text-7xl gap-1.5 items-center font-semibold flex-col sm:flex-row justify-center">
+						<h1 className="inline-flex flex-col items-center justify-center gap-1.5 text-[2.5rem] leading-tight font-semibold sm:flex-row md:text-5xl lg:text-7xl">
 							The open source
 							<TextLoop
 								transition={{
@@ -67,14 +67,14 @@ export default function Hero() {
 									},
 								}}
 							>
-								<GoogleDriveIcon className="inline size-12 md:size-14 lg:size-16.5 relative top-[-2px]" />
+								<GoogleDriveIcon className="relative top-[-2px] inline size-12 md:size-14 lg:size-16.5" />
 								<OneDriveIcon className="inline size-12 md:size-14 lg:size-16.5" />
 								<DropboxIcon className="inline size-12 md:size-14 lg:size-16.5" />
 								<ICloudIcon className="inline size-12 md:size-14 lg:size-16.5" />
 							</TextLoop>
 							alternative
 						</h1>
-						<p className="max-w-xl text-base text-muted-foreground md:text-xl">
+						<p className="text-muted-foreground max-w-xl text-base md:text-xl">
 							They&apos;re your files, you control them.
 						</p>
 					</div>
@@ -84,7 +84,7 @@ export default function Hero() {
 			</AnimatedGroup>
 
 			<AnimatedGroup
-				className="w-full sm:max-w-[300vw] flex justify-start sm:justify-center"
+				className="flex w-full justify-start sm:max-w-[300vw] sm:justify-center"
 				variants={{
 					container: {
 						visible: {
@@ -97,17 +97,17 @@ export default function Hero() {
 					...transitionVariants,
 				}}
 			>
-				<div className="ml-0 sm:mx-auto min-w-[300vw] sm:max-w-7xl sm:min-w-0 sm:translate-x-0">
+				<div className="ml-0 min-w-[300vw] sm:mx-auto sm:max-w-7xl sm:min-w-0 sm:translate-x-0">
 					<Image
 						src={HeroDark}
 						alt="Hero"
-						className="hidden rounded-lg dark:block shadow-[0_0_20px_rgba(30,30,30,0.8)] sm:mx-auto ml-0"
+						className="ml-0 hidden rounded-lg shadow-[0_0_20px_rgba(30,30,30,0.8)] sm:mx-auto dark:block"
 						unoptimized
 					/>
 					<Image
 						src={HeroLight}
 						alt="Hero"
-						className="block rounded-lg dark:hidden shadow-[0_0_20px_rgba(30,30,30,0.2)] sm:mx-auto ml-0"
+						className="ml-0 block rounded-lg shadow-[0_0_20px_rgba(30,30,30,0.2)] sm:mx-auto dark:hidden"
 						unoptimized
 					/>
 				</div>

@@ -4,12 +4,12 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SidebarGroup, SidebarGroupContent } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
 import { Upload, FolderOpen, ChevronDown, File, FolderPlus } from "lucide-react";
-import { UploadFileDialog } from "@/components/dialogs/upload-files-dialog";
 import { UploadFolderDialog } from "@/components/dialogs/upload-folder-dialog";
 import { CreateFolderDialog } from "@/components/dialogs/create-folder-dialog";
+import { UploadFileDialog } from "@/components/dialogs/upload-files-dialog";
+import { SidebarGroup, SidebarGroupContent } from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
 import { useUpload } from "@/hooks/useUpload";
 
 export default function UploadButton() {
@@ -32,7 +32,7 @@ export default function UploadButton() {
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button
-								className="w-full justify-start group-data-[collapsible=icon]:justify-center cursor-pointer"
+								className="w-full cursor-pointer justify-start group-data-[collapsible=icon]:justify-center"
 								size="sm"
 							>
 								<Upload className="mr-2 size-4 group-data-[collapsible=icon]:mr-0" />
