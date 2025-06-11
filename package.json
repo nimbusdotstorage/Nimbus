@@ -25,9 +25,9 @@
 		"typescript-eslint": "^8.32.1"
 	},
 	"scripts": {
-		"dev:web": "bun --filter @nimbus/web dev",
-		"dev:server": "bun --filter @nimbus/server dev",
-		"dev": "concurrently --names \"WEB,SERVER\" --prefix-colors \"cyan,magenta\" --prefix \"[{name}]\" --kill-others-on-fail \"bun --filter @nimbus/web dev\" \"bun --filter @nimbus/server dev\"",
+		"dev:web": "bun --filter @nimbus/web --env-file .env dev",
+		"dev:server": "bun --filter @nimbus/server --env-file .env dev",
+		"dev": "concurrently --names \"WEB,SERVER\" --prefix-colors \"cyan,magenta\" --prefix \"[{name}]\" --kill-others-on-fail \"bun --filter * --env-file .env dev\"",
 		"db:up": "docker compose up -d",
 		"db:down": "docker compose down",
 		"db:reset": "docker compose down -v && docker compose up -d",
