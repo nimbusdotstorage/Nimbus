@@ -1,6 +1,6 @@
 import { createAuthClient } from "better-auth/react";
-import { BACKEND_URL } from "@/utils/constants";
+import { clientEnv } from "./env/client-env";
 
 export const authClient = createAuthClient({
-	baseURL: BACKEND_URL,
+	baseURL: clientEnv.NEXT_PUBLIC_BACKEND_URL,
 });

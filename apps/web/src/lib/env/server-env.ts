@@ -5,14 +5,9 @@ import { z } from "zod";
 
 export const serverEnv = createEnv({
 	server: {
-		DATABASE_URL: z.string().url(),
-		GOOGLE_CLIENT_ID: z.string(),
-		GOOGLE_CLIENT_SECRET: z.string().min(1),
-		BETTER_AUTH_SECRET: z.string().min(1),
-		BETTER_AUTH_URL: z.string().url(),
-		FRONTEND_URL: z.string().url(),
-		BACKEND_URL: z.string().url(),
-		NODE_ENV: z.enum(["development", "production"]),
+		DATABASE_URL: z
+			.string({ message: "The DATABASE_URL environment variable must be set." })
+			.url("The value provided for DATABASE_URL is not a valid URL. Please check the format."),
 	},
 	runtimeEnv: process.env,
 	emptyStringAsUndefined: true,
