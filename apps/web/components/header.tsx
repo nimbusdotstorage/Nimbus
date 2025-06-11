@@ -1,7 +1,6 @@
 
 "use client";
 
-import { Bell, HelpCircle, Settings } from "lucide-react";
 import { MessageCircleQuestion } from "@/components/animate-ui/icons/message-circle-question";
 import { Settings } from "@/components/animate-ui/icons/settings";
 import { AnimateIcon } from "@/components/animate-ui/icons/icon";
@@ -73,14 +72,7 @@ export function Header() {
 							onFocus={() => setIsSearchOpen(true)}
 						/>
 					</div>
-		<header className="bg-background border-b">
-			<div className="flex h-16 items-center justify-between gap-4 px-4">
-				<SidebarTrigger className="size-9 cursor-pointer" />
-				<div className="relative max-w-xl flex-1">
-					<Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
-					<Input type="search" placeholder="Search in Drive" className="bg-muted/50 w-full pl-8" />
 				</div>
-
 				<div className="flex items-center gap-2">
 					<ModeToggle />
 					<AnimateIcon animateOnHover>
@@ -136,7 +128,6 @@ export function Header() {
 					</DropdownMenu>
 				</div>
 			</div>
-
 			<SearchDialog open={isSearchOpen} onOpenChange={setIsSearchOpen} />
 		</header>
 	);
