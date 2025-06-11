@@ -1,8 +1,12 @@
 {
-	"name": "db",
+	"name": "@repo/db",
 	"module": "src/index.ts",
 	"type": "module",
 	"private": true,
+	"exports": {
+		".": "./src/index.ts",
+		"./schema": "./schema.ts"
+	},
 	"devDependencies": {
 		"@types/bun": "latest"
 	},

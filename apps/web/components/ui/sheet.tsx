@@ -1,7 +1,7 @@
 "use client";
 
-import type { ComponentProps } from "react";
 import { Description, Root, Trigger, Close, Portal, Overlay, Title, Content } from "@radix-ui/react-dialog";
+import type { ComponentProps } from "react";
 import { XIcon } from "lucide-react";
 
 import { cn } from "lib/utils";

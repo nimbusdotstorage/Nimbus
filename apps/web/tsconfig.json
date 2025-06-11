@@ -34,11 +34,11 @@
 		"baseUrl": ".",
 		"paths": {
 			"@/server/*": ["../server/*"],
-			"@/packages/*": ["../../packages/*"],
 			"@/components/*": ["./components/*"],
 			"@/lib/*": ["./lib/*"],
 			"@/web/*": ["./*"],
-			"@/public/*": ["./public/*"]
+			"@/public/*": ["./public/*"],
+			"@/hooks/*": ["./hooks/*"]
 		}
 	},
 	"include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],

@@ -3,19 +3,19 @@
 import { useState, type ComponentProps } from "react";
 
 import { Sidebar, SidebarContent, SidebarHeader, SidebarRail } from "@/components/ui/sidebar";
-import TagMenu from "@/components/main-sidebar/tag-menu";
-import { QuickAccess } from "@/components/main-sidebar/quick-access";
-import StorageFooter from "@/components/main-sidebar/sidebar-footer";
 import SidebarFolders from "@/components/main-sidebar/sidebar-folders";
-import UploadButton from "@/components/main-sidebar/upload";
-import Sources from "@/components/main-sidebar/sources";
+import StorageFooter from "@/components/main-sidebar/sidebar-footer";
+import { QuickAccess } from "@/components/main-sidebar/quick-access";
 import type { Source } from "@/components/main-sidebar/sources";
-import AzureIcon from "@/web/public/azure";
-import GoogleCloudIcon from "@/web/public/gcp";
-import AWSIcon from "@/web/public/aws";
-import OneDriveIcon from "@/web/public/onedrive";
+import UploadButton from "@/components/main-sidebar/upload";
+import TagMenu from "@/components/main-sidebar/tag-menu";
+import Sources from "@/components/main-sidebar/sources";
 import { HardDrive, Users, Server } from "lucide-react";
 import GoogleDriveIcon from "@/web/public/googledrive";
+import OneDriveIcon from "@/web/public/onedrive";
+import GoogleCloudIcon from "@/web/public/gcp";
+import AzureIcon from "@/web/public/azure";
+import AWSIcon from "@/web/public/aws";
 
 const fileSources = [
 	{

@@ -1,8 +1,7 @@
-import { Hono } from "hono";
+import { logger } from "hono/logger";
 import { cors } from "hono/cors";
-import filesRoutes from "@/apps/server/src/routes/files";
-import authRoutes from "@/apps/server/src/routes/auth";
-import waitlistRoutes from "@/apps/server/src/routes/waitlist";
+import routes from "./routes";
+import { Hono } from "hono";
 
 const app = new Hono();
 
@@ -14,13 +13,11 @@ app.use(
 		allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 	})
 );
+app.use(logger());
 
-// Health check
 app.get("/kamehame", c => c.text("HAAAAAAAAAAAAAA"));
 
-app.route("/files", filesRoutes);
-app.route("/api/auth", authRoutes);
-app.route("/waitlist", waitlistRoutes);
+app.route("/api", routes);
 
 export default {
 	port: 1284,
