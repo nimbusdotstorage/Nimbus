@@ -1,7 +1,7 @@
 import { AnimatedGroup } from "@/components/ui/animated-group";
-import HeroLight from "@/web/public/images/hero-light.png";
 import { WaitlistForm } from "@/components/home/waitlist";
-import HeroDark from "@/web/public/images/hero-dark.png";
+import HeroLight from "@/public/images/hero-light.png";
+import HeroDark from "@/public/images/hero-dark.png";
 import { TextLoop } from "@/components/ui/text-loop";
 import GoogleDriveIcon from "@/public/googledrive";
 import Header from "@/components/home/header";
