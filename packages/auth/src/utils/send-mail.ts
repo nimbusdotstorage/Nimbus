@@ -1,9 +1,8 @@
-import { BACKEND_URL } from "@/utils/constants";
 import axios from "axios";
 
 export async function sendMail({ to, subject, text }: { to: string; subject: string; text: string }) {
 	try {
-		const response = await axios.post(`${BACKEND_URL}/api/email/send-mail`, { to, subject, text });
+		const response = await axios.post(`${process.env.BACKEND_URL}/api/email/send-mail`, { to, subject, text });
 
 		return response.data;
 	} catch (error) {

@@ -1,7 +1,7 @@
 import type { SignInFormData, SignUpFormData, ForgotPasswordFormData, ResetPasswordFormData } from "@/schemas";
-import { BACKEND_URL, CALLBACK_URL } from "@nimbus/auth/constants";
 import { useMutation } from "@tanstack/react-query";
-import { authClient } from "@nimbus/auth/client";
+import { clientEnv } from "@/lib/env/client-env";
+import { authClient } from "@/lib/auth-client";
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -15,7 +15,7 @@ interface AuthState {
 export const signInWithGoogle = async () => {
 	await authClient.signIn.social({
 		provider: "google",
-		callbackURL: CALLBACK_URL,
+		callbackURL: clientEnv.NEXT_PUBLIC_CALLBACK_URL,
 	});
 };
 
@@ -120,7 +120,7 @@ export const useSignUp = () => {
 							name: fullName,
 							email: data.email,
 							password: data.password,
-							callbackURL: CALLBACK_URL,
+							callbackURL: clientEnv.NEXT_PUBLIC_CALLBACK_URL,
 						});
 
 						// Handle profile image if provided
@@ -226,7 +226,7 @@ export const useSignOut = () => {
 };
 
 const checkEmailExists = async (email: string): Promise<{ exists: boolean }> => {
-	const response = await axios.post(`${BACKEND_URL}/api/auth/check-email`, { email });
+	const response = await axios.post(`${clientEnv.NEXT_PUBLIC_CALLBACK_URL}/api/auth/check-email`, { email });
 	return response.data;
 };
 

@@ -4,7 +4,6 @@
 	"type": "module",
 	"private": true,
 	"exports": {
-		"./client": "./src/auth-client.ts",
 		"./constants": "./src/utils/constants.ts",
 		"./auth": "./src/auth.ts"
 	},

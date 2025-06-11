@@ -1,4 +1,4 @@
-import { BACKEND_URL } from "@nimbus/auth/constants";
+import { clientEnv } from "@/lib/env/client-env";
 
 type Params = Record<string, string | number | null | undefined>;
 
@@ -35,7 +35,7 @@ export function createRequest({ path, pathParams = {}, queryParams = {} }: Creat
 		const query = queryString ? `?${queryString}` : "";
 
 		// Construct the full URL
-		const fullUrl = `${BACKEND_URL}/api${currentPath}${query}`;
+		const fullUrl = `${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api${currentPath}${query}`;
 
 		return fetch(fullUrl, { signal });
 	};
