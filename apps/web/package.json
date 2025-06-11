@@ -1,5 +1,5 @@
 {
-	"name": "web",
+	"name": "@nimbus/web",
 	"private": true,
 	"peerDependencies": {
 		"typescript": "^5"
@@ -11,6 +11,8 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
+		"@nimbus/auth": "workspace:*",
+		"@nimbus/db": "workspace:*",
 		"@hookform/resolvers": "^5.0.1",
 		"@number-flow/react": "^0.5.9",
 		"@radix-ui/react-avatar": "^1.1.10",
@@ -54,8 +56,6 @@
 		"eslint-config-next": "15.2.4",
 		"tailwindcss": "^4.1.8",
 		"tw-animate-css": "^1.3.2",
-		"@repo/auth": "workspace:*",
-		"@repo/db": "workspace:*",
 		"typescript": "^5"
 	}
 }

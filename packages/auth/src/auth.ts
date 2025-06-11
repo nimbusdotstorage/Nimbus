@@ -3,8 +3,8 @@ import { BACKEND_URL, FRONTEND_URL } from "./utils/constants";
 import { extractTokenFromUrl } from "./utils/extract-token";
 import { sendMail } from "./utils/send-mail";
 import { betterAuth } from "better-auth";
-import Schema from "@repo/db/schema";
-import { db } from "@repo/db";
+import Schema from "@nimbus/db/schema";
+import { db } from "@nimbus/db";
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {

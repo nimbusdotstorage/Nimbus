@@ -1,8 +1,13 @@
 {
-	"name": "@repo/db",
+	"name": "@nimbus/db",
 	"module": "src/index.ts",
 	"type": "module",
 	"private": true,
+	"scripts": {
+		"generate": "bunx drizzle-kit generate",
+		"migrate": "bunx drizzle-kit generate && bunx drizzle-kit migrate",
+		"studio": "bunx drizzle-kit studio"
+	},
 	"exports": {
 		".": "./src/index.ts",
 		"./schema": "./schema.ts"
@@ -12,8 +17,5 @@
 	},
 	"peerDependencies": {
 		"typescript": "^5"
-	},
-	"dependencies": {
-		"dotenv": "^16.5.0"
 	}
 }
