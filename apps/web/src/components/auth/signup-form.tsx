@@ -2,10 +2,10 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { useSignUp, useCheckEmailExists, useGoogleAuth } from "@/hooks/useAuth";
+import { SocialAuthButton } from "@/components/auth/shared/social-auth-button";
 import { useState, type ComponentProps, type ChangeEvent } from "react";
 import { SegmentedProgress } from "@/components/ui/segmented-progress";
 import { ArrowLeft, Eye, EyeClosed, Loader2, X } from "lucide-react";
-import { SocialAuthButton } from "./shared/social-auth-button";
 import { signUpSchema, type SignUpFormData } from "@/schemas";
 import { FieldError } from "@/components/ui/field-error";
 import { zodResolver } from "@hookform/resolvers/zod";

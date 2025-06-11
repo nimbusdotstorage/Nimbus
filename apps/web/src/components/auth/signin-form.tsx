@@ -1,17 +1,17 @@
 "use client";
 
-import { SocialAuthButton } from "./shared/social-auth-button";
+import { SocialAuthButton } from "@/components/auth/shared/social-auth-button";
+import { PasswordInput } from "@/components/auth/shared/password-input";
+import { AuthCard } from "@/components/auth/shared/auth-card";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { signInSchema, type SignInFormData } from "@/schemas";
 import { FieldError } from "@/components/ui/field-error";
 import type { ComponentProps, ChangeEvent } from "react";
-import { PasswordInput } from "./shared/password-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { AuthCard } from "./shared/auth-card";
 import { useSignIn } from "@/hooks/useAuth";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
