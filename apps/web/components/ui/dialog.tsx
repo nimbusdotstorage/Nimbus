@@ -2,9 +2,10 @@
 
 import { Root, Trigger, Portal, Close, Overlay, Title, Content, Description } from "@radix-ui/react-dialog";
 import { XIcon } from "lucide-react";
+import * as React from "react";
 
-import { cn } from "@/web/lib/utils";
 import type { ComponentProps } from "react";
+import { cn } from "@/web/lib/utils";
 
 function Dialog({ ...props }: ComponentProps<typeof Root>) {
 	return <Root data-slot="dialog" {...props} />;

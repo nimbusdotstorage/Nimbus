@@ -1,13 +1,13 @@
-import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { createRequest } from "@/web/hooks/createRequest";
-import { FileText, Folder, X, Image, Video } from "lucide-react";
+import { FileText, Folder, Image, Video, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { createRequest } from "@/web/hooks/createRequest";
 import { useRequest } from "@/web/hooks/useRequest";
+import { Button } from "@/components/ui/button";
 import type { FileItem } from "@/web/lib/types";
 import { parseError } from "@/web/utils/error";
 import { Loader } from "@/components/loader";
+import { useEffect } from "react";
 
 interface FolderContentItem extends FileItem {
 	path?: string;
@@ -48,12 +48,16 @@ export function FilePreview() {
 		if (id && id !== data?.id) {
 			void refetch();
 		}
+		// Adding refetch breaks it
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [id, data?.id]);
 
 	useEffect(() => {
 		if (data?.type === "folder") {
 			void refetchFolderContents();
 		}
+		// Adding refetchFolderContents breaks it
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data?.type]);
 
 	const handleClose = () => {
@@ -65,19 +69,19 @@ export function FilePreview() {
 	const getFileIcon = (type: string) => {
 		switch (type) {
 			case "folder":
-				return <Folder className="h-4 w-4 text-muted-foreground" />;
+				return <Folder className="text-muted-foreground h-4 w-4" />;
 			case "image":
-				return <Image className="h-4 w-4 text-muted-foreground" />;
+				return <Image className="text-muted-foreground h-4 w-4" />;
 			case "video":
-				return <Video className="h-4 w-4 text-muted-foreground" />;
+				return <Video className="text-muted-foreground h-4 w-4" />;
 			default:
-				return <FileText className="h-4 w-4 text-muted-foreground" />;
+				return <FileText className="text-muted-foreground h-4 w-4" />;
 		}
 	};
 
 	return (
 		<Sheet open={!!id} onOpenChange={handleClose}>
-			<SheetContent className="w-[400px] sm:w-[540px] overflow-y-auto" closeButton={false}>
+			<SheetContent className="w-[400px] overflow-y-auto sm:w-[540px]" closeButton={false}>
 				<SheetHeader className="mb-4">
 					<div className="flex items-center justify-between">
 						<SheetTitle>{!isLoading && data ? data.name : "Loading..."}</SheetTitle>
@@ -100,64 +104,64 @@ export function FilePreview() {
 					{isLoading ? (
 						<Loader />
 					) : error ? (
-						<div className="space-y-2 flex-1 flex flex-col items-center justify-center">
+						<div className="flex flex-1 flex-col items-center justify-center space-y-2">
 							<p>{parseError(error)}</p>
 							<Button onClick={refetch}>Try again</Button>
 						</div>
 					) : data?.type === "document" ? (
-						<div className="border rounded-md p-4 bg-muted/30">
-							<div className="aspect-[3/4] bg-background rounded-md border flex items-center justify-center mb-4">
-								<FileText className="h-16 w-16 text-muted-foreground" />
+						<div className="bg-muted/30 rounded-md border p-4">
+							<div className="bg-background mb-4 flex aspect-[3/4] items-center justify-center rounded-md border">
+								<FileText className="text-muted-foreground h-16 w-16" />
 							</div>
 							<div className="space-y-2">
 								<h3 className="font-medium">{data?.name}</h3>
-								<p className="text-sm text-muted-foreground">Size: {data?.size}</p>
-								<p className="text-sm text-muted-foreground">Last modified: {data?.modified}</p>
+								<p className="text-muted-foreground text-sm">Size: {data?.size}</p>
+								<p className="text-muted-foreground text-sm">Last modified: {data?.modified}</p>
 							</div>
-							<div className="mt-6 pt-6 border-t">
-								<h4 className="font-medium mb-2">Document Content Preview</h4>
+							<div className="mt-6 border-t pt-6">
+								<h4 className="mb-2 font-medium">Document Content Preview</h4>
 								<div className="space-y-2">
-									<div className="h-4 bg-muted rounded w-full"></div>
-									<div className="h-4 bg-muted rounded w-5/6"></div>
-									<div className="h-4 bg-muted rounded w-4/6"></div>
-									<div className="h-4 bg-muted rounded w-full"></div>
-									<div className="h-4 bg-muted rounded w-3/4"></div>
+									<div className="bg-muted h-4 w-full rounded"></div>
+									<div className="bg-muted h-4 w-5/6 rounded"></div>
+									<div className="bg-muted h-4 w-4/6 rounded"></div>
+									<div className="bg-muted h-4 w-full rounded"></div>
+									<div className="bg-muted h-4 w-3/4 rounded"></div>
 								</div>
 							</div>
 						</div>
 					) : data?.type === "folder" ? (
-						<div className="border rounded-md p-4 bg-muted/30">
-							<div className="aspect-[4/3] bg-background rounded-md border flex items-center justify-center mb-4">
-								<Folder className="h-16 w-16 text-muted-foreground" />
+						<div className="bg-muted/30 rounded-md border p-4">
+							<div className="bg-background mb-4 flex aspect-[4/3] items-center justify-center rounded-md border">
+								<Folder className="text-muted-foreground h-16 w-16" />
 							</div>
 							<div className="space-y-2">
 								<h3 className="font-medium">{data?.name}</h3>
-								<p className="text-sm text-muted-foreground">Last modified: {data?.modified}</p>
-								{data?.size && <p className="text-sm text-muted-foreground">Total size: {data?.size}</p>}
+								<p className="text-muted-foreground text-sm">Last modified: {data?.modified}</p>
+								{data?.size && <p className="text-muted-foreground text-sm">Total size: {data?.size}</p>}
 							</div>
-							<div className="mt-6 pt-6 border-t">
-								<h4 className="font-medium mb-2">Folder Contents</h4>
+							<div className="mt-6 border-t pt-6">
+								<h4 className="mb-2 font-medium">Folder Contents</h4>
 								{folderContentsLoading ? (
 									<div className="flex justify-center p-4">
 										<Loader />
 									</div>
 								) : folderContents && folderContents.length > 0 ? (
-									<div className="space-y-1 max-h-60 overflow-y-auto pr-2">
+									<div className="max-h-60 space-y-1 overflow-y-auto pr-2">
 										{folderContents.map(item => (
-											<div key={item.id} className="flex items-center space-x-2 p-2 rounded hover:bg-muted">
+											<div key={item.id} className="hover:bg-muted flex items-center space-x-2 rounded p-2">
 												{getFileIcon(item.type)}
-												<span className="text-sm truncate">{item.name}</span>
+												<span className="truncate text-sm">{item.name}</span>
 											</div>
 										))}
 									</div>
 								) : (
-									<p className="text-sm text-muted-foreground p-2">This folder is empty</p>
+									<p className="text-muted-foreground p-2 text-sm">This folder is empty</p>
 								)}
 							</div>
 						</div>
 					) : (
-						<div className="text-center py-8 text-muted-foreground">
-							<Folder className="h-12 w-12 mx-auto mb-2" />
+						<div className="text-muted-foreground py-8 text-center">
+							<Folder className="mx-auto mb-2 h-12 w-12" />
 							<p>Preview not available</p>
 						</div>
 					)}

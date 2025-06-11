@@ -25,4 +25,4 @@ jobs:
         run: bun lint
 
       - name: Check Prettier formatting
-        run: bun check-format
+        run: bun format:check
