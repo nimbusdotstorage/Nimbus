@@ -1,3 +1,7 @@
+// import { BACKEND_URL } from "@repo/auth/constants";
+
+// ! NOTE TO SELF: BACKEND_URL ISNT BEING PASSED IN BY THE ENV VARIABLES IN SOME ROUTES
+
 type Params = Record<string, string | number | null | undefined>;
 
 type CreateRequestOptions = {
@@ -16,9 +20,6 @@ type CreateRequestOptions = {
  */
 export function createRequest({ path, pathParams = {}, queryParams = {} }: CreateRequestOptions) {
 	return (signal: AbortSignal) => {
-		// Get the base URL based on environment
-		const baseUrl = process.env.NODE_ENV === "development" ? "http://localhost:1284" : "https://api.nimbus.storage";
-
 		// Replace path params in the URL
 		let currentPath = path;
 		for (const [key, value] of Object.entries(pathParams)) {
@@ -36,7 +37,7 @@ export function createRequest({ path, pathParams = {}, queryParams = {} }: Creat
 		const query = queryString ? `?${queryString}` : "";
 
 		// Construct the full URL
-		const fullUrl = `${baseUrl}${currentPath}${query}`;
+		const fullUrl = `${process.env.BACKEND_URL!}/api${currentPath}${query}`;
 
 		return fetch(fullUrl, { signal, credentials: "include" });
 	};

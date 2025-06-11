@@ -6,9 +6,6 @@ import {
 	SidebarMenu,
 	SidebarMenuButton,
 } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import { MoreHorizontal } from "lucide-react";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -16,6 +13,9 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { MoreHorizontal } from "lucide-react";
+import { Plus } from "lucide-react";
 
 const tags = [
 	{ name: "Important", color: "bg-red-500", count: 12 },
@@ -31,7 +31,7 @@ export default function TagMenu() {
 		<SidebarGroup>
 			<SidebarGroupLabel>
 				Tags
-				<Button variant="ghost" size="icon" className="ml-auto h-6 w-6 ">
+				<Button variant="ghost" size="icon" className="ml-auto h-6 w-6">
 					<Plus className="size-3" />
 					<span className="sr-only">Add Tag</span>
 				</Button>
@@ -41,13 +41,13 @@ export default function TagMenu() {
 					{tags.map(tag => (
 						<SidebarMenuItem key={tag.name} className="group/item">
 							<SidebarMenuButton
-								className="flex items-center w-full peer pl-3 group-data-[collapsible=icon]:justify-center justify-between"
+								className="peer flex w-full cursor-pointer items-center justify-between pl-3 group-data-[collapsible=icon]:justify-center"
 								tooltip={`${tag.name} (${tag.count})`}
 							>
 								<div className="flex items-center gap-1">
 									<span className={`size-3 rounded-full ${tag.color}`} />
 									<span className="ml-2 group-data-[collapsible=icon]:hidden">{tag.name}</span>
-									<span className="ml-2 text-xs text-sidebar-foreground/70 group-data-[collapsible=icon]:hidden">
+									<span className="text-sidebar-foreground/70 ml-2 text-xs group-data-[collapsible=icon]:hidden">
 										{tag.count}
 									</span>
 								</div>
