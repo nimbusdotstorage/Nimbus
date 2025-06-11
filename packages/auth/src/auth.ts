@@ -1,7 +1,7 @@
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { BACKEND_URL, FRONTEND_URL } from "./utils/constants";
-import { extractTokenFromUrl } from "./utils/extract-token";
-import { sendMail } from "./utils/send-mail";
+import { BACKEND_URL, FRONTEND_URL } from "@/utils/constants";
+import { extractTokenFromUrl } from "@/utils/extract-token";
+import { sendMail } from "@/utils/send-mail";
 import { betterAuth } from "better-auth";
 import Schema from "@nimbus/db/schema";
 import { db } from "@nimbus/db";

@@ -13,6 +13,7 @@
 		"./schema": "./schema.ts"
 	},
 	"devDependencies": {
+		"@nimbus/tsconfig": "workspace:*",
 		"@types/bun": "latest"
 	},
 	"peerDependencies": {

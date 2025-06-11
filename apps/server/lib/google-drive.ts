@@ -1,7 +1,7 @@
 import { drive_v3 } from "googleapis/build/src/apis/drive/v3";
 import { OAuth2Client } from "google-auth-library";
-import { env } from "src/config/env";
 import { google } from "googleapis";
+import { env } from "@/config/env";
 
 export interface DriveManagerConfig {
 	auth?: {

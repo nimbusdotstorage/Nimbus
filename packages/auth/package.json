@@ -9,6 +9,7 @@
 		"./auth": "./src/auth.ts"
 	},
 	"devDependencies": {
+		"@nimbus/tsconfig": "workspace:*",
 		"@types/bun": "latest"
 	},
 	"peerDependencies": {
