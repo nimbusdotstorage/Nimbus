@@ -1,5 +1,5 @@
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { FileText, Folder, Image, Video, X } from "lucide-react";
+import { getFileIcon } from "@/components/file-browser/file-icons";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createRequest } from "@/web/hooks/createRequest";
 import { useRequest } from "@/web/hooks/useRequest";
@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import type { FileItem } from "@/web/lib/types";
 import { parseError } from "@/web/utils/error";
 import { Loader } from "@/components/loader";
+import { Folder, X } from "lucide-react";
 import { useEffect } from "react";
 
 interface FolderContentItem extends FileItem {
@@ -66,19 +67,6 @@ export function FilePreview() {
 		router.replace(`?${params.toString()}`);
 	};
 
-	const getFileIcon = (type: string) => {
-		switch (type) {
-			case "folder":
-				return <Folder className="text-muted-foreground h-4 w-4" />;
-			case "image":
-				return <Image className="text-muted-foreground h-4 w-4" />;
-			case "video":
-				return <Video className="text-muted-foreground h-4 w-4" />;
-			default:
-				return <FileText className="text-muted-foreground h-4 w-4" />;
-		}
-	};
-
 	return (
 		<Sheet open={!!id} onOpenChange={handleClose}>
 			<SheetContent className="w-[400px] overflow-y-auto sm:w-[540px]" closeButton={false}>
@@ -111,7 +99,7 @@ export function FilePreview() {
 					) : data?.type === "document" ? (
 						<div className="bg-muted/30 rounded-md border p-4">
 							<div className="bg-background mb-4 flex aspect-[3/4] items-center justify-center rounded-md border">
-								<FileText className="text-muted-foreground h-16 w-16" />
+								{getFileIcon(data.name, "h-16 w-16 text-primary")}
 							</div>
 							<div className="space-y-2">
 								<h3 className="font-medium">{data?.name}</h3>
@@ -132,7 +120,7 @@ export function FilePreview() {
 					) : data?.type === "folder" ? (
 						<div className="bg-muted/30 rounded-md border p-4">
 							<div className="bg-background mb-4 flex aspect-[4/3] items-center justify-center rounded-md border">
-								<Folder className="text-muted-foreground h-16 w-16" />
+								{getFileIcon(data.name, "h-16 w-16 text-primary")}
 							</div>
 							<div className="space-y-2">
 								<h3 className="font-medium">{data?.name}</h3>
@@ -149,7 +137,7 @@ export function FilePreview() {
 									<div className="max-h-60 space-y-1 overflow-y-auto pr-2">
 										{folderContents.map(item => (
 											<div key={item.id} className="hover:bg-muted flex items-center space-x-2 rounded p-2">
-												{getFileIcon(item.type)}
+												{getFileIcon(item.name, "text-muted-foreground h-4 w-4")}
 												<span className="truncate text-sm">{item.name}</span>
 											</div>
 										))}
