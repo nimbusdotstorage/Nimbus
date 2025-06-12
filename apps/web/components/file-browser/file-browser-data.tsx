@@ -10,6 +10,7 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { FileItem } from "@/web/lib/types";
 import { FileText, Folder, MoreVertical } from "lucide-react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
 export function FileBrowserData({ viewMode, data }: { viewMode: "grid" | "list"; data: FileItem[] }) {
