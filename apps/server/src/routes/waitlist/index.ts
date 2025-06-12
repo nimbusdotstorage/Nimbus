@@ -1,6 +1,6 @@
-import { joinWaitlist, getWaitlistCount } from "@/apps/server/src/controllers/waitlist";
-import { emailSchema } from "@/apps/server/src/validators";
+import { joinWaitlist, getWaitlistCount } from "@/controllers/waitlist";
 import { zValidator } from "@hono/zod-validator";
+import { emailSchema } from "@/validators";
 import { Hono } from "hono";
 
 const waitlistRouter = new Hono();

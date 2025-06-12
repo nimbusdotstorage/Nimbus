@@ -1,6 +1,7 @@
 import { drive_v3 } from "googleapis/build/src/apis/drive/v3";
 import { OAuth2Client } from "google-auth-library";
 import { google } from "googleapis";
+import { env } from "@/config/env";
 
 export interface DriveManagerConfig {
 	auth?: {
@@ -26,7 +27,7 @@ export class GoogleDriveManager {
 	private drive: drive_v3.Drive;
 
 	constructor(public config: DriveManagerConfig) {
-		this.auth = new OAuth2Client(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_SECRET);
+		this.auth = new OAuth2Client(env.GOOGLE_CLIENT_ID, env.GOOGLE_CLIENT_SECRET);
 
 		// Should have to just call getAccessToken from betterauth and pass token to setCredentials
 		if (config.auth) {

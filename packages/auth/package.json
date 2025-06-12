@@ -1,21 +1,21 @@
 {
-	"name": "@repo/auth",
+	"name": "@nimbus/auth",
 	"module": "index.ts",
 	"type": "module",
 	"private": true,
 	"exports": {
-		"./client": "./src/auth-client.ts",
-		"./constants": "./src/utils/constants.ts",
+		"./auth-client": "./src/auth-client.ts",
 		"./auth": "./src/auth.ts"
 	},
 	"devDependencies": {
+		"@nimbus/tsconfig": "workspace:*",
 		"@types/bun": "latest"
 	},
 	"peerDependencies": {
 		"typescript": "^5"
 	},
 	"dependencies": {
-		"@repo/db": "workspace:*",
+		"@nimbus/db": "workspace:*",
 		"axios": "^1.9.0",
 		"dotenv": "^16.5.0"
 	}
