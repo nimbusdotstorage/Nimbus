@@ -1,13 +1,14 @@
 import { logger } from "hono/logger";
+import { env } from "@/config/env";
 import { cors } from "hono/cors";
-import routes from "./routes";
+import routes from "@/routes";
 import { Hono } from "hono";
 
 const app = new Hono();
 
 app.use(
 	cors({
-		origin: process.env.FRONTEND_URL!,
+		origin: env.FRONTEND_URL,
 		credentials: true,
 		allowHeaders: ["Content-Type", "Authorization"],
 		allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
