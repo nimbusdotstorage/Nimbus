@@ -1,10 +1,9 @@
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-// import { BACKEND_URL, FRONTEND_URL } from "./utils/constants";
-import { extractTokenFromUrl } from "./utils/extract-token";
-import { sendMail } from "./utils/send-mail";
+import { extractTokenFromUrl } from "@/utils/extract-token";
+import { sendMail } from "@/utils/send-mail";
 import { betterAuth } from "better-auth";
-import schema from "@repo/db/schema";
-import { db } from "@repo/db";
+import schema from "@nimbus/db/schema";
+import { db } from "@nimbus/db";
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
@@ -24,7 +23,7 @@ export const auth = betterAuth({
 		resetPasswordTokenExpiresIn: 600, // 10 minutes
 		sendResetPassword: async ({ user, url }) => {
 			const token = extractTokenFromUrl(url);
-			const frontendResetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
+			const frontendResetUrl = `${process.env.FRONTEND_URL!}/reset-password?token=${token}`;
 
 			await sendMail({
 				to: user.email,
