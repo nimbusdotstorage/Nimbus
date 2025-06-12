@@ -226,7 +226,7 @@ export const useSignOut = () => {
 };
 
 const checkEmailExists = async (email: string): Promise<{ exists: boolean }> => {
-	const response = await axios.post(`${clientEnv.NEXT_PUBLIC_CALLBACK_URL}/api/auth/check-email`, { email });
+	const response = await axios.post(`${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api/auth/check-email`, { email });
 	return response.data;
 };
 
