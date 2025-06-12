@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -5,15 +7,25 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { FileText, Folder, MoreVertical } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { FileItem } from "@/web/lib/types";
+import { FileText, Folder, MoreVertical } from "lucide-react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export function FileBrowserData({ viewMode, data }: { viewMode: "grid" | "list"; data: FileItem[] }) {
-	return viewMode === "grid" ? <FilesGrid data={data} /> : <FilesList data={data} />;
+	return data.length > 0 ? (
+		<>
+			{viewMode === "grid" && <FilesGrid data={data} />}
+			{viewMode === "list" && <FilesList data={data} />}
+		</>
+	) : (
+		<ZeroCase />
+	);
+}
+
+function ZeroCase() {
+	return <div className="col-span-full text-center py-8 text-muted-foreground text-sm">Nothing here :(</div>;
 }
 
 function FilesGrid({ data }: { data: FileItem[] }) {
@@ -48,10 +60,6 @@ function FilesGrid({ data }: { data: FileItem[] }) {
 					</Link>
 				);
 			})}
-			{/* zero case */}
-			{data.length === 0 && (
-				<div className="text-muted-foreground col-span-full py-8 text-center text-sm">Nothing here :(</div>
-			)}
 		</div>
 	);
 }
@@ -60,42 +68,50 @@ function FilesList({ data }: { data: FileItem[] }) {
 	const searchParams = useSearchParams();
 
 	return (
-		<div className="overflow-hidden rounded-md border">
-			<table className="w-full">
-				<thead>
-					<tr className="bg-muted/50">
-						<th className="p-3 text-left font-medium">Name</th>
-						<th className="p-3 text-left font-medium">Modified</th>
-						<th className="p-3 text-left font-medium">Size</th>
-						<th className="w-10 p-3"></th>
-					</tr>
-				</thead>
-				<tbody>
+		<div className="overflow-hidden">
+			<Table>
+				<TableHeader>
+					<TableRow className="!bg-transparent h-auto pb-2 text-xs text-muted-foreground">
+						<TableHead className="h-auto pb-2 text-xs text-muted-foreground">Name</TableHead>
+						<TableHead className="h-auto pb-2 text-xs text-muted-foreground">Modified</TableHead>
+						<TableHead className="h-auto pb-2 text-xs text-muted-foreground">Size</TableHead>
+						<TableHead className="h-0 w-0" />
+					</TableRow>
+				</TableHeader>
+
+				<TableBody>
 					{data.map(file => {
 						const params = new URLSearchParams(searchParams.toString());
 						params.append("id", file.id);
 
 						return (
-							<tr key={file.id} className="hover:bg-accent/10 relative cursor-pointer border-t transition-colors">
-								<td className="flex items-center gap-2 p-4">
-									<Link href={"?" + params.toString()} className="absolute inset-0" />
-									{file.type === "folder" ? (
-										<Folder className="text-primary h-4 w-4" />
-									) : (
-										<FileText className="text-primary h-4 w-4" />
-									)}
-									{file.name}
-								</td>
-								<td className="text-muted-foreground p-3 text-sm">{file.modified}</td>
-								<td className="text-muted-foreground p-3 text-sm">{file.size || "—"}</td>
-								<td className="p-3">
+							<TableRow key={file.id} className="text-xs relative">
+								<TableCell className="py-1">
+									<span className="flex items-center gap-2 font-medium">
+										<Link href={"?" + params.toString()} className="absolute inset-0" />
+
+										{file.type === "folder" ? (
+											<Folder className="h-4 w-4 text-foreground" />
+										) : (
+											<FileText className="h-4 w-4 text-foreground" />
+										)}
+
+										{file.name}
+									</span>
+								</TableCell>
+
+								<TableCell className="py-1 text-muted-foreground">{file.modified}</TableCell>
+
+								<TableCell className="py-1 text-muted-foreground">{file.size || "—"}</TableCell>
+
+								<TableCell className="py-1">
 									<FileActions />
-								</td>
-							</tr>
+								</TableCell>
+							</TableRow>
 						);
 					})}
-				</tbody>
-			</table>
+				</TableBody>
+			</Table>
 		</div>
 	);
 }
@@ -104,7 +120,7 @@ function FileActions() {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<Button variant="ghost" size="icon" className="relative h-8 w-8">
+				<Button variant="ghost" size="icon" className="size-8 bg-transparent relative">
 					<MoreVertical className="h-4 w-4" />
 					<span className="sr-only">Open menu</span>
 				</Button>

@@ -1,22 +1,21 @@
 "use client";
 
-import { FileBrowserData } from "@/components/file-browser/file-browser-data";
 import { ErrorMessageWithRetry } from "@/components/error-message/with-retry";
+import { FileBrowserData } from "@/components/file-browser/file-browser-data";
 import { FilePreview } from "@/components/file-browser/file-preview";
 import { FileTabs } from "@/components/file-browser/file-tabs";
+import { Loader } from "@/components/loader";
+import { Button } from "@/components/ui/button";
 import { createRequest } from "@/web/hooks/createRequest";
 import { useRequest } from "@/web/hooks/useRequest";
-import { useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import type { FileItem } from "@/web/lib/types";
-import { Loader } from "@/components/loader";
 import { Grid, List } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 export function FileBrowser() {
 	const searchParams = useSearchParams();
 	const type = searchParams.get("type");
-	const id = searchParams.get("id");
 
 	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
@@ -31,7 +30,7 @@ export function FileBrowser() {
 	});
 
 	return (
-		<div className={`flex flex-1 flex-col space-y-4 ${id ? "blur-sm transition-all" : ""}`}>
+		<div className="space-y-4 flex-1 flex flex-col">
 			<div className="flex items-center justify-between">
 				<FileTabs type={type} />
 
