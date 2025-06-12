@@ -12,6 +12,7 @@
 	},
 	"dependencies": {
 		"@nimbus/db": "workspace:*",
+		"@nimbus/auth": "workspace:*",
 		"@hookform/resolvers": "^5.0.1",
 		"@number-flow/react": "^0.5.9",
 		"@radix-ui/react-avatar": "^1.1.10",

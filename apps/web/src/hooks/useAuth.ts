@@ -1,7 +1,7 @@
 import type { SignInFormData, SignUpFormData, ForgotPasswordFormData, ResetPasswordFormData } from "@/schemas";
+import { authClient } from "@nimbus/auth/auth-client";
 import { useMutation } from "@tanstack/react-query";
 import { clientEnv } from "@/lib/env/client-env";
-import { authClient } from "@/lib/auth-client";
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
