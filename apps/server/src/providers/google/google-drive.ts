@@ -1,4 +1,4 @@
-import { GoogleDrive } from "@/apps/server/lib/google-drive/src/index";
+import { GoogleDrive } from "@nimbus/server/lib/google-drive/src/index";
 import type { File } from "@/providers/google/types";
 // import type { FileListParams } from "lib/google-drive/src/resources";
 

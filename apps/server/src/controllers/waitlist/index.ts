@@ -1,8 +1,8 @@
-import { waitlist } from "@repo/db/schema";
+import { waitlist } from "@nimbus/db/schema";
 import { count } from "drizzle-orm";
 import type { Context } from "hono";
+import { db } from "@nimbus/db";
 import { nanoid } from "nanoid";
-import { db } from "@repo/db";
 
 export const joinWaitlist = async (c: Context) => {
 	try {

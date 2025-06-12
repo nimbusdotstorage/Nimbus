@@ -1,5 +1,5 @@
-import { auth } from "@/packages/auth/src/auth";
-import { db } from "@/packages/db/src";
+import { auth } from "@nimbus/auth/auth";
+import { db } from "@nimbus/db";
 
 export class AccountError extends Error {
 	constructor(
