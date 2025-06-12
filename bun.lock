@@ -55,6 +55,7 @@
       "name": "@nimbus/web",
       "dependencies": {
         "@hookform/resolvers": "^5.0.1",
+        "@nimbus/auth": "workspace:*",
         "@nimbus/db": "workspace:*",
         "@number-flow/react": "^0.5.9",
         "@radix-ui/react-avatar": "^1.1.10",
