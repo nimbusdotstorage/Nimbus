@@ -1,7 +1,7 @@
 import { waitlist } from "@nimbus/db/schema";
 import { NextResponse } from "next/server";
 import { count } from "drizzle-orm";
-import { db } from "@nimbus/db";
+import { db } from "../../temp_db";
 
 export async function GET() {
 	try {

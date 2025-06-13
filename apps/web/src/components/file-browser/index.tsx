@@ -6,19 +6,14 @@ import { FilePreview } from "@/components/file-browser/file-preview";
 import { FileTabs } from "@/components/file-browser/file-tabs";
 import { createRequest } from "@/hooks/createRequest";
 import { useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { useRequest } from "@/hooks/useRequest";
 import { Loader } from "@/components/loader";
 import type { FileItem } from "@/lib/types";
-import { Grid, List } from "lucide-react";
-import { useState } from "react";
 
 export function FileBrowser() {
 	const searchParams = useSearchParams();
 	const type = searchParams.get("type");
 	const id = searchParams.get("id");
-
-	const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
 	const fetchFiles = createRequest({
 		path: "/files",
@@ -34,25 +29,6 @@ export function FileBrowser() {
 		<div className={`flex flex-1 flex-col space-y-4 ${id ? "blur-sm transition-all" : ""}`}>
 			<div className="flex items-center justify-between">
 				<FileTabs type={type} />
-
-				<div className="flex items-center gap-2">
-					<Button
-						variant={viewMode === "grid" ? "default" : "outline"}
-						size="icon"
-						className="cursor-pointer"
-						onClick={() => setViewMode("grid")}
-					>
-						<Grid className="h-4 w-4" />
-					</Button>
-					<Button
-						variant={viewMode === "list" ? "default" : "outline"}
-						size="icon"
-						className="cursor-pointer"
-						onClick={() => setViewMode("list")}
-					>
-						<List className="h-4 w-4" />
-					</Button>
-				</div>
 			</div>
 
 			{isLoading ? (
@@ -60,7 +36,7 @@ export function FileBrowser() {
 			) : error ? (
 				<ErrorMessageWithRetry error={error} retryFn={refetch} />
 			) : (
-				data && <FileBrowserData viewMode={viewMode} data={data} />
+				data && <FileBrowserData data={data} />
 			)}
 
 			<FilePreview />

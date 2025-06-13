@@ -1,7 +1,7 @@
 import { rateLimitAttempts, waitlist } from "@nimbus/db/schema";
 import { NextResponse, NextRequest } from "next/server";
 import { eq, sql } from "drizzle-orm";
-import { db } from "@nimbus/db";
+import { db } from "../../temp_db";
 import { nanoid } from "nanoid";
 import { z } from "zod";
 

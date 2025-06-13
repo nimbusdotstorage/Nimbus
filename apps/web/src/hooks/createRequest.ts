@@ -37,6 +37,6 @@ export function createRequest({ path, pathParams = {}, queryParams = {} }: Creat
 		// Construct the full URL
 		const fullUrl = `${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api${currentPath}${query}`;
 
-		return fetch(fullUrl, { signal });
+		return fetch(fullUrl, { signal, credentials: "include" });
 	};
 }

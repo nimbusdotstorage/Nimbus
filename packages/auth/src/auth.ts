@@ -2,14 +2,14 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { extractTokenFromUrl } from "@/utils/extract-token";
 import { sendMail } from "@/utils/send-mail";
 import { betterAuth } from "better-auth";
-import Schema from "@nimbus/db/schema";
+import schema from "@nimbus/db/schema";
 import { db } from "@nimbus/db";
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
 		provider: "pg",
 		schema: {
-			...Schema,
+			...schema,
 		},
 	}),
 
@@ -42,6 +42,8 @@ export const auth = betterAuth({
 				"https://www.googleapis.com/auth/userinfo.profile",
 				"https://www.googleapis.com/auth/userinfo.email",
 			],
+			accessType: "offline",
+			prompt: "consent",
 		},
 	},
 });
