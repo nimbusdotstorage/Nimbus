@@ -31,7 +31,7 @@ const baseSignUpSchema = z.object({
 	email: z.string().email("Please enter a valid email address"),
 	password: createPasswordSchema(),
 	confirmPassword: z.string(),
-	image: z.instanceof(File).optional(),
+	image: typeof window === "undefined" ? z.any().optional() : z.instanceof(File).optional(),
 });
 
 export const signUpSchema = createConfirmPasswordSchema()(baseSignUpSchema);
