@@ -5,9 +5,9 @@ import { Hono } from "hono";
 
 const authRouter = new Hono();
 
-authRouter.post("/check-email", zValidator("json", emailSchema), checkEmail);
+authRouter.post("/check-email", zValidator("json", emailSchema), ...checkEmail);
 
 // Better Auth handler for all other auth routes
-authRouter.on(["POST", "GET"], "/*", handleAuth);
+authRouter.on(["POST", "GET"], "/*", ...handleAuth);
 
 export default authRouter;
