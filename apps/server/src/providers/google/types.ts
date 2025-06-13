@@ -145,34 +145,10 @@ export interface FileListParams {
  * a `fileId`. Use the `files.list` method to retrieve the ID for a file.
  */
 export interface File {
-	/**
-	 * The ID of the file.
-	 */
 	id?: string;
 
-	/**
-	 * A collection of arbitrary key-value pairs which are private to the requesting
-	 * app. Entries with null values are cleared in update and copy requests. These
-	 * properties can only be retrieved using an authenticated request. An
-	 * authenticated request uses an access token obtained with a OAuth 2 client ID.
-	 * You cannot use an API key to retrieve private properties.
-	 */
-	appProperties?: Record<string, string>;
-
-	/**
-	 * Whether the options to copy, print, or download this file, should be disabled
-	 * for readers and commenters.
-	 */
-	copyRequiresWriterPermission?: boolean;
-
-	/**
-	 * The time at which the file was created (RFC 3339 date-time).
-	 */
 	createdTime?: string;
 
-	/**
-	 * A short description of the file.
-	 */
 	description?: string;
 
 	/**
@@ -447,7 +423,7 @@ export type FileListResponse = {
 	files: File[];
 };
 
-export type DeleteFileResponse = {
+export type FileOperationResponse = {
 	success: boolean;
 	message?: string;
 };

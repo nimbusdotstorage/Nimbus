@@ -1,6 +1,7 @@
-import type { File, DeleteFileResponse } from "@/providers/google/types";
+import { createFileSchema, deleteFileSchema, getFileByIdSchema, updateFileSchema } from "@/validators";
+import type { File, FileOperationResponse } from "@/providers/google/types";
 import { GoogleDriveProvider } from "@/providers/google/google-drive";
-import { getAccount } from "lib/utils/accounts";
+import { getAccount } from "@/lib/utils/accounts";
 import type { Context } from "hono";
 
 // Cache control constants, replace with Valkey/Upstash/Redis?
@@ -12,16 +13,17 @@ const CACHE_HEADER = `public, max-age=${CACHE_MAX_AGE}, s-maxage=${CACHE_MAX_AGE
 export const getFiles = async (c: Context) => {
 	const user = c.get("user");
 	if (!user) {
-		return c.json({ error: "User not authenticated" }, 401);
+		return c.json<FileOperationResponse>({ success: false, message: "User not authenticated" }, 401);
 	}
+
 	const account = await getAccount(user, c.req.raw.headers);
 	if (!account) {
-		return c.json({ error: "Unauthorized access" }, 401);
+		return c.json<FileOperationResponse>({ success: false, message: "Unauthorized access" }, 401);
 	}
 
 	const files = await new GoogleDriveProvider(account.accessToken!).listFiles();
 	if (!files) {
-		return c.json({ error: "Files not found" }, 404);
+		return c.json<FileOperationResponse>({ success: false, message: "Files not found" }, 404);
 	}
 
 	// Set cache headers for the list of files
@@ -30,26 +32,36 @@ export const getFiles = async (c: Context) => {
 	return c.json(files as File[]);
 };
 
-// Get a specific file from Google Drive via ID in url params
+// Get a specific file from Google Drive
 export const getFileById = async (c: Context) => {
 	const user = c.get("user");
 	if (!user) {
-		return c.json({ error: "User not authenticated" }, 401);
+		return c.json<FileOperationResponse>({ success: false, message: "User not authenticated" }, 401);
 	}
 
 	const account = await getAccount(user, c.req.raw.headers);
 	if (!account) {
-		return c.json({ error: "Unauthorized access" }, 401);
+		return c.json<FileOperationResponse>({ success: false, message: "Unauthorized access" }, 401);
 	}
 
-	const fileId = c.req.param("id");
-	if (!fileId) {
-		return c.json({ error: "File ID not provided" }, 400);
+	// Validation
+	const { error, data } = getFileByIdSchema.safeParse(c.req.param());
+	if (error) {
+		return c.json<FileOperationResponse>({ success: false, message: error.errors[0]?.message }, 400);
 	}
+
+	const fileId = data.id;
+	if (!fileId) {
+		return c.json<FileOperationResponse>({ success: false, message: "File ID not provided" }, 400);
+	}
+
 	const file = await new GoogleDriveProvider(account.accessToken!).getFileById(fileId);
 	if (!file) {
-		return c.json({ error: "File not found" }, 404);
+		return c.json<FileOperationResponse>({ success: false, message: "File not found" }, 404);
 	}
+
+	c.header("Cache-Control", CACHE_HEADER);
+	c.header("Vary", "Authorization"); // Vary cache by Authorization header
 	return c.json<File>(file);
 };
 
@@ -57,20 +69,86 @@ export const getFileById = async (c: Context) => {
 export const deleteFile = async (c: Context) => {
 	const user = c.get("user");
 	if (!user) {
-		return c.json<DeleteFileResponse>({ success: false, message: "User not authenticated" }, 401);
+		return c.json<FileOperationResponse>({ success: false, message: "User not authenticated" }, 401);
 	}
 
 	const account = await getAccount(user, c.req.raw.headers);
 	if (!account) {
-		return c.json<DeleteFileResponse>({ success: false, message: "Unauthorized access" }, 401);
+		return c.json<FileOperationResponse>({ success: false, message: "Unauthorized access" }, 401);
 	}
 
-	const fileId = c.req.param("id");
+	const { error, data } = deleteFileSchema.safeParse(c.req.query());
+	if (error) {
+		return c.json<FileOperationResponse>({ success: false, message: error.errors[0]?.message }, 400);
+	}
+
+	const fileId = data.id;
 	const success = await new GoogleDriveProvider(account.accessToken!).deleteFile(fileId);
 
 	if (!success) {
-		return c.json<DeleteFileResponse>({ success: false, message: "Failed to delete file" }, 500);
+		return c.json<FileOperationResponse>({ success: false, message: "Failed to delete file" }, 500);
 	}
 
-	return c.json<DeleteFileResponse>({ success: true, message: "File deleted successfully" });
+	return c.json<FileOperationResponse>({ success: true, message: "File deleted successfully" });
+};
+
+// Update a file from Google Drive
+export const updateFile = async (c: Context) => {
+	const user = c.get("user");
+	if (!user) {
+		return c.json<FileOperationResponse>({ success: false, message: "User not authenticated" }, 401);
+	}
+
+	const account = await getAccount(user, c.req.raw.headers);
+	if (!account) {
+		return c.json<FileOperationResponse>({ success: false, message: "Unauthorized access" }, 401);
+	}
+
+	// Validation
+	const { error, data } = updateFileSchema.safeParse(c.req.query());
+	if (error) {
+		return c.json<FileOperationResponse>({ success: false, message: error.errors[0]?.message }, 400);
+	}
+
+	const fileId = data.id;
+	const name = data.name;
+
+	const success = await new GoogleDriveProvider(account.accessToken!).updateFile(fileId, name);
+
+	if (!success) {
+		return c.json<FileOperationResponse>({ success: false, message: "Failed to update file" }, 500);
+	}
+
+	return c.json<FileOperationResponse>({ success: true, message: "File updated successfully" });
+};
+
+// Create a file/folder in Google Drive
+export const createFile = async (c: Context) => {
+	// TODO: find an implementation that cuts out the repetitive code
+	const user = c.get("user");
+	if (!user) {
+		return c.json<FileOperationResponse>({ success: false, message: "User not authenticated" }, 401);
+	}
+
+	const account = await getAccount(user, c.req.raw.headers);
+	if (!account) {
+		return c.json<FileOperationResponse>({ success: false, message: "Unauthorized access" }, 401);
+	}
+
+	//Validation
+	const { error, data } = createFileSchema.safeParse(c.req.query());
+	if (error) {
+		return c.json<FileOperationResponse>({ success: false, message: error.errors[0]?.message }, 400);
+	}
+
+	const name = data.name;
+	const mimeType = data.mimeType;
+	const parents = data.parents ? [data.parents] : undefined;
+	const success = await new GoogleDriveProvider(account.accessToken!).createFile(name, mimeType, parents);
+
+	if (!success) {
+		return c.json<FileOperationResponse>({ success: false, message: "Failed to create file" }, 500);
+	}
+
+	return c.json<FileOperationResponse>({ success: true, message: "File created successfully" });
 };

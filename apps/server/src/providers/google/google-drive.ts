@@ -11,23 +11,13 @@ export class GoogleDriveProvider {
 
 	// Create file method
 	// Can also be used to create a folder
+	async createFile(name: string, mimeType: string, parents?: string[] | undefined): Promise<File | null> {
+		const response = await this.drive.files.create({
+			name,
+			parents,
+			mimeType,
+		});
 
-	/**
-	 * List files in the user's Google Drive.
-	 */
-	async listFiles(): Promise<File[]> {
-		const response = await this.drive.files.list();
-
-		if (!response.files) {
-			return [];
-		}
-
-		// Normalize and type the result
-		return response.files as File[];
-	}
-
-	async getFileById(id: string): Promise<File | null> {
-		const response = await this.drive.files.retrieve(id, {});
 		if (!response) {
 			return null;
 		}
@@ -35,9 +25,52 @@ export class GoogleDriveProvider {
 		return response as File;
 	}
 
-	// Update file method
-	// Needs to be used to update data like name
-	// Folders are also files in Google Drive
+	/**
+	 * List files in the user's Google Drive.
+	 * @returns An array of files of type File
+	 */
+	async listFiles(): Promise<File[]> {
+		const response = await this.drive.files.list({
+			fields: "files(id, name, mimeType, size, createdTime, modifiedTime, trashed, parents)",
+		});
+
+		if (!response.files) {
+			return [];
+		}
+
+		return response.files as File[];
+	}
+
+	async getFileById(id: string): Promise<File | null> {
+		const response = await this.drive.files.retrieve(id, {
+			fields: "id, name, mimeType, size, createdTime, modifiedTime, trashed, parents",
+		});
+
+		if (!response) {
+			return null;
+		}
+
+		return response as File;
+	}
+
+	/**
+	 * Update a file from Google Drive
+	 * Folders are also files in Google Drive
+	 * @param fileId The ID of the file to update
+	 * @param name The new name for the file
+	 * @returns The updated file of type File
+	 */
+	async updateFile(fileId: string, name: string): Promise<File | null> {
+		const response = await this.drive.files.update(fileId, {
+			name,
+		});
+
+		if (!response) {
+			return null;
+		}
+
+		return response as File;
+	}
 
 	/**
 	 * Delete a file from Google Drive
@@ -50,8 +83,7 @@ export class GoogleDriveProvider {
 				supportsAllDrives: false,
 			});
 			return true;
-		} catch (error) {
-			console.error("Error deleting file from Google Drive:", error);
+		} catch {
 			return false;
 		}
 	}

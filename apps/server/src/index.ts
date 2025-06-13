@@ -1,4 +1,4 @@
-import { auth } from "@repo/auth/auth";
+import { auth } from "@nimbus/auth/auth";
 import { logger } from "hono/logger";
 import { env } from "@/config/env";
 import { cors } from "hono/cors";
