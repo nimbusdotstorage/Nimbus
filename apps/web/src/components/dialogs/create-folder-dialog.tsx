@@ -16,18 +16,24 @@ import type React from "react";
 interface CreateFolderDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	onCreateFolder: (folderName: string) => void;
+	onCreateFolder: (folderName: string, parentId?: string | undefined) => void;
 }
 
 export function CreateFolderDialog({ open, onOpenChange, onCreateFolder }: CreateFolderDialogProps) {
 	const [folderName, setFolderName] = useState("");
 
-	const handleCreateFolder = (event: FormEvent) => {
+	// We will get the parentId from the url. When a folder is clicked, it will enter the folder and display the files in that folder.
+	const parentId = undefined;
+
+	const handleCreateFolder = async (event: FormEvent) => {
 		event.preventDefault();
 		if (!folderName.trim()) return;
 
-		onCreateFolder(folderName.trim());
-		toast.success("Folder created successfully");
+		try {
+			await onCreateFolder(folderName.trim(), parentId);
+		} catch {
+			toast.error("Failed to create folder");
+		}
 		onOpenChange(false);
 		setFolderName("");
 	};
