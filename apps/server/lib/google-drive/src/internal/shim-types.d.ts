@@ -1,3 +1,4 @@
+/* eslint-disable no-redeclare */
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 /**
@@ -13,15 +14,15 @@
  * presence of `NodeJS.ReadableStream` will fail.
  */
 declare namespace NodeJS {
-  interface ReadableStream {}
+	interface ReadableStream {}
 }
 
 type HasProperties<T> = keyof T extends never ? false : true;
 
 // @ts-ignore
 type _ReadableStream<R = any> =
-  // @ts-ignore
-  HasProperties<NodeJS.ReadableStream> extends true ? NodeJS.ReadableStream<R> : ReadableStream<R>;
+	// @ts-ignore
+	HasProperties<NodeJS.ReadableStream> extends true ? NodeJS.ReadableStream<R> : ReadableStream<R>;
 
 // @ts-ignore
 declare const _ReadableStream: unknown extends typeof ReadableStream ? never : typeof ReadableStream;
