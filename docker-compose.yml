@@ -17,6 +17,31 @@ services:
       timeout: 5s
       retries: 5
 
+  valkey:
+    image: valkey/valkey:8
+    container_name: nimbus-valkey
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    environment:
+      - VALKEY_DB=${VALKEY_DB:-valkey}
+      - VALKEY_USERNAME=${VALKEY_USERNAME:-valkey}
+      - VALKEY_PASSWORD=${VALKEY_PASSWORD:-valkey}
+      - VALKEY_HOST=${VALKEY_HOST:-localhost}
+      - VALKEY_PORT=${VALKEY_PORT:-6379}
+    volumes:
+      - valkey-data:/var/lib/valkey/data
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    depends_on:
+      - postgres
+
 volumes:
   postgres-data:
     name: nimbus-postgres-data
+  valkey-data:
+    name: nimbus-valkey-data
