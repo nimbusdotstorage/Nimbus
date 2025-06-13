@@ -1,10 +1,12 @@
+import { Factory } from "hono/factory";
 import type { Context } from "hono";
 import { env } from "@/config/env";
 import { Resend } from "resend";
 
 const resend = new Resend(env.RESEND_API_KEY);
+const factory = new Factory();
 
-export const sendMail = async (c: Context) => {
+export const sendMail = factory.createHandlers(async (c: Context) => {
 	try {
 		const { to, subject, text } = await c.req.json();
 
@@ -41,4 +43,4 @@ export const sendMail = async (c: Context) => {
 			500
 		);
 	}
-};
+});

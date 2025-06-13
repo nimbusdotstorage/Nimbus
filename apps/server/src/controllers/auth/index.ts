@@ -1,10 +1,13 @@
 import { user } from "@nimbus/db/schema";
 import { auth } from "@nimbus/auth/auth";
+import { Factory } from "hono/factory";
 import type { Context } from "hono";
 import { eq } from "drizzle-orm";
 import { db } from "@nimbus/db";
 
-export const checkEmail = async (c: Context) => {
+const factory = new Factory();
+
+export const checkEmail = factory.createHandlers(async (c: Context) => {
 	try {
 		const { email } = await c.req.json();
 
@@ -19,13 +22,13 @@ export const checkEmail = async (c: Context) => {
 		console.error("Error checking email:", error);
 		return c.json({ error: "Internal server error" }, 500);
 	}
-};
+});
 
-export const handleAuth = async (c: Context) => {
+export const handleAuth = factory.createHandlers(async (c: Context) => {
 	try {
 		return await auth.handler(c.req.raw);
 	} catch (error) {
 		console.error("Auth handler error:", error);
 		return c.json({ error: "Authentication failed" }, 500);
 	}
-};
+});

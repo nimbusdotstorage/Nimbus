@@ -1,10 +1,13 @@
 import { waitlist } from "@nimbus/db/schema";
+import { Factory } from "hono/factory";
 import { count } from "drizzle-orm";
 import type { Context } from "hono";
 import { db } from "@nimbus/db";
 import { nanoid } from "nanoid";
 
-export const joinWaitlist = async (c: Context) => {
+const factory = new Factory();
+
+export const joinWaitlist = factory.createHandlers(async (c: Context) => {
 	try {
 		const { email } = await c.req.json();
 
@@ -28,9 +31,9 @@ export const joinWaitlist = async (c: Context) => {
 			500
 		);
 	}
-};
+});
 
-export const getWaitlistCount = async (c: Context) => {
+export const getWaitlistCount = factory.createHandlers(async (c: Context) => {
 	try {
 		const result: { count: number }[] = await db.select({ count: count() }).from(waitlist);
 		return c.json({ count: result[0]?.count });
@@ -44,4 +47,4 @@ export const getWaitlistCount = async (c: Context) => {
 			500
 		);
 	}
-};
+});
