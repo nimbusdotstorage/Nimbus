@@ -8,49 +8,33 @@ const publicRoutes = ["/", "/signin", "/signup", "/forgot-password", "/reset-pas
 export async function middleware(request: NextRequest) {
 	const { pathname } = request.nextUrl;
 
-	const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route));
+	const isProtected = protectedRoutes.some(route => pathname.startsWith(route));
+	const isPublic = publicRoutes.includes(pathname);
 
-	if (isProtectedRoute) {
-		try {
-			const sessionCookie = await getSessionCookie(request.headers);
+	try {
+		const sessionCookie = getSessionCookie(request.headers);
 
-			if (!sessionCookie) {
-				const signInUrl = new URL("/signin", request.url);
-				signInUrl.searchParams.set("redirect", pathname);
-				return NextResponse.redirect(signInUrl);
-			}
-
-			return NextResponse.next();
-		} catch (error) {
-			console.error("Auth middleware error:", error);
+		if (isProtected && !sessionCookie) {
 			const signInUrl = new URL("/signin", request.url);
 			signInUrl.searchParams.set("redirect", pathname);
 			return NextResponse.redirect(signInUrl);
 		}
-	}
 
-	const isPublicRoute = publicRoutes.some(route => pathname === route || pathname.startsWith(route));
-
-	// If user is authenticated and trying to access auth pages, redirect to app
-	if (isPublicRoute && pathname !== "/") {
-		if (
-			pathname === "/signin" ||
-			pathname === "/signup" ||
-			pathname === "/forgot-password" ||
-			pathname === "/reset-password"
-		) {
-			try {
-				const sessionCookie = await getSessionCookie(request.headers);
-
-				if (sessionCookie) {
-					return NextResponse.redirect(new URL("/app", request.url));
-				}
-			} catch (error) {
-				console.error("Auth check error:", error);
-				return NextResponse.redirect(new URL("/signin", request.url));
-			}
+		if (isPublic && sessionCookie && pathname !== "/") {
+			return NextResponse.redirect(new URL("/app", request.url));
+		}
+	} catch (error) {
+		console.error("Auth middleware error:", error);
+		if (isProtected) {
+			const signInUrl = new URL("/signin", request.url);
+			signInUrl.searchParams.set("redirect", pathname);
+			return NextResponse.redirect(signInUrl);
+		}
+		if (isPublic && pathname !== "/") {
+			return NextResponse.redirect(new URL("/signin", request.url));
 		}
 	}
+
 	return NextResponse.next();
 }
 
