@@ -1,1 +1,1 @@
-export * from './resources/index';
+export * from "./resources/index";

@@ -1,39 +1,34 @@
 /* eslint-disable no-unused-vars */
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import type { RequestInit, RequestInfo, BodyInit } from "./internal/builtin-types";
 import type { HTTPMethod, PromiseOrValue, MergedRequestInit, FinalizedRequestInit } from "./internal/types";
-import { uuid4 } from "./internal/utils/uuid";
 import { validatePositiveInteger, isAbsoluteURL, safeJSON } from "./internal/utils/values";
-import { sleep } from "./internal/utils/sleep";
+import type { RequestInit, RequestInfo, BodyInit } from "./internal/builtin-types";
 import { type Logger, type LogLevel, parseLogLevel } from "./internal/utils/log";
+import { sleep } from "./internal/utils/sleep";
+import { uuid4 } from "./internal/utils/uuid";
 export type { Logger, LogLevel } from "./internal/utils/log";
-import { castToError, isAbortError } from "./internal/errors";
-import type { APIResponseProps } from "./internal/parse";
-import { getPlatformHeaders } from "./internal/detect-platform";
-import * as Shims from "./internal/shims";
-import * as Opts from "./internal/request-options";
-import * as qs from "./internal/qs";
-import { VERSION } from "./version";
-import * as Errors from "./core/error";
-import * as Uploads from "./core/uploads";
-import * as API from "./resources/index";
-import { APIPromise } from "./core/api-promise";
-import { type Fetch } from "./internal/builtin-types";
-import { type HeadersLike, type NullableHeaders, buildHeaders } from "./internal/headers";
-import { type FinalRequestOptions, type RequestOptions } from "./internal/request-options";
-import { About, type AboutRetrieveParams, type AboutRetrieveResponse, type User } from "./resources/about";
-import { type App, type AppListParams, type AppListResponse, type AppRetrieveParams, Apps } from "./resources/apps";
 import {
-	type ChangeGetStartPageTokenParams,
-	type ChangeGetStartPageTokenResponse,
-	type ChangeListParams,
-	type ChangeListResponse,
-	type ChangeSubscribeParams,
-	Changes,
-	type Channel,
-} from "./resources/changes";
-import { type ChannelStopWatchingParams, Channels } from "./resources/channels";
+	type File,
+	type FileCopyParams,
+	type FileCreateParams,
+	type FileDeleteParams,
+	type FileDeleteTrashedParams,
+	type FileExportParams,
+	type FileGenerateIDsParams,
+	type FileGenerateIDsResponse,
+	type FileListLabelsParams,
+	type FileListLabelsResponse,
+	type FileListParams,
+	type FileListResponse,
+	type FileModifyLabelsParams,
+	type FileModifyLabelsResponse,
+	type FileRetrieveParams,
+	type FileUpdateParams,
+	type FileWatchParams,
+	Files,
+	type Label,
+} from "./resources/files/files";
 import {
 	type Drive,
 	type DriveCreateParams,
@@ -56,30 +51,35 @@ import {
 	type TeamdriveUpdateParams,
 	Teamdrives,
 } from "./resources/teamdrives";
-import { readEnv } from "./internal/utils/env";
-import { formatRequestDetails, loggerFor } from "./internal/utils/log";
-import { isEmptyObj } from "./internal/utils/values";
 import {
-	type File,
-	type FileCopyParams,
-	type FileCreateParams,
-	type FileDeleteParams,
-	type FileDeleteTrashedParams,
-	type FileExportParams,
-	type FileGenerateIDsParams,
-	type FileGenerateIDsResponse,
-	type FileListLabelsParams,
-	type FileListLabelsResponse,
-	type FileListParams,
-	type FileListResponse,
-	type FileModifyLabelsParams,
-	type FileModifyLabelsResponse,
-	type FileRetrieveParams,
-	type FileUpdateParams,
-	type FileWatchParams,
-	Files,
-	type Label,
-} from "./resources/files/files";
+	type ChangeGetStartPageTokenParams,
+	type ChangeGetStartPageTokenResponse,
+	type ChangeListParams,
+	type ChangeListResponse,
+	type ChangeSubscribeParams,
+	Changes,
+	type Channel,
+} from "./resources/changes";
+import { type App, type AppListParams, type AppListResponse, type AppRetrieveParams, Apps } from "./resources/apps";
+import { About, type AboutRetrieveParams, type AboutRetrieveResponse, type User } from "./resources/about";
+import { type FinalRequestOptions, type RequestOptions } from "./internal/request-options";
+import { type HeadersLike, type NullableHeaders, buildHeaders } from "./internal/headers";
+import { type ChannelStopWatchingParams, Channels } from "./resources/channels";
+import { formatRequestDetails, loggerFor } from "./internal/utils/log";
+import { getPlatformHeaders } from "./internal/detect-platform";
+import { castToError, isAbortError } from "./internal/errors";
+import type { APIResponseProps } from "./internal/parse";
+import { type Fetch } from "./internal/builtin-types";
+import { isEmptyObj } from "./internal/utils/values";
+import * as Opts from "./internal/request-options";
+import { APIPromise } from "./core/api-promise";
+import { readEnv } from "./internal/utils/env";
+import * as Shims from "./internal/shims";
+import * as Uploads from "./core/uploads";
+import * as API from "./resources/index";
+import * as Errors from "./core/error";
+import * as qs from "./internal/qs";
+import { VERSION } from "./version";
 
 export interface ClientOptions {
 	/**
