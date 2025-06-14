@@ -71,7 +71,6 @@ const fileSources = [
 	},
 ];
 
-// TODO: Query data from API and pass to children
 export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
 	const [selectedSource, setSelectedSource] = useState(fileSources[0] as Source);
 

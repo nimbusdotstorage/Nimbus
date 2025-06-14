@@ -61,7 +61,6 @@ waitlistRouter.post("/join", zValidator("json", emailSchema), async (c: Context)
 		}
 
 		const email = (await c.req.json()).email;
-		console.log(email);
 
 		const existing = await db
 			.select()
