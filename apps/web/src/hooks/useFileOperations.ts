@@ -4,14 +4,14 @@ import axios, { type AxiosError } from "axios";
 import { toast } from "sonner";
 
 interface DeleteFileParams {
-	fileId: string;
+	id: string;
 }
 
 export function useFileOperations() {
 	const deleteFileMutation = useMutation({
-		mutationFn: async ({ fileId }: DeleteFileParams) => {
+		mutationFn: async ({ id }: DeleteFileParams) => {
 			const response = await axios.delete(`${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api/files`, {
-				params: { id: fileId },
+				params: { id },
 				headers: {
 					"Content-Type": "application/json",
 				},
@@ -30,8 +30,8 @@ export function useFileOperations() {
 		},
 	});
 
-	const handleDeleteFile = (fileId: string) => {
-		deleteFileMutation.mutate({ fileId });
+	const handleDeleteFile = (id: string) => {
+		deleteFileMutation.mutate({ id });
 	};
 
 	return {

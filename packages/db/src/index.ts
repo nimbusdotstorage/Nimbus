@@ -1,7 +1,9 @@
-import { drizzle } from "drizzle-orm/postgres-js";
+import { drizzle } from "drizzle-orm/node-postgres";
 import schema from "@nimbus/db/schema";
-import postgres from "postgres";
+import { Pool } from "pg";
 
-export const client = postgres(process.env.DATABASE_URL!, { prepare: false });
+const pool = new Pool({
+	connectionString: process.env.DATABASE_URL!,
+});
 
-export const db = drizzle(client, { schema });
+export const db = drizzle({ client: pool, schema });
