@@ -1,4 +1,7 @@
+import { Factory } from "hono/factory";
 import type { Context } from "hono";
+
+const factory = new Factory();
 
 const sampleData = [
 	{ id: "1", name: "Documents", type: "folder", modified: "May 15, 2024" },
@@ -9,13 +12,13 @@ const sampleData = [
 	{ id: "6", name: "Videos", type: "folder", modified: "May 3, 2024" },
 ];
 
-export const getFiles = (c: Context) => {
+export const getFiles = factory.createHandlers(async (c: Context) => {
 	const type = c.req.query("type")?.toLowerCase() || "";
 	const filteredData = sampleData.filter(item => !type || item.type.toLowerCase().includes(type));
 	return c.json(filteredData);
-};
+});
 
-export const getFileById = (c: Context) => {
+export const getFileById = factory.createHandlers(async (c: Context) => {
 	const { id } = c.req.param();
 	const file = sampleData.find(item => item.id === id);
 
@@ -24,4 +27,4 @@ export const getFileById = (c: Context) => {
 	}
 
 	return c.json(file);
-};
+});
