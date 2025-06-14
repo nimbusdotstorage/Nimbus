@@ -123,16 +123,19 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 	const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 	const [selectedFile, setSelectedFile] = useState<string | null>(null);
 	const [extractedKeywords, setExtractedKeywords] = useState<string[]>([]);
+	const [hasSearched, setHasSearched] = useState(false);
 
-	const handleSearch = () => {
-		if (!query.trim()) {
+	const handleSearch = (searchQuery?: string) => {
+		const queryToSearch = searchQuery || query;
+		if (!queryToSearch.trim()) {
 			setSearchResults([]);
 			setExtractedKeywords([]);
+			setHasSearched(false);
 			return;
 		}
 
 		// Simple keyword extraction
-		const keywords = query
+		const keywords = queryToSearch
 			.toLowerCase()
 			.split(/\s+/)
 			.filter(word => word.length > 2);
@@ -146,12 +149,18 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 		});
 
 		setSearchResults(results);
+		setHasSearched(true);
 	};
 
 	const handleKeyPress = (e: KeyboardEvent) => {
 		if (e.key === "Enter") {
 			handleSearch();
 		}
+	};
+
+	const handleSuggestionClick = (suggestionQuery: string) => {
+		setQuery(suggestionQuery);
+		handleSearch(suggestionQuery);
 	};
 
 	const toggleFileSelection = (fileId: string) => {
@@ -194,6 +203,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 			setSearchResults([]);
 			setSelectedFile(null);
 			setExtractedKeywords([]);
+			setHasSearched(false);
 		}
 		onOpenChange(newOpen);
 	};
@@ -229,7 +239,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 								autoFocus
 							/>
 						</div>
-						<Button onClick={handleSearch} disabled={!query.trim()}>
+						<Button onClick={() => handleSearch()} disabled={!query.trim()}>
 							<Search className="mr-2 h-4 w-4" />
 							Search
 						</Button>
@@ -237,36 +247,15 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 
 					{/* Quick Search Examples */}
 					<div className="flex flex-wrap gap-2">
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => {
-								setQuery("spreadsheet billing");
-								handleSearch();
-							}}
-						>
+						<Button variant="outline" size="sm" onClick={() => handleSuggestionClick("spreadsheet billing")}>
 							<FileText className="mr-1 h-3 w-3" />
 							Billing spreadsheets
 						</Button>
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => {
-								setQuery("financial report");
-								handleSearch();
-							}}
-						>
+						<Button variant="outline" size="sm" onClick={() => handleSuggestionClick("financial report")}>
 							<FileText className="mr-1 h-3 w-3" />
 							Financial reports
 						</Button>
-						<Button
-							variant="outline"
-							size="sm"
-							onClick={() => {
-								setQuery("presentation client");
-								handleSearch();
-							}}
-						>
+						<Button variant="outline" size="sm" onClick={() => handleSuggestionClick("presentation client")}>
 							<FileText className="mr-1 h-3 w-3" />
 							Client presentations
 						</Button>
@@ -358,7 +347,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 								</div>
 							</div>
 						</div>
-					) : query && query.trim() ? (
+					) : query && query.trim() && hasSearched ? (
 						<div className="flex flex-1 items-center justify-center py-12 text-center">
 							<div className="text-muted-foreground">
 								<Search className="mx-auto mb-4 h-12 w-12 opacity-50" />
