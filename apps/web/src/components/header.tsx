@@ -1,9 +1,11 @@
 import { MessageCircleQuestion } from "@/components/animate-ui/icons/message-circle-question";
 import { Settings } from "@/components/animate-ui/icons/settings";
 import { AnimateIcon } from "@/components/animate-ui/icons/icon";
+import { SearchDialog } from "@/components/search/search-dialog";
 import { LogOut } from "@/components/animate-ui/icons/log-out";
 import { Bell } from "@/components/animate-ui/icons/bell";
 import { Search } from "lucide-react";
+import { useState } from "react";
 
 import {
 	DropdownMenu,
@@ -36,6 +38,7 @@ const getInitials = (name?: string | null) => {
 export function Header() {
 	const { data: session, isPending } = authClient.useSession();
 	const { signOut, isLoading } = useSignOut();
+	const [isSearchOpen, setIsSearchOpen] = useState(false);
 
 	const handleSignOut = async () => {
 		await signOut();
@@ -50,9 +53,17 @@ export function Header() {
 		<header className="bg-background border-b">
 			<div className="flex h-16 items-center justify-between gap-4 px-4">
 				<SidebarTrigger className="size-9 cursor-pointer" />
-				<div className="relative max-w-xl flex-1">
-					<Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
-					<Input type="search" placeholder="Search in Drive" className="bg-muted/50 w-full pl-8" />
+				{/* Search section with flexbox - removed duplicate right icon */}
+				<div className="flex max-w-xl flex-1 items-center">
+					<div className="relative flex w-full items-center">
+						<Search className="text-muted-foreground pointer-events-none absolute left-2.5 h-4 w-4" />
+						<Input
+							type="search"
+							placeholder="Search smarter with AI"
+							className="bg-muted/50 w-full pl-8"
+							onFocus={() => setIsSearchOpen(true)}
+						/>
+					</div>
 				</div>
 				<div className="flex items-center gap-2">
 					<ModeToggle />
@@ -109,6 +120,7 @@ export function Header() {
 					</DropdownMenu>
 				</div>
 			</div>
+			<SearchDialog open={isSearchOpen} onOpenChange={setIsSearchOpen} />
 		</header>
 	);
 }
