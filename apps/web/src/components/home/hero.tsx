@@ -6,11 +6,12 @@ import { TextLoop } from "@/components/ui/text-loop";
 import GoogleDriveIcon from "@/public/googledrive";
 import Header from "@/components/home/header";
 import OneDriveIcon from "@/public/onedrive";
+import { type Variants } from "motion/react";
 import DropboxIcon from "@/public/dropbox";
 import ICloudIcon from "@/public/icloud";
 import Image from "next/image";
 
-const transitionVariants = {
+const transitionVariants: { item: Variants } = {
 	item: {
 		hidden: {
 			opacity: 0,
