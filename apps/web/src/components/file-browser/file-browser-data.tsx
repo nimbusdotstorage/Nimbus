@@ -34,9 +34,7 @@ function FilesList({ data }: { data: FileItem[] }) {
 				<tbody>
 					{data.map(file => {
 						const params = new URLSearchParams(searchParams.toString());
-						params.append("id", file.id);
-
-						console.log(params.toString());
+						params.set("id", file.id);
 
 						return (
 							<tr key={file.id} className="hover:bg-accent/10 relative cursor-pointer border-t transition-colors">
