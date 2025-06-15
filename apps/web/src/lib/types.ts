@@ -1,6 +1,8 @@
 // TODO: Turn this into the typing file for the front end
 
-import type { ComponentType } from "react";
+import type { ChangeEvent, ComponentProps, ComponentType, ReactNode } from "react";
+import type { Button } from "@/components/ui/button";
+import type { Input } from "@/components/ui/input";
 
 export interface FileItem {
 	id: string;
@@ -17,12 +19,6 @@ export interface CreateFolderDialogProps {
 }
 
 export interface UploadFileDialogProps {
-	open: boolean;
-	onOpenChange: (open: boolean) => void;
-	onUpload: (files: FileList) => void;
-}
-
-export interface UploadFolderDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 	onUpload: (files: FileList) => void;
@@ -49,6 +45,13 @@ export interface DeleteFileParams {
 	id: string;
 }
 
+export interface AuthCardProps extends ComponentProps<"div"> {
+	title: string;
+	description: string;
+	navigationType: "signin" | "signup";
+	children: ReactNode;
+}
+
 export type Params = Record<string, string | number | null | undefined>;
 
 export type CreateRequestOptions = {
@@ -67,19 +70,23 @@ export type UseRequestReturn<ResponseBody> = {
 	data: ResponseBody | null;
 	error: Error | null;
 	isLoading: boolean;
-	refetch: () => void;
-};
-
-export type AxiosError = {
-	response?: {
-		data?: {
-			message?: string;
-		};
-	};
-	message: string;
+	refetch: () => Promise<void>;
 };
 
 export interface CreateFolderParams {
 	name: string;
 	parentId?: string;
+}
+
+export type SocialProvider = "google";
+export type AuthAction = "signin" | "signup";
+
+export interface SocialAuthButtonProps extends Omit<ComponentProps<typeof Button>, "children" | "variant" | "type"> {
+	provider: SocialProvider;
+	action: AuthAction;
+}
+
+export interface PasswordInputProps extends Omit<ComponentProps<typeof Input>, "type"> {
+	value?: string;
+	onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }

@@ -1,4 +1,4 @@
-import type { CreateRequestOptions } from "../lib/types";
+import type { CreateRequestOptions } from "@/lib/types";
 import { clientEnv } from "@/lib/env/client-env";
 
 /**

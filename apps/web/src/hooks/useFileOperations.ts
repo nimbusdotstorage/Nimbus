@@ -1,5 +1,5 @@
-import type { DeleteFileParams } from "../lib/types";
 import { useMutation } from "@tanstack/react-query";
+import type { DeleteFileParams } from "@/lib/types";
 import { clientEnv } from "@/lib/env/client-env";
 import axios, { type AxiosError } from "axios";
 import { toast } from "sonner";

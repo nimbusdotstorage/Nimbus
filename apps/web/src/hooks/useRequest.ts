@@ -1,4 +1,4 @@
-import type { UseRequestParams, UseRequestReturn } from "../lib/types";
+import type { UseRequestParams, UseRequestReturn } from "@/lib/types";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { parseError } from "@/utils/error";
 
