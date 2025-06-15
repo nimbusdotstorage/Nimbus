@@ -1,3 +1,4 @@
+import { rateLimiter } from "@/lib/rate-limiter";
 import { auth } from "@nimbus/auth/auth";
 import { logger } from "hono/logger";
 import { env } from "@/config/env";
@@ -40,6 +41,22 @@ app.use("*", async (c, next) => {
 	c.set("user", session.user);
 	c.set("session", session.session);
 	return next();
+});
+
+app.use("*", async (c, next) => {
+	try {
+		const key =
+			c.req.header("x-forwarded-for") ||
+			c.req.raw.headers.get("cf-connecting-ip") ||
+			c.req.raw.headers.get("x-real-ip") ||
+			c.req.raw.headers.get("host") ||
+			"unknown";
+		await rateLimiter.consume(key); // IP-based or user ID, etc.
+		return await next();
+	} catch (err) {
+		console.error(err);
+		return c.text("Too Many Requests", 429);
+	}
 });
 
 app.get("/kamehame", c => c.text("HAAAAAAAAAAAAAA"));
