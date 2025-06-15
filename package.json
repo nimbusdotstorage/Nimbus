@@ -27,7 +27,7 @@
 	"scripts": {
 		"dev:web": "bun --elide-lines 0 --filter @nimbus/web --env-file .env dev",
 		"dev:server": "bun --elide-lines 0 --filter @nimbus/server --env-file .env dev",
-		"dev": "concurrently --names \"WEB,SERVER\" --prefix-colors \"cyan,magenta\" --prefix \"[{name}]\" --kill-others-on-fail \"bun --filter @nimbus/web --env-file .env dev\" \"bun --filter @nimbus/server --env-file .env dev\"",
+		"dev": "concurrently --names \"WEB,SERVER\" --prefix-colors \"cyan,magenta\" --prefix \"[{name}]\" --kill-others-on-fail \"bun --env-file .env dev:web\" \"bun --env-file .env dev:server\"",
 		"dev:verbose": "bun --elide-lines 0 --filter \"*\" --env-file .env dev",
 		"db:up": "docker compose up -d",
 		"db:down": "docker compose down",
