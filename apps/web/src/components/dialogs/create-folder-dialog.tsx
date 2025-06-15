@@ -6,18 +6,13 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import type { CreateFolderDialogProps } from "@/lib/types";
 import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import type React from "react";
-
-interface CreateFolderDialogProps {
-	open: boolean;
-	onOpenChange: (open: boolean) => void;
-	onCreateFolder: (folderName: string, parentId?: string | undefined) => void;
-}
 
 export function CreateFolderDialog({ open, onOpenChange, onCreateFolder }: CreateFolderDialogProps) {
 	const [folderName, setFolderName] = useState("");

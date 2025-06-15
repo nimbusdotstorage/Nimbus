@@ -1,11 +1,8 @@
+import type { DeleteFileParams } from "../lib/types";
 import { useMutation } from "@tanstack/react-query";
 import { clientEnv } from "@/lib/env/client-env";
 import axios, { type AxiosError } from "axios";
 import { toast } from "sonner";
-
-interface DeleteFileParams {
-	id: string;
-}
 
 export function useFileOperations() {
 	const deleteFileMutation = useMutation({

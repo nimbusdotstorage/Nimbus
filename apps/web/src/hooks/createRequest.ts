@@ -1,12 +1,5 @@
+import type { CreateRequestOptions } from "../lib/types";
 import { clientEnv } from "@/lib/env/client-env";
-
-type Params = Record<string, string | number | null | undefined>;
-
-type CreateRequestOptions = {
-	path: string;
-	pathParams?: Params;
-	queryParams?: Params;
-};
 
 /**
  * Creates a request function that can be used to fetch data from an API.
