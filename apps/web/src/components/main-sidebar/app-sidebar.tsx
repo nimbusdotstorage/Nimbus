@@ -6,7 +6,6 @@ import { Sidebar, SidebarContent, SidebarHeader, SidebarRail } from "@/component
 import SidebarFolders from "@/components/main-sidebar/sidebar-folders";
 import StorageFooter from "@/components/main-sidebar/sidebar-footer";
 import { QuickAccess } from "@/components/main-sidebar/quick-access";
-import type { Source } from "@/components/main-sidebar/sources";
 import UploadButton from "@/components/main-sidebar/upload";
 import TagMenu from "@/components/main-sidebar/tag-menu";
 import Sources from "@/components/main-sidebar/sources";
@@ -14,6 +13,7 @@ import { HardDrive, Users, Server } from "lucide-react";
 import GoogleDriveIcon from "@/public/googledrive";
 import OneDriveIcon from "@/public/onedrive";
 import GoogleCloudIcon from "@/public/gcp";
+import type { Source } from "@/lib/types";
 import AzureIcon from "@/public/azure";
 import AWSIcon from "@/public/aws";
 

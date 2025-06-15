@@ -8,15 +8,10 @@ import {
 } from "@/components/ui/dialog";
 import { UploadZone } from "@/components/upload/upload-zone";
 import { useState, useEffect, type FormEvent } from "react";
+import type { UploadFileDialogProps } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import type React from "react";
-
-interface UploadFileDialogProps {
-	open: boolean;
-	onOpenChange: (open: boolean) => void;
-	onUpload: (files: FileList) => void;
-}
 
 export function UploadFileDialog({ open, onOpenChange, onUpload }: UploadFileDialogProps) {
 	const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);

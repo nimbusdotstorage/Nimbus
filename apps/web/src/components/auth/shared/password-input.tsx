@@ -1,15 +1,10 @@
 "use client";
 
-import { useState, type ChangeEvent } from "react";
+import type { PasswordInputProps } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeClosed } from "lucide-react";
-import type { ComponentProps } from "react";
-
-interface PasswordInputProps extends Omit<ComponentProps<typeof Input>, "type"> {
-	value?: string;
-	onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-}
+import { useState } from "react";
 
 export function PasswordInput({ className, ...props }: PasswordInputProps) {
 	const [isVisible, setIsVisible] = useState(false);

@@ -1,18 +1,11 @@
 "use client";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import type { ComponentProps, ReactNode } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import type { AuthCardProps } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-
-interface AuthCardProps extends ComponentProps<"div"> {
-	title: string;
-	description: string;
-	navigationType: "signin" | "signup";
-	children: ReactNode;
-}
 
 export function AuthCard({ title, description, navigationType, children, className, ...props }: AuthCardProps) {
 	const oppositeAction = navigationType === "signin" ? "signup" : "signin";
