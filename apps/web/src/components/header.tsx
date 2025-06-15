@@ -1,4 +1,4 @@
-import { Search, Bell, LogOut, Settings, MessageCircleQuestion } from "lucide-react";
+import { Bell, LogOut, MessageCircleQuestion, Search, Settings } from "lucide-react";
 
 import {
 	DropdownMenu,
@@ -8,39 +8,25 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useSession } from "./providers/session-provider";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { authClient } from "@nimbus/auth/auth-client";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSignOut } from "@/hooks/useAuth";
-import Link from "next/link";
-
-const getInitials = (name?: string | null) => {
-	if (!name) return "SG";
-	const parts = name.trim().split(/\s+/);
-	if (parts.length === 0) return "SG";
-
-	const firstInitial = parts[0]?.[0] || "";
-	const lastInitial = parts.length > 1 ? parts[parts.length - 1]?.[0] || "" : "";
-
-	return (firstInitial + lastInitial).toUpperCase() || "SG";
-};
+import Profile from "./ui/user-profile";
 
 export function Header() {
-	const { data: session, isPending } = authClient.useSession();
 	const { signOut, isLoading } = useSignOut();
+	const { user } = useSession();
 
 	const handleSignOut = async () => {
 		await signOut();
 	};
 
-	const userName = session?.user?.name;
-	const userEmail = session?.user?.email;
-	// TODO: Cache the user image
-	const userImage = session?.user?.image;
-	const userInitials = getInitials(userName);
+	const userName = user.name;
+	const userEmail = user.email;
+	const userImage = user.image;
 
 	return (
 		<header className="bg-background border-b">
@@ -67,35 +53,22 @@ export function Header() {
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant="ghost" size="icon" className="cursor-pointer rounded-full">
-								<Avatar className="h-8 w-8">
-									{userImage && <AvatarImage src={userImage} alt={userName || "User"} />}
-									<AvatarFallback>{isPending ? "..." : userInitials}</AvatarFallback>
-								</Avatar>
+								<Profile name={userName} url={userImage || null} size="sm" />
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end">
-							{isPending ? (
-								<DropdownMenuItem>Loading...</DropdownMenuItem>
-							) : session?.user ? (
-								<>
-									<DropdownMenuLabel>My Account</DropdownMenuLabel>
-									<DropdownMenuSeparator />
-									<DropdownMenuItem className="flex cursor-default flex-col items-start focus:bg-transparent">
-										<div className="font-medium">{userName || "User"}</div>
-										<div className="text-muted-foreground text-xs">{userEmail || "No email"}</div>
-									</DropdownMenuItem>
-									<DropdownMenuSeparator />
+							<DropdownMenuLabel>My Account</DropdownMenuLabel>
+							<DropdownMenuSeparator />
+							<DropdownMenuItem className="flex cursor-default flex-col items-start focus:bg-transparent">
+								<div className="font-medium">{userName || "User"}</div>
+								<div className="text-muted-foreground text-xs">{userEmail || "No email"}</div>
+							</DropdownMenuItem>
+							<DropdownMenuSeparator />
 
-									<DropdownMenuItem onClick={handleSignOut} className="cursor-pointer" disabled={isLoading}>
-										<LogOut className="mr-2 h-4 w-4" />
-										<span>{isLoading ? "Signing out..." : "Sign Out"}</span>
-									</DropdownMenuItem>
-								</>
-							) : (
-								<DropdownMenuItem asChild className="cursor-pointer">
-									<Link href="/signin">Sign in</Link>
-								</DropdownMenuItem>
-							)}
+							<DropdownMenuItem onClick={handleSignOut} className="cursor-pointer" disabled={isLoading}>
+								<LogOut className="mr-2 h-4 w-4" />
+								<span>{isLoading ? "Signing out..." : "Sign Out"}</span>
+							</DropdownMenuItem>
 						</DropdownMenuContent>
 					</DropdownMenu>
 				</div>
