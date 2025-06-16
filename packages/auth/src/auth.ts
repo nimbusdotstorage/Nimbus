@@ -1,20 +1,19 @@
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { BACKEND_URL, FRONTEND_URL } from "./utils/constants";
-import { extractTokenFromUrl } from "./utils/extract-token";
-import { sendMail } from "./utils/send-mail";
+import { extractTokenFromUrl } from "@/utils/extract-token";
+import { sendMail } from "@/utils/send-mail";
 import { betterAuth } from "better-auth";
-import Schema from "@repo/db/schema";
-import { db } from "@repo/db";
+import schema from "@nimbus/db/schema";
+import { db } from "@nimbus/db";
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
 		provider: "pg",
 		schema: {
-			...Schema,
+			...schema,
 		},
 	}),
 
-	trustedOrigins: [FRONTEND_URL, BACKEND_URL],
+	trustedOrigins: [process.env.FRONTEND_URL!, process.env.BACKEND_URL!],
 
 	emailAndPassword: {
 		enabled: true,
@@ -24,7 +23,7 @@ export const auth = betterAuth({
 		resetPasswordTokenExpiresIn: 600, // 10 minutes
 		sendResetPassword: async ({ user, url }) => {
 			const token = extractTokenFromUrl(url);
-			const frontendResetUrl = `${FRONTEND_URL}/reset-password?token=${token}`;
+			const frontendResetUrl = `${process.env.FRONTEND_URL!}/reset-password?token=${token}`;
 
 			await sendMail({
 				to: user.email,
@@ -43,6 +42,10 @@ export const auth = betterAuth({
 				"https://www.googleapis.com/auth/userinfo.profile",
 				"https://www.googleapis.com/auth/userinfo.email",
 			],
+			accessType: "offline",
+			prompt: "consent",
 		},
 	},
 });
+
+export type Session = typeof auth.$Infer.Session;
