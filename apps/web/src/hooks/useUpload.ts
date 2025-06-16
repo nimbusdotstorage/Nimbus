@@ -3,7 +3,7 @@
 import type { CreateFolderParams } from "@/lib/types";
 import { useMutation } from "@tanstack/react-query";
 import { clientEnv } from "@/lib/env/client-env";
-import axios, { type AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -45,9 +45,9 @@ export function useUpload() {
 			setCreateFolderOpen(false);
 			toast.success("Folder created successfully");
 		},
-		onError: (error: AxiosError<{ message?: string }>) => {
+		onError: (error: AxiosError) => {
 			console.error("Error creating folder:", error);
-			const errorMessage = error.response?.data?.message || error.message || "Failed to create folder";
+			const errorMessage = error.message || "Failed to create folder";
 			toast.error(errorMessage);
 		},
 	});
