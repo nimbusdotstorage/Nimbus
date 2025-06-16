@@ -8,9 +8,9 @@ import {
 } from "@/components/ui/dialog";
 import { Folder, Search, MoveRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { parseError } from "@/web/utils/error";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
+import { parseError } from "@/utils/error";
 import { toast } from "sonner";
 
 interface Destination {

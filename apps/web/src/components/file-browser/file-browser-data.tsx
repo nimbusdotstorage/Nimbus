@@ -6,15 +6,15 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoveRight, Pencil, Share2, Download, Trash2, MoreVertical, Folder, Eye } from "lucide-react";
-import { useFileActions, type FileType } from "@/web/hooks/useFileActions";
-import { getFileIcon } from "@/web/components/file-browser/file-icons";
-import { RenameDialog } from "@/web/components/dialogs/rename-dialog";
-import { DeleteDialog } from "@/web/components/dialogs/delete-dialog";
+import { useFileActions, type FileType } from "@/hooks/useFileActions";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { MoveDialog } from "@/web/components/dialogs/move-dialog";
+import { getFileIcon } from "@/components/file-browser/file-icons";
+import { RenameDialog } from "@/components/dialogs/rename-dialog";
+import { DeleteDialog } from "@/components/dialogs/delete-dialog";
+import { MoveDialog } from "@/components/dialogs/move-dialog";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import type { FileItem } from "@/web/lib/types";
+import type { FileItem } from "@/lib/types";
 import { toast } from "sonner";
 import Link from "next/link";
 

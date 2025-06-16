@@ -6,9 +6,9 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { useFileActions } from "@/web/hooks/useFileActions";
+import { useFileActions } from "@/hooks/useFileActions";
 import { Button } from "@/components/ui/button";
-import { parseError } from "@/web/utils/error";
+import { parseError } from "@/utils/error";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
