@@ -1,4 +1,8 @@
-// TODO: Turn this into the typing file for the front end
+// This file holds all the custom interfaces and types for the Next.js front end app.
+
+import type { ChangeEvent, ComponentProps, ComponentType, ReactNode } from "react";
+import type { Button } from "@/components/ui/button";
+import type { Input } from "@/components/ui/input";
 
 import type { ChangeEvent, ComponentProps, ComponentType, ReactNode } from "react";
 import type { Button } from "@/components/ui/button";

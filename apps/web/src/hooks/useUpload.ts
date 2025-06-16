@@ -3,7 +3,7 @@
 import type { CreateFolderParams } from "@/lib/types";
 import { useMutation } from "@tanstack/react-query";
 import { clientEnv } from "@/lib/env/client-env";
-import axios, { AxiosError } from "axios";
+import axios, { type AxiosError } from "axios";
 import { useState } from "react";
 import { toast } from "sonner";
 
