@@ -1,4 +1,4 @@
-import rateLimiter from "@/middleware/rate-limiter";
+import { rateLimiter } from "@/config/rate-limiter";
 import { auth } from "@nimbus/auth/auth";
 import { logger } from "hono/logger";
 import { env } from "@/config/env";

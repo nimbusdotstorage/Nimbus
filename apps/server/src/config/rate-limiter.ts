@@ -9,4 +9,4 @@ const rateLimiter = new RateLimiterRedis({
 	keyPrefix: "rate-limiter",
 });
 
-export default { rateLimiter };
+export { rateLimiter };
