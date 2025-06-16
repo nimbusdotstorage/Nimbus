@@ -9,15 +9,7 @@ import {
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Plus, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { ComponentType } from "react";
-
-export interface Source {
-	name: string;
-	icon: ComponentType<{ className?: string }>;
-	value: string;
-	backgroundColor: string;
-	textColor?: string;
-}
+import type { Source } from "@/lib/types";
 
 // ! This is a temporary implementation, will need to figure out the data to be passed from API
 export default function Sources({
