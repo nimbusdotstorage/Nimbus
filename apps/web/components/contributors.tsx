@@ -1,6 +1,6 @@
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Card, CardTitle, CardDescription } from "./ui/card";
-import useContributors from "../hooks/useContributors";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardTitle, CardDescription } from "@/components/ui/card";
+import useContributors from "@/hooks/useContributors";
 import { Github, GitCommit } from "lucide-react";
 import Link from "next/link";
 
@@ -68,21 +68,21 @@ export default function Contributors() {
 					{sortedContributors.map(contributor => (
 						<Card
 							key={contributor.id}
-							className="group border-border/50 bg-card/50 hover:shadow-primary/20 relative flex aspect-square flex-col overflow-hidden shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+							className="group border-border/50 bg-card/50 hover:shadow-primary/5 relative flex aspect-square flex-col overflow-hidden shadow-sm backdrop-blur-sm transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-sm"
 						>
-							<div className="absolute inset-0 flex items-center justify-center opacity-5 transition-opacity duration-300 group-hover:opacity-10">
+							<div className="absolute inset-0 flex items-center justify-center opacity-2 transition-opacity duration-300 ease-out group-hover:opacity-3">
 								<Github className="text-foreground h-40 w-40" />
 							</div>
 
-							<div className="from-primary/10 absolute inset-0 bg-gradient-to-b via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+							<div className="from-primary/3 absolute inset-0 bg-gradient-to-b via-transparent to-transparent opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100" />
 
 							<div className="relative z-10 flex h-full flex-col">
 								<div className="flex flex-1 flex-col items-center justify-center p-5 text-center">
 									<div className="relative mb-4">
-										<div className="from-primary/30 to-primary/10 absolute inset-0 rounded-full bg-gradient-to-r blur-md transition-all duration-300 group-hover:blur-lg" />
-										<Avatar className="ring-border group-hover:ring-primary/40 relative h-16 w-16 ring-2 transition-all duration-300">
+										<div className="from-primary/10 to-primary/3 absolute inset-0 rounded-full bg-gradient-to-r blur-sm transition-all duration-300 ease-out group-hover:blur-md" />
+										<Avatar className="ring-border group-hover:ring-primary/20 relative h-16 w-16 ring-1 transition-all duration-300 ease-out">
 											<AvatarImage src={contributor.avatar_url} alt={contributor.login} />
-											<AvatarFallback className="from-primary/20 to-primary/10 text-primary-foreground bg-gradient-to-br text-sm font-bold">
+											<AvatarFallback className="from-primary/10 to-primary/3 text-primary-foreground bg-gradient-to-br text-sm font-bold">
 												{contributor.login.slice(0, 2).toUpperCase()}
 											</AvatarFallback>
 										</Avatar>
@@ -90,7 +90,7 @@ export default function Contributors() {
 
 									<div className="flex min-h-[4rem] flex-col justify-center">
 										<Link href={contributor.html_url}>
-											<CardTitle className="text-foreground hover:text-primary line-clamp-2 text-base leading-tight font-bold break-words hyphens-auto underline drop-shadow-sm transition-colors">
+											<CardTitle className="text-foreground hover:text-primary/70 line-clamp-2 text-base leading-tight font-bold break-words hyphens-auto underline drop-shadow-sm transition-colors duration-300 ease-out">
 												{contributor.login}
 											</CardTitle>
 										</Link>
@@ -100,7 +100,7 @@ export default function Contributors() {
 
 								<div className="flex flex-col items-center gap-3 p-4">
 									<div className="relative bottom-3 flex items-center gap-3">
-										<div className="bg-primary/20 flex h-8 w-8 items-center justify-center rounded-full">
+										<div className="bg-primary/10 group-hover:bg-primary/15 flex h-8 w-8 items-center justify-center rounded-full transition-colors duration-300 ease-out">
 											<GitCommit className="text-primary h-5 w-5" />
 										</div>
 										<span className="text-foreground text-xl font-semibold">{contributor.contributions}</span>
@@ -119,7 +119,7 @@ export default function Contributors() {
 						href="https://github.com/nimbusdotstorage/Nimbus"
 						target="_blank"
 						rel="noopener noreferrer"
-						className="text-primary hover:text-primary/80 ml-2 font-semibold transition-colors hover:underline"
+						className="text-primary hover:text-primary/70 ml-2 font-semibold transition-colors duration-300 ease-out hover:underline"
 					>
 						Join us on GitHub
 					</a>

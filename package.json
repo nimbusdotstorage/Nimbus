@@ -4,6 +4,7 @@
 	"type": "module",
 	"private": true,
 	"devDependencies": {
+		"@nimbus/tsconfig": "workspace:*",
 		"@eslint/js": "^9.27.0",
 		"@next/eslint-plugin-next": "^15.3.2",
 		"@types/bun": "latest",
@@ -24,18 +25,19 @@
 		"typescript-eslint": "^8.32.1"
 	},
 	"scripts": {
-		"dev:web": "bun --cwd=apps/web dev",
-		"dev:server": "bun --cwd=apps/server dev",
-		"dev": "concurrently --names \"WEB,SERVER\" --prefix-colors \"cyan,magenta\" --prefix \"[{name}]\" --kill-others-on-fail \"bun --cwd=apps/web dev\" \"bun --cwd=apps/server dev\"",
+		"dev:web": "bun --elide-lines 0 --filter @nimbus/web --env-file .env dev",
+		"dev:server": "bun --elide-lines 0 --filter @nimbus/server --env-file .env dev",
+		"dev": "concurrently --names \"WEB,SERVER\" --prefix-colors \"cyan,magenta\" --prefix \"[{name}]\" --kill-others-on-fail \"bun --env-file .env dev:web\" \"bun --env-file .env dev:server\"",
+		"dev:verbose": "bun --elide-lines 0 --filter \"*\" --env-file .env dev",
 		"db:up": "docker compose up -d",
 		"db:down": "docker compose down",
 		"db:reset": "docker compose down -v && docker compose up -d",
-		"db:migrate": "cd packages/db && bunx drizzle-kit generate && bunx drizzle-kit migrate",
-		"db:studio": "cd packages/db && bunx drizzle-kit studio",
+		"db:migrate": "bun --elide-lines 0 --filter @nimbus/db --env-file .env migrate",
+		"db:studio": "bun --elide-lines 0 --filter @nimbus/db --env-file .env studio",
 		"build": "bun --cwd=apps/web run build",
 		"start": "bun --cwd=apps/web run start",
 		"format": "bunx prettier --write .",
-		"check:format": "bunx prettier --check .",
+		"format:check": "bunx prettier --check .",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
 		"prepare": "husky"

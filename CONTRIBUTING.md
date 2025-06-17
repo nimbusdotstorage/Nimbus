@@ -57,7 +57,8 @@ We use Docker to run a PostgreSQL database for local development. Follow these s
 
 ### 4. Environment Setup
 
-Copy the `.env.example` file to `.env` using this command, `cp .env.example .env` and fill in these values:
+Copy the `.env.example` file to `.env` using this command, `cp .env.example .env` and fill in these values. Follow the
+instructions on the first step of this [guide](https://www.better-auth.com/docs/authentication/google).
 
 <details>
 <summary>How to setup Google keys?</summary>
@@ -69,8 +70,8 @@ Copy the `.env.example` file to `.env` using this command, `cp .env.example .env
 
 - Under <b>API & Services</b>, navigate to <b>Oauth Consent Screen</b> and enter the details.
 
-- Now create a client. Add <b>Authorised Javascript origin</b> as `http://localhost:3000` and <b> Authorised redirect uri</b> as `http://localhost:1284/api/auth/callback/google` and get your 
-`client_id` and `client_secret`.
+- Now create a client. Add <b>Authorised Javascript origin</b> as `http://localhost:3000` and <b> Authorised redirect
+  uri</b> as `http://localhost:1284/api/auth/callback/google` and get your `client_id` and `client_secret`.
 
 - Now navigate to <b>Audience</b> and add <b>Test users</b>.
 </details>
@@ -83,6 +84,23 @@ GOOGLE_CLIENT_SECRET=
 BETTER_AUTH_SECRET=
 ```
 
+<details>
+<summary>How to get a Resend API Key?</summary>
+<br>
+
+1. Go to [Resend.com](https://resend.com) and sign up or log in to your account.
+2. From the dashboard, click on **"API Keys"** in the sidebar.
+3. Click the **"Create API Key"** button.
+4. Enter a name for your key (e.g., `nimbus-dev`) and confirm.
+5. Copy the generated API key.
+
+6. Add it to your `.env` file:
+   </details>
+
+   ```bash
+   RESEND_API_KEY=your-api-key-here
+   ```
+
 ### 5. Run Database Migrations
 
 After setting up the database, run the migrations:
@@ -91,7 +109,25 @@ After setting up the database, run the migrations:
 bun db:migrate
 ```
 
-### 6. Start the Development Server
+### 6. Enable Google Drive API
+
+To ensure the application works correctly and can fetch data from Google Drive, you must enable the Google Drive API in
+the same Google Cloud project where your OAuth credentials are configured.
+
+<details>
+<summary> Steps To Enable Drive API </summary>
+<br>
+
+1. Go to the [Google Cloud Console](https://console.cloud.google.com/).
+2. Select the project you're using for OAuth.
+3. Navigate to **APIs & Services > Library**.
+4. Search for **Google Drive API** or [Click Here](https://console.cloud.google.com/apis/library/drive.googleapis.com).
+5. Click **Enable**.
+</details>
+
+> Note: This step is **required** for the application to access Google Drive data via OAuth.
+
+### 7. Start the Development Server
 
 In a new terminal, start the development server:
 
