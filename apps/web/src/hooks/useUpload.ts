@@ -1,24 +1,11 @@
 // TODO: Move to useFileOperations.ts
 
+import type { CreateFolderParams } from "@/lib/types";
 import { useMutation } from "@tanstack/react-query";
 import { clientEnv } from "@/lib/env/client-env";
+import axios, { type AxiosError } from "axios";
 import { useState } from "react";
 import { toast } from "sonner";
-import axios from "axios";
-
-type AxiosError = {
-	response?: {
-		data?: {
-			message?: string;
-		};
-	};
-	message: string;
-};
-
-interface CreateFolderParams {
-	name: string;
-	parentId?: string;
-}
 
 export function useUpload() {
 	const [uploadFileOpen, setUploadFileOpen] = useState(false);
@@ -60,7 +47,7 @@ export function useUpload() {
 		},
 		onError: (error: AxiosError) => {
 			console.error("Error creating folder:", error);
-			const errorMessage = error.response?.data?.message || error.message || "Failed to create folder";
+			const errorMessage = error.message || "Failed to create folder";
 			toast.error(errorMessage);
 		},
 	});
