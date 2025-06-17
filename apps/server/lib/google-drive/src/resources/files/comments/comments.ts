@@ -1,8 +1,7 @@
 /* eslint-disable no-redeclare */
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import {
-	Replies,
+import type {
 	Reply,
 	ReplyCreateParams,
 	ReplyDeleteParams,
@@ -11,13 +10,14 @@ import {
 	ReplyRetrieveParams,
 	ReplyUpdateParams,
 } from "./replies";
-import { RequestOptions } from "../../../internal/request-options";
+import { type RequestOptions } from "../../../internal/request-options";
 import { buildHeaders } from "../../../internal/headers";
 import { APIPromise } from "../../../core/api-promise";
 import { APIResource } from "../../../core/resource";
 import { path } from "../../../internal/utils/path";
 import * as AboutAPI from "../../about";
 import * as RepliesAPI from "./replies";
+import { Replies } from "./replies";
 
 export class Comments extends APIResource {
 	replies: RepliesAPI.Replies = new RepliesAPI.Replies(this._client);
@@ -847,23 +847,23 @@ Comments.Replies = Replies;
 
 export declare namespace Comments {
 	export {
-		type Comment as Comment,
-		type CommentListResponse as CommentListResponse,
-		type CommentCreateParams as CommentCreateParams,
-		type CommentRetrieveParams as CommentRetrieveParams,
-		type CommentUpdateParams as CommentUpdateParams,
-		type CommentListParams as CommentListParams,
-		type CommentDeleteParams as CommentDeleteParams,
+		type Comment,
+		type CommentListResponse,
+		type CommentCreateParams,
+		type CommentRetrieveParams,
+		type CommentUpdateParams,
+		type CommentListParams,
+		type CommentDeleteParams,
 	};
 
 	export {
-		Replies as Replies,
-		type Reply as Reply,
-		type ReplyListResponse as ReplyListResponse,
-		type ReplyCreateParams as ReplyCreateParams,
-		type ReplyRetrieveParams as ReplyRetrieveParams,
-		type ReplyUpdateParams as ReplyUpdateParams,
-		type ReplyListParams as ReplyListParams,
-		type ReplyDeleteParams as ReplyDeleteParams,
+		Replies,
+		type Reply,
+		type ReplyListResponse,
+		type ReplyCreateParams,
+		type ReplyRetrieveParams,
+		type ReplyUpdateParams,
+		type ReplyListParams,
+		type ReplyDeleteParams,
 	};
 }

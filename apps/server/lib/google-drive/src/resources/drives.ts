@@ -1,7 +1,7 @@
 /* eslint-disable no-redeclare */
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { RequestOptions } from "../internal/request-options";
+import { type RequestOptions } from "../internal/request-options";
 import { buildHeaders } from "../internal/headers";
 import { APIPromise } from "../core/api-promise";
 import { APIResource } from "../core/resource";
@@ -1614,14 +1614,14 @@ export namespace DriveUnhideParams {
 
 export declare namespace Drives {
 	export {
-		type Drive as Drive,
-		type DriveListResponse as DriveListResponse,
-		type DriveCreateParams as DriveCreateParams,
-		type DriveRetrieveParams as DriveRetrieveParams,
-		type DriveUpdateParams as DriveUpdateParams,
-		type DriveListParams as DriveListParams,
-		type DriveDeleteParams as DriveDeleteParams,
-		type DriveHideParams as DriveHideParams,
-		type DriveUnhideParams as DriveUnhideParams,
+		type Drive,
+		type DriveListResponse,
+		type DriveCreateParams,
+		type DriveRetrieveParams,
+		type DriveUpdateParams,
+		type DriveListParams,
+		type DriveDeleteParams,
+		type DriveHideParams,
+		type DriveUnhideParams,
 	};
 }

@@ -1,13 +1,6 @@
 /* eslint-disable no-unused-vars */
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import type { HTTPMethod, PromiseOrValue, MergedRequestInit, FinalizedRequestInit } from "./internal/types";
-import { validatePositiveInteger, isAbsoluteURL, safeJSON } from "./internal/utils/values";
-import type { RequestInit, RequestInfo, BodyInit } from "./internal/builtin-types";
-import { type Logger, type LogLevel, parseLogLevel } from "./internal/utils/log";
-import { sleep } from "./internal/utils/sleep";
-import { uuid4 } from "./internal/utils/uuid";
-export type { Logger, LogLevel } from "./internal/utils/log";
 import {
 	type File,
 	type FileCopyParams,
@@ -61,25 +54,30 @@ import {
 	type Channel,
 } from "./resources/changes";
 import { type App, type AppListParams, type AppListResponse, type AppRetrieveParams, Apps } from "./resources/apps";
+import { type LogLevel, type Logger, formatRequestDetails, loggerFor, parseLogLevel } from "./internal/utils/log";
+import type { FinalizedRequestInit, HTTPMethod, MergedRequestInit, PromiseOrValue } from "./internal/types";
 import { About, type AboutRetrieveParams, type AboutRetrieveResponse, type User } from "./resources/about";
+import { isAbsoluteURL, isEmptyObj, safeJSON, validatePositiveInteger } from "./internal/utils/values";
 import { type FinalRequestOptions, type RequestOptions } from "./internal/request-options";
 import { type HeadersLike, type NullableHeaders, buildHeaders } from "./internal/headers";
+import type { BodyInit, RequestInfo, RequestInit } from "./internal/builtin-types";
 import { type ChannelStopWatchingParams, Channels } from "./resources/channels";
-import { formatRequestDetails, loggerFor } from "./internal/utils/log";
 import { getPlatformHeaders } from "./internal/detect-platform";
 import { castToError, isAbortError } from "./internal/errors";
 import type { APIResponseProps } from "./internal/parse";
 import { type Fetch } from "./internal/builtin-types";
-import { isEmptyObj } from "./internal/utils/values";
 import * as Opts from "./internal/request-options";
 import { APIPromise } from "./core/api-promise";
+import { sleep } from "./internal/utils/sleep";
 import { readEnv } from "./internal/utils/env";
+import { uuid4 } from "./internal/utils/uuid";
 import * as Shims from "./internal/shims";
 import * as Uploads from "./core/uploads";
 import * as API from "./resources/index";
 import * as Errors from "./core/error";
 import * as qs from "./internal/qs";
 import { VERSION } from "./version";
+export type { LogLevel, Logger } from "./internal/utils/log";
 
 export interface ClientOptions {
 	/**
@@ -270,7 +268,7 @@ export class GoogleDrive {
 
 	protected makeStatusError(
 		status: number,
-		error: Object,
+		error: object,
 		message: string | undefined,
 		headers: Headers
 	): Errors.APIError {
@@ -622,8 +620,6 @@ export class GoogleDrive {
 			...((globalThis as any).ReadableStream &&
 				body instanceof (globalThis as any).ReadableStream && { duplex: "half" }),
 			...(body && { body }),
-			...((this.fetchOptions as any) ?? {}),
-			...((options.fetchOptions as any) ?? {}),
 		};
 
 		return { req, url, timeout: options.timeout };
@@ -739,76 +735,65 @@ GoogleDrive.Teamdrives = Teamdrives;
 export declare namespace GoogleDrive {
 	export type RequestOptions = Opts.RequestOptions;
 
+	export { About, type User, type AboutRetrieveResponse, type AboutRetrieveParams };
+
+	export { Apps, type App, type AppListResponse, type AppRetrieveParams, type AppListParams };
+
 	export {
-		About as About,
-		type User as User,
-		type AboutRetrieveResponse as AboutRetrieveResponse,
-		type AboutRetrieveParams as AboutRetrieveParams,
+		Changes,
+		type Channel,
+		type ChangeListResponse,
+		type ChangeGetStartPageTokenResponse,
+		type ChangeListParams,
+		type ChangeGetStartPageTokenParams,
+		type ChangeSubscribeParams,
+	};
+
+	export { Channels, type ChannelStopWatchingParams };
+
+	export {
+		Drives,
+		type Drive,
+		type DriveListResponse,
+		type DriveCreateParams,
+		type DriveRetrieveParams,
+		type DriveUpdateParams,
+		type DriveListParams,
+		type DriveDeleteParams,
+		type DriveHideParams,
+		type DriveUnhideParams,
 	};
 
 	export {
-		Apps as Apps,
-		type App as App,
-		type AppListResponse as AppListResponse,
-		type AppRetrieveParams as AppRetrieveParams,
-		type AppListParams as AppListParams,
+		Files,
+		type File,
+		type Label,
+		type FileListResponse,
+		type FileGenerateIDsResponse,
+		type FileListLabelsResponse,
+		type FileModifyLabelsResponse,
+		type FileCreateParams,
+		type FileRetrieveParams,
+		type FileUpdateParams,
+		type FileListParams,
+		type FileDeleteParams,
+		type FileCopyParams,
+		type FileDeleteTrashedParams,
+		type FileExportParams,
+		type FileGenerateIDsParams,
+		type FileListLabelsParams,
+		type FileModifyLabelsParams,
+		type FileWatchParams,
 	};
 
 	export {
-		Changes as Changes,
-		type Channel as Channel,
-		type ChangeListResponse as ChangeListResponse,
-		type ChangeGetStartPageTokenResponse as ChangeGetStartPageTokenResponse,
-		type ChangeListParams as ChangeListParams,
-		type ChangeGetStartPageTokenParams as ChangeGetStartPageTokenParams,
-		type ChangeSubscribeParams as ChangeSubscribeParams,
-	};
-
-	export { Channels as Channels, type ChannelStopWatchingParams as ChannelStopWatchingParams };
-
-	export {
-		Drives as Drives,
-		type Drive as Drive,
-		type DriveListResponse as DriveListResponse,
-		type DriveCreateParams as DriveCreateParams,
-		type DriveRetrieveParams as DriveRetrieveParams,
-		type DriveUpdateParams as DriveUpdateParams,
-		type DriveListParams as DriveListParams,
-		type DriveDeleteParams as DriveDeleteParams,
-		type DriveHideParams as DriveHideParams,
-		type DriveUnhideParams as DriveUnhideParams,
-	};
-
-	export {
-		Files as Files,
-		type File as File,
-		type Label as Label,
-		type FileListResponse as FileListResponse,
-		type FileGenerateIDsResponse as FileGenerateIDsResponse,
-		type FileListLabelsResponse as FileListLabelsResponse,
-		type FileModifyLabelsResponse as FileModifyLabelsResponse,
-		type FileCreateParams as FileCreateParams,
-		type FileRetrieveParams as FileRetrieveParams,
-		type FileUpdateParams as FileUpdateParams,
-		type FileListParams as FileListParams,
-		type FileDeleteParams as FileDeleteParams,
-		type FileCopyParams as FileCopyParams,
-		type FileDeleteTrashedParams as FileDeleteTrashedParams,
-		type FileExportParams as FileExportParams,
-		type FileGenerateIDsParams as FileGenerateIDsParams,
-		type FileListLabelsParams as FileListLabelsParams,
-		type FileModifyLabelsParams as FileModifyLabelsParams,
-		type FileWatchParams as FileWatchParams,
-	};
-
-	export {
-		Teamdrives as Teamdrives,
-		type TeamDrive as TeamDrive,
-		type TeamdriveListResponse as TeamdriveListResponse,
-		type TeamdriveCreateParams as TeamdriveCreateParams,
-		type TeamdriveRetrieveParams as TeamdriveRetrieveParams,
-		type TeamdriveUpdateParams as TeamdriveUpdateParams,
-		type TeamdriveListParams as TeamdriveListParams,
-		type TeamdriveDeleteParams as TeamdriveDeleteParams,
+		Teamdrives,
+		type TeamDrive,
+		type TeamdriveListResponse,
+		type TeamdriveCreateParams,
+		type TeamdriveRetrieveParams,
+		type TeamdriveUpdateParams,
+		type TeamdriveListParams,
+		type TeamdriveDeleteParams,
 	};
 }
