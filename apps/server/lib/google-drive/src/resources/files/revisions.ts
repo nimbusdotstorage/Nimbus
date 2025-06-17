@@ -1,7 +1,7 @@
 /* eslint-disable no-redeclare */
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { RequestOptions } from "../../internal/request-options";
+import { type RequestOptions } from "../../internal/request-options";
 import { buildHeaders } from "../../internal/headers";
 import { APIPromise } from "../../core/api-promise";
 import { APIResource } from "../../core/resource";
@@ -609,11 +609,11 @@ export namespace RevisionDeleteParams {
 
 export declare namespace Revisions {
 	export {
-		type Revision as Revision,
-		type RevisionListResponse as RevisionListResponse,
-		type RevisionRetrieveParams as RevisionRetrieveParams,
-		type RevisionUpdateParams as RevisionUpdateParams,
-		type RevisionListParams as RevisionListParams,
-		type RevisionDeleteParams as RevisionDeleteParams,
+		type Revision,
+		type RevisionListResponse,
+		type RevisionRetrieveParams,
+		type RevisionUpdateParams,
+		type RevisionListParams,
+		type RevisionDeleteParams,
 	};
 }

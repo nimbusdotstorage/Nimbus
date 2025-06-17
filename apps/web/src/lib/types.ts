@@ -4,10 +4,6 @@ import type { ChangeEvent, ComponentProps, ComponentType, ReactNode } from "reac
 import type { Button } from "@/components/ui/button";
 import type { Input } from "@/components/ui/input";
 
-import type { ChangeEvent, ComponentProps, ComponentType, ReactNode } from "react";
-import type { Button } from "@/components/ui/button";
-import type { Input } from "@/components/ui/input";
-
 export interface FileItem {
 	id: string;
 	name: string;
