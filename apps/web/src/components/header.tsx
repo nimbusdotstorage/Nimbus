@@ -48,7 +48,6 @@ export function Header() {
 		<header className="bg-background border-b">
 			<div className="flex h-16 items-center justify-between gap-4 px-4">
 				<SidebarTrigger className="size-9 cursor-pointer" />
-				{/* Search section with flexbox - removed duplicate right icon */}
 				<div className="flex max-w-xl flex-1 items-center">
 					<div className="relative flex w-full items-center">
 						<Search className="text-muted-foreground pointer-events-none absolute left-2.5 h-4 w-4" />
