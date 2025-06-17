@@ -14,7 +14,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSignOut } from "@/hooks/useAuth";
-import Profile from "./ui/user-profile";
+import Profile from "./user-profile";
 
 export function Header() {
 	const { signOut, isLoading } = useSignOut();
@@ -53,7 +53,7 @@ export function Header() {
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant="ghost" size="icon" className="cursor-pointer rounded-full">
-								<Profile name={userName} url={userImage || null} size="sm" />
+								<Profile name={userName} url={userImage || null} />
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end">

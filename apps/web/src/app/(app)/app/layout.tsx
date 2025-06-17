@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 import { SessionProvider } from "@/components/providers/session-provider";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/main-sidebar/app-sidebar";
-import { redirect } from "next/navigation";
 import { auth } from "@nimbus/auth/auth";
 import { headers } from "next/headers";
 
@@ -12,9 +11,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
 		headers: await headers(),
 	});
 
-	if (!session) {
-		redirect("/login");
-	}
+	if (!session) return null;
 
 	return (
 		<SessionProvider value={{ session, user: session.user }}>
