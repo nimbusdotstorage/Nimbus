@@ -1,15 +1,7 @@
-import { MessageCircleQuestion } from "@/components/animate-ui/icons/message-circle-question";
-import { Settings } from "@/components/animate-ui/icons/settings";
-import { AnimateIcon } from "@/components/animate-ui/icons/icon";
+import { ModeToggle } from "@/components/mode-toggle";
 import { SearchDialog } from "@/components/search/search-dialog";
-import { LogOut } from "@/components/animate-ui/icons/log-out";
-import { Bell } from "@/components/animate-ui/icons/bell";
-import { Search } from "lucide-react";
-import { useState } from "react";
-// main branch 2025-06-17
-// left this in case we need it :)
-// import { Search, Bell, LogOut, Settings, MessageCircleQuestion } from "lucide-react";
-
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -18,14 +10,13 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { authClient } from "@nimbus/auth/auth-client";
-import { ModeToggle } from "@/components/mode-toggle";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useSignOut } from "@/hooks/useAuth";
+import { authClient } from "@nimbus/auth/auth-client";
+import { Bell, LogOut, MessageCircleQuestion, Search, Settings } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 const getInitials = (name?: string | null) => {
 	if (!name) return "SG";
