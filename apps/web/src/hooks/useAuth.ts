@@ -3,14 +3,10 @@ import { authClient } from "@nimbus/auth/auth-client";
 import { useMutation } from "@tanstack/react-query";
 import { clientEnv } from "@/lib/env/client-env";
 import { useState, useCallback } from "react";
+import type { AuthState } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import axios from "axios";
-
-interface AuthState {
-	isLoading: boolean;
-	error: string | null;
-}
 
 export const signInWithGoogle = async () => {
 	await authClient.signIn.social({

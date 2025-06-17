@@ -1,18 +1,6 @@
+import type { UseRequestParams, UseRequestReturn } from "@/lib/types";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { parseError } from "@/utils/error";
-
-type UseRequestParams = {
-	request: (signal: AbortSignal) => Promise<Response>;
-	triggers?: unknown[];
-	manual?: boolean;
-};
-
-type UseRequestReturn<ResponseBody> = {
-	data: ResponseBody | null;
-	error: Error | null;
-	isLoading: boolean;
-	refetch: () => void;
-};
 
 /**
  * A hook that fetches data from an API and returns the data, refetch function, error, and loading state.

@@ -1,16 +1,8 @@
 "use client";
 
+import type { SocialAuthButtonProps } from "@/lib/types";
 import { Google } from "@/components/icons/google";
 import { Button } from "@/components/ui/button";
-import type { ComponentProps } from "react";
-
-type SocialProvider = "google";
-type AuthAction = "signin" | "signup";
-
-interface SocialAuthButtonProps extends Omit<ComponentProps<typeof Button>, "children" | "variant" | "type"> {
-	provider: SocialProvider;
-	action: AuthAction;
-}
 
 const providerConfig = {
 	google: {
