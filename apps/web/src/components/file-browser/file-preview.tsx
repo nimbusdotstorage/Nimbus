@@ -1,17 +1,13 @@
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { FileText, Folder, Image, Video, X } from "lucide-react";
+import type { FileItem, FolderContentItem } from "@/lib/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createRequest } from "@/hooks/createRequest";
 import { Button } from "@/components/ui/button";
 import { useRequest } from "@/hooks/useRequest";
 import { Loader } from "@/components/loader";
-import type { FileItem } from "@/lib/types";
 import { parseError } from "@/utils/error";
 import { useEffect } from "react";
-
-interface FolderContentItem extends FileItem {
-	path?: string;
-}
 
 export function FilePreview() {
 	const router = useRouter();

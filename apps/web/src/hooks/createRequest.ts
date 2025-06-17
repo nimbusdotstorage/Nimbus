@@ -1,12 +1,5 @@
+import type { CreateRequestOptions } from "@/lib/types";
 import { clientEnv } from "@/lib/env/client-env";
-
-type Params = Record<string, string | number | null | undefined>;
-
-type CreateRequestOptions = {
-	path: string;
-	pathParams?: Params;
-	queryParams?: Params;
-};
 
 /**
  * Creates a request function that can be used to fetch data from an API.
@@ -37,6 +30,6 @@ export function createRequest({ path, pathParams = {}, queryParams = {} }: Creat
 		// Construct the full URL
 		const fullUrl = `${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api${currentPath}${query}`;
 
-		return fetch(fullUrl, { signal });
+		return fetch(fullUrl, { signal, credentials: "include" });
 	};
 }

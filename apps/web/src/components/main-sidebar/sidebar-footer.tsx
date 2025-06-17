@@ -3,7 +3,6 @@ import { SidebarFooter } from "@/components/ui/sidebar";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 
-// TODO: Get actual data from api, fix collapsed styling
 export default function StorageFooter() {
 	const storageUsed = 69;
 	return (

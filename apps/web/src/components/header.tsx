@@ -6,6 +6,9 @@ import { LogOut } from "@/components/animate-ui/icons/log-out";
 import { Bell } from "@/components/animate-ui/icons/bell";
 import { Search } from "lucide-react";
 import { useState } from "react";
+// main branch 2025-06-17
+// left this in case we need it :)
+// import { Search, Bell, LogOut, Settings, MessageCircleQuestion } from "lucide-react";
 
 import {
 	DropdownMenu,
@@ -46,6 +49,7 @@ export function Header() {
 
 	const userName = session?.user?.name;
 	const userEmail = session?.user?.email;
+	// TODO: Cache the user image
 	const userImage = session?.user?.image;
 	const userInitials = getInitials(userName);
 
@@ -67,21 +71,18 @@ export function Header() {
 				</div>
 				<div className="flex items-center gap-2">
 					<ModeToggle />
-					<AnimateIcon animateOnHover>
-						<Button variant="ghost" size="icon">
-							<MessageCircleQuestion className="h-5 w-5" />
-						</Button>
-					</AnimateIcon>
-					<AnimateIcon animateOnHover>
-						<Button variant="ghost" size="icon">
-							<Settings className="h-5 w-5" />
-						</Button>
-					</AnimateIcon>
-					<AnimateIcon animateOnHover>
-						<Button variant="ghost" size="icon">
-							<Bell className="h-5 w-5" />
-						</Button>
-					</AnimateIcon>
+					<Button variant="ghost" size="icon">
+						<MessageCircleQuestion className="h-5 w-5" />
+					</Button>
+
+					<Button variant="ghost" size="icon">
+						<Settings className="h-5 w-5" />
+					</Button>
+
+					<Button variant="ghost" size="icon">
+						<Bell className="h-5 w-5" />
+					</Button>
+
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant="ghost" size="icon" className="cursor-pointer rounded-full">
@@ -104,12 +105,10 @@ export function Header() {
 									</DropdownMenuItem>
 									<DropdownMenuSeparator />
 
-									<AnimateIcon animateOnHover>
-										<DropdownMenuItem onClick={handleSignOut} className="cursor-pointer" disabled={isLoading}>
-											<LogOut className="mr-2 h-4 w-4" />
-											<span>{isLoading ? "Signing out..." : "Sign Out"}</span>
-										</DropdownMenuItem>
-									</AnimateIcon>
+									<DropdownMenuItem onClick={handleSignOut} className="cursor-pointer" disabled={isLoading}>
+										<LogOut className="mr-2 h-4 w-4" />
+										<span>{isLoading ? "Signing out..." : "Sign Out"}</span>
+									</DropdownMenuItem>
 								</>
 							) : (
 								<DropdownMenuItem asChild className="cursor-pointer">
