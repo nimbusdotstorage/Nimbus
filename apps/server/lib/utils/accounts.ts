@@ -22,7 +22,7 @@ export const getAccount = async (user: typeof auth.$Infer.Session.user | null, h
 		});
 
 		if (!account) {
-			throw new AccountError(`No account found`, "ACCOUNT_NOT_FOUND");
+			throw new AccountError(`No account found for user ${user.id}`, "ACCOUNT_NOT_FOUND");
 		}
 
 		const { accessToken } = await auth.api.getAccessToken({

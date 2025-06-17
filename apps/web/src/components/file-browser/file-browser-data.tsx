@@ -6,28 +6,69 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useFileOperations } from "@/hooks/useFileOperations";
-import { FileText, Folder, MoreVertical } from "lucide-react";
+import { FileText, Folder, MoreVertical, ArrowUp, ArrowDown, ArrowUpDown } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import type { FileItem } from "@/lib/types";
+import type { FileItem, SortConfig, SortField } from "@/lib/types";
+import { formatFileSizeDisplay } from "@/lib/utils";
 import Link from "next/link";
+import type React from "react";
 
-// TODO: Typing of the file data needs to be updated
-export function FileBrowserData({ data }: { data: FileItem[] }) {
-	return <FilesList data={data} />;
+interface FileBrowserDataProps {
+	data: FileItem[];
+	sortConfig?: SortConfig;
+	onSortChange?: (field: SortField) => void;
 }
 
-function FilesList({ data }: { data: FileItem[] }) {
+export function FileBrowserData({ data, sortConfig, onSortChange }: FileBrowserDataProps) {
+	return <FilesList data={data} sortConfig={sortConfig} onSortChange={onSortChange} />;
+}
+
+interface FilesListProps {
+	data: FileItem[];
+	sortConfig?: SortConfig;
+	onSortChange?: (field: SortField) => void;
+}
+
+function FilesList({ data, sortConfig, onSortChange }: FilesListProps) {
 	const searchParams = useSearchParams();
+
+	const handleSort = (field: SortField) => {
+		if (onSortChange) {
+			onSortChange(field);
+		}
+	};
+
+	const getSortIcon = (field: SortField) => {
+		if (!sortConfig || sortConfig.field !== field) {
+			return <ArrowUpDown className="h-3 w-3 opacity-50" />;
+		}
+		return sortConfig.direction === "asc" ? 
+			<ArrowUp className="h-3 w-3" /> : 
+			<ArrowDown className="h-3 w-3" />;
+	};
+
+	const SortableHeader = ({ field, children }: { field: SortField; children: React.ReactNode }) => (
+		<th className="p-3">
+			<button
+				onClick={() => handleSort(field)}
+				className="flex items-center gap-1 hover:text-foreground transition-colors cursor-pointer"
+				disabled={!onSortChange}
+			>
+				{children}
+				{getSortIcon(field)}
+			</button>
+		</th>
+	);
 
 	return (
 		<div className="overflow-hidden rounded-md border">
 			<table className="w-full">
 				<thead className="text-muted-foreground bg-muted/50 text-left text-xs font-medium">
 					<tr>
-						<th className="p-3">Name</th>
-						<th className="p-3">Modified</th>
-						<th className="p-3">Size</th>
+						<SortableHeader field="name">Name</SortableHeader>
+						<SortableHeader field="modified">Modified</SortableHeader>
+						<SortableHeader field="size">Size</SortableHeader>
 						<th className="p-3">Actions</th>
 					</tr>
 				</thead>
@@ -47,8 +88,8 @@ function FilesList({ data }: { data: FileItem[] }) {
 									)}
 									{file.name}
 								</td>
-								<td className="text-muted-foreground p-3 text-sm">{file.modified}</td>
-								<td className="text-muted-foreground p-3 text-sm">{file.size || "—"}</td>
+								<td className="text-muted-foreground p-3 text-sm">{new Date(file.modified).toLocaleDateString()}</td>
+								<td className="text-muted-foreground p-3 text-sm">{formatFileSizeDisplay(file.size)}</td>
 								<td className="p-3">
 									<FileActions id={file.id} />
 								</td>
