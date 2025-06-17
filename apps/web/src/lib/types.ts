@@ -4,10 +4,6 @@ import type { ChangeEvent, ComponentProps, ComponentType, ReactNode } from "reac
 import type { Button } from "@/components/ui/button";
 import type { Input } from "@/components/ui/input";
 
-import type { ChangeEvent, ComponentProps, ComponentType, ReactNode } from "react";
-import type { Button } from "@/components/ui/button";
-import type { Input } from "@/components/ui/input";
-
 export interface FileItem {
 	id: string;
 	name: string;
@@ -84,6 +80,15 @@ export interface CreateFolderParams {
 
 export type SocialProvider = "google";
 export type AuthAction = "signin" | "signup";
+
+// File sorting types
+export type SortField = "name" | "modified" | "size" | "type";
+export type SortDirection = "asc" | "desc";
+
+export interface SortConfig {
+	field: SortField;
+	direction: SortDirection;
+}
 
 export interface SocialAuthButtonProps extends Omit<ComponentProps<typeof Button>, "children" | "variant" | "type"> {
 	provider: SocialProvider;
