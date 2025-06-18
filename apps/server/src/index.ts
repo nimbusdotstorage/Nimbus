@@ -1,4 +1,7 @@
-import { rateLimiter } from "@/config/rate-limiter";
+import { loggedInUserRateLimiter, anonymousUserRateLimiter } from "@/config/rate-limiters";
+import { ErrorResponse } from "./utils/response-classes/error-response";
+import { getIp, setRateLimitHeaders } from "./utils/rate-limiter-utils";
+import { RateLimiterRes } from "rate-limiter-flexible";
 import { auth } from "@nimbus/auth/auth";
 import { logger } from "hono/logger";
 import { env } from "@/config/env";
@@ -44,18 +47,34 @@ app.use("*", async (c, next) => {
 });
 
 app.use("*", async (c, next) => {
+	const user = c.get("user");
 	try {
-		const key =
-			c.req.header("x-forwarded-for") ||
-			c.req.raw.headers.get("cf-connecting-ip") ||
-			c.req.raw.headers.get("x-real-ip") ||
-			c.req.raw.headers.get("host") ||
-			"unknown";
-		await rateLimiter.consume(key); // IP-based or user ID, etc.
+		let rateLimiterRes: RateLimiterRes;
+		if (user) {
+			rateLimiterRes = await loggedInUserRateLimiter.consume(user.id);
+			setRateLimitHeaders(c, rateLimiterRes, loggedInUserRateLimiter);
+		} else {
+			rateLimiterRes = await anonymousUserRateLimiter.consume(getIp(c));
+			setRateLimitHeaders(c, rateLimiterRes, anonymousUserRateLimiter);
+		}
 		return await next();
 	} catch (err) {
-		console.error(err);
-		return c.text("Too Many Requests", 429);
+		console.error("Error in rate limiter middleware:", err);
+		if (err instanceof RateLimiterRes) {
+			if (user) {
+				setRateLimitHeaders(c, err, loggedInUserRateLimiter);
+			} else {
+				setRateLimitHeaders(c, err, anonymousUserRateLimiter);
+			}
+			return c.json(
+				new ErrorResponse({
+					code: "TOO_MANY_REQUESTS",
+					message: "Too many requests. Please wait before trying again.",
+				}),
+				403
+			);
+		}
+		return c.json(new ErrorResponse({ code: "INTERNAL_SERVER_ERROR", message: "Internal server error." }), 500);
 	}
 });
 
