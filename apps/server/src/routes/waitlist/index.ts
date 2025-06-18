@@ -1,65 +1,50 @@
-import { rateLimitAttempts, waitlist } from "@nimbus/db/schema";
+import { ErrorResponse, getServerErrorResponse } from "@/utils/response-classes/error-response";
+import { SuccessResponse } from "@/utils/response-classes/success-response";
+import { getIp, setRateLimitHeaders } from "@/utils/rate-limiter-utils";
+import { SUCCESS_MESSAGES } from "@/utils/constants/success-message";
+import { ERROR_MESSAGES } from "@/utils/constants/error-message";
+import { SUCCESS_CODES } from "@/utils/constants/success-code";
+import { waitlistRateLimiter } from "@/config/rate-limiters";
+import { ERROR_CODES } from "@/utils/constants/error-code";
+import { RateLimiterRes } from "rate-limiter-flexible";
 import { zValidator } from "@hono/zod-validator";
+import { waitlist } from "@nimbus/db/schema";
 import { emailSchema } from "@/validators";
-import { eq, sql } from "drizzle-orm";
+import type { Context, Next } from "hono";
 import { count } from "drizzle-orm";
-import type { Context } from "hono";
+import { eq } from "drizzle-orm";
 import { db } from "@nimbus/db";
 import { nanoid } from "nanoid";
 import { Hono } from "hono";
 
 const waitlistRouter = new Hono();
 
-// Database-backed rate limiting function. Replace with Valkey rate limiting
-async function checkRateLimitDB(ip: string, limit = 3, windowMs = 120000) {
-	const now = new Date();
-
-	const attempts = await db.select().from(rateLimitAttempts).where(eq(rateLimitAttempts.identifier, ip)).limit(1);
-
-	const currentAttempt = attempts[0];
-
-	if (!currentAttempt || currentAttempt.expiresAt < now) {
-		const newExpiry = new Date(now.getTime() + windowMs);
-		await db
-			.insert(rateLimitAttempts)
-			.values({ identifier: ip, count: 1, expiresAt: newExpiry })
-			.onConflictDoUpdate({
-				target: rateLimitAttempts.identifier,
-				set: { count: 1, expiresAt: newExpiry },
-			});
-		return { allowed: true, remaining: limit - 1, resetTime: newExpiry };
-	}
-
-	if (currentAttempt.count >= limit) {
-		return { allowed: false, remaining: 0, resetTime: currentAttempt.expiresAt };
-	}
-
-	await db
-		.update(rateLimitAttempts)
-		.set({ count: sql`${rateLimitAttempts.count} + 1` })
-		.where(eq(rateLimitAttempts.identifier, ip));
-
-	return { allowed: true, remaining: limit - (currentAttempt.count + 1), resetTime: currentAttempt.expiresAt };
-}
-
-// Route: POST /waitlist/join
-waitlistRouter.post("/join", zValidator("json", emailSchema), async (c: Context) => {
+const rateLimiter = async (c: Context, next: Next) => {
 	try {
-		const ip = c.req.header("x-forwarded-for") || c.req.header("x-real-ip") || "anonymous";
+		const key = getIp(c);
+		const rateLimiterRes = await waitlistRateLimiter.consume(key);
+		setRateLimitHeaders(c, rateLimiterRes, waitlistRateLimiter);
+		return next();
+	} catch (err) {
+		console.error("Waitlist rate limiter error:", err);
 
-		const rateLimitResult = await checkRateLimitDB(ip, 3, 120000);
-
-		if (!rateLimitResult.allowed) {
+		if (err instanceof RateLimiterRes) {
+			setRateLimitHeaders(c, err, waitlistRateLimiter);
 			return c.json(
-				{
-					success: false,
-					error: "Too many requests. Please wait before trying again.",
-					retryAfter: Math.ceil((rateLimitResult.resetTime.getTime() - Date.now()) / 1000),
-				},
-				429
+				new ErrorResponse({
+					code: ERROR_CODES.TO_MANY_REQUESTS,
+					message: ERROR_MESSAGES.TO_MANY_REQUESTS,
+				}),
+				403
 			);
 		}
+		return c.json(getServerErrorResponse(), 500);
+	}
+};
 
+// Route: POST /waitlist/join
+waitlistRouter.post("/join", zValidator("json", emailSchema), rateLimiter, async (c: Context) => {
+	try {
 		const email = (await c.req.json()).email;
 
 		const existing = await db
@@ -70,7 +55,13 @@ waitlistRouter.post("/join", zValidator("json", emailSchema), async (c: Context)
 			.then(rows => rows[0]);
 
 		if (existing) {
-			return c.json({ success: false, error: "This email is already on the waitlist" }, 400);
+			return c.json(
+				new ErrorResponse({
+					code: ERROR_CODES.DUPLICATE_EMAIL,
+					message: ERROR_MESSAGES.WAITLIST_DUPLICATE_EMAIL,
+				}),
+				400
+			);
 		}
 
 		await db.insert(waitlist).values({
@@ -78,20 +69,33 @@ waitlistRouter.post("/join", zValidator("json", emailSchema), async (c: Context)
 			email: email.toLowerCase().trim(),
 		});
 
-		return c.json({ success: true }, 201);
+		return c.json(
+			new SuccessResponse({
+				code: SUCCESS_CODES.WAITLIST_ADDED,
+				message: SUCCESS_MESSAGES.WAITLIST_ADDED,
+				data: null,
+			}),
+			201
+		);
 	} catch (error) {
 		console.error("Error adding email to waitlist:", error);
-		return c.json({ success: false, error: "Internal server error" }, 500);
+		return c.json(getServerErrorResponse(), 500);
 	}
 });
 
 waitlistRouter.get("/count", async c => {
 	try {
 		const result = await db.select({ count: count() }).from(waitlist);
-		return c.json({ count: result[0]?.count || 0 });
+		return c.json(
+			new SuccessResponse({
+				code: SUCCESS_CODES.WAITLIST_COUNT,
+				message: SUCCESS_MESSAGES.WAITLIST_COUNT,
+				data: { count: result[0]?.count || 0 },
+			})
+		);
 	} catch (error) {
 		console.error("Error getting waitlist count:", error);
-		return c.json({ success: false, error: "Internal server error" }, 500);
+		return c.json(getServerErrorResponse(), 500);
 	}
 });
 

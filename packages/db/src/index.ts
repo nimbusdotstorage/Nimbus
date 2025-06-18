@@ -1,5 +1,5 @@
 import { drizzle } from "drizzle-orm/node-postgres";
-import schema from "@nimbus/db/schema";
+import schema from "@/schema";
 import { Pool } from "pg";
 
 const pool = new Pool({
@@ -7,3 +7,5 @@ const pool = new Pool({
 });
 
 export const db = drizzle({ client: pool, schema });
+
+export type DB = typeof db;
