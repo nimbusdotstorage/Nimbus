@@ -31,6 +31,17 @@ export const env = createEnv({
 		VALKEY_HOST: z.string({ message: "The VALKEY_HOST environment variable is required." }),
 		VALKEY_USERNAME: z.string({ message: "The VALKEY_USERNAME environment variable is required." }),
 		VALKEY_PASSWORD: z.string({ message: "The VALKEY_PASSWORD environment variable is required." }),
+
+		// Rate-limiters configuration
+		LOGGED_IN_USER_PRIMARY_RATE_LIMITER_POINTS: z.coerce.number().default(10).optional(),
+		LOGGED_IN_USER_PRIMARY_RATE_LIMITER_DURATION: z.coerce.number().default(60).optional(),
+		LOGGED_IN_USER_PRIMARY_RATE_LIMITER_BLOCK_DURATION: z.coerce.number().default(60).optional(),
+		LOGGED_IN_USER_SECONDARY_RATE_LIMITER_POINTS: z.coerce.number().default(10).optional(),
+		LOGGED_IN_USER_SECONDARY_RATE_LIMITER_DURATION: z.coerce.number().default(60).optional(),
+		LOGGED_IN_USER_SECONDARY_RATE_LIMITER_BLOCK_DURATION: z.coerce.number().default(60).optional(),
+		ANONYMOUS_USER_RATE_LIMITER_POINTS: z.coerce.number().default(10).optional(),
+		ANONYMOUS_USER_RATE_LIMITER_DURATION: z.coerce.number().default(60).optional(),
+		ANONYMOUS_USER_RATE_LIMITER_BLOCK_DURATION: z.coerce.number().default(60).optional(),
 	},
 	runtimeEnv: process.env,
 	emptyStringAsUndefined: true,
