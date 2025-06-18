@@ -10,7 +10,7 @@
 	},
 	"exports": {
 		".": "./src/index.ts",
-		"./schema": "./schema.ts"
+		"./schema": "./src/schema.ts"
 	},
 	"devDependencies": {
 		"@nimbus/tsconfig": "workspace:*",
