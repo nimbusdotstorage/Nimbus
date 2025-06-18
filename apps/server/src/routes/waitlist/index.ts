@@ -1,6 +1,11 @@
-import { ErrorResponse } from "@/utils/response-classes/error-response";
+import { ErrorResponse, getServerErrorResponse } from "@/utils/response-classes/error-response";
+import { SuccessResponse } from "@/utils/response-classes/success-response";
 import { getIp, setRateLimitHeaders } from "@/utils/rate-limiter-utils";
+import { SUCCESS_MESSAGES } from "@/utils/constants/success-message";
+import { ERROR_MESSAGES } from "@/utils/constants/error-message";
+import { SUCCESS_CODES } from "@/utils/constants/success-code";
 import { waitlistRateLimiter } from "@/config/rate-limiters";
+import { ERROR_CODES } from "@/utils/constants/error-code";
 import { RateLimiterRes } from "rate-limiter-flexible";
 import { zValidator } from "@hono/zod-validator";
 import { waitlist } from "@nimbus/db/schema";
@@ -27,14 +32,13 @@ const rateLimiter = async (c: Context, next: Next) => {
 			setRateLimitHeaders(c, err, waitlistRateLimiter);
 			return c.json(
 				new ErrorResponse({
-					code: "TOO_MANY_REQUESTS",
-					message: "Too many requests. Please wait before trying again.",
+					code: ERROR_CODES.TO_MANY_REQUESTS,
+					message: ERROR_MESSAGES.TO_MANY_REQUESTS,
 				}),
 				403
 			);
 		}
-
-		return c.json(new ErrorResponse({ code: "INTERNAL_SERVER_ERROR", message: "Internal server error." }), 500);
+		return c.json(getServerErrorResponse(), 500);
 	}
 };
 
@@ -51,7 +55,13 @@ waitlistRouter.post("/join", zValidator("json", emailSchema), rateLimiter, async
 			.then(rows => rows[0]);
 
 		if (existing) {
-			return c.json({ success: false, error: "This email is already on the waitlist" }, 400);
+			return c.json(
+				new ErrorResponse({
+					code: ERROR_CODES.DUPLICATE_EMAIL,
+					message: ERROR_MESSAGES.WAITLIST_DUPLICATE_EMAIL,
+				}),
+				400
+			);
 		}
 
 		await db.insert(waitlist).values({
@@ -59,21 +69,33 @@ waitlistRouter.post("/join", zValidator("json", emailSchema), rateLimiter, async
 			email: email.toLowerCase().trim(),
 		});
 
-		return c.json({ success: true }, 201);
+		return c.json(
+			new SuccessResponse({
+				code: SUCCESS_CODES.WAITLIST_ADDED,
+				message: SUCCESS_MESSAGES.WAITLIST_ADDED,
+				data: null,
+			}),
+			201
+		);
 	} catch (error) {
 		console.error("Error adding email to waitlist:", error);
-		return c.json({ success: false, error: "Internal server error" }, 500);
+		return c.json(getServerErrorResponse(), 500);
 	}
 });
 
 waitlistRouter.get("/count", async c => {
 	try {
-		console.log("OK");
 		const result = await db.select({ count: count() }).from(waitlist);
-		return c.json({ count: result[0]?.count || 0 });
+		return c.json(
+			new SuccessResponse({
+				code: SUCCESS_CODES.WAITLIST_COUNT,
+				message: SUCCESS_MESSAGES.WAITLIST_COUNT,
+				data: { count: result[0]?.count || 0 },
+			})
+		);
 	} catch (error) {
 		console.error("Error getting waitlist count:", error);
-		return c.json({ success: false, error: "Internal server error" }, 500);
+		return c.json(getServerErrorResponse(), 500);
 	}
 });
 
