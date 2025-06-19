@@ -19,7 +19,7 @@ export function setRateLimitHeaders(c: Context, rateLimiterRes: RateLimiterRes, 
 	c.res.headers.set("X-RateLimit-Limit", limit);
 	c.res.headers.set("X-RateLimit-Remaining", remaining);
 	c.res.headers.set("X-RateLimit-Reset", reset);
-	c.res.headers.set("x-ratelimit-used", consume);
+	c.res.headers.set("X-ratelimit-used", consume);
 }
 
 export function createRateLimiterMiddleware({ limiter }: { limiter: RateLimiterAbstract }) {
