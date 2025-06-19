@@ -1348,13 +1348,13 @@ export namespace TeamdriveDeleteParams {
 }
 
 export declare namespace Teamdrives {
-	export {
-		type TeamDrive,
-		type TeamdriveListResponse,
-		type TeamdriveCreateParams,
-		type TeamdriveRetrieveParams,
-		type TeamdriveUpdateParams,
-		type TeamdriveListParams,
-		type TeamdriveDeleteParams,
+	export type {
+		TeamDrive,
+		TeamdriveListResponse,
+		TeamdriveCreateParams,
+		TeamdriveRetrieveParams,
+		TeamdriveUpdateParams,
+		TeamdriveListParams,
+		TeamdriveDeleteParams,
 	};
 }

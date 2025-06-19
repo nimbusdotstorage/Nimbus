@@ -1612,15 +1612,15 @@ export namespace DriveUnhideParams {
 }
 
 export declare namespace Drives {
-	export {
-		type Drive,
-		type DriveListResponse,
-		type DriveCreateParams,
-		type DriveRetrieveParams,
-		type DriveUpdateParams,
-		type DriveListParams,
-		type DriveDeleteParams,
-		type DriveHideParams,
-		type DriveUnhideParams,
+	export type {
+		Drive,
+		DriveListResponse,
+		DriveCreateParams,
+		DriveRetrieveParams,
+		DriveUpdateParams,
+		DriveListParams,
+		DriveDeleteParams,
+		DriveHideParams,
+		DriveUnhideParams,
 	};
 }

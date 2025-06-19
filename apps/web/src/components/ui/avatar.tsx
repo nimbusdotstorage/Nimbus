@@ -15,10 +15,8 @@ function Avatar({ className, ...props }: ComponentProps<typeof Root>) {
 	);
 }
 
-function AvatarImage({ className, ...props }: ComponentProps<typeof Image>) {
-	return (
-		<Image data-slot="avatar-image" className={cn("aspect-square size-full", className)} alt="Avatar" {...props} />
-	);
+function AvatarImage({ className, alt = "Avatar", ...props }: ComponentProps<typeof Image>) {
+	return <Image data-slot="avatar-image" className={cn("aspect-square size-full", className)} alt={alt} {...props} />;
 }
 
 function AvatarFallback({ className, ...props }: ComponentProps<typeof Fallback>) {

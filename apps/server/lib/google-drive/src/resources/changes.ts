@@ -705,12 +705,12 @@ export namespace ChangeSubscribeParams {
 }
 
 export declare namespace Changes {
-	export {
-		type Channel,
-		type ChangeListResponse,
-		type ChangeGetStartPageTokenResponse,
-		type ChangeListParams,
-		type ChangeGetStartPageTokenParams,
-		type ChangeSubscribeParams,
+	export type {
+		Channel,
+		ChangeListResponse,
+		ChangeGetStartPageTokenResponse,
+		ChangeListParams,
+		ChangeGetStartPageTokenParams,
+		ChangeSubscribeParams,
 	};
 }

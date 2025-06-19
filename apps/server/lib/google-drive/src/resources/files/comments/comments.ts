@@ -845,24 +845,24 @@ export namespace CommentDeleteParams {
 Comments.Replies = Replies;
 
 export declare namespace Comments {
-	export {
-		type Comment,
-		type CommentListResponse,
-		type CommentCreateParams,
-		type CommentRetrieveParams,
-		type CommentUpdateParams,
-		type CommentListParams,
-		type CommentDeleteParams,
+	export type {
+		Comment,
+		CommentListResponse,
+		CommentCreateParams,
+		CommentRetrieveParams,
+		CommentUpdateParams,
+		CommentListParams,
+		CommentDeleteParams,
 	};
 
-	export {
-		Replies,
-		type Reply,
-		type ReplyListResponse,
-		type ReplyCreateParams,
-		type ReplyRetrieveParams,
-		type ReplyUpdateParams,
-		type ReplyListParams,
-		type ReplyDeleteParams,
+	export { Replies };
+	export type {
+		Reply,
+		ReplyListResponse,
+		ReplyCreateParams,
+		ReplyRetrieveParams,
+		ReplyUpdateParams,
+		ReplyListParams,
+		ReplyDeleteParams,
 	};
 }

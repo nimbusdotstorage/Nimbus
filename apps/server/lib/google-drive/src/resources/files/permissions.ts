@@ -1053,13 +1053,13 @@ export namespace PermissionDeleteParams {
 }
 
 export declare namespace Permissions {
-	export {
-		type Permission,
-		type PermissionListResponse,
-		type PermissionCreateParams,
-		type PermissionRetrieveParams,
-		type PermissionUpdateParams,
-		type PermissionListParams,
-		type PermissionDeleteParams,
+	export type {
+		Permission,
+		PermissionListResponse,
+		PermissionCreateParams,
+		PermissionRetrieveParams,
+		PermissionUpdateParams,
+		PermissionListParams,
+		PermissionDeleteParams,
 	};
 }

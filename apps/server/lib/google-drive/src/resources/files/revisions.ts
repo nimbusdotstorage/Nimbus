@@ -607,12 +607,12 @@ export namespace RevisionDeleteParams {
 }
 
 export declare namespace Revisions {
-	export {
-		type Revision,
-		type RevisionListResponse,
-		type RevisionRetrieveParams,
-		type RevisionUpdateParams,
-		type RevisionListParams,
-		type RevisionDeleteParams,
+	export type {
+		Revision,
+		RevisionListResponse,
+		RevisionRetrieveParams,
+		RevisionUpdateParams,
+		RevisionListParams,
+		RevisionDeleteParams,
 	};
 }

@@ -1,7 +1,7 @@
 "use client";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Search, FileText, Folder, Tag, Filter } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { FileText, Filter, Folder, Search, Tag } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -347,7 +347,7 @@ export function SearchDialog({ open, onOpenChange }: SearchDialogProps) {
 								</div>
 							</div>
 						</div>
-					) : query && query.trim() && hasSearched ? (
+					) : query?.trim() && hasSearched ? (
 						<div className="flex flex-1 items-center justify-center py-12 text-center">
 							<div className="text-muted-foreground">
 								<Search className="mx-auto mb-4 h-12 w-12 opacity-50" />

@@ -738,61 +738,61 @@ export declare namespace GoogleDrive {
 
 	export { Apps, type App, type AppListResponse, type AppRetrieveParams, type AppListParams };
 
-	export {
-		Changes,
-		type Channel,
-		type ChangeListResponse,
-		type ChangeGetStartPageTokenResponse,
-		type ChangeListParams,
-		type ChangeGetStartPageTokenParams,
-		type ChangeSubscribeParams,
+	export { Changes };
+	export type {
+		Channel,
+		ChangeListResponse,
+		ChangeGetStartPageTokenResponse,
+		ChangeListParams,
+		ChangeGetStartPageTokenParams,
+		ChangeSubscribeParams,
 	};
 
 	export { Channels, type ChannelStopWatchingParams };
 
-	export {
-		Drives,
-		type Drive,
-		type DriveListResponse,
-		type DriveCreateParams,
-		type DriveRetrieveParams,
-		type DriveUpdateParams,
-		type DriveListParams,
-		type DriveDeleteParams,
-		type DriveHideParams,
-		type DriveUnhideParams,
+	export { Drives };
+	export type {
+		Drive,
+		DriveListResponse,
+		DriveCreateParams,
+		DriveRetrieveParams,
+		DriveUpdateParams,
+		DriveListParams,
+		DriveDeleteParams,
+		DriveHideParams,
+		DriveUnhideParams,
 	};
 
-	export {
-		Files,
-		type File,
-		type Label,
-		type FileListResponse,
-		type FileGenerateIDsResponse,
-		type FileListLabelsResponse,
-		type FileModifyLabelsResponse,
-		type FileCreateParams,
-		type FileRetrieveParams,
-		type FileUpdateParams,
-		type FileListParams,
-		type FileDeleteParams,
-		type FileCopyParams,
-		type FileDeleteTrashedParams,
-		type FileExportParams,
-		type FileGenerateIDsParams,
-		type FileListLabelsParams,
-		type FileModifyLabelsParams,
-		type FileWatchParams,
+	export { Files };
+	export type {
+		File,
+		Label,
+		FileListResponse,
+		FileGenerateIDsResponse,
+		FileListLabelsResponse,
+		FileModifyLabelsResponse,
+		FileCreateParams,
+		FileRetrieveParams,
+		FileUpdateParams,
+		FileListParams,
+		FileDeleteParams,
+		FileCopyParams,
+		FileDeleteTrashedParams,
+		FileExportParams,
+		FileGenerateIDsParams,
+		FileListLabelsParams,
+		FileModifyLabelsParams,
+		FileWatchParams,
 	};
 
-	export {
-		Teamdrives,
-		type TeamDrive,
-		type TeamdriveListResponse,
-		type TeamdriveCreateParams,
-		type TeamdriveRetrieveParams,
-		type TeamdriveUpdateParams,
-		type TeamdriveListParams,
-		type TeamdriveDeleteParams,
+	export { Teamdrives };
+	export type {
+		TeamDrive,
+		TeamdriveListResponse,
+		TeamdriveCreateParams,
+		TeamdriveRetrieveParams,
+		TeamdriveUpdateParams,
+		TeamdriveListParams,
+		TeamdriveDeleteParams,
 	};
 }

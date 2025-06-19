@@ -737,13 +737,13 @@ export namespace ReplyDeleteParams {
 }
 
 export declare namespace Replies {
-	export {
-		type Reply,
-		type ReplyListResponse,
-		type ReplyCreateParams,
-		type ReplyRetrieveParams,
-		type ReplyUpdateParams,
-		type ReplyListParams,
-		type ReplyDeleteParams,
+	export type {
+		Reply,
+		ReplyListResponse,
+		ReplyCreateParams,
+		ReplyRetrieveParams,
+		ReplyUpdateParams,
+		ReplyListParams,
+		ReplyDeleteParams,
 	};
 }

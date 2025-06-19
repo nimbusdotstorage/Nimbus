@@ -5643,56 +5643,56 @@ Files.Permissions = Permissions;
 Files.Revisions = Revisions;
 
 export declare namespace Files {
-	export {
-		type File,
-		type Label,
-		type FileListResponse,
-		type FileGenerateIDsResponse,
-		type FileListLabelsResponse,
-		type FileModifyLabelsResponse,
-		type FileCreateParams,
-		type FileRetrieveParams,
-		type FileUpdateParams,
-		type FileListParams,
-		type FileDeleteParams,
-		type FileCopyParams,
-		type FileDeleteTrashedParams,
-		type FileExportParams,
-		type FileGenerateIDsParams,
-		type FileListLabelsParams,
-		type FileModifyLabelsParams,
-		type FileWatchParams,
+	export type {
+		File,
+		Label,
+		FileListResponse,
+		FileGenerateIDsResponse,
+		FileListLabelsResponse,
+		FileModifyLabelsResponse,
+		FileCreateParams,
+		FileRetrieveParams,
+		FileUpdateParams,
+		FileListParams,
+		FileDeleteParams,
+		FileCopyParams,
+		FileDeleteTrashedParams,
+		FileExportParams,
+		FileGenerateIDsParams,
+		FileListLabelsParams,
+		FileModifyLabelsParams,
+		FileWatchParams,
 	};
 
-	export {
-		Comments,
-		type Comment,
-		type CommentListResponse,
-		type CommentCreateParams,
-		type CommentRetrieveParams,
-		type CommentUpdateParams,
-		type CommentListParams,
-		type CommentDeleteParams,
+	export { Comments };
+	export type {
+		Comment,
+		CommentListResponse,
+		CommentCreateParams,
+		CommentRetrieveParams,
+		CommentUpdateParams,
+		CommentListParams,
+		CommentDeleteParams,
 	};
 
-	export {
-		Permissions,
-		type Permission,
-		type PermissionListResponse,
-		type PermissionCreateParams,
-		type PermissionRetrieveParams,
-		type PermissionUpdateParams,
-		type PermissionListParams,
-		type PermissionDeleteParams,
+	export { Permissions };
+	export type {
+		Permission,
+		PermissionListResponse,
+		PermissionCreateParams,
+		PermissionRetrieveParams,
+		PermissionUpdateParams,
+		PermissionListParams,
+		PermissionDeleteParams,
 	};
 
-	export {
-		Revisions,
-		type Revision,
-		type RevisionListResponse,
-		type RevisionRetrieveParams,
-		type RevisionUpdateParams,
-		type RevisionListParams,
-		type RevisionDeleteParams,
+	export { Revisions };
+	export type {
+		Revision,
+		RevisionListResponse,
+		RevisionRetrieveParams,
+		RevisionUpdateParams,
+		RevisionListParams,
+		RevisionDeleteParams,
 	};
 }

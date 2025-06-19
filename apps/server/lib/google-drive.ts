@@ -30,7 +30,9 @@ export class GoogleDriveManager {
 
 		// Should have to just call getAccessToken from betterauth and pass token to setCredentials
 		if (config.auth) {
-			this.auth.setCredentials({});
+			this.auth.setCredentials({
+				refresh_token: config.auth.refreshToken,
+			});
 		}
 
 		this.drive = google.drive({ version: "v3", auth: this.auth });
@@ -47,6 +49,10 @@ export class GoogleDriveManager {
 
 	//Get access tokens from authorization code
 	public getTokens(code: string) {
+		if (!code || typeof code !== "string" || code.trim().length === 0) {
+			throw new Error("Invalid authorization code provided");
+		}
+
 		return this.withErrorHandler(
 			"getTokens",
 			async () => {
@@ -111,6 +117,10 @@ export class GoogleDriveManager {
 
 	//Get a file from Google Drive by ID
 	public getFile(fileId: string, fields?: string) {
+		if (!fileId || typeof fileId !== "string" || fileId.trim().length === 0) {
+			throw new Error("Invalid file ID provided");
+		}
+
 		return this.withErrorHandler(
 			"getFile",
 			async () => {
@@ -187,7 +197,9 @@ export class GoogleDriveManager {
 		try {
 			return await fn();
 		} catch (error: any) {
-			console.error(`Error in GoogleDriveManager.${operation}:`, error.message, context);
+			const errorMessage = error.response?.data?.error?.message || error.message || "Unknown error";
+			const statusCode = error.response?.status || error.code;
+			console.error(`Error in GoogleDriveManager.${operation} [${statusCode}]:`, errorMessage, context);
 			throw error;
 		}
 	}
