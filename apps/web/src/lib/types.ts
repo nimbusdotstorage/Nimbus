@@ -3,14 +3,6 @@ import type { ChangeEvent, ComponentProps, ComponentType, ReactNode } from "reac
 import type { Button } from "@/components/ui/button";
 import type { Input } from "@/components/ui/input";
 
-export interface FileItem {
-	id: string;
-	name: string;
-	type: "folder" | "document" | "image" | "video";
-	size?: string;
-	modified: string;
-}
-
 export interface CreateFolderDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
@@ -21,6 +13,14 @@ export interface UploadFileDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 	onUpload: (files: FileList) => void;
+}
+
+export interface FileItem {
+	id: string;
+	name: string;
+	type: "folder" | "document" | "image" | "video";
+	size?: string;
+	modified: string;
 }
 
 export interface FolderContentItem extends FileItem {
@@ -38,10 +38,6 @@ export interface Source {
 export interface AuthState {
 	isLoading: boolean;
 	error: string | null;
-}
-
-export interface DeleteFileParams {
-	id: string;
 }
 
 export interface AuthCardProps extends ComponentProps<"div"> {
@@ -72,11 +68,6 @@ export type UseRequestReturn<ResponseBody> = {
 	refetch: () => Promise<void>;
 };
 
-export interface CreateFolderParams {
-	name: string;
-	parentId?: string;
-}
-
 export type SocialProvider = "google";
 export type AuthAction = "signin" | "signup";
 
@@ -88,4 +79,65 @@ export interface SocialAuthButtonProps extends Omit<ComponentProps<typeof Button
 export interface PasswordInputProps extends Omit<ComponentProps<typeof Input>, "type"> {
 	value?: string;
 	onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+}
+
+// File API request types
+export interface GetFileParams {
+	id: string;
+}
+
+export interface CreateFileParams {
+	name: string;
+	parentId?: string;
+	mimeType?: string;
+	// 'string' for base64 encoded data, though Blob/File is preferred
+	fileContent?: Blob | GoogleDriveFile | ArrayBuffer | ReadableStream | string;
+}
+
+export interface CreateFolderParams {
+	name: string;
+	parentId?: string;
+}
+
+export interface DeleteFileParams {
+	id: string;
+}
+
+export interface UpdateFileParams {
+	id: string;
+	name?: string;
+	parentId?: string;
+}
+
+// File API response types
+export interface GoogleDriveFile {
+	id?: string;
+	// Links for exporting Docs Editors files to specific formats (docx, pdf, png, etc.)
+	createdTime?: string;
+	exportLinks?: Record<string, string>;
+	//Only for binary files (non-google files)
+	fileExtension?: string;
+	fullFileExtension?: string;
+	iconLink?: string;
+	mimeType?: string;
+	modifiedTime?: string;
+	name?: string;
+	parents?: Array<string>;
+	size?: string;
+	starred?: boolean;
+	trashed?: boolean;
+	viewedByMeTime?: string;
+	// For downloading binary files (non-google files)
+	webContentLink?: string;
+	// For opening in relevant Google file editor (Docs, Sheets, Slides)
+	webViewLink?: string;
+}
+
+/**
+ * A list of files, the kind of file it is, and the token for the next page of results
+ */
+export interface FileListResponse {
+	files?: Array<GoogleDriveFile>;
+	// Undefined if no more results are in the response
+	nextPageToken?: string;
 }

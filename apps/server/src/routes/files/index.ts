@@ -24,8 +24,11 @@ filesRouter.get("/", async (c: Context) => {
 		return c.json<FileOperationResponse>({ success: false, message: "Unauthorized access" }, 401);
 	}
 
+	const { pageSize: pageSizeStr, nextPageToken } = c.req.query();
+	const pageSizeNum = pageSizeStr ? parseInt(pageSizeStr) : undefined;
+
 	// * The GoogleDriveProvider will be replaced by a general provider in the future
-	const files = await new GoogleDriveProvider(account.accessToken!).listFiles();
+	const files = await new GoogleDriveProvider(account.accessToken!).listFiles(pageSizeNum, nextPageToken);
 	if (!files) {
 		return c.json<FileOperationResponse>({ success: false, message: "Files not found" }, 404);
 	}
