@@ -14,7 +14,7 @@
 		"@nimbus/auth": "workspace:*",
 		"@nimbus/db": "workspace:*",
 		"@t3-oss/env-core": "^0.13.8",
-		"drizzle-orm": "^0.43.1",
+		"drizzle-orm": "^0.44.2",
 		"hono": "^4.7.10",
 		"nanoid": "^5.1.5",
 		"pg": "^8.16.0",
