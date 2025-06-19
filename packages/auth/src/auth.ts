@@ -45,6 +45,14 @@ export const auth = betterAuth({
 			accessType: "offline",
 			prompt: "consent",
 		},
+
+		microsoft: {
+			clientId: process.env.MICROSOFT_CLIENT_ID as string,
+			clientSecret: process.env.MICROSOFT_CLIENT_SECRET as string,
+			scope: ["https://graph.microsoft.com/User.Read"],
+			tenantId: "common",
+			prompt: "select_account",
+		},
 	},
 });
 

@@ -15,6 +15,13 @@ export const signInWithGoogle = async () => {
 	});
 };
 
+export const signInWithMicrosoft = async () => {
+	await authClient.signIn.social({
+		provider: "microsoft",
+		callbackURL: clientEnv.NEXT_PUBLIC_CALLBACK_URL,
+	});
+};
+
 export const useGoogleAuth = () => {
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -37,10 +44,33 @@ export const useGoogleAuth = () => {
 	return { signInWithGoogleProvider, isLoading };
 };
 
+export const useMicrosoftAuth = () => {
+	const [isLoading, setIsLoading] = useState(false);
+
+	const signInWithMicrosoftProvider = useCallback(async () => {
+		setIsLoading(true);
+		try {
+			toast.promise(signInWithMicrosoft(), {
+				loading: "Signing in with Microsoft...",
+				success: "Signed in with Microsoft",
+				error: error => (error instanceof Error ? error.message : "Microsoft authentication failed"),
+			});
+		} catch (error) {
+			const errorMessage = error instanceof Error ? error.message : "Google authentication failed";
+			toast.error(errorMessage);
+		} finally {
+			setIsLoading(false);
+		}
+	}, []);
+
+	return { signInWithMicrosoftProvider, isLoading };
+};
+
 export const useSignIn = () => {
 	const router = useRouter();
 	const [state, setState] = useState<AuthState>({ isLoading: false, error: null });
 	const { signInWithGoogleProvider } = useGoogleAuth();
+	const { signInWithMicrosoftProvider } = useMicrosoftAuth();
 
 	// Get redirect URL from search params
 	const getRedirectUrl = () => {
@@ -95,6 +125,7 @@ export const useSignIn = () => {
 		...state,
 		signInWithCredentials,
 		signInWithGoogleProvider,
+		signInWithMicrosoftProvider,
 	};
 };
 
@@ -102,6 +133,7 @@ export const useSignUp = () => {
 	const router = useRouter();
 	const [state, setState] = useState<AuthState>({ isLoading: false, error: null });
 	const { signInWithGoogleProvider } = useGoogleAuth();
+	const { signInWithMicrosoftProvider } = useMicrosoftAuth();
 
 	const signUpWithCredentials = useCallback(
 		async (data: SignUpFormData) => {
@@ -179,6 +211,7 @@ export const useSignUp = () => {
 		...state,
 		signUpWithCredentials,
 		signInWithGoogleProvider,
+		signInWithMicrosoftProvider,
 	};
 };
 
