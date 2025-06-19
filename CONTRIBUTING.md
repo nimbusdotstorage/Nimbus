@@ -72,7 +72,8 @@ We use Docker to run a PostgreSQL database and Valkey for local development. Fol
 
 ### 4. Environment Setup
 
-Copy the `.env.example` file to `.env` using this command, `cp .env.example .env` and fill in these values:
+Copy the `.env.example` file to `.env` using this command, `cp .env.example .env` and fill in these values. Follow the
+instructions on the first step of this [guide](https://www.better-auth.com/docs/authentication/google).
 
 <details>
 <summary>How to setup Google keys?</summary>
@@ -123,7 +124,25 @@ After setting up the database, run the migrations:
 bun db:migrate
 ```
 
-### 6. Start the Development Server
+### 6. Enable Google Drive API
+
+To ensure the application works correctly and can fetch data from Google Drive, you must enable the Google Drive API in
+the same Google Cloud project where your OAuth credentials are configured.
+
+<details>
+<summary> Steps To Enable Drive API </summary>
+<br>
+
+1. Go to the [Google Cloud Console](https://console.cloud.google.com/).
+2. Select the project you're using for OAuth.
+3. Navigate to **APIs & Services > Library**.
+4. Search for **Google Drive API** or [Click Here](https://console.cloud.google.com/apis/library/drive.googleapis.com).
+5. Click **Enable**.
+</details>
+
+> Note: This step is **required** for the application to access Google Drive data via OAuth.
+
+### 7. Start the Development Server
 
 In a new terminal, start the development server:
 
