@@ -3,13 +3,13 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 const protectedRoutes = ["/app"];
-const publicRoutes = ["/", "/signin", "/signup", "/forgot-password", "/reset-password"];
+const publicRoutes = new Set(["/", "/signin", "/signup", "/forgot-password", "/reset-password"]);
 
 export async function middleware(request: NextRequest) {
 	const { pathname } = request.nextUrl;
 
 	const isProtected = protectedRoutes.some(route => pathname.startsWith(route));
-	const isPublic = publicRoutes.includes(pathname);
+	const isPublic = publicRoutes.has(pathname);
 
 	try {
 		const sessionCookie = getSessionCookie(request.headers);

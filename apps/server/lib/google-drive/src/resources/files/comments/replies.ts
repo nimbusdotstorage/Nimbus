@@ -1,7 +1,6 @@
-/* eslint-disable no-redeclare */
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { RequestOptions } from "../../../internal/request-options";
+import { type RequestOptions } from "../../../internal/request-options";
 import { buildHeaders } from "../../../internal/headers";
 import { APIPromise } from "../../../core/api-promise";
 import { APIResource } from "../../../core/resource";
@@ -738,13 +737,13 @@ export namespace ReplyDeleteParams {
 }
 
 export declare namespace Replies {
-	export {
-		type Reply as Reply,
-		type ReplyListResponse as ReplyListResponse,
-		type ReplyCreateParams as ReplyCreateParams,
-		type ReplyRetrieveParams as ReplyRetrieveParams,
-		type ReplyUpdateParams as ReplyUpdateParams,
-		type ReplyListParams as ReplyListParams,
-		type ReplyDeleteParams as ReplyDeleteParams,
+	export type {
+		Reply,
+		ReplyListResponse,
+		ReplyCreateParams,
+		ReplyRetrieveParams,
+		ReplyUpdateParams,
+		ReplyListParams,
+		ReplyDeleteParams,
 	};
 }

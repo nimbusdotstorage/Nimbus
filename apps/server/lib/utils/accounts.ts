@@ -4,7 +4,7 @@ import { db } from "@nimbus/db";
 export class AccountError extends Error {
 	constructor(
 		message: string,
-		public code: string = "ACCOUNT_ERROR"
+		public code = "ACCOUNT_ERROR"
 	) {
 		super(message);
 		this.name = "AccountError";

@@ -1,8 +1,6 @@
-/* eslint-disable no-redeclare */
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import {
-	Replies,
+import type {
 	Reply,
 	ReplyCreateParams,
 	ReplyDeleteParams,
@@ -11,13 +9,14 @@ import {
 	ReplyRetrieveParams,
 	ReplyUpdateParams,
 } from "./replies";
-import { RequestOptions } from "../../../internal/request-options";
+import { type RequestOptions } from "../../../internal/request-options";
 import { buildHeaders } from "../../../internal/headers";
 import { APIPromise } from "../../../core/api-promise";
 import { APIResource } from "../../../core/resource";
 import { path } from "../../../internal/utils/path";
 import * as AboutAPI from "../../about";
 import * as RepliesAPI from "./replies";
+import { Replies } from "./replies";
 
 export class Comments extends APIResource {
 	replies: RepliesAPI.Replies = new RepliesAPI.Replies(this._client);
@@ -846,24 +845,24 @@ export namespace CommentDeleteParams {
 Comments.Replies = Replies;
 
 export declare namespace Comments {
-	export {
-		type Comment as Comment,
-		type CommentListResponse as CommentListResponse,
-		type CommentCreateParams as CommentCreateParams,
-		type CommentRetrieveParams as CommentRetrieveParams,
-		type CommentUpdateParams as CommentUpdateParams,
-		type CommentListParams as CommentListParams,
-		type CommentDeleteParams as CommentDeleteParams,
+	export type {
+		Comment,
+		CommentListResponse,
+		CommentCreateParams,
+		CommentRetrieveParams,
+		CommentUpdateParams,
+		CommentListParams,
+		CommentDeleteParams,
 	};
 
-	export {
-		Replies as Replies,
-		type Reply as Reply,
-		type ReplyListResponse as ReplyListResponse,
-		type ReplyCreateParams as ReplyCreateParams,
-		type ReplyRetrieveParams as ReplyRetrieveParams,
-		type ReplyUpdateParams as ReplyUpdateParams,
-		type ReplyListParams as ReplyListParams,
-		type ReplyDeleteParams as ReplyDeleteParams,
+	export { Replies };
+	export type {
+		Reply,
+		ReplyListResponse,
+		ReplyCreateParams,
+		ReplyRetrieveParams,
+		ReplyUpdateParams,
+		ReplyListParams,
+		ReplyDeleteParams,
 	};
 }
