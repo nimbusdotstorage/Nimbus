@@ -8,4 +8,12 @@ const redisClient = new Redis({
 	password: env.VALKEY_PASSWORD,
 });
 
+redisClient.on("error", err => {
+	console.error("Redis connection error:", err);
+});
+
+redisClient.on("connect", () => {
+	console.log("Connected to Valkey");
+});
+
 export default redisClient;
