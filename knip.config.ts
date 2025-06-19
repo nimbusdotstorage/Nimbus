@@ -23,7 +23,7 @@ const config: KnipConfig = {
 		// https://knip.dev/reference/plugins/next#_top
 		"apps/web": {
 			ignoreBinaries,
-			ignoreDependencies: ["tailwindcss", "eslint", "eslint-config-next", "postcss"],
+			ignoreDependencies: ["tailwindcss", "tw-animate-css", "eslint", "eslint-config-next", "postcss"],
 		},
 
 		"packages/config": {
