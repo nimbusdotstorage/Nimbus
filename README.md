@@ -48,7 +48,7 @@ We use Docker to run a PostgreSQL database and Valkey for local development. Fol
    docker compose ps
    ```
 
-   You should see the `nimbus-db` and `nimbus-valkey` container in the list with a status of "Up".
+   You should see the `nimbus-db` and `nimbus-valkey` containers in the list with a status of "Up".
 
 3. **Connect to the database** (optional):
 
