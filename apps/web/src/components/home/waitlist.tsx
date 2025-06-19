@@ -31,7 +31,7 @@ async function getWaitlistCount(): Promise<{ count: number }> {
 }
 
 async function joinWaitlist(email: string): Promise<void> {
-	const response = await fetch(`${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api/waitlist/count`, {
+	const response = await fetch(`${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api/waitlist/join`, {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
