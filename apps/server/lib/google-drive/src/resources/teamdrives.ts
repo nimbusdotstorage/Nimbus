@@ -1,7 +1,6 @@
-/* eslint-disable no-redeclare */
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { RequestOptions } from "../internal/request-options";
+import { type RequestOptions } from "../internal/request-options";
 import { buildHeaders } from "../internal/headers";
 import { APIPromise } from "../core/api-promise";
 import { APIResource } from "../core/resource";
@@ -1349,13 +1348,13 @@ export namespace TeamdriveDeleteParams {
 }
 
 export declare namespace Teamdrives {
-	export {
-		type TeamDrive as TeamDrive,
-		type TeamdriveListResponse as TeamdriveListResponse,
-		type TeamdriveCreateParams as TeamdriveCreateParams,
-		type TeamdriveRetrieveParams as TeamdriveRetrieveParams,
-		type TeamdriveUpdateParams as TeamdriveUpdateParams,
-		type TeamdriveListParams as TeamdriveListParams,
-		type TeamdriveDeleteParams as TeamdriveDeleteParams,
+	export type {
+		TeamDrive,
+		TeamdriveListResponse,
+		TeamdriveCreateParams,
+		TeamdriveRetrieveParams,
+		TeamdriveUpdateParams,
+		TeamdriveListParams,
+		TeamdriveDeleteParams,
 	};
 }

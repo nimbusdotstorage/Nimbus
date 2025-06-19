@@ -49,7 +49,7 @@ function* iterateHeaders(headers: HeadersLike): IterableIterator<readonly [strin
 		shouldClear = true;
 		iter = Object.entries(headers ?? {});
 	}
-	for (let row of iter) {
+	for (const row of iter) {
 		const name = row[0];
 		if (typeof name !== "string") throw new TypeError("expected header name to be a string");
 		const values = isArray(row[1]) ? row[1] : [row[1]];

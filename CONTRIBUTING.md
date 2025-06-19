@@ -184,6 +184,12 @@ git push origin feature/your-feature-name
 
 - Go to GitHub and open a pull request from your feature branch
 
+> Note: If you open a pull request, try to minimize the amount of repo wide changes you make. It will highly increase
+> the chances that we just review and merge. We're much more likely to question and challenge changes if they do not
+> make sense to the actual features or fixes the PR was intended for. Example: adding unneeded dependencies for the
+> server when the PR was for a dialog component, or changing the middleware functionality when you were working on
+> better error handling on the server
+
 ## Useful Commands
 
 - **Stop the database**:

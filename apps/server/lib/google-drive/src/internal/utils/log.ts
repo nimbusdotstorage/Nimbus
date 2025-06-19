@@ -58,7 +58,7 @@ const noopLogger = {
 	debug: noop,
 };
 
-let cachedLoggers = new WeakMap<Logger, [LogLevel, Logger]>();
+const cachedLoggers = new WeakMap<Logger, [LogLevel, Logger]>();
 
 export function loggerFor(client: Googledrive): Logger {
 	const logger = client.logger;

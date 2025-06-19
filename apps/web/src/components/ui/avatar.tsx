@@ -1,6 +1,6 @@
 "use client";
 
-import { Root, Image, Fallback } from "@radix-ui/react-avatar";
+import { Fallback, Image, Root } from "@radix-ui/react-avatar";
 import type { ComponentProps } from "react";
 
 import { cn } from "@/lib/utils";
@@ -15,8 +15,8 @@ function Avatar({ className, ...props }: ComponentProps<typeof Root>) {
 	);
 }
 
-function AvatarImage({ className, ...props }: ComponentProps<typeof Image>) {
-	return <Image data-slot="avatar-image" className={cn("aspect-square size-full", className)} {...props} />;
+function AvatarImage({ className, alt = "Avatar", ...props }: ComponentProps<typeof Image>) {
+	return <Image data-slot="avatar-image" className={cn("aspect-square size-full", className)} alt={alt} {...props} />;
 }
 
 function AvatarFallback({ className, ...props }: ComponentProps<typeof Fallback>) {
@@ -29,4 +29,4 @@ function AvatarFallback({ className, ...props }: ComponentProps<typeof Fallback>
 	);
 }
 
-export { Avatar, AvatarImage, AvatarFallback };
+export { Avatar, AvatarFallback, AvatarImage };

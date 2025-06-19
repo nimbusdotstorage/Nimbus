@@ -1,7 +1,6 @@
-/* eslint-disable no-redeclare */
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { RequestOptions } from "../internal/request-options";
+import { type RequestOptions } from "../internal/request-options";
 import { buildHeaders } from "../internal/headers";
 import { APIPromise } from "../core/api-promise";
 import { APIResource } from "../core/resource";
@@ -172,5 +171,5 @@ export namespace ChannelStopWatchingParams {
 }
 
 export declare namespace Channels {
-	export { type ChannelStopWatchingParams as ChannelStopWatchingParams };
+	export { type ChannelStopWatchingParams };
 }

@@ -3,7 +3,7 @@ import { motion, AnimatePresence, type Transition, type Variants, type AnimatePr
 import { useState, useEffect, Children, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-export type TextLoopProps = {
+export interface TextLoopProps {
 	children: ReactNode[];
 	className?: string;
 	interval?: number;
@@ -12,7 +12,7 @@ export type TextLoopProps = {
 	onIndexChange?: (index: number) => void;
 	trigger?: boolean;
 	mode?: AnimatePresenceProps["mode"];
-};
+}
 
 export function TextLoop({
 	children,

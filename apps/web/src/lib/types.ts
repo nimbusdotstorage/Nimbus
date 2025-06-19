@@ -53,24 +53,24 @@ export interface AuthCardProps extends ComponentProps<"div"> {
 
 export type Params = Record<string, string | number | null | undefined>;
 
-export type CreateRequestOptions = {
+export interface CreateRequestOptions {
 	path: string;
 	pathParams?: Params;
 	queryParams?: Params;
-};
+}
 
-export type UseRequestParams = {
+export interface UseRequestParams {
 	request: (signal: AbortSignal) => Promise<Response>;
 	triggers?: unknown[];
 	manual?: boolean;
-};
+}
 
-export type UseRequestReturn<ResponseBody> = {
+export interface UseRequestReturn<ResponseBody> {
 	data: ResponseBody | null;
 	error: Error | null;
 	isLoading: boolean;
 	refetch: () => Promise<void>;
-};
+}
 
 export interface CreateFolderParams {
 	name: string;
