@@ -20,6 +20,7 @@
 		"nanoid": "^5.1.5",
 		"pg": "^8.16.0",
 		"postgres": "^3.4.7",
+		"rate-limiter-flexible": "^7.1.1",
 		"resend": "^4.5.2",
 		"zod": "^3.25.56"
 	},
