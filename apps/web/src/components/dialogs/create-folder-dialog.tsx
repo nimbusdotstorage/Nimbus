@@ -25,11 +25,12 @@ export function CreateFolderDialog({ open, onOpenChange, onCreateFolder }: Creat
 
 		try {
 			await onCreateFolder(folderName.trim(), parentId);
+			toast.success(`Folder "${folderName.trim()}" created successfully`);
+			onOpenChange(false);
+			setFolderName("");
 		} catch {
 			toast.error("Failed to create folder");
 		}
-		onOpenChange(false);
-		setFolderName("");
 	};
 
 	return (

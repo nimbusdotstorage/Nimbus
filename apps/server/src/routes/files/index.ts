@@ -12,7 +12,7 @@ import { Hono } from "hono";
 
 const filesRouter = new Hono();
 
-// Get all files
+// Search/list all files
 filesRouter.get("/", async (c: Context) => {
 	const user = c.get("user");
 	if (!user) {
@@ -29,11 +29,19 @@ filesRouter.get("/", async (c: Context) => {
 		return c.json<FileOperationResponse>({ success: false, message: "Unauthorized access" }, 401);
 	}
 
-	// * The GoogleDriveProvider will be replaced by a general provider in the future
-	const files = await new GoogleDriveProvider(accessToken).listFiles();
-	if (!files) {
-		return c.json<FileOperationResponse>({ success: false, message: "Files not found" }, 404);
-	}
+	// Get URL params
+	const url = new URL(c.req.url);
+	const query = url.searchParams.get("q") || "";
+	const parents = url.searchParams.get("parents");
+	const pageSize = parseInt(url.searchParams.get("pageSize") || "20");
+	const pageToken = url.searchParams.get("pageToken");
+
+	const files = await new GoogleDriveProvider(accessToken).listFiles({
+		q: query,
+		parents: parents ? [parents] : undefined,
+		pageSize,
+		pageToken: pageToken || undefined,
+	});
 
 	// Set cache headers for the list of files
 	// c.header("Cache-Control", CACHE_HEADER);
@@ -79,7 +87,7 @@ filesRouter.get("/:id", async (c: Context) => {
 	return c.json<File>(file);
 });
 
-// Untested
+// Update file
 filesRouter.put("/", async (c: Context) => {
 	const user = c.get("user");
 	if (!user) {

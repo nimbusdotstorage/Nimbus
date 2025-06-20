@@ -2,18 +2,18 @@
 
 import { FileBrowserData } from "@/components/file-browser/file-browser-data";
 import { ErrorMessageWithRetry } from "@/components/error-message/with-retry";
-import { FilePreview } from "@/components/file-browser/file-preview";
 import { FileTabs } from "@/components/file-browser/file-tabs";
 import { createRequest } from "@/hooks/createRequest";
 import { useSearchParams } from "next/navigation";
 import { useRequest } from "@/hooks/useRequest";
 import { Loader } from "@/components/loader";
 import type { FileItem } from "@/lib/types";
+import React, { useState } from "react";
 
 export function FileBrowser() {
 	const searchParams = useSearchParams();
 	const type = searchParams.get("type");
-	const id = searchParams.get("id");
+	const [localData, setLocalData] = useState<FileItem[] | null>(null);
 
 	const fetchFiles = createRequest({
 		path: "/files",
@@ -25,8 +25,36 @@ export function FileBrowser() {
 		triggers: [type],
 	});
 
+	// Use local data if available, otherwise use fetched data
+	const displayData = localData || data;
+
+	const handleFileDeleted = (fileId: string) => {
+		// Remove file from local state for immediate UI update
+		if (displayData) {
+			setLocalData(displayData.filter(file => file.id !== fileId));
+		}
+		// Refetch to sync with server
+		void refetch();
+	};
+
+	const handleFileRenamed = (fileId: string, newName: string) => {
+		// Update file name in local state for immediate UI update
+		if (displayData) {
+			setLocalData(displayData.map(file => (file.id === fileId ? { ...file, name: newName } : file)));
+		}
+		// Refetch to sync with server
+		void refetch();
+	};
+
+	// Reset local data when fetched data changes
+	React.useEffect(() => {
+		if (data) {
+			setLocalData(null);
+		}
+	}, [data]);
+
 	return (
-		<div className={`flex flex-1 flex-col space-y-4 ${id ? "blur-sm transition-all" : ""}`}>
+		<div className="flex flex-1 flex-col space-y-4">
 			<div className="flex items-center justify-between">
 				<FileTabs type={type} />
 			</div>
@@ -36,10 +64,10 @@ export function FileBrowser() {
 			) : error ? (
 				<ErrorMessageWithRetry error={error} retryFn={refetch} />
 			) : (
-				data && <FileBrowserData data={data} />
+				displayData && (
+					<FileBrowserData data={displayData} onFileDeleted={handleFileDeleted} onFileRenamed={handleFileRenamed} />
+				)
 			)}
-
-			<FilePreview />
 		</div>
 	);
 }
