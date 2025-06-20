@@ -64,7 +64,7 @@ export function RenameFileDialog({ open, onOpenChange, file, onFileRenamed }: Re
 			const { extension } = getFileNameParts(file.name);
 			const isFolder = file.mimeType === "application/vnd.google-apps.folder";
 			if (!isFolder && extension) {
-				fullName = `${values.name}.${extension}`;
+				fullName = `${values.name}${extension}`;
 			}
 
 			const response = await fetch(

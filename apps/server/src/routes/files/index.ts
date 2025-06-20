@@ -33,15 +33,10 @@ filesRouter.get("/", async (c: Context) => {
 	const url = new URL(c.req.url);
 	const query = url.searchParams.get("q") || "";
 	const parents = url.searchParams.get("parents");
-	const pageSize = parseInt(url.searchParams.get("pageSize") || "20");
+	const pageSize = Number.parseInt(url.searchParams.get("pageSize") || "20");
 	const pageToken = url.searchParams.get("pageToken");
 
-	const files = await new GoogleDriveProvider(accessToken).listFiles({
-		q: query,
-		parents: parents ? [parents] : undefined,
-		pageSize,
-		pageToken: pageToken || undefined,
-	});
+	const files = await new GoogleDriveProvider(accessToken).listFiles();
 
 	// Set cache headers for the list of files
 	// c.header("Cache-Control", CACHE_HEADER);

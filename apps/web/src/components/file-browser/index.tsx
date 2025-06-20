@@ -34,7 +34,12 @@ export function FileBrowser() {
 			setLocalData(displayData.filter(file => file.id !== fileId));
 		}
 		// Refetch to sync with server
-		void refetch();
+
+		refetch().catch(error => {
+			console.error("Failed to sync with server:", error);
+			// Optionally revert the optimistic update
+			setLocalData(null);
+		});
 	};
 
 	const handleFileRenamed = (fileId: string, newName: string) => {
@@ -43,7 +48,11 @@ export function FileBrowser() {
 			setLocalData(displayData.map(file => (file.id === fileId ? { ...file, name: newName } : file)));
 		}
 		// Refetch to sync with server
-		void refetch();
+		refetch().catch(error => {
+			console.error("Failed to sync with server:", error);
+			// Optionally revert the optimistic update
+			setLocalData(null);
+		});
 	};
 
 	// Reset local data when fetched data changes

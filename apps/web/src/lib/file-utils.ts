@@ -1,12 +1,10 @@
-import type { FileItem } from "./types";
-
 /**
  * Format file size in human readable format
  */
 export function formatFileSize(bytes?: string | number): string {
 	if (!bytes) return "—";
 
-	const size = typeof bytes === "string" ? parseInt(bytes) : bytes;
+	const size = typeof bytes === "string" ? Number.parseInt(bytes) : bytes;
 	if (isNaN(size)) return "—";
 
 	const units = ["B", "KB", "MB", "GB", "TB"];

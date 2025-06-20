@@ -60,10 +60,10 @@ export class GoogleDriveProvider {
 	 * @param fileId The ID of the file to retrieve content for
 	 * @returns Binary content of the file
 	 */
-	async getFileContent(fileId: string): Promise<any | null> {
+	async getFileContent(fileId: string): Promise<ArrayBuffer | Buffer | string | null> {
 		try {
 			const response = await this.drive.files.retrieve(fileId, { alt: "media" });
-			return response;
+			return response as ArrayBuffer | Buffer | string;
 		} catch (error) {
 			console.error("Error getting file content:", error);
 			return null;

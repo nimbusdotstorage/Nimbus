@@ -43,7 +43,7 @@ export function DeleteFileDialog({ open, onOpenChange, file, onFileDeleted }: De
 			} else {
 				const error = await response.json();
 				console.error("Delete failed:", error);
-				toast.error("Failed to delete: " + (error.message || "Unknown error"));
+				toast.error(`Failed to delete: ${error.message || "Unknown error"}`);
 			}
 		} catch (error) {
 			console.error("Delete error:", error);

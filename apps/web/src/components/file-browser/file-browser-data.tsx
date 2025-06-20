@@ -247,13 +247,19 @@ export function FileBrowserData({
 					</thead>
 					<tbody>
 						{data.map(file => {
-							const isFolder = file.mimeType === "application/vnd.google-apps.folder";
-
 							return (
 								<tr
 									key={file.id}
 									className="hover:bg-accent/10 cursor-pointer border-t transition-colors"
 									onClick={() => handleRowClick(file)}
+									onKeyDown={e => {
+										if (e.key === "Enter" || e.key === " ") {
+											e.preventDefault();
+											handleRowClick(file);
+										}
+									}}
+									tabIndex={0}
+									role="button"
 								>
 									<td className="w-[50%] p-4">
 										<div className="flex max-w-full min-w-0 items-center gap-3">
@@ -269,7 +275,7 @@ export function FileBrowserData({
 										</div>
 									</td>
 									<td className="text-muted-foreground w-[15%] truncate p-3 text-sm">
-										{file.size ? formatFileSize(parseInt(file.size)) : "—"}
+										{file.size ? formatFileSize(Number.parseInt(file.size)) : "—"}
 									</td>
 									<td className="text-muted-foreground w-[20%] truncate p-3 text-sm">
 										{file.modifiedTime ? format(new Date(file.modifiedTime), "MMM d, yyyy 'at' h:mm a") : "—"}
