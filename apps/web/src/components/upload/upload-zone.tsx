@@ -41,7 +41,7 @@ export function UploadZone({
 		multiple: !isFolder,
 	});
 
-	const truncateFilename = (filename: string, maxLength: number = 40) => {
+	const truncateFilename = (filename: string, maxLength = 40) => {
 		if (filename.length <= maxLength) return filename;
 
 		const extension = filename.split(".").pop();

@@ -11,7 +11,6 @@ import { UploadFileDialog } from "@/components/dialogs/upload-files-dialog";
 import { FolderPlus, Plus, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUpload } from "@/hooks/useUpload";
-import type React from "react";
 
 export function UploadButton() {
 	const {

@@ -18,5 +18,9 @@
 	},
 	"peerDependencies": {
 		"typescript": "^5"
+	},
+	"dependencies": {
+		"drizzle-orm": "^0.43.1",
+		"pg": "^8.16.1"
 	}
 }

@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export type Fetch = (input: string | URL | Request, init?: RequestInit) => Promise<Response>;

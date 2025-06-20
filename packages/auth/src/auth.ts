@@ -5,6 +5,10 @@ import { betterAuth } from "better-auth";
 import schema from "@nimbus/db/schema";
 import { db } from "@nimbus/db";
 
+if (!process.env.FRONTEND_URL || !process.env.BACKEND_URL) {
+	throw new Error("Missing environment variables. FRONTEND_URL or BACKEND_URL is not defined");
+}
+
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
 		provider: "pg",
@@ -13,7 +17,7 @@ export const auth = betterAuth({
 		},
 	}),
 
-	trustedOrigins: [process.env.FRONTEND_URL!, process.env.BACKEND_URL!],
+	trustedOrigins: [process.env.FRONTEND_URL, process.env.BACKEND_URL],
 
 	emailAndPassword: {
 		enabled: true,
@@ -23,7 +27,7 @@ export const auth = betterAuth({
 		resetPasswordTokenExpiresIn: 600, // 10 minutes
 		sendResetPassword: async ({ user, url }) => {
 			const token = extractTokenFromUrl(url);
-			const frontendResetUrl = `${process.env.FRONTEND_URL!}/reset-password?token=${token}`;
+			const frontendResetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
 
 			await sendMail({
 				to: user.email,

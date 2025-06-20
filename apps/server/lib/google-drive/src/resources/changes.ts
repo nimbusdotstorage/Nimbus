@@ -1,7 +1,6 @@
-/* eslint-disable no-redeclare */
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { RequestOptions } from "../internal/request-options";
+import { type RequestOptions } from "../internal/request-options";
 import { APIPromise } from "../core/api-promise";
 import { APIResource } from "../core/resource";
 import * as TeamdrivesAPI from "./teamdrives";
@@ -706,12 +705,12 @@ export namespace ChangeSubscribeParams {
 }
 
 export declare namespace Changes {
-	export {
-		type Channel as Channel,
-		type ChangeListResponse as ChangeListResponse,
-		type ChangeGetStartPageTokenResponse as ChangeGetStartPageTokenResponse,
-		type ChangeListParams as ChangeListParams,
-		type ChangeGetStartPageTokenParams as ChangeGetStartPageTokenParams,
-		type ChangeSubscribeParams as ChangeSubscribeParams,
+	export type {
+		Channel,
+		ChangeListResponse,
+		ChangeGetStartPageTokenResponse,
+		ChangeListParams,
+		ChangeGetStartPageTokenParams,
+		ChangeSubscribeParams,
 	};
 }

@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export type PromiseOrValue<T> = T | Promise<T>;
@@ -97,14 +96,12 @@ type NodeFetchRequestInit =
 	| NotAny<import("../../../../../../../../../../node_modules/node-fetch").RequestInit>;
 /** @ts-ignore For users who use Deno */
 type FetchRequestInit = NonNullable<OverloadedParameters<typeof fetch>[1]>;
-/* eslint-enable */
 
 type RequestInits =
 	| NotAny<UndiciTypesRequestInit>
 	| NotAny<UndiciRequestInit>
 	| NotAny<BunRequestInit>
 	| NotAny<NodeFetchRequestInit>
-	// eslint-disable-next-line no-undef
 	| NotAny<RequestInit>
 	| NotAny<FetchRequestInit>;
 

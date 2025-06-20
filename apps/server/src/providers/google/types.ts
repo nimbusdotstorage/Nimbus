@@ -284,12 +284,12 @@ export interface File {
 	 * parents of the source file. Update requests must use the `addParents` and
 	 * `removeParents` parameters to modify the parents list.
 	 */
-	parents?: Array<string>;
+	parents?: string[];
 
 	/**
 	 * Output only. List of permission IDs for users with access to this file.
 	 */
-	permissionIds?: Array<string>;
+	permissionIds?: string[];
 
 	/**
 	 * A collection of arbitrary key-value pairs which are visible to all apps. Entries
@@ -344,7 +344,7 @@ export interface File {
 	 * Output only. The list of spaces which contain the file. The currently supported
 	 * values are 'drive', 'appDataFolder' and 'photos'.
 	 */
-	spaces?: Array<string>;
+	spaces?: string[];
 
 	/**
 	 * Whether the user has starred the file.
@@ -419,11 +419,11 @@ export interface File {
 }
 
 // Custom Route Typing
-export type FileListResponse = {
+export interface FileListResponse {
 	files: File[];
-};
+}
 
-export type FileOperationResponse = {
+export interface FileOperationResponse {
 	success: boolean;
 	message?: string;
-};
+}
