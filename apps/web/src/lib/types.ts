@@ -7,8 +7,9 @@ export interface FileItem {
 	id: string;
 	name: string;
 	type: "folder" | "document" | "image" | "video";
+	modifiedTime: string;
 	size?: string;
-	modified: string;
+	mimeType?: string;
 }
 
 export interface CreateFolderDialogProps {
