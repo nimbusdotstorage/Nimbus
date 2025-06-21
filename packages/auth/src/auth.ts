@@ -12,6 +12,11 @@ export const auth = betterAuth({
 			...schema,
 		},
 	}),
+	account: {
+		accountLinking: {
+			enabled: true,
+		},
+	},
 
 	trustedOrigins: [process.env.FRONTEND_URL!, process.env.BACKEND_URL!],
 

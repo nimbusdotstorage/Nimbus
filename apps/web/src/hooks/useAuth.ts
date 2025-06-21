@@ -28,6 +28,12 @@ export const useGoogleAuth = () => {
 	const signInWithGoogleProvider = useCallback(async () => {
 		setIsLoading(true);
 		try {
+			const isLoggedIn = await authClient.getSession();
+
+			isLoggedIn
+				? await authClient.linkSocial({ provider: "google", callbackURL: clientEnv.NEXT_PUBLIC_CALLBACK_URL })
+				: await authClient.signIn.social({ provider: "google", callbackURL: clientEnv.NEXT_PUBLIC_CALLBACK_URL });
+
 			toast.promise(signInWithGoogle(), {
 				loading: "Signing in with Google...",
 				success: "Signed in with Google",
@@ -50,6 +56,12 @@ export const useMicrosoftAuth = () => {
 	const signInWithMicrosoftProvider = useCallback(async () => {
 		setIsLoading(true);
 		try {
+			const isLoggedIn = await authClient.getSession();
+
+			isLoggedIn
+				? await authClient.linkSocial({ provider: "microsoft", callbackURL: clientEnv.NEXT_PUBLIC_CALLBACK_URL })
+				: await authClient.signIn.social({ provider: "microsoft", callbackURL: clientEnv.NEXT_PUBLIC_CALLBACK_URL });
+
 			toast.promise(signInWithMicrosoft(), {
 				loading: "Signing in with Microsoft...",
 				success: "Signed in with Microsoft",
