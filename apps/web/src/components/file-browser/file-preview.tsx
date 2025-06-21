@@ -1,5 +1,5 @@
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { FileText, Folder, Image, Video, X } from "lucide-react";
+import { FileText, Folder, Image as ImageIcon, Video, X } from "lucide-react";
 import type { FileItem, FolderContentItem } from "@/lib/types";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createRequest } from "@/hooks/createRequest";
@@ -67,7 +67,7 @@ export function FilePreview() {
 			case "folder":
 				return <Folder className="text-muted-foreground h-4 w-4" />;
 			case "image":
-				return <Image className="text-muted-foreground h-4 w-4" />;
+				return <ImageIcon className="text-muted-foreground h-4 w-4" />;
 			case "video":
 				return <Video className="text-muted-foreground h-4 w-4" />;
 			default:

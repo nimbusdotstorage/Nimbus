@@ -7,7 +7,7 @@ export class GoogleDriveError extends Error {}
 export class APIError<
 	TStatus extends number | undefined = number | undefined,
 	THeaders extends Headers | undefined = Headers | undefined,
-	TError extends Object | undefined = Object | undefined,
+	TError extends object | undefined = object | undefined,
 > extends GoogleDriveError {
 	/** HTTP status for the response that caused the error */
 	readonly status: TStatus;
@@ -46,7 +46,7 @@ export class APIError<
 
 	static generate(
 		status: number | undefined,
-		errorResponse: Object | undefined,
+		errorResponse: object | undefined,
 		message: string | undefined,
 		headers: Headers | undefined
 	): APIError {

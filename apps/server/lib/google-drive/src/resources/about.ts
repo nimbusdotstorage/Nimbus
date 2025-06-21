@@ -1,7 +1,6 @@
-/* eslint-disable no-redeclare */
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { RequestOptions } from "../internal/request-options";
+import { type RequestOptions } from "../internal/request-options";
 import { APIPromise } from "../core/api-promise";
 import { APIResource } from "../core/resource";
 
@@ -253,9 +252,5 @@ export namespace AboutRetrieveParams {
 }
 
 export declare namespace About {
-	export {
-		type User as User,
-		type AboutRetrieveResponse as AboutRetrieveResponse,
-		type AboutRetrieveParams as AboutRetrieveParams,
-	};
+	export { type User, type AboutRetrieveResponse, type AboutRetrieveParams };
 }

@@ -1,36 +1,35 @@
-/* eslint-disable no-redeclare */
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import {
-	Permission,
-	PermissionCreateParams,
-	PermissionDeleteParams,
-	PermissionListParams,
-	PermissionListResponse,
-	PermissionRetrieveParams,
-	PermissionUpdateParams,
+	type Permission,
+	type PermissionCreateParams,
+	type PermissionDeleteParams,
+	type PermissionListParams,
+	type PermissionListResponse,
+	type PermissionRetrieveParams,
+	type PermissionUpdateParams,
 	Permissions,
 } from "./permissions";
 import {
-	Comment,
-	CommentCreateParams,
-	CommentDeleteParams,
-	CommentListParams,
-	CommentListResponse,
-	CommentRetrieveParams,
-	CommentUpdateParams,
+	type Comment,
+	type CommentCreateParams,
+	type CommentDeleteParams,
+	type CommentListParams,
+	type CommentListResponse,
+	type CommentRetrieveParams,
+	type CommentUpdateParams,
 	Comments,
 } from "./comments/comments";
 import {
-	Revision,
-	RevisionDeleteParams,
-	RevisionListParams,
-	RevisionListResponse,
-	RevisionRetrieveParams,
-	RevisionUpdateParams,
+	type Revision,
+	type RevisionDeleteParams,
+	type RevisionListParams,
+	type RevisionListResponse,
+	type RevisionRetrieveParams,
+	type RevisionUpdateParams,
 	Revisions,
 } from "./revisions";
-import { RequestOptions } from "../../internal/request-options";
+import type { RequestOptions } from "../../internal/request-options";
 import { buildHeaders } from "../../internal/headers";
 import { APIPromise } from "../../core/api-promise";
 import * as CommentsAPI from "./comments/comments";
@@ -5644,56 +5643,56 @@ Files.Permissions = Permissions;
 Files.Revisions = Revisions;
 
 export declare namespace Files {
-	export {
-		type File as File,
-		type Label as Label,
-		type FileListResponse as FileListResponse,
-		type FileGenerateIDsResponse as FileGenerateIDsResponse,
-		type FileListLabelsResponse as FileListLabelsResponse,
-		type FileModifyLabelsResponse as FileModifyLabelsResponse,
-		type FileCreateParams as FileCreateParams,
-		type FileRetrieveParams as FileRetrieveParams,
-		type FileUpdateParams as FileUpdateParams,
-		type FileListParams as FileListParams,
-		type FileDeleteParams as FileDeleteParams,
-		type FileCopyParams as FileCopyParams,
-		type FileDeleteTrashedParams as FileDeleteTrashedParams,
-		type FileExportParams as FileExportParams,
-		type FileGenerateIDsParams as FileGenerateIDsParams,
-		type FileListLabelsParams as FileListLabelsParams,
-		type FileModifyLabelsParams as FileModifyLabelsParams,
-		type FileWatchParams as FileWatchParams,
+	export type {
+		File,
+		Label,
+		FileListResponse,
+		FileGenerateIDsResponse,
+		FileListLabelsResponse,
+		FileModifyLabelsResponse,
+		FileCreateParams,
+		FileRetrieveParams,
+		FileUpdateParams,
+		FileListParams,
+		FileDeleteParams,
+		FileCopyParams,
+		FileDeleteTrashedParams,
+		FileExportParams,
+		FileGenerateIDsParams,
+		FileListLabelsParams,
+		FileModifyLabelsParams,
+		FileWatchParams,
 	};
 
-	export {
-		Comments as Comments,
-		type Comment as Comment,
-		type CommentListResponse as CommentListResponse,
-		type CommentCreateParams as CommentCreateParams,
-		type CommentRetrieveParams as CommentRetrieveParams,
-		type CommentUpdateParams as CommentUpdateParams,
-		type CommentListParams as CommentListParams,
-		type CommentDeleteParams as CommentDeleteParams,
+	export { Comments };
+	export type {
+		Comment,
+		CommentListResponse,
+		CommentCreateParams,
+		CommentRetrieveParams,
+		CommentUpdateParams,
+		CommentListParams,
+		CommentDeleteParams,
 	};
 
-	export {
-		Permissions as Permissions,
-		type Permission as Permission,
-		type PermissionListResponse as PermissionListResponse,
-		type PermissionCreateParams as PermissionCreateParams,
-		type PermissionRetrieveParams as PermissionRetrieveParams,
-		type PermissionUpdateParams as PermissionUpdateParams,
-		type PermissionListParams as PermissionListParams,
-		type PermissionDeleteParams as PermissionDeleteParams,
+	export { Permissions };
+	export type {
+		Permission,
+		PermissionListResponse,
+		PermissionCreateParams,
+		PermissionRetrieveParams,
+		PermissionUpdateParams,
+		PermissionListParams,
+		PermissionDeleteParams,
 	};
 
-	export {
-		Revisions as Revisions,
-		type Revision as Revision,
-		type RevisionListResponse as RevisionListResponse,
-		type RevisionRetrieveParams as RevisionRetrieveParams,
-		type RevisionUpdateParams as RevisionUpdateParams,
-		type RevisionListParams as RevisionListParams,
-		type RevisionDeleteParams as RevisionDeleteParams,
+	export { Revisions };
+	export type {
+		Revision,
+		RevisionListResponse,
+		RevisionRetrieveParams,
+		RevisionUpdateParams,
+		RevisionListParams,
+		RevisionDeleteParams,
 	};
 }

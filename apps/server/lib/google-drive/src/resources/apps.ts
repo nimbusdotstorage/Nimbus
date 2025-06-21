@@ -1,7 +1,6 @@
-/* eslint-disable no-redeclare */
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { RequestOptions } from "../internal/request-options";
+import { type RequestOptions } from "../internal/request-options";
 import { APIPromise } from "../core/api-promise";
 import { APIResource } from "../core/resource";
 import { path } from "../internal/utils/path";
@@ -358,10 +357,5 @@ export namespace AppListParams {
 }
 
 export declare namespace Apps {
-	export {
-		type App as App,
-		type AppListResponse as AppListResponse,
-		type AppRetrieveParams as AppRetrieveParams,
-		type AppListParams as AppListParams,
-	};
+	export { type App, type AppListResponse, type AppRetrieveParams, type AppListParams };
 }

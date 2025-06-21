@@ -4,27 +4,21 @@
 	"type": "module",
 	"private": true,
 	"devDependencies": {
+		"@nimbus/eslint": "workspace:*",
 		"@nimbus/tsconfig": "workspace:*",
-		"@eslint/js": "^9.27.0",
-		"@next/eslint-plugin-next": "^15.3.2",
-		"@types/bun": "latest",
-		"@typescript-eslint/eslint-plugin": "^8.32.1",
-		"@typescript-eslint/parser": "^8.32.1",
 		"concurrently": "^9.1.2",
-		"eslint": "^9.27.0",
-		"eslint-config-prettier": "^10.1.5",
-		"eslint-plugin-react": "^7.37.5",
-		"eslint-plugin-react-hooks": "^5.2.0",
-		"eslint-plugin-unused-imports": "^4.1.4",
+		"eslint": "^9.29.0",
 		"husky": "^9.1.7",
-		"lint-staged": "^16.1.0",
+		"knip": "^5.61.2",
+		"lint-staged": "^16.1.2",
+		"oxlint": "^1.1.0",
 		"prettier": "^3.5.3",
 		"prettier-plugin-sort-imports": "^1.8.8",
 		"prettier-plugin-tailwindcss": "^0.6.12",
-		"typescript": "^5",
-		"typescript-eslint": "^8.32.1"
+		"typescript": "^5"
 	},
 	"scripts": {
+		"knip": "knip-bun --config knip.config.ts",
 		"dev:web": "bun --elide-lines 0 --filter @nimbus/web --env-file .env dev",
 		"dev:server": "bun --elide-lines 0 --filter @nimbus/server --env-file .env dev",
 		"dev": "concurrently --names \"WEB,SERVER\" --prefix-colors \"cyan,magenta\" --prefix \"[{name}]\" --kill-others-on-fail \"bun --env-file .env dev:web\" \"bun --env-file .env dev:server\"",
@@ -34,25 +28,20 @@
 		"db:reset": "docker compose down -v && docker compose up -d",
 		"db:migrate": "bun --elide-lines 0 --filter @nimbus/db --env-file .env migrate",
 		"db:studio": "bun --elide-lines 0 --filter @nimbus/db --env-file .env studio",
-		"build": "bun --cwd=apps/web run build",
-		"start": "bun --cwd=apps/web run start",
-		"format": "bunx prettier --write .",
-		"format:check": "bunx prettier --check .",
-		"lint": "eslint .",
-		"lint:fix": "eslint . --fix",
+		"build:web": "bun run --cwd=apps/web build",
+		"build:server": "bun run --cwd=apps/server build",
+		"build": "concurrently --names \"WEB,SERVER\" --prefix-colors \"cyan,magenta\" --prefix \"[{name}]\" --kill-others-on-fail \"bun run --cwd=apps/web build\" \"bun run --cwd=apps/server build\"",
+		"start:web": "bun run --cwd=apps/web start",
+		"start:server": "bun run --cwd=apps/server start",
+		"start": "concurrently --names \"WEB,SERVER\" --prefix-colors \"cyan,magenta\" --prefix \"[{name}]\" --kill-others-on-fail \"bun run --cwd=apps/web start\" \"bun run --cwd=apps/server start\"",
+		"format": "bun prettier . --write --list-different",
+		"format:check": "bun prettier . --check",
+		"lint": "oxlint; eslint .; bun run --cwd=apps/web lint",
+		"lint:fix": "oxlint --fix; eslint . --fix; bun run --cwd=apps/web lint --fix",
 		"prepare": "husky"
 	},
 	"workspaces": [
 		"apps/*",
 		"packages/*"
-	],
-	"lint-staged": {
-		"*.{js,jsx,ts,tsx}": [
-			"eslint --fix",
-			"prettier --write"
-		],
-		"*.{json,md,yml,yaml}": [
-			"prettier --write"
-		]
-	}
+	]
 }

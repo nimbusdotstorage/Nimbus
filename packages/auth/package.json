@@ -8,15 +8,14 @@
 		"./auth": "./src/auth.ts"
 	},
 	"devDependencies": {
-		"@nimbus/tsconfig": "workspace:*",
-		"@types/bun": "latest"
+		"@nimbus/tsconfig": "workspace:*"
 	},
 	"peerDependencies": {
 		"typescript": "^5"
 	},
 	"dependencies": {
 		"@nimbus/db": "workspace:*",
-		"axios": "^1.9.0",
-		"dotenv": "^16.5.0"
+		"axios": "^1.10.0",
+		"better-auth": "^1.2.9"
 	}
 }

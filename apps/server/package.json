@@ -5,9 +5,9 @@
 	"private": true,
 	"scripts": {
 		"dev": "bun --watch src/index.ts",
+		"dev:hot": "bun --hot src/index.ts",
 		"build": "bun build src/index.ts --target bun --outdir dist",
-		"start": "bun dist/index.js",
-		"lint": "eslint src/**/*.ts"
+		"start": "bun dist/index.js"
 	},
 	"dependencies": {
 		"@hono/zod-validator": "^0.7.0",
@@ -15,18 +15,17 @@
 		"@nimbus/db": "workspace:*",
 		"@t3-oss/env-core": "^0.13.8",
 		"drizzle-orm": "^0.43.1",
-		"hono": "^4.7.10",
-		"nanoid": "^5.1.5",
-		"pg": "^8.16.0",
+		"iovalkey": "^0.3.3",
 		"postgres": "^3.4.7",
-		"resend": "^4.5.2",
-		"zod": "^3.25.56"
+		"rate-limiter-flexible": "^7.1.1",
+		"hono": "^4.8.0",
+		"nanoid": "^5.1.5",
+		"pg": "^8.16.1",
+		"resend": "^4.6.0",
+		"zod": "^3.25.67"
 	},
 	"devDependencies": {
 		"@nimbus/tsconfig": "workspace:*",
-		"@types/bun": "latest",
-		"@types/pg": "^8.15.2",
-		"eslint": "^9.0.0",
-		"typescript": "^5.0.0"
+		"@types/pg": "^8.15.4"
 	}
 }

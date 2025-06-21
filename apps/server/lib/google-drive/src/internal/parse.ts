@@ -2,7 +2,7 @@
 
 import { formatRequestDetails, loggerFor } from "./utils/log";
 import type { FinalRequestOptions } from "./request-options";
-import { type Googledrive } from "../client";
+import { type GoogleDrive } from "../client";
 
 export type APIResponseProps = {
 	response: Response;
@@ -13,7 +13,7 @@ export type APIResponseProps = {
 	startTime: number;
 };
 
-export async function defaultParseResponse<T>(client: Googledrive, props: APIResponseProps): Promise<T> {
+export async function defaultParseResponse<T>(client: GoogleDrive, props: APIResponseProps): Promise<T> {
 	const { response, requestLogID, retryOfRequestLogID, startTime } = props;
 	const body = await (async () => {
 		// fetch refuses to read the body when the status code is 204.

@@ -1,8 +1,8 @@
 # Dependency directories
-*/node_modules/
-*/.next/
-*/dist/
-*/build/
+**/node_modules/
+**/.next/
+**/dist/
+**/build/
 *package-lock.json
 *bun.lock
 
@@ -13,8 +13,6 @@
 # Configuration files that might be automatically generated or have specific formatting
 .env
 .env.*
-*/next.config.js
-tailwind.config.js
 
 # Generated files
 schema.ts
@@ -27,8 +25,5 @@ drizzle/
 # Log files
 *.log
 
-# Dotfiles
-.*
-
 # If you have serverless function output directories (e.g., Vercel, Netlify)
-*/.vercel/
+**/.vercel/

@@ -62,7 +62,12 @@ filesRouter.get("/:id", async (c: Context) => {
 		return c.json<FileOperationResponse>({ success: false, message: "File ID not provided" }, 400);
 	}
 
-	const file = await new GoogleDriveProvider(account.accessToken!).getFileById(fileId);
+	const accessToken = account.accessToken;
+	if (!accessToken) {
+		return c.json<FileOperationResponse>({ success: false, message: "Unauthorized access" }, 401);
+	}
+
+	const file = await new GoogleDriveProvider(accessToken).getFileById(fileId);
 	if (!file) {
 		return c.json<FileOperationResponse>({ success: false, message: "File not found" }, 404);
 	}
@@ -93,7 +98,12 @@ filesRouter.put("/", async (c: Context) => {
 	const fileId = data.id;
 	const name = data.name;
 
-	const success = await new GoogleDriveProvider(account.accessToken!).updateFile(fileId, name);
+	const accessToken = account.accessToken;
+	if (!accessToken) {
+		return c.json<FileOperationResponse>({ success: false, message: "Unauthorized access" }, 401);
+	}
+
+	const success = await new GoogleDriveProvider(accessToken).updateFile(fileId, name);
 
 	if (!success) {
 		return c.json<FileOperationResponse>({ success: false, message: "Failed to update file" }, 500);
@@ -120,8 +130,13 @@ filesRouter.delete("/", async (c: Context) => {
 		return c.json<FileOperationResponse>({ success: false, message: error.errors[0]?.message }, 400);
 	}
 
+	const accessToken = account.accessToken;
+	if (!accessToken) {
+		return c.json<FileOperationResponse>({ success: false, message: "Unauthorized access" }, 401);
+	}
+
 	const fileId = data.id;
-	const success = await new GoogleDriveProvider(account.accessToken!).deleteFile(fileId);
+	const success = await new GoogleDriveProvider(accessToken).deleteFile(fileId);
 
 	if (!success) {
 		return c.json<FileOperationResponse>({ success: false, message: "Failed to delete file" }, 500);
@@ -148,10 +163,15 @@ filesRouter.post("/", async (c: Context) => {
 		return c.json<FileOperationResponse>({ success: false, message: error.errors[0]?.message }, 400);
 	}
 
+	const accessToken = account.accessToken;
+	if (!accessToken) {
+		return c.json<FileOperationResponse>({ success: false, message: "Unauthorized access" }, 401);
+	}
+
 	const name = data.name;
 	const mimeType = data.mimeType;
 	const parents = data.parents ? [data.parents] : undefined;
-	const success = await new GoogleDriveProvider(account.accessToken!).createFile(name, mimeType, parents);
+	const success = await new GoogleDriveProvider(accessToken).createFile(name, mimeType, parents);
 
 	if (!success) {
 		return c.json<FileOperationResponse>({ success: false, message: "Failed to create file" }, 500);
