@@ -1,5 +1,4 @@
 // This file holds all the custom interfaces and types for the Next.js front end app.
-
 import type { ChangeEvent, ComponentProps, ComponentType, ReactNode } from "react";
 import type { Button } from "@/components/ui/button";
 import type { Input } from "@/components/ui/input";
@@ -54,24 +53,24 @@ export interface AuthCardProps extends ComponentProps<"div"> {
 
 export type Params = Record<string, string | number | null | undefined>;
 
-export type CreateRequestOptions = {
+export interface CreateRequestOptions {
 	path: string;
 	pathParams?: Params;
 	queryParams?: Params;
-};
+}
 
-export type UseRequestParams = {
+export interface UseRequestParams {
 	request: (signal: AbortSignal) => Promise<Response>;
 	triggers?: unknown[];
 	manual?: boolean;
-};
+}
 
-export type UseRequestReturn<ResponseBody> = {
+export interface UseRequestReturn<ResponseBody> {
 	data: ResponseBody | null;
 	error: Error | null;
 	isLoading: boolean;
 	refetch: () => Promise<void>;
-};
+}
 
 export interface CreateFolderParams {
 	name: string;

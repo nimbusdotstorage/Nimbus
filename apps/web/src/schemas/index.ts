@@ -14,7 +14,7 @@ const createPasswordSchema = () =>
 const createConfirmPasswordSchema =
 	(passwordField = "password") =>
 	(schema: z.ZodTypeAny) =>
-		schema.refine((data: any) => data[passwordField] === data.confirmPassword, {
+		schema.refine(data => data[passwordField] === data.confirmPassword, {
 			message: "Passwords do not match",
 			path: ["confirmPassword"],
 		});
