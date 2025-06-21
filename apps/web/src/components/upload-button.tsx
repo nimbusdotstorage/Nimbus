@@ -29,21 +29,33 @@ export function UploadButton() {
 		<>
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
-					<Button variant="outline" size="icon" className="cursor-pointer">
+					<Button variant="outline" size="icon" className="cursor-pointer" aria-label="Open upload menu">
 						<Plus className="h-4 w-4" />
 						<span className="sr-only">Open menu</span>
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="end">
-					<DropdownMenuItem onClick={() => setUploadFileOpen(true)} className="cursor-pointer">
+					<DropdownMenuItem
+						onClick={() => setUploadFileOpen(true)}
+						className="cursor-pointer"
+						aria-label="Upload files"
+					>
 						<Upload className="mr-2 h-4 w-4" />
 						Upload files
 					</DropdownMenuItem>
-					<DropdownMenuItem onClick={() => setUploadFolderOpen(true)} className="cursor-pointer">
+					<DropdownMenuItem
+						onClick={() => setUploadFolderOpen(true)}
+						className="cursor-pointer"
+						aria-label="Upload folder"
+					>
 						<Upload className="mr-2 h-4 w-4" />
 						Upload folder
 					</DropdownMenuItem>
-					<DropdownMenuItem onClick={() => setCreateFolderOpen(true)} className="cursor-pointer">
+					<DropdownMenuItem
+						onClick={() => setCreateFolderOpen(true)}
+						className="cursor-pointer"
+						aria-label="Create folder"
+					>
 						<FolderPlus className="mr-2 h-4 w-4" />
 						Create folder
 					</DropdownMenuItem>

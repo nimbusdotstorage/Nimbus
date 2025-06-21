@@ -36,7 +36,7 @@ export function FileBrowser() {
 			) : error ? (
 				<ErrorMessageWithRetry error={error} retryFn={refetch} />
 			) : (
-				data && <FileBrowserData data={data} />
+				data && <FileBrowserData data={data} type={type} />
 			)}
 
 			<FilePreview />

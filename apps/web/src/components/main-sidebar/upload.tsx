@@ -34,6 +34,7 @@ export default function UploadButton() {
 							<Button
 								className="w-full cursor-pointer justify-start group-data-[collapsible=icon]:justify-center"
 								size="sm"
+								aria-label="Open upload menu"
 							>
 								<Upload className="mr-2 size-4 group-data-[collapsible=icon]:mr-0" />
 								<span className="group-data-[collapsible=icon]:hidden">Upload</span>
