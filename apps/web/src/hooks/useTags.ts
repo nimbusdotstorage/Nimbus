@@ -61,10 +61,23 @@ export function useTags() {
 			const validatedData = updateTagSchema.parse(data);
 			return updateTag(validatedData);
 		},
-		onSuccess: () => {
+		onSuccess: updatedTag => {
 			toast.success("Tag updated successfully");
-			// invalidate the tags query => new request will be automatically sent to update data
-			return queryClient.invalidateQueries({ queryKey: [TAGS_QUERY_KEY] });
+			// Update tags cache locally with the updated tag
+			queryClient.setQueryData<Tag[]>([TAGS_QUERY_KEY], (oldData = []) => {
+				const updateRecursive = (tags: Tag[]): Tag[] => {
+					return tags.map(tag => {
+						if (tag.id === updatedTag.id) {
+							return { ...tag, ...updatedTag };
+						}
+						if (tag.children) {
+							return { ...tag, children: updateRecursive(tag.children) };
+						}
+						return tag;
+					});
+				};
+				return updateRecursive(oldData);
+			});
 		},
 		onError: (error: AxiosError<{ message: string }> | Error) => {
 			if (error instanceof Error && error.name === "ZodError") {
@@ -79,19 +92,55 @@ export function useTags() {
 		mutationFn: deleteTag,
 		onSuccess: (_, deletedId) => {
 			toast.success("Tag deleted successfully");
-			// remove the tag from the local data
+			// remove the tag and all its descendants from the local data
 			queryClient.setQueryData<Tag[]>([TAGS_QUERY_KEY], (oldData = []) => {
-				const removeRecursive = (tags: Tag[], idToRemove: string): Tag[] => {
+				// First, find all descendant IDs to remove
+				const getDescendantIds = (tags: Tag[], targetId: string): string[] => {
+					const descendants: string[] = [];
+
+					const findDescendants = (tagList: Tag[]) => {
+						for (const tag of tagList) {
+							if (tag.id === targetId) {
+								// Found the target tag, collect all its children
+								if (tag.children) {
+									const collectChildren = (children: Tag[]) => {
+										for (const child of children) {
+											descendants.push(child.id);
+											if (child.children) {
+												collectChildren(child.children);
+											}
+										}
+									};
+									collectChildren(tag.children);
+								}
+								return;
+							}
+							if (tag.children) {
+								findDescendants(tag.children);
+							}
+						}
+					};
+
+					findDescendants(tags);
+					return descendants;
+				};
+
+				const descendantIds = getDescendantIds(oldData, deletedId);
+				const allIdsToRemove = [deletedId, ...descendantIds];
+
+				// Remove all tags (parent and descendants)
+				const removeRecursive = (tags: Tag[], idsToRemove: string[]): Tag[] => {
 					return tags
-						.filter(tag => tag.id !== idToRemove)
+						.filter(tag => !idsToRemove.includes(tag.id))
 						.map(tag => {
 							if (tag.children && tag.children.length > 0) {
-								return { ...tag, children: removeRecursive(tag.children, idToRemove) };
+								return { ...tag, children: removeRecursive(tag.children, idsToRemove) };
 							}
 							return tag;
 						});
 				};
-				return removeRecursive(oldData, deletedId);
+
+				return removeRecursive(oldData, allIdsToRemove);
 			});
 		},
 		onError: (error: AxiosError<{ message: string }>) => {

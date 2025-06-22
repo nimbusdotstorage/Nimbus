@@ -96,9 +96,31 @@ function FileTags({ file, availableTags, refetch }: { file: FileItem; availableT
 		return flattened;
 	};
 
+	// Get up to date tag information (in case tag is updated or deleted)
+	const getUpdatedFileTags = () => {
+		if (!file.tags) return [];
+
+		// Create a flat lookup map of all available tags for O(1) access
+		const tagMap = new Map<string, Tag>();
+		const buildTagMap = (tags: Tag[]) => {
+			tags.forEach(tag => {
+				tagMap.set(tag.id, tag);
+				if (tag.children) {
+					buildTagMap(tag.children);
+				}
+			});
+		};
+		buildTagMap(availableTags);
+		return file.tags
+			.map(fileTag => tagMap.get(fileTag.id) || fileTag) // Use updated tag if available, fallback to original
+			.filter(tag => tagMap.has(tag.id)); // Only keep tags that still exist
+	};
+
+	const updatedFileTags = getUpdatedFileTags();
+
 	return (
 		<div className="flex items-center gap-2 overflow-hidden">
-			{file.tags?.map(tag => (
+			{updatedFileTags.map(tag => (
 				<div
 					key={tag.id}
 					className="group relative cursor-pointer"
