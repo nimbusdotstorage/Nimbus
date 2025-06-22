@@ -17,11 +17,11 @@ cd Nimbus
 bun i
 ```
 
-### 3. Set Up Postgres with Docker
+### 3. Set Up Postgres and Valkey with Docker
 
-We use Docker to run a PostgreSQL database for local development. Follow these steps to set it up:
+We use Docker to run a PostgreSQL database and Valkey for local development. Follow these steps to set it up:
 
-1. **Start the database**:
+1. **Start the database and valkey**:
 
    ```bash
    bun db:up
@@ -35,19 +35,33 @@ We use Docker to run a PostgreSQL database for local development. Follow these s
    - Username: `postgres`
    - Password: `postgres`
 
-2. **Verify the database is running if running a detached container**:
+   And a Valkey container with credentials:
+
+   - Host: `localhost`
+   - Port: `6379`
+   - Username: `valkey`
+   - Password: `valkey`
+
+2. **Verify the database and valkey is running if running a detached container**:
 
    ```bash
    docker compose ps
    ```
 
-   You should see the `nimbus-db` container in the list with a status of "Up".
+   You should see the `nimbus-db` and `nimbus-valkey` containers in the list with a status of "Up".
 
 3. **Connect to the database** (optional):
 
    ```bash
    # Using psql client inside the container
    docker compose exec postgres psql -U postgres -d nimbus
+   ```
+
+4. **Connect to the valkey** (optional):
+
+   ```bash
+   # Using valkey-cli inside the container
+   docker compose exec valkey valkey-cli --user valkey --pass valkey
    ```
 
 ### 4. Environment Setup

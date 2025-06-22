@@ -1,65 +1,21 @@
-import { rateLimitAttempts, waitlist } from "@nimbus/db/schema";
+import { createRateLimiterMiddleware } from "@/utils/rate-limiter-utils";
+import { waitlistRateLimiter } from "@/config/rate-limiters";
 import { zValidator } from "@hono/zod-validator";
+import { waitlist } from "@nimbus/db/schema";
 import { emailSchema } from "@/validators";
-import { eq, sql } from "drizzle-orm";
 import { count } from "drizzle-orm";
 import type { Context } from "hono";
+import { eq } from "drizzle-orm";
 import { db } from "@nimbus/db";
 import { nanoid } from "nanoid";
 import { Hono } from "hono";
 
 const waitlistRouter = new Hono();
 
-// Database-backed rate limiting function. Replace with Valkey rate limiting
-async function checkRateLimitDB(ip: string, limit = 3, windowMs = 120000) {
-	const now = new Date();
+const waitlistRateLimiterMiddleware = createRateLimiterMiddleware({ limiter: waitlistRateLimiter });
 
-	const attempts = await db.select().from(rateLimitAttempts).where(eq(rateLimitAttempts.identifier, ip)).limit(1);
-
-	const currentAttempt = attempts[0];
-
-	if (!currentAttempt || currentAttempt.expiresAt < now) {
-		const newExpiry = new Date(now.getTime() + windowMs);
-		await db
-			.insert(rateLimitAttempts)
-			.values({ identifier: ip, count: 1, expiresAt: newExpiry })
-			.onConflictDoUpdate({
-				target: rateLimitAttempts.identifier,
-				set: { count: 1, expiresAt: newExpiry },
-			});
-		return { allowed: true, remaining: limit - 1, resetTime: newExpiry };
-	}
-
-	if (currentAttempt.count >= limit) {
-		return { allowed: false, remaining: 0, resetTime: currentAttempt.expiresAt };
-	}
-
-	await db
-		.update(rateLimitAttempts)
-		.set({ count: sql`${rateLimitAttempts.count} + 1` })
-		.where(eq(rateLimitAttempts.identifier, ip));
-
-	return { allowed: true, remaining: limit - (currentAttempt.count + 1), resetTime: currentAttempt.expiresAt };
-}
-
-// Route: POST /waitlist/join
-waitlistRouter.post("/join", zValidator("json", emailSchema), async (c: Context) => {
+waitlistRouter.post("/join", waitlistRateLimiterMiddleware, zValidator("json", emailSchema), async (c: Context) => {
 	try {
-		const ip = c.req.header("x-forwarded-for") || c.req.header("x-real-ip") || "anonymous";
-
-		const rateLimitResult = await checkRateLimitDB(ip, 3, 120000);
-
-		if (!rateLimitResult.allowed) {
-			return c.json(
-				{
-					success: false,
-					error: "Too many requests. Please wait before trying again.",
-					retryAfter: Math.ceil((rateLimitResult.resetTime.getTime() - Date.now()) / 1000),
-				},
-				429
-			);
-		}
-
 		const email = (await c.req.json()).email;
 
 		const existing = await db
