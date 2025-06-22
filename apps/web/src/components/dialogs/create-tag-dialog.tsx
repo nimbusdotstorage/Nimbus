@@ -6,9 +6,11 @@ import {
 	DialogFooter,
 	DialogDescription,
 } from "@/components/ui/dialog";
+import { FieldError } from "@/components/ui/field-error";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { createTagSchema } from "@/schemas";
 import { useState, useEffect } from "react";
 import type { Tag } from "@/lib/types";
 import { type ReactNode } from "react";
@@ -35,6 +37,7 @@ export function CreateTagDialog({ isOpen, onClose, onCreate, tags, initialParent
 	const [name, setName] = useState("");
 	const [color, setColor] = useState("#808080");
 	const [parentId, setParentId] = useState<string | undefined>(undefined);
+	const [errors, setErrors] = useState<{ name?: string; color?: string }>({});
 
 	useEffect(() => {
 		if (isOpen) {
@@ -43,13 +46,58 @@ export function CreateTagDialog({ isOpen, onClose, onCreate, tags, initialParent
 			setName("");
 			setColor("#808080");
 			setParentId(undefined);
+			setErrors({});
 		}
 	}, [isOpen, initialParentId]);
 
+	// Real-time validation
+	useEffect(() => {
+		const validationResult = createTagSchema.safeParse({
+			name,
+			color,
+			parentId: parentId === "none" ? undefined : parentId,
+		});
+		if (!validationResult.success) {
+			const newErrors: { name?: string; color?: string } = {};
+			validationResult.error.errors.forEach(error => {
+				if (error.path.includes("name")) {
+					newErrors.name = error.message;
+				}
+				if (error.path.includes("color")) {
+					newErrors.color = error.message;
+				}
+			});
+			setErrors(newErrors);
+		} else {
+			setErrors({});
+		}
+	}, [name, color, parentId]);
+
 	const handleSubmit = () => {
-		onCreate({ name, color, parentId: parentId === "none" ? undefined : parentId });
-		onClose();
+		const validationResult = createTagSchema.safeParse({
+			name,
+			color,
+			parentId: parentId === "none" ? undefined : parentId,
+		});
+		if (validationResult.success) {
+			onCreate(validationResult.data);
+			onClose();
+		} else {
+			// Update errors for final validation
+			const newErrors: { name?: string; color?: string } = {};
+			validationResult.error.errors.forEach(error => {
+				if (error.path.includes("name")) {
+					newErrors.name = error.message;
+				}
+				if (error.path.includes("color")) {
+					newErrors.color = error.message;
+				}
+			});
+			setErrors(newErrors);
+		}
 	};
+
+	const isValid = Object.keys(errors).length === 0 && name.trim().length > 0;
 
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
@@ -63,20 +111,26 @@ export function CreateTagDialog({ isOpen, onClose, onCreate, tags, initialParent
 						<Label htmlFor="name" className="text-right">
 							Name
 						</Label>
-						<Input id="name" value={name} onChange={e => setName(e.target.value)} className="col-span-3" />
+						<div className="col-span-3">
+							<Input
+								id="name"
+								value={name}
+								onChange={e => setName(e.target.value)}
+								className={errors.name ? "border-red-500" : ""}
+								placeholder="Enter tag name (letters and spaces only)"
+							/>
+						</div>
 					</div>
+					<div className="text-xs text-red-500">{errors.name && <FieldError error={errors.name} />}</div>
 					<div className="grid grid-cols-4 items-center gap-4">
 						<Label htmlFor="color" className="text-right">
 							Color
 						</Label>
-						<Input
-							id="color"
-							type="color"
-							value={color}
-							onChange={e => setColor(e.target.value)}
-							className="col-span-3"
-						/>
+						<div className="col-span-3">
+							<Input id="color" type="color" value={color} onChange={e => setColor(e.target.value)} />
+						</div>
 					</div>
+					<div className="text-xs text-red-500">{errors.color && <FieldError error={errors.color} />}</div>
 					<div className="grid grid-cols-4 items-center gap-4">
 						<Label htmlFor="parent" className="text-right">
 							Parent Tag
@@ -96,7 +150,9 @@ export function CreateTagDialog({ isOpen, onClose, onCreate, tags, initialParent
 					<Button variant="outline" onClick={onClose}>
 						Cancel
 					</Button>
-					<Button onClick={handleSubmit}>Create</Button>
+					<Button onClick={handleSubmit} disabled={!isValid}>
+						Create
+					</Button>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>

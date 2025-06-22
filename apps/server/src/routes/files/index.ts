@@ -1,6 +1,7 @@
 import { createFileSchema, deleteFileSchema, getFileByIdSchema, updateFileSchema } from "@/validators";
 import type { File, FileOperationResponse } from "@/providers/google/types";
 import { GoogleDriveProvider } from "@/providers/google/google-drive";
+import { TagService } from "@/routes/tags/tag-service";
 import { getAccount } from "@/lib/utils/accounts";
 import type { Context } from "hono";
 import { Hono } from "hono";
@@ -11,6 +12,7 @@ import { Hono } from "hono";
 // const CACHE_HEADER = `public, max-age=${CACHE_MAX_AGE}, s-maxage=${CACHE_MAX_AGE}, stale-while-revalidate=${STALE_WHILE_REVALIDATE}`;
 
 const filesRouter = new Hono();
+const tagService = new TagService();
 
 // Get all files
 filesRouter.get("/", async (c: Context) => {
@@ -35,10 +37,18 @@ filesRouter.get("/", async (c: Context) => {
 		return c.json<FileOperationResponse>({ success: false, message: "Files not found" }, 404);
 	}
 
+	// Add tags to files
+	const filesWithTags = await Promise.all(
+		files.map(async file => {
+			const tags = await tagService.getFileTags(file.id!, user.id);
+			return { ...file, tags };
+		})
+	);
+
 	// Set cache headers for the list of files
 	// c.header("Cache-Control", CACHE_HEADER);
 	// c.header("Vary", "Authorization"); // Vary cache by Authorization header
-	return c.json(files as File[]);
+	return c.json(filesWithTags as File[]);
 });
 
 // Get a specific file from
@@ -74,9 +84,13 @@ filesRouter.get("/:id", async (c: Context) => {
 		return c.json<FileOperationResponse>({ success: false, message: "File not found" }, 404);
 	}
 
+	// Add tags to file
+	const tags = await tagService.getFileTags(fileId, user.id);
+	const fileWithTags = { ...file, tags };
+
 	// c.header("Cache-Control", CACHE_HEADER);
 	// c.header("Vary", "Authorization"); // Vary cache by Authorization header
-	return c.json<File>(file);
+	return c.json<File>(fileWithTags);
 });
 
 // Untested

@@ -60,7 +60,12 @@ export const tagIdSchema = z
 	.max(250, "Tag ID cannot be longer than 250 characters");
 
 export const createTagSchema = z.object({
-	name: z.string().min(1, "Tag name cannot be empty").max(50, "Tag name cannot be longer than 50 characters"),
+	name: z
+		.string()
+		.min(1, "Tag name cannot be empty")
+		.max(50, "Tag name cannot be longer than 50 characters")
+		.regex(/^[a-zA-Z\s]+$/, "Tag name must contain only alphabetic characters and spaces")
+		.trim(),
 	color: z
 		.string()
 		.regex(/^#[0-9A-F]{6}$/i, "Color must be a valid hex color")
@@ -73,6 +78,8 @@ export const updateTagSchema = z.object({
 		.string()
 		.min(1, "Tag name cannot be empty")
 		.max(50, "Tag name cannot be longer than 50 characters")
+		.regex(/^[a-zA-Z\s]+$/, "Tag name must contain only alphabetic characters and spaces")
+		.trim()
 		.optional(),
 	color: z
 		.string()

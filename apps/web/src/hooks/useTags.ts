@@ -1,3 +1,4 @@
+import { createTagSchema, updateTagSchema, type CreateTagInput, type UpdateTagInput } from "@/schemas";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { clientEnv } from "@/lib/env/client-env";
 import axios, { type AxiosError } from "axios";
@@ -19,7 +20,11 @@ export function useTags() {
 	});
 
 	const createTagMutation = useMutation({
-		mutationFn: createTag,
+		mutationFn: (data: CreateTagInput) => {
+			// Validate data before sending to API
+			const validatedData = createTagSchema.parse(data);
+			return createTag(validatedData);
+		},
 		onSuccess: newTag => {
 			toast.success("Tag created successfully");
 			// update data locally with the new tag
@@ -41,20 +46,32 @@ export function useTags() {
 				return [...oldData, newTag];
 			});
 		},
-		onError: (error: AxiosError<{ message: string }>) => {
-			toast.error(error.response?.data?.message || "Failed to create tag");
+		onError: (error: AxiosError<{ message: string }> | Error) => {
+			if (error instanceof Error && error.name === "ZodError") {
+				toast.error("Invalid tag data. Please check your input.");
+			} else {
+				toast.error((error as AxiosError<{ message: string }>).response?.data?.message || "Failed to create tag");
+			}
 		},
 	});
 
 	const updateTagMutation = useMutation({
-		mutationFn: updateTag,
+		mutationFn: (data: UpdateTagInput) => {
+			// Validate data before sending to API
+			const validatedData = updateTagSchema.parse(data);
+			return updateTag(validatedData);
+		},
 		onSuccess: () => {
 			toast.success("Tag updated successfully");
 			// invalidate the tags query => new request will be automatically sent to update data
 			return queryClient.invalidateQueries({ queryKey: [TAGS_QUERY_KEY] });
 		},
-		onError: (error: AxiosError<{ message: string }>) => {
-			toast.error(error.response?.data?.message || "Failed to update tag");
+		onError: (error: AxiosError<{ message: string }> | Error) => {
+			if (error instanceof Error && error.name === "ZodError") {
+				toast.error("Invalid tag data. Please check your input.");
+			} else {
+				toast.error((error as AxiosError<{ message: string }>).response?.data?.message || "Failed to update tag");
+			}
 		},
 	});
 
@@ -82,6 +99,58 @@ export function useTags() {
 		},
 	});
 
+	const addTagsToFileMutation = useMutation({
+		mutationFn: addTagsToFile,
+		onSuccess: (_data, variables) => {
+			toast.success("Tag added to file successfully");
+			// Update cache locally by incrementing count for each added tag
+			queryClient.setQueryData<Tag[]>([TAGS_QUERY_KEY], (oldData = []) => {
+				const updateCountRecursive = (tags: Tag[]): Tag[] => {
+					return tags.map(tag => {
+						if (variables.tagIds.includes(tag.id)) {
+							return { ...tag, _count: (tag._count || 0) + 1 };
+						}
+						if (tag.children) {
+							return { ...tag, children: updateCountRecursive(tag.children) };
+						}
+						return tag;
+					});
+				};
+				return updateCountRecursive(oldData);
+			});
+			variables.onSuccess?.();
+		},
+		onError: (error: AxiosError<{ message: string }>) => {
+			toast.error(error.response?.data?.message || "Failed to add tag to file");
+		},
+	});
+
+	const removeTagsFromFileMutation = useMutation({
+		mutationFn: removeTagsFromFile,
+		onSuccess: (_data, variables) => {
+			toast.success("Tag removed from file successfully");
+			// Update cache locally by decrementing count for each removed tag
+			queryClient.setQueryData<Tag[]>([TAGS_QUERY_KEY], (oldData = []) => {
+				const updateCountRecursive = (tags: Tag[]): Tag[] => {
+					return tags.map(tag => {
+						if (variables.tagIds.includes(tag.id)) {
+							return { ...tag, _count: Math.max(0, (tag._count || 0) - 1) };
+						}
+						if (tag.children) {
+							return { ...tag, children: updateCountRecursive(tag.children) };
+						}
+						return tag;
+					});
+				};
+				return updateCountRecursive(oldData);
+			});
+			variables.onSuccess?.();
+		},
+		onError: (error: AxiosError<{ message: string }>) => {
+			toast.error(error.response?.data?.message || "Failed to remove tag from file");
+		},
+	});
+
 	return {
 		tags: tags ?? [],
 		isLoading,
@@ -89,6 +158,8 @@ export function useTags() {
 		createTag: createTagMutation.mutate,
 		updateTag: updateTagMutation.mutate,
 		deleteTag: deleteTagMutation.mutate,
+		addTagsToFile: addTagsToFileMutation.mutate,
+		removeTagsFromFile: removeTagsFromFileMutation.mutate,
 	};
 }
 
@@ -99,23 +170,16 @@ async function getTags(): Promise<Tag[]> {
 	return response.data.data;
 }
 
-async function createTag(data: { name: string; color: string; parentId?: string }): Promise<Tag> {
+async function createTag(data: CreateTagInput): Promise<Tag> {
 	const response = await axios.post(`${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api/tags`, data, {
 		withCredentials: true,
 	});
 	return response.data.data;
 }
 
-async function updateTag({
-	id,
-	...data
-}: {
-	id: string;
-	name?: string;
-	color?: string;
-	parentId?: string;
-}): Promise<Tag> {
-	const response = await axios.put(`${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api/tags/${id}`, data, {
+async function updateTag(data: UpdateTagInput): Promise<Tag> {
+	const { id, ...updateData } = data;
+	const response = await axios.put(`${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api/tags/${id}`, updateData, {
 		withCredentials: true,
 	});
 	return response.data.data;
@@ -123,6 +187,27 @@ async function updateTag({
 
 async function deleteTag(id: string): Promise<void> {
 	await axios.delete(`${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api/tags/${id}`, {
+		withCredentials: true,
+	});
+}
+
+async function addTagsToFile(variables: { fileId: string; tagIds: string[]; onSuccess?: () => void }): Promise<void> {
+	await axios.post(
+		`${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api/tags/files/${variables.fileId}`,
+		{ tagIds: variables.tagIds },
+		{
+			withCredentials: true,
+		}
+	);
+}
+
+async function removeTagsFromFile(variables: {
+	fileId: string;
+	tagIds: string[];
+	onSuccess?: () => void;
+}): Promise<void> {
+	await axios.delete(`${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api/tags/files/${variables.fileId}`, {
+		data: { tagIds: variables.tagIds },
 		withCredentials: true,
 	});
 }

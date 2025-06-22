@@ -5,30 +5,34 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { FileText, Folder, MoreVertical, Plus, X } from "lucide-react";
 import { useFileOperations } from "@/hooks/useFileOperations";
-import { FileText, Folder, MoreVertical } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import type { FileItem, Tag } from "@/lib/types";
 import { Button } from "@/components/ui/button";
-import type { FileItem } from "@/lib/types";
+import { Badge } from "@/components/ui/badge";
+import { useTags } from "@/hooks/useTags";
 import Link from "next/link";
 
 // TODO: Typing of the file data needs to be updated
-export function FileBrowserData({ data }: { data: FileItem[] }) {
-	return <FilesList data={data} />;
+export function FileBrowserData({ data, refetch }: { data: FileItem[]; refetch: () => void }) {
+	return <FilesList data={data} refetch={refetch} />;
 }
 
-function FilesList({ data }: { data: FileItem[] }) {
+function FilesList({ data, refetch }: { data: FileItem[]; refetch: () => void }) {
 	const searchParams = useSearchParams();
+	const { tags } = useTags();
 
 	return (
 		<div className="overflow-hidden rounded-md border">
-			<table className="w-full">
+			<table className="w-full table-fixed">
 				<thead className="text-muted-foreground bg-muted/50 text-left text-xs font-medium">
 					<tr>
 						<th className="p-3">Name</th>
 						<th className="p-3">Modified</th>
 						<th className="p-3">Size</th>
 						<th className="p-3">Actions</th>
+						<th className="p-3">Tags</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -38,7 +42,7 @@ function FilesList({ data }: { data: FileItem[] }) {
 
 						return (
 							<tr key={file.id} className="hover:bg-accent/10 relative cursor-pointer border-t transition-colors">
-								<td className="flex items-center gap-2 p-4">
+								<td className="flex items-center gap-2 truncate p-4">
 									<Link href={"?" + params.toString()} className="absolute inset-0" />
 									{file.type === "folder" ? (
 										<Folder className="text-primary h-4 w-4" />
@@ -49,14 +53,94 @@ function FilesList({ data }: { data: FileItem[] }) {
 								</td>
 								<td className="text-muted-foreground p-3 text-sm">{file.modified}</td>
 								<td className="text-muted-foreground p-3 text-sm">{file.size || "—"}</td>
-								<td className="p-3">
+								<td className="relative p-3">
 									<FileActions id={file.id} />
+								</td>
+								<td className="relative p-3">
+									<FileTags file={file} availableTags={tags} refetch={refetch} />
 								</td>
 							</tr>
 						);
 					})}
 				</tbody>
 			</table>
+		</div>
+	);
+}
+
+function FileTags({ file, availableTags, refetch }: { file: FileItem; availableTags: Tag[]; refetch: () => void }) {
+	const { addTagsToFile, removeTagsFromFile } = useTags();
+
+	const handleAddTag = (tagId: string) => {
+		addTagsToFile({ fileId: file.id, tagIds: [tagId], onSuccess: refetch });
+	};
+
+	const handleRemoveTag = (tagId: string) => {
+		removeTagsFromFile({ fileId: file.id, tagIds: [tagId], onSuccess: refetch });
+	};
+
+	const fileTagIds = file.tags?.map(t => t.id) ?? [];
+
+	// Helper function to flatten hierarchical tag structure
+	const flattenTags = (tags: Tag[]): Tag[] => {
+		const flattened: Tag[] = [];
+		const flattenRecursive = (tagList: Tag[]) => {
+			tagList.forEach(tag => {
+				flattened.push(tag);
+				if (tag.children && tag.children.length > 0) {
+					flattenRecursive(tag.children);
+				}
+			});
+		};
+		flattenRecursive(tags);
+		return flattened;
+	};
+
+	return (
+		<div className="flex items-center gap-2 overflow-hidden">
+			{file.tags?.map(tag => (
+				<div
+					key={tag.id}
+					className="group relative cursor-pointer"
+					onClick={() => {
+						handleRemoveTag(tag.id);
+					}}
+				>
+					<Badge
+						className="text-muted-foreground hover:bg-muted relative overflow-hidden rounded-md border-0 px-2 py-1 text-xs font-medium transition-all duration-200 group-hover:pr-6"
+						style={{ backgroundColor: tag.color + "20" }}
+					>
+						<div className="flex items-center gap-1.5">
+							<div className="h-2 w-2 rounded-full" style={{ backgroundColor: tag.color }} />
+							<span className="truncate">{tag.name}</span>
+						</div>
+						<X className="absolute top-1/2 right-1.5 h-3 w-3 -translate-y-1/2 transform opacity-0 transition-all duration-200 group-hover:opacity-100" />
+					</Badge>
+				</div>
+			))}
+			<DropdownMenu>
+				<DropdownMenuTrigger asChild>
+					<Button
+						variant="ghost"
+						size="sm"
+						className="h-6 w-6 rounded-full p-0 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+					>
+						<Plus className="h-4 w-4" />
+					</Button>
+				</DropdownMenuTrigger>
+				<DropdownMenuContent align="start">
+					{flattenTags(availableTags)
+						.filter(tag => !fileTagIds.includes(tag.id))
+						.map(tag => (
+							<DropdownMenuItem key={tag.id} onClick={() => handleAddTag(tag.id)} className="cursor-pointer">
+								<div className="flex items-center gap-2">
+									<div className="h-3 w-3 rounded-full" style={{ backgroundColor: tag.color }} />
+									{tag.name}
+								</div>
+							</DropdownMenuItem>
+						))}
+				</DropdownMenuContent>
+			</DropdownMenu>
 		</div>
 	);
 }

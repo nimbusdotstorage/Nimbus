@@ -178,7 +178,7 @@ tagsRouter.delete("/:id", async (c: Context) => {
 });
 
 // Add tags to a file
-tagsRouter.put("/files/:fileId", async (c: Context) => {
+tagsRouter.post("/files/:fileId", async (c: Context) => {
 	const user = c.get("user");
 	if (!user) {
 		return c.json<FileTagOperationResponse>({ success: false, message: "User not authenticated" }, 401);
