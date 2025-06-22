@@ -69,7 +69,6 @@ export const createTagSchema = z.object({
 });
 
 export const updateTagSchema = z.object({
-	id: tagIdSchema,
 	name: z
 		.string()
 		.min(1, "Tag name cannot be empty")

@@ -135,9 +135,6 @@ tagsRouter.put("/:id", async (c: Context) => {
 				400
 			);
 		}
-		if (paramData.id !== bodyData.id) {
-			return c.json<TagOperationResponse>({ success: false, message: "Tag ID mismatch" }, 400);
-		}
 		const updatedTag = await tagService.updateTag(paramData.id, user.id, bodyData);
 		return c.json<TagOperationResponse>({ success: true, message: "Tag updated successfully", data: updatedTag });
 	} catch (error) {
@@ -181,7 +178,7 @@ tagsRouter.delete("/:id", async (c: Context) => {
 });
 
 // Add tags to a file
-tagsRouter.post("/files/:fileId", async (c: Context) => {
+tagsRouter.put("/files/:fileId", async (c: Context) => {
 	const user = c.get("user");
 	if (!user) {
 		return c.json<FileTagOperationResponse>({ success: false, message: "User not authenticated" }, 401);
@@ -267,12 +264,8 @@ tagsRouter.get("/files/:fileId", async (c: Context) => {
 		return c.json<TagOperationResponse>({ success: false, message: "Unauthorized access" }, 401);
 	}
 
-	const fileId = c.req.param("fileId");
-	if (!fileId) {
-		return c.json<TagOperationResponse>({ success: false, message: "File ID not provided" }, 400);
-	}
-
 	try {
+		const fileId = c.req.param("fileId");
 		const tags = await tagService.getFileTags(fileId, user.id);
 		return c.json<TagOperationResponse>({ success: true, message: "File tags retrieved successfully", data: tags });
 	} catch (error) {

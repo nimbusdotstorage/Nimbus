@@ -47,7 +47,9 @@ export class TagService {
 			.from(fileTag)
 			.where(and(eq(fileTag.tagId, tagId), eq(fileTag.userId, userId)));
 
-		const record = tagRecord[0]!;
+		const record = tagRecord[0];
+		if (!record) return null;
+
 		return {
 			id: record.id,
 			name: record.name,
@@ -137,7 +139,7 @@ export class TagService {
 			}
 		}
 
-		const updateData: any = {};
+		const updateData: Partial<typeof tag.$inferInsert> = {};
 
 		if (updates.name) updateData.name = updates.name;
 		if (updates.color) updateData.color = updates.color;

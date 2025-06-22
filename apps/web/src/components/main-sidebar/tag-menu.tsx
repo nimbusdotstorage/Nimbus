@@ -1,3 +1,4 @@
+"use client";
 import {
 	SidebarGroup,
 	SidebarGroupContent,
@@ -13,63 +14,170 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
+import { UpdateTagDialog } from "../dialogs/update-tag-dialog";
+import { DeleteTagDialog } from "../dialogs/delete-tag-dialog";
+import { CreateTagDialog } from "../dialogs/create-tag-dialog";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ChevronDown, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
-import { Plus } from "lucide-react";
+import { useTags } from "@/hooks/useTags";
+import type { Tag } from "@/lib/types";
+import { useState } from "react";
 
-const tags = [
-	{ name: "Important", color: "bg-red-500", count: 12 },
-	{ name: "Work", color: "bg-blue-500", count: 28 },
-	{ name: "Personal", color: "bg-green-500", count: 15 },
-	{ name: "Project", color: "bg-purple-500", count: 9 },
-	{ name: "Archive", color: "bg-gray-500", count: 6 },
-];
-
-// TODO: Get data from API, be able to edit tags( add, delete, color change, rename), add popup for these funcitons (with keyboard shortcuts)
+// TODO: add keyboard shortcuts
 export default function TagMenu() {
+	const { tags, isLoading, error, createTag, updateTag, deleteTag } = useTags();
+	const [isCreateDialogOpen, setCreateDialogOpen] = useState(false);
+	const [isUpdateDialogOpen, setUpdateDialogOpen] = useState(false);
+	const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
+	const [selectedTag, setSelectedTag] = useState<Tag | null>(null);
+	const [initialParentId, setInitialParentId] = useState<string | undefined>(undefined);
+
+	if (error) {
+		return <div>Error loading tags</div>;
+	}
+
+	const openCreateDialog = (parentId?: string) => {
+		setInitialParentId(parentId);
+		setCreateDialogOpen(true);
+	};
+
+	const openUpdateDialog = (tag: Tag) => {
+		setSelectedTag(tag);
+		setUpdateDialogOpen(true);
+	};
+
+	const openDeleteDialog = (tag: Tag) => {
+		setSelectedTag(tag);
+		setDeleteDialogOpen(true);
+	};
+
 	return (
 		<SidebarGroup>
 			<SidebarGroupLabel>
 				Tags
-				<Button variant="ghost" size="icon" className="ml-auto h-6 w-6">
+				<Button variant="ghost" size="icon" className="ml-auto h-6 w-6" onClick={() => openCreateDialog()}>
 					<Plus className="size-3" />
 					<span className="sr-only">Add Tag</span>
 				</Button>
 			</SidebarGroupLabel>
 			<SidebarGroupContent>
 				<SidebarMenu>
-					{tags.map(tag => (
-						<SidebarMenuItem key={tag.name} className="group/item">
+					{isLoading && (
+						<>
+							<Skeleton className="mb-2 h-6 w-full" />
+							<Skeleton className="mb-2 h-6 w-full" />
+							<Skeleton className="mb-2 h-6 w-full" />
+						</>
+					)}
+					<TagTree
+						tags={tags}
+						openUpdateDialog={openUpdateDialog}
+						openDeleteDialog={openDeleteDialog}
+						openCreateDialog={openCreateDialog}
+					/>
+				</SidebarMenu>
+			</SidebarGroupContent>
+			<CreateTagDialog
+				isOpen={isCreateDialogOpen}
+				onClose={() => setCreateDialogOpen(false)}
+				onCreate={createTag}
+				tags={tags}
+				initialParentId={initialParentId}
+			/>
+			<UpdateTagDialog
+				isOpen={isUpdateDialogOpen}
+				onClose={() => setUpdateDialogOpen(false)}
+				onUpdate={updateTag}
+				tags={tags}
+				tag={selectedTag}
+			/>
+			<DeleteTagDialog
+				isOpen={isDeleteDialogOpen}
+				onClose={() => setDeleteDialogOpen(false)}
+				onDelete={deleteTag}
+				tag={selectedTag}
+			/>
+		</SidebarGroup>
+	);
+}
+
+interface TagTreeProps {
+	tags: Tag[];
+	openUpdateDialog: (tag: Tag) => void;
+	openDeleteDialog: (tag: Tag) => void;
+	openCreateDialog: (parentId?: string) => void;
+}
+
+function TagTree({ tags, openUpdateDialog, openDeleteDialog, openCreateDialog }: TagTreeProps) {
+	const [open, setOpen] = useState(false);
+
+	return (
+		<>
+			{tags.map(tag => (
+				<Collapsible key={tag.id} asChild>
+					<SidebarMenuItem className="group/item p-0">
+						<div className="flex w-full items-center">
 							<SidebarMenuButton
-								className="peer flex w-full cursor-pointer items-center justify-between pl-3 group-data-[collapsible=icon]:justify-center"
-								tooltip={`${tag.name} (${tag.count})`}
+								className="peer flex flex-1 cursor-pointer items-center justify-between pl-3"
+								tooltip={`${tag.name} (${tag._count})`}
 							>
-								<div className="flex items-center gap-1">
-									<span className={`size-3 rounded-full ${tag.color}`} />
-									<span className="ml-2 group-data-[collapsible=icon]:hidden">{tag.name}</span>
-									<span className="text-sidebar-foreground/70 ml-2 text-xs group-data-[collapsible=icon]:hidden">
-										{tag.count}
-									</span>
-								</div>
 								<DropdownMenu>
 									<DropdownMenuTrigger asChild>
-										<div className="px-1.5 opacity-0 group-hover/item:opacity-100 group-data-[collapsible=icon]:hidden">
-											<MoreHorizontal className="size-3" />
-											<span className="sr-only">Tag options</span>
+										<div className="flex flex-1 items-center gap-1">
+											<span className="size-3 rounded-full" style={{ backgroundColor: tag.color }} />
+											<span className="ml-2 group-data-[state=collapsed]:hidden">{tag.name}</span>
+											<span className="text-sidebar-foreground/70 ml-2 text-xs group-data-[state=collapsed]:hidden">
+												{tag._count}
+											</span>
 										</div>
 									</DropdownMenuTrigger>
 									<DropdownMenuContent align="end">
-										<DropdownMenuItem>Edit Tag</DropdownMenuItem>
-										<DropdownMenuItem>Change Color</DropdownMenuItem>
+										<DropdownMenuItem onClick={() => openUpdateDialog(tag)}>Edit Tag</DropdownMenuItem>
+										<DropdownMenuItem onClick={() => openCreateDialog(tag.id)}>Add nested Tag</DropdownMenuItem>
 										<DropdownMenuSeparator />
-										<DropdownMenuItem className="text-destructive">Delete Tag</DropdownMenuItem>
+										<DropdownMenuItem className="text-destructive" onClick={() => openDeleteDialog(tag)}>
+											Delete Tag
+										</DropdownMenuItem>
 									</DropdownMenuContent>
 								</DropdownMenu>
 							</SidebarMenuButton>
-						</SidebarMenuItem>
-					))}
-				</SidebarMenu>
-			</SidebarGroupContent>
-		</SidebarGroup>
+
+							{tag.children && tag.children.length > 0 && (
+								<CollapsibleTrigger asChild>
+									<Button
+										onClick={() => setOpen(!open)}
+										variant="ghost"
+										size="icon"
+										className="h-6 w-6 shrink-0 cursor-pointer group-data-[state=collapsed]:hidden"
+									>
+										{open ? (
+											<ChevronDown className="size-4 rotate-180 transition-transform duration-300" />
+										) : (
+											<ChevronDown className="size-4 transition-transform duration-300" />
+										)}
+									</Button>
+								</CollapsibleTrigger>
+							)}
+						</div>
+						{tag.children && tag.children.length > 0 && (
+							<CollapsibleContent asChild>
+								<div className="border-muted-foreground/20 ml-5 border-l pl-2">
+									<ul>
+										<TagTree
+											tags={tag.children}
+											openUpdateDialog={openUpdateDialog}
+											openDeleteDialog={openDeleteDialog}
+											openCreateDialog={openCreateDialog}
+										/>
+									</ul>
+								</div>
+							</CollapsibleContent>
+						)}
+					</SidebarMenuItem>
+				</Collapsible>
+			))}
+		</>
 	);
 }
