@@ -1,7 +1,6 @@
-/* eslint-disable no-redeclare */
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { RequestOptions } from "../../internal/request-options";
+import { type RequestOptions } from "../../internal/request-options";
 import { buildHeaders } from "../../internal/headers";
 import { APIPromise } from "../../core/api-promise";
 import { APIResource } from "../../core/resource";
@@ -1054,13 +1053,13 @@ export namespace PermissionDeleteParams {
 }
 
 export declare namespace Permissions {
-	export {
-		type Permission as Permission,
-		type PermissionListResponse as PermissionListResponse,
-		type PermissionCreateParams as PermissionCreateParams,
-		type PermissionRetrieveParams as PermissionRetrieveParams,
-		type PermissionUpdateParams as PermissionUpdateParams,
-		type PermissionListParams as PermissionListParams,
-		type PermissionDeleteParams as PermissionDeleteParams,
+	export type {
+		Permission,
+		PermissionListResponse,
+		PermissionCreateParams,
+		PermissionRetrieveParams,
+		PermissionUpdateParams,
+		PermissionListParams,
+		PermissionDeleteParams,
 	};
 }

@@ -31,7 +31,7 @@ const SIDEBAR_WIDTH_MOBILE = "18rem";
 const SIDEBAR_WIDTH_ICON = "3rem";
 const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 
-type SidebarContextProps = {
+interface SidebarContextProps {
 	state: "expanded" | "collapsed";
 	open: boolean;
 	setOpen: (open: boolean) => void;
@@ -39,7 +39,7 @@ type SidebarContextProps = {
 	setOpenMobile: (open: boolean) => void;
 	isMobile: boolean;
 	toggleSidebar: () => void;
-};
+}
 
 const SidebarContext = createContext<SidebarContextProps | null>(null);
 
@@ -197,7 +197,7 @@ function Sidebar({
 
 	return (
 		<div
-			className="group peer text-sidebar-foreground hidden md:block"
+			className="text-sidebar-foreground group peer hidden md:block"
 			data-state={state}
 			data-collapsible={state === "collapsed" ? collapsible : ""}
 			data-variant={variant}

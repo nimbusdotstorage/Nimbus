@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { type Googledrive } from "../client";
+import { type GoogleDrive } from "../client";
 
-import { APIResponseProps, defaultParseResponse } from "../internal/parse";
+import { type APIResponseProps, defaultParseResponse } from "../internal/parse";
 import { type PromiseOrValue } from "../internal/types";
 
 /**
@@ -11,12 +11,12 @@ import { type PromiseOrValue } from "../internal/types";
  */
 export class APIPromise<T> extends Promise<T> {
 	private parsedPromise: Promise<T> | undefined;
-	#client: Googledrive;
+	#client: GoogleDrive;
 
 	constructor(
-		client: Googledrive,
+		client: GoogleDrive,
 		private responsePromise: Promise<APIResponseProps>,
-		private parseResponse: (client: Googledrive, props: APIResponseProps) => PromiseOrValue<T> = defaultParseResponse
+		private parseResponse: (client: GoogleDrive, props: APIResponseProps) => PromiseOrValue<T> = defaultParseResponse
 	) {
 		super(resolve => {
 			// this is maybe a bit weird but this has to be a no-op to not implicitly
@@ -70,6 +70,7 @@ export class APIPromise<T> extends Promise<T> {
 		return this.parsedPromise;
 	}
 
+	// oxlint-disable-next-line no-thenable
 	override then<TResult1 = T, TResult2 = never>(
 		onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
 		onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null

@@ -35,5 +35,3 @@ export function useFileOperations() {
 		handleDeleteFile,
 	};
 }
-
-export default useFileOperations;
