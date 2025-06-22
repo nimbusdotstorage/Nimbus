@@ -1,5 +1,6 @@
 "use client";
 
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Discord } from "@/components/icons/discord";
 import Logo from "@/components/icons/brand/logo";
@@ -18,21 +19,36 @@ export default function Header() {
 				</Link>
 			</h1>
 			<div className="flex items-center gap-4">
-				<Button variant="ghost" asChild aria-label="Contributors">
-					<Link href="/contributors" className="hover:text-primary/80 transition-colors">
-						<Users className="h-5 w-5" />
-					</Link>
-				</Button>
-				<Button variant="ghost" aria-label="Discord">
-					<a href="https://discord.gg/c9nWy26ubK" target="_blank" rel="noopener noreferrer">
-						<Discord />
-					</a>
-				</Button>
-				<Button variant="ghost" aria-label="X (Twitter)">
-					<a href="https://x.com/nimbusdotcloud" target="_blank" rel="noopener noreferrer">
-						<XPlatform />
-					</a>
-				</Button>
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<Button variant="ghost" asChild aria-label="Contributors">
+							<Link href="/contributors" className="hover:text-primary/80 transition-colors">
+								<Users className="h-5 w-5" />
+							</Link>
+						</Button>
+					</TooltipTrigger>
+					<TooltipContent>Contributors</TooltipContent>
+				</Tooltip>
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<Button variant="ghost" aria-label="Discord">
+							<a href="https://discord.gg/c9nWy26ubK" target="_blank" rel="noopener noreferrer">
+								<Discord />
+							</a>
+						</Button>
+					</TooltipTrigger>
+					<TooltipContent>Discord</TooltipContent>
+				</Tooltip>
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<Button variant="ghost" aria-label="X (Twitter)">
+							<a href="https://x.com/nimbusdotcloud" target="_blank" rel="noopener noreferrer">
+								<XPlatform />
+							</a>
+						</Button>
+					</TooltipTrigger>
+					<TooltipContent>X (Twitter)</TooltipContent>
+				</Tooltip>
 				<ModeToggle />
 			</div>
 		</header>

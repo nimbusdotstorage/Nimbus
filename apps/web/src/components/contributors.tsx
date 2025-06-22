@@ -1,8 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardTitle, CardDescription } from "@/components/ui/card";
-import useContributors from "@/hooks/useContributors";
-import { Github, GitCommit } from "lucide-react";
+import { GitHub } from "@/components/icons/github";
+import { useQuery } from "@tanstack/react-query";
+import { GitCommit } from "lucide-react";
 import Link from "next/link";
+import axios from "axios";
 
 interface Contributor {
 	login: string;
@@ -15,7 +17,17 @@ interface Contributor {
 }
 
 export default function Contributors() {
-	const { isPending, error, data } = useContributors();
+	const { isPending, error, data } = useQuery({
+		queryKey: ["contributorsData"],
+		queryFn: async () => {
+			const response = await axios.get("https://api.github.com/repos/nimbusdotstorage/Nimbus/contributors", {
+				headers: {
+					"User-Agent": "Nimbus",
+				},
+			});
+			return response.data;
+		},
+	});
 
 	if (isPending) {
 		return (
@@ -64,46 +76,50 @@ export default function Contributors() {
 					</p>
 				</div>
 
-				<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 md:gap-7 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+				<div className="grid gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 md:gap-7 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
 					{sortedContributors.map(contributor => (
 						<Card
 							key={contributor.id}
-							className="group border-border/50 bg-card/50 hover:shadow-primary/20 relative flex aspect-square flex-col overflow-hidden shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
+							className="group border-border/50 bg-card/50 hover:shadow-primary/20 relative flex min-h-[280px] flex-col overflow-hidden shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl sm:aspect-square sm:min-h-0"
 						>
 							<div className="absolute inset-0 flex items-center justify-center opacity-5 transition-opacity duration-300 group-hover:opacity-10">
-								<Github className="text-foreground h-40 w-40" />
+								<GitHub variant="outline" className="text-foreground h-32 w-32 sm:h-40 sm:w-40" />
 							</div>
 
 							<div className="from-primary/10 absolute inset-0 bg-gradient-to-b via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
 							<div className="relative z-10 flex h-full flex-col">
-								<div className="flex flex-1 flex-col items-center justify-center p-5 text-center">
-									<div className="relative mb-4">
+								<div className="flex flex-1 flex-col items-center justify-center p-4 text-center sm:p-5">
+									<div className="relative mb-3 sm:mb-4">
 										<div className="from-primary/30 to-primary/10 absolute inset-0 rounded-full bg-gradient-to-r blur-md transition-all duration-300 group-hover:blur-lg" />
-										<Avatar className="ring-border group-hover:ring-primary/40 relative h-16 w-16 ring-2 transition-all duration-300">
+										<Avatar className="ring-border group-hover:ring-primary/40 relative h-12 w-12 ring-2 transition-all duration-300 sm:h-16 sm:w-16">
 											<AvatarImage src={contributor.avatar_url} alt={contributor.login} />
-											<AvatarFallback className="from-primary/20 to-primary/10 text-primary-foreground bg-gradient-to-br text-sm font-bold">
+											<AvatarFallback className="from-primary/20 to-primary/10 text-primary-foreground bg-gradient-to-br text-xs font-bold sm:text-sm">
 												{contributor.login.slice(0, 2).toUpperCase()}
 											</AvatarFallback>
 										</Avatar>
 									</div>
 
-									<div className="flex min-h-[4rem] flex-col justify-center">
+									<div className="flex min-h-[3rem] flex-col justify-center sm:min-h-[4rem]">
 										<Link href={contributor.html_url}>
-											<CardTitle className="text-foreground hover:text-primary line-clamp-2 text-base leading-tight font-bold break-words hyphens-auto underline drop-shadow-sm transition-colors">
+											<CardTitle className="text-foreground hover:text-primary line-clamp-2 text-sm leading-tight font-bold break-words hyphens-auto underline drop-shadow-sm transition-colors sm:text-base">
 												{contributor.login}
 											</CardTitle>
 										</Link>
-										<CardDescription className="text-muted-foreground mt-1 text-sm">Contributor</CardDescription>
+										<CardDescription className="text-muted-foreground mt-1 text-xs sm:text-sm">
+											Contributor
+										</CardDescription>
 									</div>
 								</div>
 
-								<div className="flex flex-col items-center gap-3 p-4">
-									<div className="relative bottom-3 flex items-center gap-3">
-										<div className="bg-primary/20 flex h-8 w-8 items-center justify-center rounded-full">
-											<GitCommit className="text-primary h-5 w-5" />
+								<div className="mt-auto flex flex-col items-center gap-2 p-3 pb-6 sm:relative sm:bottom-2 sm:gap-3 sm:p-4 sm:pb-8 md:relative md:bottom-2 md:pb-10 lg:relative lg:bottom-3 lg:pb-12 xl:pb-14 2xl:pb-16">
+									<div className="flex items-center gap-2 sm:gap-3">
+										<div className="bg-primary/20 flex h-6 w-6 items-center justify-center rounded-full sm:h-8 sm:w-8">
+											<GitCommit className="text-primary h-3 w-3 sm:h-5 sm:w-5" />
 										</div>
-										<span className="text-foreground text-xl font-semibold">{contributor.contributions}</span>
+										<span className="text-foreground text-base font-semibold sm:text-xl">
+											{contributor.contributions}
+										</span>
 									</div>
 								</div>
 							</div>
