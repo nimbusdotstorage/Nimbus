@@ -5,6 +5,7 @@ import HeroDark from "@/public/images/hero-dark.png";
 import { TextLoop } from "@/components/ui/text-loop";
 import GoogleDriveIcon from "@/public/googledrive";
 
+import Header from "@/components/home/header";
 import OneDriveIcon from "@/public/onedrive";
 import { type Variants } from "motion/react";
 import DropboxIcon from "@/public/dropbox";
@@ -34,6 +35,7 @@ const transitionVariants: { item: Variants } = {
 export default function Hero() {
 	return (
 		<div className="flex w-full flex-1 flex-col items-center justify-center gap-12 overflow-hidden px-4 py-40 md:gap-16">
+			<Header />
 			<AnimatedGroup variants={transitionVariants} className="w-full">
 				<div className="flex flex-col gap-12 px-4 md:px-6">
 					<div className="flex flex-col items-center justify-center gap-3 text-center md:gap-6">
