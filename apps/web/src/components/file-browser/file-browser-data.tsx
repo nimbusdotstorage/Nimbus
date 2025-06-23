@@ -10,6 +10,7 @@ import { FileText, Folder, MoreVertical } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import type { FileItem } from "@/lib/types";
+import { fileSize } from "@/lib/utils";
 import Link from "next/link";
 
 // TODO: Typing of the file data needs to be updated
@@ -33,6 +34,7 @@ function FilesList({ data }: { data: FileItem[] }) {
 				</thead>
 				<tbody>
 					{data.map(file => {
+						const size = file.size ? fileSize(file.size) : "—";
 						const params = new URLSearchParams(searchParams.toString());
 						params.set("id", file.id);
 
@@ -48,7 +50,7 @@ function FilesList({ data }: { data: FileItem[] }) {
 									{file.name}
 								</td>
 								<td className="text-muted-foreground p-3 text-sm">{file.modified}</td>
-								<td className="text-muted-foreground p-3 text-sm">{file.size || "—"}</td>
+								<td className="text-muted-foreground p-3 text-sm">{size}</td>
 								<td className="p-3">
 									<FileActions id={file.id} />
 								</td>

@@ -6,10 +6,18 @@ import { Discord } from "@/components/icons/discord";
 import Logo from "@/components/icons/brand/logo";
 import { XPlatform } from "@/components/icons/x";
 import { Button } from "@/components/ui/button";
+import { usePathname } from "next/navigation";
 import { Users } from "lucide-react";
 import Link from "next/link";
 
 export default function Header() {
+	const pathname = usePathname();
+	const isApp = pathname.startsWith("/app");
+
+	if (isApp) {
+		return null;
+	}
+
 	return (
 		<header className="absolute top-0 right-0 left-0 z-50 flex items-center justify-between p-4">
 			<h1 className="flex items-center gap-2 font-sans text-lg font-bold">
