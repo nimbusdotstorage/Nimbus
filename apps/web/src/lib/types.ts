@@ -89,3 +89,8 @@ export interface PasswordInputProps extends Omit<ComponentProps<typeof Input>, "
 	value?: string;
 	onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
+
+export interface DriveStorageDetails {
+	limit: number;
+	usage: number;
+}

@@ -1,9 +1,9 @@
 "use client";
 
+import { FilePreview } from "@/components/dashboard/file-browser/file-preview";
 import { FileBrowserData } from "@/components/file-browser/file-browser-data";
 import { ErrorMessageWithRetry } from "@/components/error-message/with-retry";
-import { FilePreview } from "@/components/file-browser/file-preview";
-import { FileTabs } from "@/components/file-browser/file-tabs";
+import { FileTabs } from "@/components/dashboard/file-browser/file-tabs";
 import { createRequest } from "@/hooks/createRequest";
 import { useSearchParams } from "next/navigation";
 import { useRequest } from "@/hooks/useRequest";

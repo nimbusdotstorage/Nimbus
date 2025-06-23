@@ -9,7 +9,6 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { SidebarTrigger } from "@/components/ui/sidebar";
 import { authClient } from "@nimbus/auth/auth-client";
 import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
@@ -45,7 +44,6 @@ export function Header() {
 	return (
 		<header className="bg-background border-b">
 			<div className="flex h-16 items-center justify-between gap-4 px-4">
-				<SidebarTrigger className="size-9 cursor-pointer" />
 				<div className="relative max-w-xl flex-1">
 					<Search className="text-muted-foreground absolute top-2.5 left-2.5 h-4 w-4" />
 					<Input type="search" placeholder="Search in Drive" className="bg-muted/50 w-full pl-8" />

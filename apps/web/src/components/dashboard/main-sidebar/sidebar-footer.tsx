@@ -1,61 +1,72 @@
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
-import { SidebarFooter } from "@/components/ui/sidebar";
+import { SidebarFooter, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { getStorageDetails } from "@/hooks/useDriveOps";
 import { Progress } from "@/components/ui/progress";
+import { Moon, Settings, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { fileSize } from "@/utils/fileSize";
+import { useTheme } from "next-themes";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 export default function StorageFooter() {
-	const storageUsed = 69;
-	return (
-		<SidebarFooter className="transition-all duration-200 ease-linear">
-			<div className="p-2 transition-all duration-200 ease-linear group-data-[collapsible=icon]:p-0">
-				{/* Standard view - shown when expanded */}
-				<div className="bg-sidebar-accent rounded-lg p-3 opacity-100 transition-opacity duration-200 ease-linear group-data-[collapsible=icon]:pointer-events-none group-data-[collapsible=icon]:hidden group-data-[collapsible=icon]:opacity-0">
-					<div className="flex items-center justify-between text-sm font-medium">
-						<span>Storage</span>
-						<span>{storageUsed}% used</span>
-					</div>
-					<Progress value={storageUsed} className="mt-2 h-2" />
-					<div className="text-sidebar-foreground/70 mt-2 flex justify-between text-xs">
-						<span>6.9 GB of 10 GB used</span>
-						<Button variant="link" size="sm" className="h-auto p-0 text-xs">
-							Upgrade
-						</Button>
-					</div>
-				</div>
+	const { data, error, isError, isPending } = getStorageDetails();
+	const { theme, setTheme } = useTheme();
 
-				{/* Circular view - shown when collapsed with tooltip */}
-				<Tooltip>
-					<TooltipTrigger asChild>
-						<div className="group-data-[collapsible=icon]:bg-sidebar-accent hidden opacity-0 transition-opacity duration-200 ease-linear group-data-[collapsible=icon]:relative group-data-[collapsible=icon]:flex group-data-[collapsible=icon]:size-8 group-data-[collapsible=icon]:items-center group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:rounded-lg group-data-[collapsible=icon]:opacity-100">
-							<svg className="-rotate-90 group-data-[collapsible=icon]:size-6" viewBox="0 0 48 48">
-								<circle
-									cx="24"
-									cy="24"
-									r="20"
-									fill="none"
-									stroke="currentColor"
-									strokeOpacity="0.2"
-									strokeWidth="4"
-									pathLength="100"
-								/>
-								<circle
-									cx="24"
-									cy="24"
-									r="20"
-									fill="none"
-									stroke="currentColor"
-									strokeWidth="4"
-									pathLength="100"
-									strokeDasharray={`${storageUsed} 100`}
-								/>
-							</svg>
+	useEffect(() => {
+		if (isError && error) {
+			toast.error("Failed to load storage details.");
+		}
+	}, [isError, error]);
+
+	const usagePercent: number = Math.floor((data?.usage / data?.limit) * 100);
+
+	const toggleTheme = (): void => {
+		setTheme(theme === "dark" ? "light" : "dark");
+	};
+
+	return (
+		<SidebarFooter className="flex flex-col items-start gap-2 self-stretch p-2 transition-all duration-200 ease-linear dark:bg-neutral-800">
+			<SidebarMenu>
+				<SidebarMenuItem>
+					<div className="flex flex-col items-start self-stretch rounded-lg border border-neutral-200 bg-neutral-200 dark:border-0 dark:border-transparent dark:bg-neutral-700">
+						<div className="flex flex-col items-start gap-3 self-stretch rounded-lg bg-white p-3 shadow-sm dark:bg-black">
+							<div className="flex items-center justify-between self-stretch">
+								<p className="text-sm font-medium text-neutral-800 dark:text-neutral-300">Storage Used</p>
+								{/* Percent skeleton */}
+								{isPending ? (
+									<div className="h-4 w-12 animate-pulse rounded bg-neutral-300 dark:bg-neutral-700"></div>
+								) : (
+									<p className="text-xs font-medium text-neutral-600 dark:text-neutral-400">{usagePercent}% Used</p>
+								)}
+							</div>
+							{/* Progress bar also shows loading state implicitly with value=0 */}
+							<Progress value={usagePercent} />
 						</div>
-					</TooltipTrigger>
-					<TooltipContent side="right" sideOffset={4}>
-						<span className="text-xs">{storageUsed}% used</span>
-					</TooltipContent>
-				</Tooltip>
-			</div>
+						<div className="flex h-8 items-center justify-between self-stretch px-3">
+							{/* Storage skeleton */}
+							{isPending ? (
+								<div className="h-4 w-32 animate-pulse rounded bg-neutral-300 dark:bg-neutral-700"></div>
+							) : (
+								<p className="text-sm font-medium text-neutral-500 dark:text-neutral-300">
+									{isPending || isError ? "--" : fileSize(data.usage)} of{" "}
+									{isPending || isError ? "--" : fileSize(data.limit)}
+								</p>
+							)}
+							<Button variant="link" className="text-xs font-medium text-neutral-800 dark:text-neutral-300">
+								Upgrade
+							</Button>
+						</div>
+					</div>
+				</SidebarMenuItem>
+				<SidebarMenuButton onClick={() => toggleTheme()}>
+					{theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+					<span>Theme</span>
+				</SidebarMenuButton>
+				<SidebarMenuButton>
+					<Settings />
+					<span>Settings</span>
+				</SidebarMenuButton>
+			</SidebarMenu>
 		</SidebarFooter>
 	);
 }

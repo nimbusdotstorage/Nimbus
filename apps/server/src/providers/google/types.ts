@@ -423,7 +423,7 @@ export type FileListResponse = {
 	files: File[];
 };
 
-export type FileOperationResponse = {
+export type ApiResponse = {
 	success: boolean;
 	message?: string;
 };
