@@ -113,7 +113,6 @@ instructions on the first step of this [guide](https://www.better-auth.com/docs/
   → copy the generated secret value.
 
 - Now, go to <b>API permissions</b> and make sure these **delegated Microsoft Graph** permissions are added and granted:
-
   - `email` – View users' email address
   - `offline_access` – Maintain access to data you have given it access to
   - `openid` – Sign users in
