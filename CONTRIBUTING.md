@@ -91,9 +91,48 @@ instructions on the first step of this [guide](https://www.better-auth.com/docs/
 - Now navigate to <b>Audience</b> and add <b>Test users</b>.
 </details>
 
+<details>
+<summary>How to setup Microsoft keys?</summary>
+<br>
+
+- Go to the <a href="https://portal.azure.com/" target="_blank"><b>Microsoft Azure Portal</b></a>.
+
+- Navigate to <b>Azure Active Directory</b> → <b>App registrations</b> → click <b>New registration</b>.
+
+- Enter a name for your app.
+
+- Under <b>Supported account types</b>, choose:  
+  <b>Accounts in any organizational directory and personal Microsoft accounts</b>  
+  (i.e. all Microsoft account users).
+
+- Under <b>Redirect URI</b>, select <b>Web</b> and enter:  
+  `http://localhost:1284/api/auth/callback/azure-ad`  
+  (Also add `http://localhost:3000` under front-end origins if needed.)
+
+- After registration, go to the app's <b>Overview</b> to copy your <b>Application (client) ID</b>.
+
+- Then go to <b>Certificates & secrets</b> → <b>New client secret</b> → add a description and expiry → click <b>Add</b>
+  → copy the generated secret value.
+
+- Now, go to <b>API permissions</b> and make sure these **delegated Microsoft Graph** permissions are added and granted:
+
+  - `email` – View users' email address
+  - `offline_access` – Maintain access to data you have given it access to
+  - `openid` – Sign users in
+  - `profile` – View users' basic profile
+  - `User.Read` – Sign in and read user profile
+  - `Files.ReadWrite` – Have full access to user files (OneDrive access)
+
+- Click <b>Grant admin consent</b> to apply the permissions.
+
+</details>
+
 ```bash
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
+
+MICROSOFT_CLIENT_ID=
+MICROSOFT_CLIENT_SECRET=
 
 # To generate a secret, just run `openssl rand -base64 32`
 BETTER_AUTH_SECRET=
