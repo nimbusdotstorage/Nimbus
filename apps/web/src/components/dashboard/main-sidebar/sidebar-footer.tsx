@@ -18,7 +18,7 @@ export default function StorageFooter() {
 		}
 	}, [isError, error]);
 
-	const usagePercent: number = Math.floor((data?.usage / data?.limit) * 100);
+	const usagePercent: number = data ? Math.floor((data?.usage / data?.limit) * 100) : 0;
 
 	const toggleTheme = (): void => {
 		setTheme(theme === "dark" ? "light" : "dark");
