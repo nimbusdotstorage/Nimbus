@@ -1,8 +1,9 @@
 {
 	"name": "@nimbus/auth",
-	"module": "index.ts",
+	"version": "0.0.0",
 	"type": "module",
 	"private": true,
+	"module": "index.ts",
 	"exports": {
 		"./auth-client": "./src/auth-client.ts",
 		"./auth": "./src/auth.ts"

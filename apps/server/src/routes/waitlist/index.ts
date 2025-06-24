@@ -1,11 +1,10 @@
 import { createRateLimiterMiddleware } from "@/utils/rate-limiter-utils";
-import { waitlistRateLimiter } from "@/config/rate-limiters";
+import { waitlistRateLimiter } from "@nimbus/cache/rate-limiters";
 import { zValidator } from "@hono/zod-validator";
 import { waitlist } from "@nimbus/db/schema";
 import { emailSchema } from "@/validators";
-import { count } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import type { Context } from "hono";
-import { eq } from "drizzle-orm";
 import { db } from "@nimbus/db";
 import { nanoid } from "nanoid";
 import { Hono } from "hono";

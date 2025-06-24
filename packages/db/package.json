@@ -1,12 +1,19 @@
 {
 	"name": "@nimbus/db",
-	"module": "src/index.ts",
+	"version": "0.0.0",
 	"type": "module",
 	"private": true,
+	"module": "src/index.ts",
 	"scripts": {
-		"generate": "bunx drizzle-kit generate",
-		"migrate": "bunx drizzle-kit generate && bunx drizzle-kit migrate",
-		"studio": "bunx drizzle-kit studio"
+		"build": "bun build src/index.ts --outdir dist --target bun",
+		"generate": "bun --bun run drizzle-kit generate --config=drizzle.config.ts",
+		"migrate": "bun --bun run drizzle-kit migrate --config=drizzle.config.ts",
+		"push": "bun --bun run drizzle-kit push --config=drizzle.config.ts",
+		"studio": "bun --bun run drizzle-kit studio --config=drizzle.config.ts",
+		"docker:up": "docker compose up -d",
+		"docker:down": "docker compose down",
+		"docker:remove": "docker compose down --rmi local -v",
+		"docker:reset": "bun run docker:remove && bun run docker:up"
 	},
 	"exports": {
 		".": "./src/index.ts",
