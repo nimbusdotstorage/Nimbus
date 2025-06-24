@@ -1,5 +1,6 @@
 "use client";
 
+import { Microsoft } from "@/components/icons/microsoft";
 import type { SocialAuthButtonProps } from "@/lib/types";
 import { Google } from "@/components/icons/google";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,10 @@ const providerConfig = {
 	google: {
 		icon: Google,
 		name: "Google",
+	},
+	microsoft: {
+		icon: Microsoft,
+		name: "Microsoft",
 	},
 } as const;
 

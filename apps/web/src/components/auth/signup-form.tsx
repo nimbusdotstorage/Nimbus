@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { useSignUp, useCheckEmailExists, useGoogleAuth } from "@/hooks/useAuth";
+import { useSignUp, useCheckEmailExists, useGoogleAuth, useMicrosoftAuth } from "@/hooks/useAuth";
 import { SocialAuthButton } from "@/components/auth/shared/social-auth-button";
 import { useState, type ComponentProps, type ChangeEvent } from "react";
 import { SegmentedProgress } from "@/components/ui/segmented-progress";
@@ -37,6 +37,7 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
 	const { isLoading, signUpWithCredentials } = useSignUp();
 	const { signInWithGoogleProvider } = useGoogleAuth();
+	const { signInWithMicrosoftProvider } = useMicrosoftAuth();
 	const checkEmailMutation = useCheckEmailExists();
 
 	const {
@@ -131,6 +132,12 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 									provider="google"
 									action="signup"
 									onClick={signInWithGoogleProvider}
+									disabled={isLoading}
+								/>
+								<SocialAuthButton
+									provider="microsoft"
+									action="signup"
+									onClick={signInWithMicrosoftProvider}
 									disabled={isLoading}
 								/>
 

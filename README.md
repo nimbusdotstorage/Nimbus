@@ -28,7 +28,6 @@ We use Docker to run a PostgreSQL database and Valkey for local development. Fol
    ```
 
    This will start a Postgres container with default credentials:
-
    - Host: `localhost`
    - Port: `5432`
    - Database: `nimbus`
@@ -36,7 +35,6 @@ We use Docker to run a PostgreSQL database and Valkey for local development. Fol
    - Password: `postgres`
 
    And a Valkey container with credentials:
-
    - Host: `localhost`
    - Port: `6379`
    - Username: `valkey`
