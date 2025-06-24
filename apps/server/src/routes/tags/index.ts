@@ -237,7 +237,7 @@ tagsRouter.delete("/files/:fileId", async (c: Context) => {
 		});
 		if (paramError) {
 			return c.json<FileTagOperationResponse>(
-				{ success: false, message: paramError.message || "Validation error" },
+				{ success: false, message: paramError.errors[0]?.message || "Validation error" },
 				400
 			);
 		}

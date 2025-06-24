@@ -9,7 +9,7 @@ export type HexColor = string & { readonly __brand: "HexColor" };
 
 // Validation functions
 export function isValidTagName(name: string): boolean {
-	return /^[a-zA-Z\s]+$/.test(name) && name.trim().length > 0;
+	return /^[a-zA-Z0-9-_\s]+$/.test(name) && name.trim().length > 0;
 }
 
 export function isValidHexColor(color: string): boolean {
@@ -18,7 +18,7 @@ export function isValidHexColor(color: string): boolean {
 
 export function createTagName(name: string): TagName {
 	if (!isValidTagName(name)) {
-		throw new Error("Tag name must contain only alphabetic characters and spaces");
+		throw new Error("Tag name must contain only alphabetic characters, numbers and spaces");
 	}
 	return name as TagName;
 }
@@ -34,7 +34,7 @@ export interface Tag {
 	id: string;
 	name: string;
 	color: string;
-	parentId?: string;
+	parentId?: string | null;
 	userId: string;
 	createdAt: string;
 	updatedAt: string;

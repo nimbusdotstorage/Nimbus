@@ -64,13 +64,13 @@ export const createTagSchema = z.object({
 		.string()
 		.min(1, "Tag name cannot be empty")
 		.max(50, "Tag name cannot be longer than 50 characters")
-		.regex(/^[a-zA-Z\s]+$/, "Tag name must contain only alphabetic characters and spaces")
+		.regex(/^[a-zA-Z0-9-_\s]+$/, "Tag name must contain only alphabetic characters, numbers and spaces")
 		.trim(),
 	color: z
 		.string()
 		.regex(/^#[0-9A-F]{6}$/i, "Color must be a valid hex color")
 		.default("#808080"),
-	parentId: z.string().optional(),
+	parentId: z.string().nullable().optional(),
 });
 
 export const updateTagSchema = z.object({
@@ -78,14 +78,14 @@ export const updateTagSchema = z.object({
 		.string()
 		.min(1, "Tag name cannot be empty")
 		.max(50, "Tag name cannot be longer than 50 characters")
-		.regex(/^[a-zA-Z\s]+$/, "Tag name must contain only alphabetic characters and spaces")
+		.regex(/^[a-zA-Z0-9-_\s]+$/, "Tag name must contain only alphabetic characters, numbers and spaces")
 		.trim()
 		.optional(),
 	color: z
 		.string()
 		.regex(/^#[0-9A-F]{6}$/i, "Color must be a valid hex color")
 		.optional(),
-	parentId: z.string().optional(),
+	parentId: z.string().nullable().optional(),
 });
 
 export const deleteTagSchema = z.object({

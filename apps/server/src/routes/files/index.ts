@@ -151,6 +151,14 @@ filesRouter.delete("/", async (c: Context) => {
 		return c.json<FileOperationResponse>({ success: false, message: "Unauthorized access" }, 401);
 	}
 
+	try {
+		// Delete all fileTag associations for the file
+		// Has to be done manually since we don't store all files locally
+		await tagService.deleteFileTagsByFileId(data.id, user.id);
+	} catch {
+		return c.json<FileOperationResponse>({ success: false, message: "Failed to delete file tag relationships." });
+	}
+
 	const fileId = data.id;
 	const success = await new GoogleDriveProvider(accessToken).deleteFile(fileId);
 

@@ -108,12 +108,12 @@ export function CreateTagDialog({ isOpen, onClose, onCreate, tags, initialParent
 				</DialogHeader>
 				<div className="grid gap-4 py-4">
 					<div className="grid grid-cols-4 items-center gap-4">
-						<Label htmlFor="name" className="text-right">
+						<Label htmlFor="new-tag-name" className="text-right">
 							Name
 						</Label>
 						<div className="col-span-3">
 							<Input
-								id="name"
+								id="new-tag-name"
 								value={name}
 								onChange={e => setName(e.target.value)}
 								className={errors.name ? "border-red-500" : ""}
@@ -123,20 +123,20 @@ export function CreateTagDialog({ isOpen, onClose, onCreate, tags, initialParent
 					</div>
 					<div className="text-xs text-red-500">{errors.name && <FieldError error={errors.name} />}</div>
 					<div className="grid grid-cols-4 items-center gap-4">
-						<Label htmlFor="color" className="text-right">
+						<Label htmlFor="new-tag-color" className="text-right">
 							Color
 						</Label>
 						<div className="col-span-3">
-							<Input id="color" type="color" value={color} onChange={e => setColor(e.target.value)} />
+							<Input id="new-tag-color" type="color" value={color} onChange={e => setColor(e.target.value)} />
 						</div>
 					</div>
 					<div className="text-xs text-red-500">{errors.color && <FieldError error={errors.color} />}</div>
 					<div className="grid grid-cols-4 items-center gap-4">
-						<Label htmlFor="parent" className="text-right">
+						<Label htmlFor="new-tag-parent" className="text-right">
 							Parent Tag
 						</Label>
 						<select
-							id="parent"
+							id="new-tag-parent"
 							value={parentId || "none"}
 							onChange={e => setParentId(e.target.value)}
 							className="col-span-3"

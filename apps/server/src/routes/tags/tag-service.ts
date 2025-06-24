@@ -280,16 +280,25 @@ export class TagService {
 
 		// Build hierarchy
 		tags.forEach(tag => {
-			const tagWithChildren = tagMap.get(tag.id)!;
-			if (tag.parentId && tagMap.has(tag.parentId)) {
-				const parent = tagMap.get(tag.parentId)!;
-				parent.children = parent.children || [];
-				parent.children.push(tagWithChildren);
-			} else {
-				rootTags.push(tagWithChildren);
+			const tagWithChildren = tagMap.get(tag.id);
+			if (tagWithChildren) {
+				if (tag.parentId && tagMap.has(tag.parentId)) {
+					const parent = tagMap.get(tag.parentId)!;
+					if (parent) {
+						parent.children = parent.children || [];
+						parent.children.push(tagWithChildren);
+					}
+				} else {
+					rootTags.push(tagWithChildren);
+				}
 			}
 		});
 
 		return rootTags;
+	}
+
+	// Delete all fileTag associations for a file
+	async deleteFileTagsByFileId(fileId: string, userId: string): Promise<void> {
+		await db.delete(fileTag).where(and(eq(fileTag.fileId, fileId), eq(fileTag.userId, userId)));
 	}
 }

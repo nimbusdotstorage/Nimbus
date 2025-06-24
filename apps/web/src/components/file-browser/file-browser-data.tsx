@@ -5,6 +5,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { CreateTagDialog } from "@/components/dialogs/create-tag-dialog";
 import { FileText, Folder, MoreVertical, Plus, X } from "lucide-react";
 import { useFileOperations } from "@/hooks/useFileOperations";
 import { useSearchParams } from "next/navigation";
@@ -12,6 +13,7 @@ import type { FileItem, Tag } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useTags } from "@/hooks/useTags";
+import { useState } from "react";
 import Link from "next/link";
 
 // TODO: Typing of the file data needs to be updated
@@ -69,7 +71,8 @@ function FilesList({ data, refetch }: { data: FileItem[]; refetch: () => void })
 }
 
 function FileTags({ file, availableTags, refetch }: { file: FileItem; availableTags: Tag[]; refetch: () => void }) {
-	const { addTagsToFile, removeTagsFromFile } = useTags();
+	const { addTagsToFile, removeTagsFromFile, createTag } = useTags();
+	const [isCreateTagOpen, setIsCreateTagOpen] = useState(false);
 
 	const handleAddTag = (tagId: string) => {
 		addTagsToFile({ fileId: file.id, tagIds: [tagId], onSuccess: refetch });
@@ -77,6 +80,21 @@ function FileTags({ file, availableTags, refetch }: { file: FileItem; availableT
 
 	const handleRemoveTag = (tagId: string) => {
 		removeTagsFromFile({ fileId: file.id, tagIds: [tagId], onSuccess: refetch });
+	};
+
+	const handleCreateTag = async (data: { name: string; color: string; parentId?: string }) => {
+		// Create the tag
+		createTag(data, {
+			onSuccess: newTag => {
+				setIsCreateTagOpen(false);
+				// Add the new tag to the file
+				handleAddTag(newTag.id);
+				refetch();
+			},
+			onError: error => {
+				console.error("Failed to create tag:", error);
+			},
+		});
 	};
 
 	const fileTagIds = file.tags?.map(t => t.id) ?? [];
@@ -117,6 +135,7 @@ function FileTags({ file, availableTags, refetch }: { file: FileItem; availableT
 	};
 
 	const updatedFileTags = getUpdatedFileTags();
+	const flattenedAvailableTags = flattenTags(availableTags).filter(tag => !fileTagIds.includes(tag.id));
 
 	return (
 		<div className="flex items-center gap-2 overflow-hidden">
@@ -151,18 +170,28 @@ function FileTags({ file, availableTags, refetch }: { file: FileItem; availableT
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align="start">
-					{flattenTags(availableTags)
-						.filter(tag => !fileTagIds.includes(tag.id))
-						.map(tag => (
+					{flattenedAvailableTags.length > 0 ? (
+						flattenedAvailableTags.map(tag => (
 							<DropdownMenuItem key={tag.id} onClick={() => handleAddTag(tag.id)} className="cursor-pointer">
 								<div className="flex items-center gap-2">
 									<div className="h-3 w-3 rounded-full" style={{ backgroundColor: tag.color }} />
 									{tag.name}
 								</div>
 							</DropdownMenuItem>
-						))}
+						))
+					) : (
+						<DropdownMenuItem onClick={() => setIsCreateTagOpen(true)} className="cursor-pointer">
+							Create new tag
+						</DropdownMenuItem>
+					)}
 				</DropdownMenuContent>
 			</DropdownMenu>
+			<CreateTagDialog
+				isOpen={isCreateTagOpen}
+				onClose={() => setIsCreateTagOpen(false)}
+				onCreate={handleCreateTag}
+				tags={availableTags}
+			/>
 		</div>
 	);
 }

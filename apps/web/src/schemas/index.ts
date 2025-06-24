@@ -57,7 +57,7 @@ export const tagNameSchema = z
 	.string()
 	.min(1, "Tag name is required")
 	.max(50, "Tag name must be less than 50 characters")
-	.regex(/^[a-zA-Z\s]+$/, "Tag name must contain only alphabetic characters and spaces")
+	.regex(/^[a-zA-Z0-9-_\s]+$/, "Tag name must contain only alphabetic characters, numbers and spaces")
 	.trim();
 
 export const hexColorSchema = z
@@ -67,14 +67,14 @@ export const hexColorSchema = z
 export const createTagSchema = z.object({
 	name: tagNameSchema,
 	color: hexColorSchema,
-	parentId: z.string().optional(),
+	parentId: z.string().nullable().optional(),
 });
 
 export const updateTagSchema = z.object({
 	id: z.string(),
 	name: tagNameSchema.optional(),
 	color: hexColorSchema.optional(),
-	parentId: z.string().optional(),
+	parentId: z.string().nullable().optional(),
 });
 
 export type CreateTagInput = z.infer<typeof createTagSchema>;

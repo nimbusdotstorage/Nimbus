@@ -4,6 +4,7 @@ import {
   timestamp,
   boolean,
   integer,
+  type AnyPgColumn,
 } from "drizzle-orm/pg-core";
 
 // Auth schema
@@ -72,7 +73,7 @@ export const tag = pgTable("tag", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
   color: text("color").notNull().default("#808080"), // Default grey color
-  parentId: text("parent_id").references((): any => tag.id, { onDelete: "cascade" }),
+  parentId: text("parent_id").references((): AnyPgColumn => tag.id, { onDelete: "cascade" }),
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
@@ -87,7 +88,8 @@ export const tag = pgTable("tag", {
 // File-Tags junction table for many-to-many relationship
 export const fileTag = pgTable("file_tag", {
   id: text("id").primaryKey(),
-  fileId: text("file_id").notNull(), // External file ID from cloud providers
+  // Can't use foreign key here since we don't store all files locally(example: external files from cloud providers)
+  fileId: text("file_id").notNull(),
   tagId: text("tag_id")
     .notNull()
     .references(() => tag.id, { onDelete: "cascade" }),

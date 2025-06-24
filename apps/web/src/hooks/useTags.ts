@@ -61,23 +61,10 @@ export function useTags() {
 			const validatedData = updateTagSchema.parse(data);
 			return updateTag(validatedData);
 		},
-		onSuccess: updatedTag => {
+		onSuccess: () => {
 			toast.success("Tag updated successfully");
-			// Update tags cache locally with the updated tag
-			queryClient.setQueryData<Tag[]>([TAGS_QUERY_KEY], (oldData = []) => {
-				const updateRecursive = (tags: Tag[]): Tag[] => {
-					return tags.map(tag => {
-						if (tag.id === updatedTag.id) {
-							return { ...tag, ...updatedTag };
-						}
-						if (tag.children) {
-							return { ...tag, children: updateRecursive(tag.children) };
-						}
-						return tag;
-					});
-				};
-				return updateRecursive(oldData);
-			});
+			// Invalidate the query to get the latest data
+			void queryClient.invalidateQueries({ queryKey: [TAGS_QUERY_KEY] });
 		},
 		onError: (error: AxiosError<{ message: string }> | Error) => {
 			if (error instanceof Error && error.name === "ZodError") {

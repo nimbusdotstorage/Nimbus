@@ -37,7 +37,7 @@ function renderTagOptions(tags: Tag[], forbiddenIds: string[], level = 0): React
 interface UpdateTagDialogProps {
 	isOpen: boolean;
 	onClose: () => void;
-	onUpdate: (data: { id: string; name?: string; color?: string; parentId?: string }) => void;
+	onUpdate: (data: { id: string; name?: string; color?: string; parentId?: string | null }) => void;
 	tags: Tag[];
 	tag: Tag | null;
 }
@@ -45,14 +45,14 @@ interface UpdateTagDialogProps {
 export function UpdateTagDialog({ isOpen, onClose, onUpdate, tags, tag }: UpdateTagDialogProps) {
 	const [name, setName] = useState("");
 	const [color, setColor] = useState("#808080");
-	const [parentId, setParentId] = useState<string | undefined>(undefined);
+	const [parentId, setParentId] = useState<string | null>(null);
 	const [errors, setErrors] = useState<{ name?: string; color?: string }>({});
 
 	useEffect(() => {
 		if (tag) {
 			setName(tag.name);
 			setColor(tag.color);
-			setParentId(tag.parentId);
+			setParentId(tag.parentId ?? null);
 			setErrors({});
 		}
 	}, [tag]);
@@ -65,7 +65,7 @@ export function UpdateTagDialog({ isOpen, onClose, onUpdate, tags, tag }: Update
 			id: tag.id,
 			name: name.trim() === tag.name ? undefined : name,
 			color: color === tag.color ? undefined : color,
-			parentId: parentId === tag.parentId ? undefined : parentId,
+			parentId: parentId === tag.parentId ? undefined : parentId === "none" ? null : parentId,
 		});
 
 		if (!validationResult.success) {
@@ -93,7 +93,7 @@ export function UpdateTagDialog({ isOpen, onClose, onUpdate, tags, tag }: Update
 			id: tag.id,
 			name: name.trim() === tag.name ? undefined : name,
 			color: color === tag.color ? undefined : color,
-			parentId: parentId === tag.parentId ? undefined : parentId,
+			parentId: parentId === tag.parentId ? undefined : parentId === "none" ? null : parentId,
 		});
 
 		if (validationResult.success) {
@@ -101,7 +101,7 @@ export function UpdateTagDialog({ isOpen, onClose, onUpdate, tags, tag }: Update
 				id: tag.id,
 				name: name.trim() === tag.name ? undefined : name,
 				color: color === tag.color ? undefined : color,
-				parentId: parentId === tag.parentId ? undefined : parentId,
+				parentId: parentId === tag.parentId ? undefined : parentId === "none" ? null : parentId,
 			});
 			onClose();
 		} else {
@@ -119,7 +119,11 @@ export function UpdateTagDialog({ isOpen, onClose, onUpdate, tags, tag }: Update
 		}
 	};
 
-	const hasChanges = tag && (name.trim() !== tag.name || color !== tag.color || parentId !== tag.parentId);
+	const hasChanges =
+		tag &&
+		(name.trim() !== tag.name ||
+			color !== tag.color ||
+			(parentId === "none" ? null : parentId) !== (tag.parentId ?? null));
 	const isValid = Object.keys(errors).length === 0;
 
 	return (
@@ -131,12 +135,12 @@ export function UpdateTagDialog({ isOpen, onClose, onUpdate, tags, tag }: Update
 				</DialogHeader>
 				<div className="grid gap-4 py-4">
 					<div className="grid grid-cols-4 items-center gap-4">
-						<Label htmlFor="name" className="text-right">
+						<Label htmlFor="update-tag-name" className="text-right">
 							Name
 						</Label>
 						<div className="col-span-3">
 							<Input
-								id="name"
+								id="update-tag-name"
 								value={name}
 								onChange={e => setName(e.target.value)}
 								className={errors.name ? "border-red-500" : ""}
@@ -146,22 +150,22 @@ export function UpdateTagDialog({ isOpen, onClose, onUpdate, tags, tag }: Update
 					</div>
 					<div className="text-xs text-red-500">{errors.name && <FieldError error={errors.name} />}</div>
 					<div className="grid grid-cols-4 items-center gap-4">
-						<Label htmlFor="color" className="text-right">
+						<Label htmlFor="update-tag-color" className="text-right">
 							Color
 						</Label>
 						<div className="col-span-3">
-							<Input id="color" type="color" value={color} onChange={e => setColor(e.target.value)} />
+							<Input id="update-tag-color" type="color" value={color} onChange={e => setColor(e.target.value)} />
 						</div>
 					</div>
 					<div className="text-xs text-red-500">{errors.color && <FieldError error={errors.color} />}</div>
 					<div className="grid grid-cols-4 items-center gap-4">
-						<Label htmlFor="parent" className="text-right">
+						<Label htmlFor="update-tag-parent" className="text-right">
 							Parent Tag
 						</Label>
 						<select
-							id="parent"
+							id="update-tag-parent"
 							value={parentId || "none"}
-							onChange={e => setParentId(e.target.value)}
+							onChange={e => setParentId(e.target.value === "none" ? null : e.target.value)}
 							className="col-span-3"
 						>
 							<option value="none">None</option>
