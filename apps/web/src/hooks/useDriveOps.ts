@@ -3,21 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 import { clientEnv } from "@/lib/env/client-env";
 import axios from "axios";
 
-export function getStorageDetails(): {
-	data: DriveStorageDetails;
-	error: Error | null;
-	isError: boolean;
-	isPending: boolean;
-} {
-	const { data, error, isError, isPending } = useQuery({
+export const useStorageDetails = () => {
+	return useQuery<DriveStorageDetails>({
 		queryKey: ["storageDetails"],
 		queryFn: async () => {
-			const data = await axios.get(`${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api/drives/about`, {
+			const response = await axios.get(`${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api/drives/about`, {
 				withCredentials: true,
 				signal: new AbortController().signal,
 			});
-			return data.data;
+			return response.data;
 		},
 	});
-	return { data, error, isError, isPending };
-}
+};

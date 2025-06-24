@@ -1,20 +1,18 @@
 import { auth } from "@nimbus/auth/auth";
-import { logger } from "hono/logger";
 import { env } from "@/config/env";
 import { cors } from "hono/cors";
 import { db } from "@nimbus/db";
 import routes from "@/routes";
 import { Hono } from "hono";
 
-export type ReqVariables = {
+export interface ReqVariables {
 	user: typeof auth.$Infer.Session.user | null;
 	session: typeof auth.$Infer.Session.session | null;
 	db: typeof db | null;
-};
+}
 
 const app = new Hono<{ Variables: ReqVariables }>();
 
-app.use(logger());
 app.use(
 	cors({
 		origin: env.FRONTEND_URL,

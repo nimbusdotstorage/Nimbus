@@ -1,5 +1,5 @@
 import { SidebarFooter, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
-import { getStorageDetails } from "@/hooks/useDriveOps";
+import { useStorageDetails } from "@/hooks/useDriveOps";
 import { Progress } from "@/components/ui/progress";
 import { Moon, Settings, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 
 export default function StorageFooter() {
-	const { data, error, isError, isPending } = getStorageDetails();
+	const { data, error, isError, isPending } = useStorageDetails();
 	const { theme, setTheme } = useTheme();
 
 	useEffect(() => {
@@ -34,7 +34,7 @@ export default function StorageFooter() {
 								<p className="text-sm font-medium text-neutral-800 dark:text-neutral-300">Storage Used</p>
 								{/* Percent skeleton */}
 								{isPending ? (
-									<div className="h-4 w-12 animate-pulse rounded bg-neutral-300 dark:bg-neutral-700"></div>
+									<div className="h-4 w-12 animate-pulse rounded bg-neutral-300 dark:bg-neutral-500"></div>
 								) : (
 									<p className="text-xs font-medium text-neutral-600 dark:text-neutral-400">{usagePercent}% Used</p>
 								)}
@@ -45,7 +45,7 @@ export default function StorageFooter() {
 						<div className="flex h-8 items-center justify-between self-stretch px-3">
 							{/* Storage skeleton */}
 							{isPending ? (
-								<div className="h-4 w-32 animate-pulse rounded bg-neutral-300 dark:bg-neutral-700"></div>
+								<div className="h-4 w-32 animate-pulse rounded bg-neutral-300 dark:bg-neutral-500"></div>
 							) : (
 								<p className="text-sm font-medium text-neutral-500 dark:text-neutral-300">
 									{isPending || isError ? "--" : fileSize(data.usage)} of{" "}

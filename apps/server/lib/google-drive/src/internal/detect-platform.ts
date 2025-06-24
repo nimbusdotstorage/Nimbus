@@ -132,8 +132,8 @@ function getBrowserInfo(): BrowserInfo | null {
 	const browserPatterns = [
 		{ key: "edge" as const, pattern: /Edge(?:\W+(\d+)\.(\d+)(?:\.(\d+))?)?/ },
 		{ key: "ie" as const, pattern: /MSIE(?:\W+(\d+)\.(\d+)(?:\.(\d+))?)?/ },
-		// eslint-disable-next-line no-useless-escape
-		{ key: "ie" as const, pattern: /Trident(?:.*rv\:(\d+)\.(\d+)(?:\.(\d+))?)?/ },
+
+		{ key: "ie" as const, pattern: /Trident(?:.*rv:(\d+)\.(\d+)(?:\.(\d+))?)?/ },
 		{ key: "chrome" as const, pattern: /Chrome(?:\W+(\d+)\.(\d+)(?:\.(\d+))?)?/ },
 		{ key: "firefox" as const, pattern: /Firefox(?:\W+(\d+)\.(\d+)(?:\.(\d+))?)?/ },
 		{ key: "safari" as const, pattern: /(?:Version\W+(\d+)\.(\d+)(?:\.(\d+))?)?(?:\W+Mobile\S*)?\W+Safari/ },

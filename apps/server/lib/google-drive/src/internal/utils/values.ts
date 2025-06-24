@@ -19,7 +19,7 @@ export function maybeObj(x: unknown): object {
 }
 
 // https://stackoverflow.com/a/34491287
-export function isEmptyObj(obj: Object | null | undefined): boolean {
+export function isEmptyObj(obj: object | null | undefined): boolean {
 	if (!obj) return true;
 	for (const _k in obj) return false;
 	return true;
