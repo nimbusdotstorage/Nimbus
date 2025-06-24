@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useTags } from "@/hooks/useTags";
 import { useState } from "react";
+import { fileSize } from "@/lib/utils";
 import Link from "next/link";
 
 // TODO: Typing of the file data needs to be updated
@@ -39,6 +40,7 @@ function FilesList({ data, refetch }: { data: FileItem[]; refetch: () => void })
 				</thead>
 				<tbody>
 					{data.map(file => {
+						const size = file.size ? fileSize(file.size) : "—";
 						const params = new URLSearchParams(searchParams.toString());
 						params.set("id", file.id);
 
@@ -54,7 +56,7 @@ function FilesList({ data, refetch }: { data: FileItem[]; refetch: () => void })
 									{file.name}
 								</td>
 								<td className="text-muted-foreground p-3 text-sm">{file.modified}</td>
-								<td className="text-muted-foreground p-3 text-sm">{file.size || "—"}</td>
+								<td className="text-muted-foreground p-3 text-sm">{size}</td>
 								<td className="relative p-3">
 									<FileActions id={file.id} />
 								</td>
