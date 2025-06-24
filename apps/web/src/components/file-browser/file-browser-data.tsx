@@ -138,7 +138,7 @@ function FileTags({ file, availableTags, refetch }: { file: FileItem; availableT
 	const flattenedAvailableTags = flattenTags(availableTags).filter(tag => !fileTagIds.includes(tag.id));
 
 	return (
-		<div className="flex items-center gap-2 overflow-hidden">
+		<div className="flex max-w-full flex-wrap items-center gap-2">
 			{updatedFileTags.map(tag => (
 				<div
 					key={tag.id}
