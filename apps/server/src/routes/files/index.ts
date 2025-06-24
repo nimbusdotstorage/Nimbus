@@ -1,7 +1,6 @@
 import { createFileSchema, deleteFileSchema, getFileByIdSchema, updateFileSchema } from "@/validators";
 import type { File, FileOperationResponse } from "@/providers/google/types";
-import { GoogleDriveProvider } from "@/providers/google/google-drive";
-import { getAccount } from "@/lib/utils/accounts";
+import { getAccount, getDriveManagerForUser } from "@/lib/utils/accounts";
 import type { Context } from "hono";
 import { Hono } from "hono";
 
@@ -25,7 +24,9 @@ filesRouter.get("/", async (c: Context) => {
 	}
 
 	// * The GoogleDriveProvider will be replaced by a general provider in the future
-	const files = await new GoogleDriveProvider(account.accessToken!).listFiles();
+	const drive = await getDriveManagerForUser(user, c.req.raw.headers);
+	const files = await drive.listFiles();
+
 	if (!files) {
 		return c.json<FileOperationResponse>({ success: false, message: "Files not found" }, 404);
 	}
@@ -59,14 +60,16 @@ filesRouter.get("/:id", async (c: Context) => {
 		return c.json<FileOperationResponse>({ success: false, message: "File ID not provided" }, 400);
 	}
 
-	const file = await new GoogleDriveProvider(account.accessToken!).getFileById(fileId);
+	const drive = await getDriveManagerForUser(user, c.req.raw.headers);
+	const file = await drive.getFileById(fileId);
+
 	if (!file) {
 		return c.json<FileOperationResponse>({ success: false, message: "File not found" }, 404);
 	}
 
 	// c.header("Cache-Control", CACHE_HEADER);
 	// c.header("Vary", "Authorization"); // Vary cache by Authorization header
-	return c.json<File>(file);
+	return c.json<File>(file as File);
 });
 
 // Untested
@@ -90,7 +93,8 @@ filesRouter.put("/", async (c: Context) => {
 	const fileId = data.id;
 	const name = data.name;
 
-	const success = await new GoogleDriveProvider(account.accessToken!).updateFile(fileId, name);
+	const drive = await getDriveManagerForUser(user, c.req.raw.headers);
+	const success = await drive.updateFile(fileId, name);
 
 	if (!success) {
 		return c.json<FileOperationResponse>({ success: false, message: "Failed to update file" }, 500);
@@ -118,7 +122,8 @@ filesRouter.delete("/", async (c: Context) => {
 	}
 
 	const fileId = data.id;
-	const success = await new GoogleDriveProvider(account.accessToken!).deleteFile(fileId);
+	const drive = await getDriveManagerForUser(user, c.req.raw.headers);
+	const success = await drive.deleteFile(fileId);
 
 	if (!success) {
 		return c.json<FileOperationResponse>({ success: false, message: "Failed to delete file" }, 500);
@@ -148,7 +153,8 @@ filesRouter.post("/", async (c: Context) => {
 	const name = data.name;
 	const mimeType = data.mimeType;
 	const parents = data.parents ? [data.parents] : undefined;
-	const success = await new GoogleDriveProvider(account.accessToken!).createFile(name, mimeType, parents);
+	const drive = await getDriveManagerForUser(user, c.req.raw.headers);
+	const success = await drive.createFile(name, mimeType, parents);
 
 	if (!success) {
 		return c.json<FileOperationResponse>({ success: false, message: "Failed to create file" }, 500);

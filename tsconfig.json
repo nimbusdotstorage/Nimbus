@@ -1,3 +1,7 @@
 {
-	"extends": "@nimbus/tsconfig/base"
+	"extends": "@nimbus/tsconfig/base",
+	"include": ["types", "apps", "lib"],
+	"compilerOptions": {
+		"lib": ["dom", "esnext"]
+	}
 }
