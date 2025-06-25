@@ -5,7 +5,6 @@
 **/build/
 *package-lock.json
 *bun.lock
-*.md
 
 # Standard ignore files (often include ignored files themselves)
 .gitignore
