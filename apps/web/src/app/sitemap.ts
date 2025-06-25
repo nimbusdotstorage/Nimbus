@@ -13,12 +13,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 			priority: 1,
 		},
 		{
-			url: buildUrl("/app"),
-			lastModified: now,
-			changeFrequency: "weekly",
-			priority: 0.8,
-		},
-		{
 			url: buildUrl("/signin"),
 			lastModified: now,
 			changeFrequency: "yearly",
@@ -29,12 +23,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
 			lastModified: now,
 			changeFrequency: "yearly",
 			priority: 0.6,
-		},
-		{
-			url: buildUrl("/forgot-password"),
-			lastModified: now,
-			changeFrequency: "yearly",
-			priority: 0.3,
 		},
 		{
 			url: buildUrl("/contributors"),
