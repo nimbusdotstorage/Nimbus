@@ -1,5 +1,5 @@
 import { RateLimiterRedis } from "rate-limiter-flexible";
-import redisClient from "@/config/valkey";
+import redisClient from "./valkey";
 
 export const waitlistRateLimiter = new RateLimiterRedis({
 	storeClient: redisClient,

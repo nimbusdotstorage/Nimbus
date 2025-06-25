@@ -13,6 +13,7 @@
 # Configuration files that might be automatically generated or have specific formatting
 .env
 .env.*
+.env*disabled
 
 # Generated files
 schema.ts

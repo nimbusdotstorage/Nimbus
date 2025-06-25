@@ -1,4 +1,3 @@
-import { vercel } from "@t3-oss/env-core/presets-zod";
 import { clientEnv } from "@/lib/env/client-env";
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
@@ -12,7 +11,6 @@ export const serverEnv = createEnv({
 	runtimeEnv: process.env,
 	emptyStringAsUndefined: true,
 	extends: [
-		vercel(), // Currently client is hosted on vercel
 		clientEnv, // Includes client-side env on server
 	],
 });
