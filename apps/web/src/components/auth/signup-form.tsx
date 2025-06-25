@@ -17,16 +17,6 @@ import { useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import Link from "next/link";
-import React from "react";
-
-// async function convertImageToBase64(file: File): Promise<string> {
-// 	return new Promise((resolve, reject) => {
-// 		const reader = new FileReader();
-// 		reader.onloadend = () => resolve(reader.result as string);
-// 		reader.onerror = reject;
-// 		reader.readAsDataURL(file);
-// 	});
-// }
 
 export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 	const searchParams = useSearchParams();

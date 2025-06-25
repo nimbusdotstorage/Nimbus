@@ -25,7 +25,7 @@ export default function StorageFooter() {
 	};
 
 	return (
-		<SidebarFooter className="flex flex-col items-start gap-2 self-stretch p-2 transition-all duration-200 ease-linear dark:bg-neutral-800">
+		<SidebarFooter className="flex flex-col items-start gap-2 self-stretch p-2 pb-0 transition-all duration-300 ease-linear dark:bg-neutral-800">
 			<SidebarMenu>
 				<SidebarMenuItem>
 					<div className="flex flex-col items-start self-stretch rounded-lg border border-neutral-200 bg-neutral-200 dark:border-0 dark:border-transparent dark:bg-neutral-700">
@@ -58,11 +58,14 @@ export default function StorageFooter() {
 						</div>
 					</div>
 				</SidebarMenuItem>
-				<SidebarMenuButton onClick={() => toggleTheme()}>
+				<SidebarMenuButton
+					onClick={() => toggleTheme()}
+					className="transition-all duration-200 ease-linear hover:bg-neutral-200 dark:hover:bg-neutral-700"
+				>
 					{theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
 					<span>Theme</span>
 				</SidebarMenuButton>
-				<SidebarMenuButton>
+				<SidebarMenuButton className="transition-all duration-200 ease-linear hover:bg-neutral-200 dark:hover:bg-neutral-700">
 					<Settings />
 					<span>Settings</span>
 				</SidebarMenuButton>
