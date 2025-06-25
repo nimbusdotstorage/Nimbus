@@ -21,7 +21,7 @@ export function fileSize(size: unknown) {
 }
 
 export const getBaseUrl = () => {
-	return clientEnv.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
+	return clientEnv.NEXT_PUBLIC_FRONTEND_URL;
 };
 
 export const buildUrl = (path: string) => {
