@@ -12,8 +12,7 @@ export const clientEnv = createEnv({
 			.url("NEXT_PUBLIC_CALLBACK_URL must be a valid URL (e.g., https://yourdomain.com)."),
 		NEXT_PUBLIC_FRONTEND_URL: z
 			.string({ message: "The NEXT_PUBLIC_FRONTEND_URL environment variable is required." })
-			.url("NEXT_PUBLIC_FRONTEND_URL must be a valid URL (e.g., https://yourdomain.com).")
-			.optional(),
+			.url("NEXT_PUBLIC_FRONTEND_URL must be a valid URL (e.g., https://yourdomain.com)."),
 	},
 	runtimeEnv: {
 		NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
