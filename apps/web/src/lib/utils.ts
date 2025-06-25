@@ -1,4 +1,5 @@
-import { clsx, type ClassValue } from "clsx";
+import { clientEnv } from "@/lib/env/client-env";
+import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -18,3 +19,12 @@ export function fileSize(size: unknown) {
 	}
 	return `${num.toFixed(idx === 0 ? 0 : 2)} ${units[idx]}`;
 }
+
+export const getBaseUrl = () => {
+	return clientEnv.NEXT_PUBLIC_FRONTEND_URL || "http://localhost:3000";
+};
+
+export const buildUrl = (path: string) => {
+	const baseUrl = getBaseUrl();
+	return `${baseUrl}${path.startsWith("/") ? path : `/${path}`}`;
+};
