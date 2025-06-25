@@ -5,15 +5,20 @@ export const clientEnv = createEnv({
 	clientPrefix: "NEXT_PUBLIC_",
 	client: {
 		NEXT_PUBLIC_BACKEND_URL: z
-			.string({ message: "The NEXT_PUBLIC_BACKEND_URL environment variable is required." })
-			.url("NEXT_PUBLIC_BACKEND_URL must be a valid URL (e.g., https://api.yourdomain.com)."),
+			.string()
+			.url("NEXT_PUBLIC_BACKEND_URL must be a valid URL (e.g., https://api.yourdomain.com).")
+			.optional()
+			.default("http://localhost:8000"),
 		NEXT_PUBLIC_CALLBACK_URL: z
-			.string({ message: "The NEXT_PUBLIC_CALLBACK_URL environment variable is required." })
-			.url("NEXT_PUBLIC_CALLBACK_URL must be a valid URL (e.g., https://yourdomain.com)."),
+			.string()
+			.url("NEXT_PUBLIC_CALLBACK_URL must be a valid URL (e.g., https://yourdomain.com).")
+			.optional()
+			.default("http://localhost:3000"),
 		NEXT_PUBLIC_FRONTEND_URL: z
-			.string({ message: "The NEXT_PUBLIC_FRONTEND_URL environment variable is required." })
+			.string()
 			.url("NEXT_PUBLIC_FRONTEND_URL must be a valid URL (e.g., https://yourdomain.com)")
-			.optional(),
+			.optional()
+			.default("http://localhost:3000"),
 	},
 	runtimeEnv: {
 		NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
