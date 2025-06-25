@@ -1,12 +1,12 @@
-import type { ReactNode } from "react";
-import "@/app/globals.css";
+// TODO:(analytics): add posthog
 
 import { ReactQueryProvider } from "@/components/providers/query-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import promoImage from "@/public/images/preview.png";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
+import type { ReactNode } from "react";
 import { Toaster } from "sonner";
+import "@/app/globals.css";
 
 export const metadata = {
 	title: "Nimbus",
@@ -60,10 +60,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 				<ReactQueryProvider>
 					<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 						<div className="relative min-h-screen">
-							<main className="flex flex-1 justify-center">
-								{children}
-								<Analytics />
-							</main>
+							<main className="flex flex-1 justify-center">{children}</main>
 							<Toaster position="top-center" richColors theme="system" />
 						</div>
 					</ThemeProvider>
