@@ -1,4 +1,4 @@
-FROM oven/bun:slim
+FROM oven/bun:alpine
 
 WORKDIR /app
 ENV NODE_ENV=production
@@ -14,8 +14,6 @@ COPY .next/static ./apps/web/.next/static
 
 # Copy public to /app
 COPY public ./apps/web/public
-
-COPY health-check.js .
 
 EXPOSE 3000
 

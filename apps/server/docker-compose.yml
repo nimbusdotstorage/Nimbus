@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: server-local-compose
+    container_name: nimbus-server-local-compose
     restart: unless-stopped
     env_file: .env
     environment:

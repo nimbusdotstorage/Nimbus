@@ -1,7 +1,7 @@
 services:
   cache:
     image: valkey/valkey:latest
-    container_name: cache-local-compose
+    container_name: nimbus-cache-local-compose
     restart: unless-stopped
     ports:
       - "6379:6379"

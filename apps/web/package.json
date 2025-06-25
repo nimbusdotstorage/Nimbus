@@ -7,7 +7,7 @@
 		"typescript": "^5"
 	},
 	"scripts": {
-		"dev": "next dev",
+		"dev": "next dev --turbopack",
 		"build": "next build && bash scripts/handle-nextjs-standalone-build.sh",
 		"start": "bun run .next/build-start-folder/apps/web/server.js",
 		"lint": "next lint",

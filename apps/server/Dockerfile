@@ -1,9 +1,8 @@
-FROM oven/bun:slim
+FROM oven/bun:alpine
 
 WORKDIR /app
 
 COPY dist/index.js .
-COPY health-check.js .
 
 EXPOSE 1284
 

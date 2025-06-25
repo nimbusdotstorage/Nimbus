@@ -1,11 +1,12 @@
-import type { ReactNode } from "react";
-import "@/app/globals.css";
+// TODO:(analytics): add posthog
 
 import { ReactQueryProvider } from "@/components/providers/query-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import promoImage from "@/public/images/preview.png";
 import { Geist, Geist_Mono } from "next/font/google";
+import type { ReactNode } from "react";
 import { Toaster } from "sonner";
+import "@/app/globals.css";
 
 export const metadata = {
 	title: "Nimbus",
