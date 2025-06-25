@@ -4,42 +4,62 @@ import { ReactQueryProvider } from "@/components/providers/query-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import promoImage from "@/public/images/preview.png";
 import { Geist, Geist_Mono } from "next/font/google";
+import { siteConfig } from "@/utils/site-config";
 import type { ReactNode } from "react";
 import { Toaster } from "sonner";
 import "@/app/globals.css";
 
 export const metadata = {
-	title: "Nimbus",
-	description: "A better cloud storage solution.",
+	keywords: ["nimbus", "cloud", "storage", "file", "sharing", "upload", "download", "sync", "backup"],
+	title: {
+		default: siteConfig.name,
+		template: `%s | ${siteConfig.name}`,
+	},
+	description: siteConfig.description,
+	metadataBase: new URL(siteConfig.url as string),
 	openGraph: {
-		title: "Nimbus",
-		description: "A better cloud storage solution.",
-		url: "https://nimbus.storage",
-		siteName: "Nimbus",
+		title: siteConfig.name,
+		description: siteConfig.description,
+		url: siteConfig.url,
+		siteName: siteConfig.name,
 		images: [
 			{
 				url: promoImage.src,
 				width: promoImage.width,
 				height: promoImage.height,
-				alt: "Nimbus",
+				alt: siteConfig.name,
 			},
 		],
 		locale: "en_US",
 		type: "website",
 	},
 	twitter: {
-		title: "Nimbus",
-		description: "A better cloud storage solution.",
-		site: "@nimbusdotcloud",
+		title: siteConfig.name,
+		description: siteConfig.description,
+		site: siteConfig.twitterHandle,
 		card: "summary_large_image",
+		domain: siteConfig.url,
 		images: [
 			{
 				url: promoImage.src,
 				width: promoImage.width,
 				height: promoImage.height,
-				alt: "Nimbus",
+				alt: siteConfig.name,
 			},
 		],
+	},
+	robots: {
+		index: true,
+		follow: true,
+		nocache: false,
+		googleBot: {
+			index: true,
+			follow: true,
+			noimageindex: false,
+			"max-video-preview": -1,
+			"max-image-preview": "large",
+			"max-snippet": -1,
+		},
 	},
 };
 
