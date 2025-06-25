@@ -7,27 +7,16 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Bell, LogOut, MessageCircleQuestion, Search, Settings } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SearchDialog } from "@/components/search/search-dialog";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { authClient } from "@nimbus/auth/auth-client";
 import { ModeToggle } from "@/components/mode-toggle";
+import Profile from "@/components/user-profile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSignOut } from "@/hooks/useAuth";
 import { useState } from "react";
 import Link from "next/link";
-
-const getInitials = (name?: string | null) => {
-	if (!name) return "SG";
-	const parts = name.trim().split(/\s+/);
-	if (parts.length === 0) return "SG";
-
-	const firstInitial = parts[0]?.[0] || "";
-	const lastInitial = parts.length > 1 ? parts[parts.length - 1]?.[0] || "" : "";
-
-	return (firstInitial + lastInitial).toUpperCase() || "SG";
-};
 
 export function Header() {
 	const { data: session, isPending } = authClient.useSession();
@@ -42,8 +31,6 @@ export function Header() {
 	const userEmail = session?.user?.email;
 	// TODO: Cache the user image
 	const userImage = session?.user?.image;
-	const userInitials = getInitials(userName);
-
 	return (
 		<header className="bg-background border-b">
 			<div className="flex h-16 items-center justify-between gap-4 px-4">
@@ -76,10 +63,7 @@ export function Header() {
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button variant="ghost" size="icon" className="cursor-pointer rounded-full">
-								<Avatar className="h-8 w-8">
-									{userImage && <AvatarImage src={userImage} alt={userName || "User"} />}
-									<AvatarFallback>{isPending ? "..." : userInitials}</AvatarFallback>
-								</Avatar>
+								<Profile url={userImage || null} name={userName || ""} size="sm" />
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent align="end">

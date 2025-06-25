@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
-import { AppSidebar } from "@/components/dashboard/main-sidebar/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/dashboard/sidebar";
 
 export default function AppLayout({ children }: { children: ReactNode }) {
 	return (

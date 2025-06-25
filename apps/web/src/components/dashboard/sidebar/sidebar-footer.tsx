@@ -18,7 +18,7 @@ export default function StorageFooter() {
 		}
 	}, [isError, error]);
 
-	const usagePercent: number = data ? Math.floor((data?.usage / data?.limit) * 100) : 0;
+	const usagePercent: number = data && data.limit > 0 ? Math.floor((data.usage / data.limit) * 100) : 0;
 
 	const toggleTheme = (): void => {
 		setTheme(theme === "dark" ? "light" : "dark");
@@ -32,18 +32,15 @@ export default function StorageFooter() {
 						<div className="flex flex-col items-start gap-3 self-stretch rounded-lg bg-white p-3 shadow-sm dark:bg-black">
 							<div className="flex items-center justify-between self-stretch">
 								<p className="text-sm font-medium text-neutral-800 dark:text-neutral-300">Storage Used</p>
-								{/* Percent skeleton */}
 								{isPending ? (
 									<div className="h-4 w-12 animate-pulse rounded bg-neutral-300 dark:bg-neutral-500"></div>
 								) : (
 									<p className="text-xs font-medium text-neutral-600 dark:text-neutral-400">{usagePercent}% Used</p>
 								)}
 							</div>
-							{/* Progress bar also shows loading state implicitly with value=0 */}
 							<Progress value={usagePercent} />
 						</div>
 						<div className="flex h-8 items-center justify-between self-stretch px-3">
-							{/* Storage skeleton */}
 							{isPending ? (
 								<div className="h-4 w-32 animate-pulse rounded bg-neutral-300 dark:bg-neutral-500"></div>
 							) : (

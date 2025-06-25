@@ -1,7 +1,9 @@
 import { createFileSchema, deleteFileSchema, getFileByIdSchema, updateFileSchema } from "@/validators";
 import { GoogleDriveProvider } from "@/providers/google/google-drive";
-import type { File, ApiResponse } from "@/providers/google/types";
+import { TagService } from "@/routes/tags/tag-service";
+import type { File } from "@/providers/google/types";
 import { getAccount } from "@/lib/utils/accounts";
+import type { ApiResponse } from "@/routes/types";
 import type { Context } from "hono";
 import { Hono } from "hono";
 
@@ -11,6 +13,7 @@ import { Hono } from "hono";
 // const CACHE_HEADER = `public, max-age=${CACHE_MAX_AGE}, s-maxage=${CACHE_MAX_AGE}, stale-while-revalidate=${STALE_WHILE_REVALIDATE}`;
 
 const filesRouter = new Hono();
+const tagService = new TagService();
 
 // Get all files
 filesRouter.get("/", async (c: Context) => {
@@ -26,7 +29,7 @@ filesRouter.get("/", async (c: Context) => {
 
 	const accessToken = account.accessToken;
 	if (!accessToken) {
-		return c.json<FileOperationResponse>({ success: false, message: "Unauthorized access" }, 401);
+		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
 	}
 
 	// * The GoogleDriveProvider will be replaced by a general provider in the future
@@ -35,10 +38,18 @@ filesRouter.get("/", async (c: Context) => {
 		return c.json<ApiResponse>({ success: false, message: "Files not found" }, 404);
 	}
 
+	// Add tags to files
+	const filesWithTags = await Promise.all(
+		files.map(async file => {
+			const tags = await tagService.getFileTags(file.id!, user.id);
+			return { ...file, tags };
+		})
+	);
+
 	// Set cache headers for the list of files
 	// c.header("Cache-Control", CACHE_HEADER);
 	// c.header("Vary", "Authorization"); // Vary cache by Authorization header
-	return c.json(files as File[]);
+	return c.json(filesWithTags as File[]);
 });
 
 // Get a specific file from
@@ -66,7 +77,7 @@ filesRouter.get("/:id", async (c: Context) => {
 
 	const accessToken = account.accessToken;
 	if (!accessToken) {
-		return c.json<FileOperationResponse>({ success: false, message: "Unauthorized access" }, 401);
+		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
 	}
 
 	const file = await new GoogleDriveProvider(accessToken).getFileById(fileId);
@@ -74,9 +85,13 @@ filesRouter.get("/:id", async (c: Context) => {
 		return c.json<ApiResponse>({ success: false, message: "File not found" }, 404);
 	}
 
+	// Add tags to file
+	const tags = await tagService.getFileTags(fileId, user.id);
+	const fileWithTags = { ...file, tags };
+
 	// c.header("Cache-Control", CACHE_HEADER);
 	// c.header("Vary", "Authorization"); // Vary cache by Authorization header
-	return c.json<File>(file);
+	return c.json<File>(fileWithTags);
 });
 
 // Untested
@@ -102,7 +117,7 @@ filesRouter.put("/", async (c: Context) => {
 
 	const accessToken = account.accessToken;
 	if (!accessToken) {
-		return c.json<FileOperationResponse>({ success: false, message: "Unauthorized access" }, 401);
+		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
 	}
 
 	const success = await new GoogleDriveProvider(accessToken).updateFile(fileId, name);
@@ -134,7 +149,15 @@ filesRouter.delete("/", async (c: Context) => {
 
 	const accessToken = account.accessToken;
 	if (!accessToken) {
-		return c.json<FileOperationResponse>({ success: false, message: "Unauthorized access" }, 401);
+		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
+	}
+
+	try {
+		// Delete all fileTag associations for the file
+		// Has to be done manually since we don't store all files locally
+		await tagService.deleteFileTagsByFileId(data.id, user.id);
+	} catch {
+		return c.json<ApiResponse>({ success: false, message: "Failed to delete file tag relationships." });
 	}
 
 	const fileId = data.id;
@@ -167,7 +190,7 @@ filesRouter.post("/", async (c: Context) => {
 
 	const accessToken = account.accessToken;
 	if (!accessToken) {
-		return c.json<FileOperationResponse>({ success: false, message: "Unauthorized access" }, 401);
+		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
 	}
 
 	const name = data.name;

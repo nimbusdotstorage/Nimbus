@@ -6,9 +6,10 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ChevronsUpDown, LogOut, Sparkles } from "lucide-react";
 import { authClient } from "@nimbus/auth/auth-client";
+import Profile from "@/components/user-profile";
+import { Avatar } from "@/components/ui/avatar";
 import { useSignOut } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 
@@ -20,17 +21,6 @@ export default function UserAccount() {
 	const userEmail = session?.user?.email;
 	// TODO: Cache the user image
 	const userImage = session?.user?.image;
-
-	const getInitials = (name?: string | null) => {
-		if (!name) return "...";
-		const parts = name.trim().split(/\s+/);
-		if (parts.length === 0) return "...";
-
-		const firstInitial = parts[0]?.[0] || "";
-		const lastInitial = parts.length > 1 ? parts[parts.length - 1]?.[0] || "" : "";
-
-		return (firstInitial + lastInitial).toUpperCase() || "...";
-	};
 
 	return (
 		<SidebarMenu>
@@ -50,12 +40,8 @@ export default function UserAccount() {
 								</div>
 							) : (
 								<div className="flex items-center gap-2">
-									<Avatar className="h-8 w-8 rounded-lg">
-										{userImage && <AvatarImage src={userImage} alt={userName || "User"} />}
-										<AvatarFallback className="bg-primary text-primary-foreground rounded-lg">
-											{getInitials(userName)}
-										</AvatarFallback>
-									</Avatar>
+									<Profile url={userImage || null} name={userName || ""} size="default" className="rounded-lg" />
+
 									<span className="text-sm leading-[normal] font-medium dark:text-neutral-200">{userName}</span>
 								</div>
 							)}

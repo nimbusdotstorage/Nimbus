@@ -1,7 +1,7 @@
 "use client";
 
+import { FileBrowser } from "@/components/dashboard/file-browser";
 import { UploadButton } from "@/components/upload-button";
-import { FileBrowser } from "@/components/file-browser";
 import { Header } from "@/components/dashboard/header";
 import { Suspense } from "react";
 
