@@ -34,7 +34,6 @@ We use Docker to run a PostgreSQL database and Valkey for local development. Fol
    ```
 
    This will start a Postgres container with default credentials:
-
    - Host: `localhost`
    - Port: `5432`
    - Database: `nimbus`
@@ -42,7 +41,6 @@ We use Docker to run a PostgreSQL database and Valkey for local development. Fol
    - Password: `postgres`
 
    And a Valkey container with credentials:
-
    - Host: `localhost`
    - Port: `6379`
    - Username: `valkey`
@@ -115,7 +113,6 @@ instructions on the first step of this [guide](https://www.better-auth.com/docs/
   → copy the generated secret value.
 
 - Now, go to <b>API permissions</b> and make sure these **delegated Microsoft Graph** permissions are added and granted:
-
   - `email` – View users' email address
   - `offline_access` – Maintain access to data you have given it access to
   - `openid` – Sign users in

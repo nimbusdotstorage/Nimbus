@@ -30,9 +30,6 @@ export async function middleware(request: NextRequest) {
 			signInUrl.searchParams.set("redirect", pathname);
 			return NextResponse.redirect(signInUrl);
 		}
-		if (isPublic && pathname !== "/") {
-			return NextResponse.redirect(new URL("/signin", request.url));
-		}
 	}
 
 	return NextResponse.next();

@@ -1,45 +1,65 @@
-import type { ReactNode } from "react";
-import "@/app/globals.css";
+// TODO:(analytics): add posthog
 
 import { ReactQueryProvider } from "@/components/providers/query-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
-import promoImage from "@/public/images/preview.png";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
+import { siteConfig } from "@/utils/site-config";
+import OGImage from "@/public/images/og.png";
+import type { ReactNode } from "react";
+import type { Metadata } from "next";
 import { Toaster } from "sonner";
+import "@/app/globals.css";
 
-export const metadata = {
-	title: "Nimbus",
-	description: "A better cloud storage solution.",
+export const metadata: Metadata = {
+	keywords: ["nimbus", "cloud", "storage", "file", "sharing", "upload", "download", "sync", "backup"],
+	title: {
+		default: siteConfig.name,
+		template: `%s | ${siteConfig.name}`,
+	},
+	description: siteConfig.description,
+	metadataBase: new URL(siteConfig.url as string),
 	openGraph: {
-		title: "Nimbus",
-		description: "A better cloud storage solution.",
-		url: "https://nimbus.storage",
-		siteName: "Nimbus",
+		title: siteConfig.name,
+		description: siteConfig.description,
+		url: siteConfig.url,
+		siteName: siteConfig.name,
 		images: [
 			{
-				url: promoImage.src,
-				width: promoImage.width,
-				height: promoImage.height,
-				alt: "Nimbus",
+				url: OGImage.src,
+				width: OGImage.width,
+				height: OGImage.height,
+				alt: siteConfig.name,
 			},
 		],
 		locale: "en_US",
 		type: "website",
 	},
 	twitter: {
-		title: "Nimbus",
-		description: "A better cloud storage solution.",
-		site: "@nimbusdotcloud",
+		title: siteConfig.name,
+		description: siteConfig.description,
+		site: siteConfig.twitterHandle,
 		card: "summary_large_image",
 		images: [
 			{
-				url: promoImage.src,
-				width: promoImage.width,
-				height: promoImage.height,
-				alt: "Nimbus",
+				url: OGImage.src,
+				width: OGImage.width,
+				height: OGImage.height,
+				alt: siteConfig.name,
 			},
 		],
+	},
+	robots: {
+		index: true,
+		follow: true,
+		nocache: false,
+		googleBot: {
+			index: true,
+			follow: true,
+			noimageindex: false,
+			"max-video-preview": -1,
+			"max-image-preview": "large",
+			"max-snippet": -1,
+		},
 	},
 };
 
@@ -60,10 +80,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 				<ReactQueryProvider>
 					<ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 						<div className="relative min-h-screen">
-							<main className="flex flex-1 justify-center">
-								{children}
-								<Analytics />
-							</main>
+							<main className="flex flex-1 justify-center">{children}</main>
 							<Toaster position="top-center" richColors theme="system" />
 						</div>
 					</ThemeProvider>
