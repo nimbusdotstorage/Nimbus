@@ -13,8 +13,8 @@ import type { FileItem, Tag } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useTags } from "@/hooks/useTags";
-import { useState } from "react";
 import { fileSize } from "@/lib/utils";
+import { useState } from "react";
 import Link from "next/link";
 
 // TODO: Typing of the file data needs to be updated
