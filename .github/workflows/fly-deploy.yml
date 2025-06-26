@@ -3,7 +3,7 @@ name: Deploy to Fly
 on:
   push:
     tags:
-      - "*"
+      - "@nimbus/*"
   workflow_dispatch:
 
 env:
