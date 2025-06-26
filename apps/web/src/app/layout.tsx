@@ -2,9 +2,9 @@
 
 import { ReactQueryProvider } from "@/components/providers/query-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
-import promoImage from "@/public/images/preview.png";
 import { Geist, Geist_Mono } from "next/font/google";
 import { siteConfig } from "@/utils/site-config";
+import OGImage from "@/public/images/og.png";
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
@@ -25,9 +25,9 @@ export const metadata: Metadata = {
 		siteName: siteConfig.name,
 		images: [
 			{
-				url: promoImage.src,
-				width: promoImage.width,
-				height: promoImage.height,
+				url: OGImage.src,
+				width: OGImage.width,
+				height: OGImage.height,
 				alt: siteConfig.name,
 			},
 		],
@@ -41,9 +41,9 @@ export const metadata: Metadata = {
 		card: "summary_large_image",
 		images: [
 			{
-				url: promoImage.src,
-				width: promoImage.width,
-				height: promoImage.height,
+				url: OGImage.src,
+				width: OGImage.width,
+				height: OGImage.height,
 				alt: siteConfig.name,
 			},
 		],
