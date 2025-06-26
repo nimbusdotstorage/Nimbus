@@ -6,10 +6,11 @@ import promoImage from "@/public/images/preview.png";
 import { Geist, Geist_Mono } from "next/font/google";
 import { siteConfig } from "@/utils/site-config";
 import type { ReactNode } from "react";
+import type { Metadata } from "next";
 import { Toaster } from "sonner";
 import "@/app/globals.css";
 
-export const metadata = {
+export const metadata: Metadata = {
 	keywords: ["nimbus", "cloud", "storage", "file", "sharing", "upload", "download", "sync", "backup"],
 	title: {
 		default: siteConfig.name,
@@ -38,7 +39,6 @@ export const metadata = {
 		description: siteConfig.description,
 		site: siteConfig.twitterHandle,
 		card: "summary_large_image",
-		domain: siteConfig.url,
 		images: [
 			{
 				url: promoImage.src,
