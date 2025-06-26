@@ -54,7 +54,7 @@ export const auth = betterAuth({
 		microsoft: {
 			clientId: process.env.MICROSOFT_CLIENT_ID as string,
 			clientSecret: process.env.MICROSOFT_CLIENT_SECRET as string,
-			scope: ["https://graph.microsoft.com/User.Read"],
+			scope: ["https://graph.microsoft.com/User.Read", "https://graph.microsoft.com/Files.ReadWrite.All"],
 			tenantId: "common",
 			prompt: "select_account",
 		},

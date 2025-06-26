@@ -1,6 +1,4 @@
-import { createDriveManager } from "@/providers/drive-provider";
-import { auth, type Session } from "@nimbus/auth/auth";
-import type { ProviderName } from "@/providers/types";
+import { auth } from "@nimbus/auth/auth";
 import { db } from "@nimbus/db";
 
 export class AccountError extends Error {
@@ -46,14 +44,4 @@ export const getAccount = async (user: typeof auth.$Infer.Session.user | null, h
 		}
 		throw new AccountError("Failed to retrieve account information", "ACCOUNT_RETRIEVAL_FAILED");
 	}
-};
-
-export const getDriveManagerForUser = async (user: Session["user"] | null, headers: Headers) => {
-	const account = await getAccount(user, headers);
-
-	if (!account.accessToken || !account.providerId) {
-		throw new Error("Missing account tokens");
-	}
-
-	return createDriveManager(account.providerId as ProviderName, account.accessToken);
 };
