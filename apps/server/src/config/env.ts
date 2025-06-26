@@ -30,6 +30,17 @@ export const env = createEnv({
 		BACKEND_URL: z
 			.string({ message: "The BACKEND_URL environment variable is required." })
 			.url("BACKEND_URL must be a valid URL (e.g., https://api.yourdomain.com)."),
+
+		CORS_ORIGIN_URLS: z
+			.string({ message: "The CORS_ORIGIN_URLS environment variable is required." })
+			.min(
+				1,
+				"CORS_ORIGIN_URLS cannot be empty. Please provide valid URLs (e.g., https://yourdomain.com,https://www.yourdomain.com)."
+			)
+			.transform(val => val.split(",").map(url => url.trim()))
+			.refine(urls => urls.every(url => z.string().url().safeParse(url).success), {
+				message: "One or more URLs in CORS_ORIGIN_URLS are not valid.",
+			}),
 	},
 	runtimeEnv: process.env,
 	emptyStringAsUndefined: true,

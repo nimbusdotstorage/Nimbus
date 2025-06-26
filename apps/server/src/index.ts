@@ -15,7 +15,7 @@ const app = new Hono<{ Variables: ReqVariables }>();
 
 app.use(
 	cors({
-		origin: env.FRONTEND_URL,
+		origin: env.CORS_ORIGIN_URLS,
 		credentials: true,
 		allowHeaders: ["Content-Type", "Authorization"],
 		allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
