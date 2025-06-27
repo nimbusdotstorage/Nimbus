@@ -4,26 +4,17 @@ import { FileBrowserData } from "@/components/dashboard/file-browser/file-browse
 import { FilePreview } from "@/components/dashboard/file-browser/file-preview";
 import { ErrorMessageWithRetry } from "@/components/error-message/with-retry";
 import { FileTabs } from "@/components/dashboard/file-browser/file-tabs";
-import { createRequest } from "@/hooks/createRequest";
+import { useFileOperations } from "@/hooks/useFileOperations";
 import { useSearchParams } from "next/navigation";
-import { useRequest } from "@/hooks/useRequest";
 import { Loader } from "@/components/loader";
-import type { FileItem } from "@/lib/types";
 
 export function FileBrowser() {
 	const searchParams = useSearchParams();
 	const type = searchParams.get("type");
 	const id = searchParams.get("id");
 
-	const fetchFiles = createRequest({
-		path: "/files",
-		queryParams: { type },
-	});
-
-	const { data, refetch, isLoading, error } = useRequest<FileItem[]>({
-		request: fetchFiles,
-		triggers: [type],
-	});
+	const { filesQuery } = useFileOperations();
+	const { data, refetch, isLoading, error } = filesQuery;
 
 	return (
 		<div className={`flex flex-1 flex-col space-y-4 ${id ? "blur-sm transition-all" : ""}`}>

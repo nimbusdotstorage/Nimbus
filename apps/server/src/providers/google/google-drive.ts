@@ -1,60 +1,101 @@
-import { GoogleDrive } from "@nimbus/server/lib/google-drive/src/index";
-import type { File as GoogleDriveFile } from "@/providers/google/types";
-import { Provider } from "@/providers/interface/provider";
-import type { File } from "@/providers/interface/types";
-// import type { FileListParams } from "lib/google-drive/src/resources";
+import type { DriveInfo, File } from "@/providers/interface/types";
+import type { Provider } from "@/providers/interface/provider";
+import { OAuth2Client } from "google-auth-library";
+import { drive_v3 } from "@googleapis/drive";
+// import fs from "fs";
 
-export class GoogleDriveProvider extends Provider<GoogleDrive> {
-	constructor(drive: GoogleDrive) {
-		super(drive);
+export class GoogleDriveProvider implements Provider {
+	private drive: drive_v3.Drive;
+
+	constructor(accessToken: string) {
+		const oauth2Client = new OAuth2Client();
+		oauth2Client.setCredentials({ access_token: accessToken });
+		this.drive = new drive_v3.Drive({ auth: oauth2Client });
 	}
 
-	// Create file method
-	// Can also be used to create a folder
-	async createFile(name: string, mimeType: string, parents?: string[] | undefined): Promise<File | null> {
-		const response = await this.drive.files.create({
-			name,
-			parents,
-			mimeType,
+	/**
+	 * List files in the user's Google Drive.
+	 * @param parents The IDs of the parent folders to query files from
+	 * @param pageSize The number of files to return per page
+	 * @param returnedValues The values the file object will contain
+	 * @param pageToken The next page token or URL for pagination
+	 * @returns An array of files of type File, and the next page token
+	 */
+	async listFiles(
+		parents: string[],
+		pageSize: number,
+		returnedValues: string,
+		pageToken?: string
+	): Promise<{ files: File[]; nextPageToken?: string }> {
+		const response = await this.drive.files.list({
+			// TODO: returnedValues when passed in will be an array of strings. Write a helper to convert it to the proper parameter for G Drive and OneDrive
+			fields: returnedValues,
+			pageSize,
+			pageToken,
+			q: parents?.length > 0 ? `'${parents[0]}' in parents` : undefined, // the ${parents[0]}' in parents specifies the folder to get the files from.
+		});
+
+		if (!response.data.files) {
+			// TODO: implement either better error handling or better empty state on front end. Probably both...
+			return { files: [] };
+		}
+
+		const files: File[] = response.data.files.map(file => convertGoogleDriveFileToProviderFile(file));
+
+		return {
+			files,
+			nextPageToken: response.data.nextPageToken || undefined,
+		};
+	}
+
+	async getFileById(id: string, returnedValues: string): Promise<File | null> {
+		const response = this.drive.files.get({
+			fileId: id,
+			fields: returnedValues,
 		});
 
 		if (!response) {
 			return null;
 		}
 
-		const file: File = convertGoogleDriveFileToProviderFile(response);
+		const file: File = convertGoogleDriveFileToProviderFile((await response).data);
 
 		return file;
 	}
 
 	/**
-	 * List files in the user's Google Drive.
-	 * @returns An array of files of type File
+	 *
+	 * @param name
+	 * @param mimeType
+	 * @param parents
+	 * @returns
 	 */
-	async listFiles(): Promise<File[]> {
-		const response = await this.drive.files.list({
-			fields: "files(id, name, mimeType, size, createdTime, modifiedTime, trashed, parents)",
-		});
+	async createFile(
+		name: string,
+		mimeType: string,
+		parents?: string[] | undefined
+		// filePath?: string or something to get the file from the user file system
+	): Promise<File | null> {
+		const fileMetadata: { name: string; mimeType: string; parents?: string[] } = {
+			name,
+			mimeType,
+			parents,
+		};
 
-		if (!response.files) {
-			return [];
-		}
-
-		const files: File[] = response.files.map(file => convertGoogleDriveFileToProviderFile(file));
-
-		return files;
-	}
-
-	async getFileById(id: string): Promise<File | null> {
-		const response = await this.drive.files.retrieve(id, {
-			fields: "id, name, mimeType, size, createdTime, modifiedTime, trashed, parents",
+		const response = await this.drive.files.create({
+			media: {
+				mimeType,
+				// body: fs.createReadStream(filePath),
+			},
+			requestBody: fileMetadata,
+			fields: "id, name, mimeType, parents", // this returns the file object with the specified fields
 		});
 
 		if (!response) {
 			return null;
 		}
 
-		const file: File = convertGoogleDriveFileToProviderFile(response);
+		const file: File = convertGoogleDriveFileToProviderFile(response.data);
 
 		return file;
 	}
@@ -67,15 +108,19 @@ export class GoogleDriveProvider extends Provider<GoogleDrive> {
 	 * @returns The updated file of type File
 	 */
 	async updateFile(fileId: string, name: string): Promise<File | null> {
-		const response = await this.drive.files.update(fileId, {
-			name,
+		const response = await this.drive.files.update({
+			fileId,
+			requestBody: {
+				name,
+			},
+			fields: "id, name, mimeType, parents", // this returns the file object with the specified fields
 		});
 
 		if (!response) {
 			return null;
 		}
 
-		const file: File = convertGoogleDriveFileToProviderFile(response);
+		const file: File = convertGoogleDriveFileToProviderFile(response.data);
 
 		return file;
 	}
@@ -87,8 +132,8 @@ export class GoogleDriveProvider extends Provider<GoogleDrive> {
 	 */
 	async deleteFile(fileId: string): Promise<boolean> {
 		try {
-			await this.drive.files.delete(fileId, {
-				supportsAllDrives: false,
+			await this.drive.files.delete({
+				fileId,
 			});
 			return true;
 		} catch {
@@ -100,25 +145,30 @@ export class GoogleDriveProvider extends Provider<GoogleDrive> {
 
 	// Export (download as MIME type) file method
 
-	// Drive methods //
+	// Drive methods
 
-	async getDriveUsageLimit() {
-		const driveAbout = await this.drive.about.retrieve({
-			fields: "storageQuota(limit, usage)",
+	async getDriveInfo(): Promise<DriveInfo | null> {
+		const driveAbout = await this.drive.about.get({
+			fields: "storageQuota(limit, usage, usageInDriveTrash)",
 		});
 
-		if (!driveAbout) {
+		if (!driveAbout.data) {
 			return null;
 		}
 
-		return driveAbout.storageQuota;
+		return {
+			limit: driveAbout.data.storageQuota?.limit,
+			usage: driveAbout.data.storageQuota?.usage,
+			usageInTrash: driveAbout.data.storageQuota?.usageInDriveTrash,
+		} as DriveInfo;
 	}
 }
 
-function convertGoogleDriveFileToProviderFile(file: GoogleDriveFile): File {
+function convertGoogleDriveFileToProviderFile(file: drive_v3.Schema$File): File {
 	return {
-		id: file.id,
-		name: file.name,
+		id: file.id || "",
+		name: file.name || "",
+		parents: file.parents || [],
 		size: file.size ?? null,
 		creationDate: file.createdTime ?? null,
 		modificationDate: file.modifiedTime ?? null,

@@ -8,14 +8,14 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import axios from "axios";
 
-export const signInWithGoogle = async () => {
+const signInWithGoogle = async () => {
 	await authClient.signIn.social({
 		provider: "google",
 		callbackURL: clientEnv.NEXT_PUBLIC_CALLBACK_URL,
 	});
 };
 
-export const signInWithMicrosoft = async () => {
+const signInWithMicrosoft = async () => {
 	await authClient.signIn.social({
 		provider: "microsoft",
 		callbackURL: clientEnv.NEXT_PUBLIC_CALLBACK_URL,

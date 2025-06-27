@@ -1,6 +1,6 @@
 import { SidebarFooter, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
-import { useStorageDetails } from "@/hooks/useDriveOps";
 import { Progress } from "@/components/ui/progress";
+import { useDriveInfo } from "@/hooks/useDriveOps";
 import { Moon, Settings, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { fileSize } from "@/utils/fileSize";
@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 
 export default function StorageFooter() {
-	const { data, error, isError, isPending } = useStorageDetails();
+	const { data, error, isError, isPending } = useDriveInfo();
 	const { theme, setTheme } = useTheme();
 
 	useEffect(() => {

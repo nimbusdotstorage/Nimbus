@@ -9,20 +9,19 @@ import { CreateTagDialog } from "@/components/dialogs/create-tag-dialog";
 import { FileText, Folder, MoreVertical, Plus, X } from "lucide-react";
 import { useFileOperations } from "@/hooks/useFileOperations";
 import { useSearchParams } from "next/navigation";
-import type { FileItem, Tag } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import type { File, Tag } from "@/lib/types";
 import { useTags } from "@/hooks/useTags";
 import { fileSize } from "@/lib/utils";
 import { useState } from "react";
-import Link from "next/link";
 
 // TODO: Typing of the file data needs to be updated
-export function FileBrowserData({ data, refetch }: { data: FileItem[]; refetch: () => void }) {
+export function FileBrowserData({ data, refetch }: { data: File[]; refetch: () => void }) {
 	return <FilesList data={data} refetch={refetch} />;
 }
 
-function FilesList({ data, refetch }: { data: FileItem[]; refetch: () => void }) {
+function FilesList({ data, refetch }: { data: File[]; refetch: () => void }) {
 	const searchParams = useSearchParams();
 	const { tags } = useTags();
 
@@ -47,15 +46,14 @@ function FilesList({ data, refetch }: { data: FileItem[]; refetch: () => void })
 						return (
 							<tr key={file.id} className="hover:bg-accent/10 relative cursor-pointer border-t transition-colors">
 								<td className="flex items-center gap-2 truncate p-4">
-									<Link href={"?" + params.toString()} className="absolute inset-0" />
-									{file.type === "folder" ? (
+									{file.id === "folder" ? (
 										<Folder className="text-primary h-4 w-4" />
 									) : (
 										<FileText className="text-primary h-4 w-4" />
 									)}
 									{file.name}
 								</td>
-								<td className="text-muted-foreground p-3 text-sm">{file.modified}</td>
+								<td className="text-muted-foreground p-3 text-sm">{file.modificationDate}</td>
 								<td className="text-muted-foreground p-3 text-sm">{size}</td>
 								<td className="relative p-3">
 									<FileActions id={file.id} />
@@ -72,7 +70,7 @@ function FilesList({ data, refetch }: { data: FileItem[]; refetch: () => void })
 	);
 }
 
-function FileTags({ file, availableTags, refetch }: { file: FileItem; availableTags: Tag[]; refetch: () => void }) {
+function FileTags({ file, availableTags, refetch }: { file: File; availableTags: Tag[]; refetch: () => void }) {
 	const { addTagsToFile, removeTagsFromFile, createTag } = useTags();
 	const [isCreateTagOpen, setIsCreateTagOpen] = useState(false);
 

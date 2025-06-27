@@ -1,83 +1,81 @@
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { FileText, Folder, Image as ImageIcon, Video, X } from "lucide-react";
-import type { FileItem, FolderContentItem } from "@/lib/types";
-import { useRouter, useSearchParams } from "next/navigation";
-import { createRequest } from "@/hooks/createRequest";
-import { Button } from "@/components/ui/button";
-import { useRequest } from "@/hooks/useRequest";
-import { Loader } from "@/components/loader";
-import { parseError } from "@/utils/error";
-import { useEffect } from "react";
+// import { FileText, Folder, Image as ImageIcon, Video, X } from "lucide-react";
+// import type { FileItem, FolderContentItem } from "@/lib/types";
+import { useSearchParams } from "next/navigation";
+import { Sheet } from "@/components/ui/sheet";
+// Add reactQuery
+// import { Button } from "@/components/ui/button";
+// import { Loader } from "@/components/loader";
+// import { parseError } from "@/utils/error";
+// import { useEffect } from "react";
 
 export function FilePreview() {
-	const router = useRouter();
+	// const router = useRouter();
 	const searchParams = useSearchParams();
 	const id = searchParams.get("id");
 
-	const fetchFile = createRequest({
-		path: "/files/:id",
-		pathParams: { id },
-	});
+	// const fetchFile = createRequest({
+	// 	path: "/files/:id",
+	// 	pathParams: { id },
+	// });
 
-	const { data, refetch, isLoading, error } = useRequest<FileItem>({
-		request: fetchFile,
-		triggers: [id],
-		manual: true,
-	});
+	// const { data, refetch, isLoading, error } = useRequest<FileItem>({
+	// 	request: fetchFile,
+	// 	triggers: [id],
+	// 	manual: true,
+	// });
 
-	const fetchFolderContents = createRequest({
-		path: "/files/:id/contents",
-		pathParams: { id },
-	});
+	// const fetchFolderContents = createRequest({
+	// 	path: "/files/:id/contents",
+	// 	pathParams: { id },
+	// });
 
-	const {
-		data: folderContents,
-		isLoading: folderContentsLoading,
-		refetch: refetchFolderContents,
-	} = useRequest<FolderContentItem[]>({
-		request: fetchFolderContents,
-		triggers: [id],
-		manual: true,
-	});
+	// const {
+	// 	data: folderContents,
+	// 	isLoading: folderContentsLoading,
+	// 	refetch: refetchFolderContents,
+	// } = useRequest<FolderContentItem[]>({
+	// 	request: fetchFolderContents,
+	// 	triggers: [id],
+	// 	manual: true,
+	// });
 
-	useEffect(() => {
-		if (id && id !== data?.id) {
-			void refetch();
-		}
-		// Adding refetch breaks it
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [id, data?.id]);
+	// useEffect(() => {
+	// 	if (id && id !== data?.id) {
+	// 		void refetch();
+	// 	}
+	// 	// Adding refetch breaks it
+	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, [id, data?.id]);
 
-	useEffect(() => {
-		if (data?.type === "folder") {
-			void refetchFolderContents();
-		}
-		// Adding refetchFolderContents breaks it
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [data?.type]);
+	// useEffect(() => {
+	// 	if (data?.type === "folder") {
+	// 		void refetchFolderContents();
+	// 	}
+	// Adding refetchFolderContents breaks it
+	// }, [data?.type]);
 
-	const handleClose = () => {
-		const params = new URLSearchParams(searchParams.toString());
-		params.delete("id");
-		router.replace(`?${params.toString()}`);
-	};
+	// const handleClose = () => {
+	// 	const params = new URLSearchParams(searchParams.toString());
+	// 	params.delete("id");
+	// 	router.replace(`?${params.toString()}`);
+	// };
 
-	const getFileIcon = (type: string) => {
-		switch (type) {
-			case "folder":
-				return <Folder className="text-muted-foreground h-4 w-4" />;
-			case "image":
-				return <ImageIcon className="text-muted-foreground h-4 w-4" />;
-			case "video":
-				return <Video className="text-muted-foreground h-4 w-4" />;
-			default:
-				return <FileText className="text-muted-foreground h-4 w-4" />;
-		}
-	};
+	// const getFileIcon = (type: string) => {
+	// 	switch (type) {
+	// 		case "folder":
+	// 			return <Folder className="text-muted-foreground h-4 w-4" />;
+	// 		case "image":
+	// 			return <ImageIcon className="text-muted-foreground h-4 w-4" />;
+	// 		case "video":
+	// 			return <Video className="text-muted-foreground h-4 w-4" />;
+	// 		default:
+	// 			return <FileText className="text-muted-foreground h-4 w-4" />;
+	// 	}
+	// };
 
 	return (
-		<Sheet open={!!id} onOpenChange={handleClose}>
-			<SheetContent className="w-[400px] overflow-y-auto sm:w-[540px]" closeButton={false}>
+		<Sheet open={!!id}>
+			{/* <SheetContent className="w-[400px] overflow-y-auto sm:w-[540px]" closeButton={false}>
 				<SheetHeader className="mb-4">
 					<div className="flex items-center justify-between">
 						<SheetTitle>{!isLoading && data ? data.name : "Loading..."}</SheetTitle>
@@ -162,7 +160,7 @@ export function FilePreview() {
 						</div>
 					)}
 				</div>
-			</SheetContent>
+			</SheetContent> */}
 		</Sheet>
 	);
 }

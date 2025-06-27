@@ -1,22 +1,19 @@
-import { createFileSchema, deleteFileSchema, getFileByIdSchema, updateFileSchema } from "@/validators";
-import { getDriveManagerForUser } from "@/providers/drive-provider";
+import { createFileSchema, deleteFileSchema, getFileByIdSchema, getFilesSchema, updateFileSchema } from "@/validators";
 import type { File } from "@/providers/interface/types";
 import { TagService } from "@/routes/tags/tag-service";
+import { getDriveManagerForUser } from "@/providers";
 import { getAccount } from "@/lib/utils/accounts";
 import type { ApiResponse } from "@/routes/types";
 import type { Context } from "hono";
 import { Hono } from "hono";
 
-// Cache control constants, replace with Valkey/Upstash/Redis?
-// const CACHE_MAX_AGE = 60 * 5; // 5 minutes in seconds
-// const STALE_WHILE_REVALIDATE = 60 * 60 * 24; // 1 day in seconds
-// const CACHE_HEADER = `public, max-age=${CACHE_MAX_AGE}, s-maxage=${CACHE_MAX_AGE}, stale-while-revalidate=${STALE_WHILE_REVALIDATE}`;
-
 const filesRouter = new Hono();
 const tagService = new TagService();
 
-// Get all files
-filesRouter.get("/", async (c: Context) => {
+// Get all files in a specific folder. Folder ID will be passed via the url (optional). Defaults to root.
+// When navigating, use the url to manage the state of which folders contents to display.
+// folderId is parent folder id. Pass it as an array to the .get() method
+filesRouter.get("/:folderId?", async (c: Context) => {
 	const user = c.get("user");
 	if (!user) {
 		return c.json<ApiResponse>({ success: false, message: "User not authenticated" }, 401);
@@ -32,25 +29,27 @@ filesRouter.get("/", async (c: Context) => {
 		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
 	}
 
-	// * The GoogleDriveProvider will be replaced by a general provider in the future
-	const drive = await getDriveManagerForUser(user, c.req.raw.headers);
-	const files = await drive.listFiles();
+	const { data, error } = getFilesSchema().safeParse(c.req.query());
 
-	if (!files) {
+	if (error) {
+		return c.json<ApiResponse>({ success: false, message: error.errors[0]?.message }, 400);
+	}
+
+	const drive = await getDriveManagerForUser(user, c.req.raw.headers);
+	const res = await drive.listFiles(data.parents, data.pageSize, data.returnedValues, data.pageToken);
+
+	if (!res.files) {
 		return c.json<ApiResponse>({ success: false, message: "Files not found" }, 404);
 	}
 
 	// Add tags to files
 	const filesWithTags = await Promise.all(
-		files.map(async file => {
+		res.files.map(async file => {
 			const tags = await tagService.getFileTags(file.id!, user.id);
 			return { ...file, tags };
 		})
 	);
 
-	// Set cache headers for the list of files
-	// c.header("Cache-Control", CACHE_HEADER);
-	// c.header("Vary", "Authorization"); // Vary cache by Authorization header
 	return c.json(filesWithTags as File[]);
 });
 
@@ -82,18 +81,17 @@ filesRouter.get("/:id", async (c: Context) => {
 		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
 	}
 
+	const returnedValues = "";
+
 	const drive = await getDriveManagerForUser(user, c.req.raw.headers);
-	const file = await drive.getFileById(fileId);
+	const file = await drive.getFileById(fileId, returnedValues);
 	if (!file) {
 		return c.json<ApiResponse>({ success: false, message: "File not found" }, 404);
 	}
 
-	// Add tags to file
+	// Add tags to file to be displayed
 	const tags = await tagService.getFileTags(fileId, user.id);
 	const fileWithTags = { ...file, tags };
-
-	// c.header("Cache-Control", CACHE_HEADER);
-	// c.header("Vary", "Authorization"); // Vary cache by Authorization header
 
 	return c.json<File>(fileWithTags);
 });

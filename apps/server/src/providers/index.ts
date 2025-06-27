@@ -1,17 +1,16 @@
 import { GoogleDriveProvider } from "@/providers/google/google-drive";
-import { OneDriveProvider } from "@/providers/onedrive/one-drive";
-import type { ProviderName } from "@/providers/types";
+// import { OneDriveProvider } from "@/providers/microsoft/one-drive";
+import type { ProviderName } from "@/providers/interface/types";
 import { getAccount } from "@/lib/utils/accounts";
-import GoogleDrive from "@/lib/google-drive/src";
 import { type Session } from "@nimbus/auth/auth";
-import OneDrive from "@/lib/one-drive/src";
+// import OneDrive from "@/lib/one-drive/src";
 
-export const createDriveManager = (providerName: ProviderName, accessToken: string) => {
+const createDriveManager = (providerName: ProviderName, accessToken: string) => {
 	if (providerName === "google") {
-		return new GoogleDriveProvider(new GoogleDrive({ accessToken }));
+		return new GoogleDriveProvider(accessToken);
 	}
 	if (providerName === "microsoft") {
-		return new OneDriveProvider(new OneDrive(), accessToken);
+		// return new OneDriveProvider(accessToken);
 	}
 	throw new Error("Unsupported provider");
 };

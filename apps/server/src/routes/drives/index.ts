@@ -1,4 +1,4 @@
-import { GoogleDriveProvider } from "@/providers/google/google-drive";
+import { getDriveManagerForUser } from "@/providers";
 import { getAccount } from "@/lib/utils/accounts";
 import type { ApiResponse } from "@/routes/types";
 import type { Context } from "hono";
@@ -23,13 +23,13 @@ drivesRouter.get("/about", async (c: Context) => {
 		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
 	}
 
-	// * The GoogleDriveProvider will be replaced by a general provider in the future
-	const drive = await new GoogleDriveProvider(accessToken).getDriveUsageLimit();
-	if (!drive) {
+	const drive = await getDriveManagerForUser(user, c.req.raw.headers);
+	const driveInfo = await drive.getDriveInfo();
+	if (!driveInfo) {
 		return c.json<ApiResponse>({ success: false, message: "Drive data not found" }, 404);
 	}
 
-	return c.json(drive);
+	return c.json(driveInfo);
 });
 
 export default drivesRouter;

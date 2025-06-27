@@ -34,8 +34,18 @@ export const emailSchema = z.object({
 		}, "Invalid email, please try again"),
 });
 
+export const getFilesSchema = () =>
+	z.object({
+		// TODO: remove the returnedValues default
+		parents: z.string().min(1).array().default(["root"]),
+		pageSize: z.number().min(10).max(100).default(20),
+		returnedValues: z.string().optional().default("files(id, name, mimeType, size, modifiedTime, parents)"),
+		pageToken: z.string().optional(),
+	});
+
 export const getFileByIdSchema = z.object({
 	id: fileIdSchema,
+	returnedValues: z.string().optional().default("files(id, name, mimeType, size, modifiedTime, parents)"),
 });
 
 export const deleteFileSchema = z.object({
@@ -54,10 +64,7 @@ export const createFileSchema = z.object({
 });
 
 // Tag schemas
-export const tagIdSchema = z
-	.string()
-	.min(1, "Tag ID cannot be empty")
-	.max(250, "Tag ID cannot be longer than 250 characters");
+const tagIdSchema = z.string().min(1, "Tag ID cannot be empty").max(250, "Tag ID cannot be longer than 250 characters");
 
 export const createTagSchema = z.object({
 	name: z

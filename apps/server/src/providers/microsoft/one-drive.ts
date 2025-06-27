@@ -1,13 +1,14 @@
-import type { File as OneDriveFile } from "@/providers/onedrive/types";
+import type { File as OneDriveFile } from "@/providers/microsoft/types";
 import { OneDrive } from "@nimbus/server/lib/one-drive/src/client";
-import { Provider } from "@/providers/interface/provider";
+import type { Provider } from "@/providers/interface/provider";
 import type { File } from "../interface/types";
 
-export class OneDriveProvider extends Provider<OneDrive> {
+export class OneDriveProvider implements Provider {
+	private drive: OneDrive;
 	private accessToken: string;
 
 	constructor(drive: OneDrive, accessToken: string) {
-		super(drive);
+		this.drive = drive;
 		this.accessToken = accessToken;
 	}
 

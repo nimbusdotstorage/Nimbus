@@ -1,7 +1,7 @@
 import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
 
-export const env = createEnv({
+export const cacheEnv = createEnv({
 	server: {
 		VALKEY_PORT: z.coerce
 			.number({ message: "The VALKEY_PORT environment variable is required." })
