@@ -8,7 +8,13 @@ export interface FileItem {
 	name: string;
 	type: "folder" | "document" | "image" | "video";
 	size?: string;
-	modified: string;
+	modifiedTime?: string;
+	mimeType?: string;
+	thumbnailLink?: string;
+	hasThumbnail?: boolean;
+	webContentLink?: string;
+	webViewLink?: string;
+	iconLink?: string;
 }
 
 export interface CreateFolderDialogProps {

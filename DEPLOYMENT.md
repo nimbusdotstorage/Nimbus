@@ -83,6 +83,7 @@ bun run fly:deploy
 ### 4. Configure Your Server and Postgres Fly.io Apps
 
 1. **Create a new Fly.io app**
+
    - **IMPORTANT**: Run the recommended command that the deploy script generated for you
      - Example:
        `fly launch --no-deploy --name bun-hono-api --internal-port 8080 --vm-cpu-kind shared --vm-cpus 1 --vm-memory 256`
@@ -90,6 +91,7 @@ bun run fly:deploy
    - Type `y` again to configure it. This will open a browser tab.
 
 2. **Configure Postgres in Browser**
+
    - Select a Postgres option
    - Give it a name. It has to be unique.
      - Example: `bun-hono-api-db`
@@ -217,6 +219,7 @@ bun run fly:deploy
 ### 11. Configure Your Web Fly.io App
 
 1. **Create a new Fly.io app**
+
    - **IMPORTANT**: Run the recommended command that the deploy script generated for you
      - Example:
        `fly launch --no-deploy --name bun-nextjs-web --internal-port 3000 --vm-cpu-kind shared --vm-cpus 1 --vm-memory 256`

@@ -1,13 +1,35 @@
 import {
+	MoreVertical,
+	ExternalLink,
+	FileText,
+	Folder,
+	Trash2,
+	Edit3,
+	FileImage,
+	FileVideo,
+	FileAudio,
+	FileCode,
+	FileSpreadsheet,
+	Presentation,
+	FileArchive,
+	File,
+	Copy,
+} from "lucide-react";
+import { format } from "date-fns";
+import { useState } from "react";
+
+import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
+	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useFileOperations } from "@/hooks/useFileOperations";
-import { FileText, Folder, MoreVertical } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { RenameFileDialog } from "@/components/dialogs/rename-file-dialog";
+import { DeleteFileDialog } from "@/components/dialogs/delete-file-dialog";
+import { formatFileSize } from "@/lib/file-utils";
+import { PdfIcon } from "@/components/icons/pdf";
 import { Button } from "@/components/ui/button";
 import type { FileItem } from "@/lib/types";
 import { fileSize } from "@/lib/utils";

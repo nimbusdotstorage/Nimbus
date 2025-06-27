@@ -112,7 +112,7 @@ export function FilePreview() {
 							<div className="space-y-2">
 								<h3 className="font-medium">{data?.name}</h3>
 								<p className="text-muted-foreground text-sm">Size: {data?.size}</p>
-								<p className="text-muted-foreground text-sm">Last modified: {data?.modified}</p>
+								<p className="text-muted-foreground text-sm">Last modified: {data?.modifiedTime}</p>
 							</div>
 							<div className="mt-6 border-t pt-6">
 								<h4 className="mb-2 font-medium">Document Content Preview</h4>
@@ -132,7 +132,7 @@ export function FilePreview() {
 							</div>
 							<div className="space-y-2">
 								<h3 className="font-medium">{data?.name}</h3>
-								<p className="text-muted-foreground text-sm">Last modified: {data?.modified}</p>
+								<p className="text-muted-foreground text-sm">Last modified: {data?.modifiedTime}</p>
 								{data?.size && <p className="text-muted-foreground text-sm">Total size: {data?.size}</p>}
 							</div>
 							<div className="mt-6 border-t pt-6">
