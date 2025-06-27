@@ -11,14 +11,16 @@ import Link from "next/link";
 
 export default function Header() {
 	return (
-		<header className="absolute top-0 right-0 left-0 z-50 flex items-center justify-between p-4">
-			<h1 className="flex items-center gap-2 font-sans text-lg font-bold">
-				<Logo className="h-9 w-9" aria-hidden="true" />
-				<Link href="/" className="hover:text-primary/80 transition-colors">
+		<header className="border-border fixed top-4 left-1/2 z-50 mx-auto flex w-full max-w-2xl -translate-x-1/2 items-center justify-between rounded-lg border bg-[#1C1C1C]/80 px-4 py-2 shadow-lg backdrop-blur-sm">
+			<h1>
+				<Link href="/" className="hover:text-primary/80 flex items-center gap-2 transition-colors">
+					<span>
+						<Logo className="h-9 w-9" aria-hidden="true" />
+					</span>
 					Nimbus
 				</Link>
 			</h1>
-			<div className="flex items-center gap-4">
+			<div className="flex items-center gap-1">
 				<Tooltip>
 					<TooltipTrigger asChild>
 						<Button variant="ghost" asChild aria-label="Contributors">
