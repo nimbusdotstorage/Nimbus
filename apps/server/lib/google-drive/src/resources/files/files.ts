@@ -484,7 +484,7 @@ export interface File {
 	/**
 	 * The ID of the file.
 	 */
-	id?: string;
+	id: string;
 
 	/**
 	 * A collection of arbitrary key-value pairs which are private to the requesting
@@ -661,7 +661,7 @@ export interface File {
 	 * for immutable items such as the top level folders of shared drives, My Drive
 	 * root folder, and Application Data folder the name is constant.
 	 */
-	name?: string;
+	name: string;
 
 	/**
 	 * The original filename of the uploaded content if available, or else the original

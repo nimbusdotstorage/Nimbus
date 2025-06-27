@@ -1,13 +1,14 @@
+import type { File as OneDriveFile } from "@/providers/onedrive/types";
 import { OneDrive } from "@nimbus/server/lib/one-drive/src/client";
-import type { File } from "@/providers/onedrive/types";
+import { Provider } from "@/providers/interface/provider";
+import type { File } from "../interface/types";
 
-export class OneDriveProvider {
-	private drive: OneDrive;
+export class OneDriveProvider extends Provider<OneDrive> {
 	private accessToken: string;
 
-	constructor(accessToken: string) {
+	constructor(drive: OneDrive, accessToken: string) {
+		super(drive);
 		this.accessToken = accessToken;
-		this.drive = new OneDrive({ accessToken });
 	}
 
 	// Create file or folder
@@ -25,8 +26,13 @@ export class OneDriveProvider {
 			},
 		});
 
-		if (!res.ok) return null;
-		return (await res.json()) as File;
+		if (!res.ok) {
+			return null;
+		}
+
+		const data = (await res.json()) as OneDriveFile;
+		const file: File = convertOneDriveFileToProviderFile(data);
+		return file;
 	}
 
 	async listFiles(): Promise<File[]> {
@@ -36,9 +42,13 @@ export class OneDriveProvider {
 			},
 		});
 
-		if (!res.ok) return [];
-		const data = (await res.json()) as { value: File[] };
-		return data.value;
+		if (!res.ok) {
+			return [];
+		}
+
+		const data = (await res.json()) as { value: OneDriveFile[] };
+		const files: File[] = data.value.map(file => convertOneDriveFileToProviderFile(file));
+		return files;
 	}
 
 	async getFileById(id: string): Promise<File | null> {
@@ -48,8 +58,13 @@ export class OneDriveProvider {
 			},
 		});
 
-		if (!res.ok) return null;
-		return (await res.json()) as File;
+		if (!res.ok) {
+			return null;
+		}
+
+		const data = (await res.json()) as OneDriveFile;
+		const file: File = convertOneDriveFileToProviderFile(data);
+		return file;
 	}
 
 	async updateFile(fileId: string, name: string): Promise<File | null> {
@@ -61,8 +76,13 @@ export class OneDriveProvider {
 			},
 		});
 
-		if (!res.ok) return null;
-		return (await res.json()) as File;
+		if (!res.ok) {
+			return null;
+		}
+
+		const data = (await res.json()) as OneDriveFile;
+		const file: File = convertOneDriveFileToProviderFile(data);
+		return file;
 	}
 
 	async deleteFile(fileId: string): Promise<boolean> {
@@ -74,4 +94,14 @@ export class OneDriveProvider {
 
 		return res.status === 204;
 	}
+}
+
+function convertOneDriveFileToProviderFile(file: OneDriveFile): File {
+	return {
+		id: file.id,
+		name: file.name,
+		size: file.size?.toString() ?? null,
+		creationDate: file.createdDateTime ?? null,
+		modificationDate: file.lastModifiedDateTime ?? null,
+	};
 }

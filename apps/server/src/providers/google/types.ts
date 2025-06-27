@@ -145,7 +145,7 @@ export interface FileListParams {
  * a `fileId`. Use the `files.list` method to retrieve the ID for a file.
  */
 export interface File {
-	id?: string;
+	id: string;
 
 	createdTime?: string;
 
@@ -262,7 +262,7 @@ export interface File {
 	 * for immutable items such as the top level folders of shared drives, My Drive
 	 * root folder, and Application Data folder the name is constant.
 	 */
-	name?: string;
+	name: string;
 
 	/**
 	 * The original filename of the uploaded content if available, or else the original

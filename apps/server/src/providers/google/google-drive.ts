@@ -1,12 +1,12 @@
 import { GoogleDrive } from "@nimbus/server/lib/google-drive/src/index";
-import type { File } from "@/providers/google/types";
+import type { File as GoogleDriveFile } from "@/providers/google/types";
+import { Provider } from "@/providers/interface/provider";
+import type { File } from "@/providers/interface/types";
 // import type { FileListParams } from "lib/google-drive/src/resources";
 
-export class GoogleDriveProvider {
-	private drive: GoogleDrive;
-
-	constructor(accessToken: string) {
-		this.drive = new GoogleDrive({ accessToken });
+export class GoogleDriveProvider extends Provider<GoogleDrive> {
+	constructor(drive: GoogleDrive) {
+		super(drive);
 	}
 
 	// Create file method
@@ -22,7 +22,9 @@ export class GoogleDriveProvider {
 			return null;
 		}
 
-		return response as File;
+		const file: File = convertGoogleDriveFileToProviderFile(response);
+
+		return file;
 	}
 
 	/**
@@ -38,7 +40,9 @@ export class GoogleDriveProvider {
 			return [];
 		}
 
-		return response.files as File[];
+		const files: File[] = response.files.map(file => convertGoogleDriveFileToProviderFile(file));
+
+		return files;
 	}
 
 	async getFileById(id: string): Promise<File | null> {
@@ -50,7 +54,9 @@ export class GoogleDriveProvider {
 			return null;
 		}
 
-		return response as File;
+		const file: File = convertGoogleDriveFileToProviderFile(response);
+
+		return file;
 	}
 
 	/**
@@ -69,7 +75,9 @@ export class GoogleDriveProvider {
 			return null;
 		}
 
-		return response as File;
+		const file: File = convertGoogleDriveFileToProviderFile(response);
+
+		return file;
 	}
 
 	/**
@@ -105,4 +113,14 @@ export class GoogleDriveProvider {
 
 		return driveAbout.storageQuota;
 	}
+}
+
+function convertGoogleDriveFileToProviderFile(file: GoogleDriveFile): File {
+	return {
+		id: file.id,
+		name: file.name,
+		size: file.size ?? null,
+		creationDate: file.createdTime ?? null,
+		modificationDate: file.modifiedTime ?? null,
+	};
 }
