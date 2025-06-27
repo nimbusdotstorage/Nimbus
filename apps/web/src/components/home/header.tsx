@@ -11,7 +11,7 @@ import Link from "next/link";
 
 export default function Header() {
 	return (
-		<header className="border-border fixed top-4 left-1/2 z-50 mx-auto flex w-full max-w-2xl -translate-x-1/2 items-center justify-between rounded-lg border bg-[#1C1C1C]/80 px-4 py-2 shadow-lg backdrop-blur-sm">
+		<header className="border-border bg-surface/80 fixed top-4 left-1/2 z-50 mx-auto flex w-full max-w-2xl -translate-x-1/2 items-center justify-between rounded-lg border px-4 py-2 backdrop-blur-xs">
 			<h1>
 				<Link href="/" className="hover:text-primary/80 flex items-center gap-2 transition-colors">
 					<span>
