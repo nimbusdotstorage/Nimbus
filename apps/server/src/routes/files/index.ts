@@ -4,6 +4,8 @@ import { TagService } from "@/routes/tags/tag-service";
 import type { File } from "@/providers/google/types";
 import { getAccount } from "@/lib/utils/accounts";
 import type { ApiResponse } from "@/routes/types";
+// import type { File, FileOperationResponse } from "@/providers/google/types";
+// import { getAccount, getDriveManagerForUser } from "@/lib/utils/accounts";
 import type { Context } from "hono";
 import { Hono } from "hono";
 
@@ -33,7 +35,11 @@ filesRouter.get("/", async (c: Context) => {
 	}
 
 	// * The GoogleDriveProvider will be replaced by a general provider in the future
+	// <<<<<<< HEAD
 	const files = await new GoogleDriveProvider(accessToken).listFiles();
+	// const drive = await getDriveManagerForUser(user, c.req.raw.headers);
+	// const files = await drive.listFiles();
+
 	if (!files) {
 		return c.json<ApiResponse>({ success: false, message: "Files not found" }, 404);
 	}
@@ -75,9 +81,15 @@ filesRouter.get("/:id", async (c: Context) => {
 		return c.json<ApiResponse>({ success: false, message: "File ID not provided" }, 400);
 	}
 
+	// <<<<<<< HEAD
 	const accessToken = account.accessToken;
 	if (!accessToken) {
 		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
+		// const drive = await getDriveManagerForUser(user, c.req.raw.headers);
+		// const file = await drive.getFileById(fileId);
+
+		// if (!file) {
+		// 	return c.json<FileOperationResponse>({ success: false, message: "File not found" }, 404);
 	}
 
 	const file = await new GoogleDriveProvider(accessToken).getFileById(fileId);
@@ -91,7 +103,9 @@ filesRouter.get("/:id", async (c: Context) => {
 
 	// c.header("Cache-Control", CACHE_HEADER);
 	// c.header("Vary", "Authorization"); // Vary cache by Authorization header
+	// <<<<<<< HEAD
 	return c.json<File>(fileWithTags);
+	// return c.json<File>(file as File);
 });
 
 // Untested
@@ -115,9 +129,15 @@ filesRouter.put("/", async (c: Context) => {
 	const fileId = data.id;
 	const name = data.name;
 
+	// <<<<<<< HEAD
 	const accessToken = account.accessToken;
 	if (!accessToken) {
 		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
+		// const drive = await getDriveManagerForUser(user, c.req.raw.headers);
+		// const success = await drive.updateFile(fileId, name);
+
+		// if (!success) {
+		// 	return c.json<FileOperationResponse>({ success: false, message: "Failed to update file" }, 500);
 	}
 
 	const success = await new GoogleDriveProvider(accessToken).updateFile(fileId, name);
@@ -161,7 +181,10 @@ filesRouter.delete("/", async (c: Context) => {
 	}
 
 	const fileId = data.id;
+	// <<<<<<< HEAD
 	const success = await new GoogleDriveProvider(accessToken).deleteFile(fileId);
+	// const drive = await getDriveManagerForUser(user, c.req.raw.headers);
+	// const success = await drive.deleteFile(fileId);
 
 	if (!success) {
 		return c.json<ApiResponse>({ success: false, message: "Failed to delete file" }, 500);
@@ -196,7 +219,10 @@ filesRouter.post("/", async (c: Context) => {
 	const name = data.name;
 	const mimeType = data.mimeType;
 	const parents = data.parents ? [data.parents] : undefined;
+	// <<<<<<< HEAD
 	const success = await new GoogleDriveProvider(accessToken).createFile(name, mimeType, parents);
+	// const drive = await getDriveManagerForUser(user, c.req.raw.headers);
+	// const success = await drive.createFile(name, mimeType, parents);
 
 	if (!success) {
 		return c.json<ApiResponse>({ success: false, message: "Failed to create file" }, 500);
