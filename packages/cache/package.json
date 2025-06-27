@@ -1,0 +1,30 @@
+{
+	"name": "@nimbus/cache",
+	"version": "0.0.1",
+	"type": "module",
+	"private": true,
+	"exports": {
+		"./rate-limiters": "./src/rate-limiters.ts",
+		"./valkey": "./src/valkey.ts",
+		"./utils/valkey-health-check": "./src/utils/valkey-health-check.ts"
+	},
+	"scripts": {
+		"build": "bun build src/rate-limiters.ts --outdir dist --target bun",
+		"docker:up": "docker compose up -d",
+		"docker:down": "docker compose down",
+		"docker:remove": "docker compose down --rmi local -v",
+		"docker:reset": "bun run docker:remove && bun run docker:up",
+		"fly:secrets:stage": "flyctl secrets import --stage < .env",
+		"fly:deploy": "bun run build && flyctl deploy --flycast"
+	},
+	"dependencies": {
+		"@t3-oss/env-core": "^0.13.8",
+		"iovalkey": "^0.3.3",
+		"rate-limiter-flexible": "^7.1.1",
+		"zod": "^3.25.67"
+	},
+	"devDependencies": {
+		"@nimbus/tsconfig": "workspace:*",
+		"@types/bun": "latest"
+	}
+}

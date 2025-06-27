@@ -4,6 +4,7 @@ import HeroLight from "@/public/images/hero-light.png";
 import HeroDark from "@/public/images/hero-dark.png";
 import { TextLoop } from "@/components/ui/text-loop";
 import GoogleDriveIcon from "@/public/googledrive";
+
 import Header from "@/components/home/header";
 import OneDriveIcon from "@/public/onedrive";
 import { type Variants } from "motion/react";
