@@ -34,10 +34,10 @@ export default function Hero() {
 			<AnimatedGroup variants={transitionVariants} className="w-full">
 				<div className="flex flex-col gap-12 px-4 md:px-6">
 					<div className="flex flex-col items-center justify-center gap-3 text-center md:gap-6">
-						<h1 className="inline-flex flex-col items-center justify-center text-[2.5rem] font-bold tracking-[-0.02em] sm:flex-row md:text-5xl lg:text-7xl">
-							Cloud you <br /> you can actually trust.
+						<h1 className="inline-flex flex-col items-center justify-center text-[2.5rem] leading-[1.1] font-bold tracking-[-0.02em] sm:flex-row md:text-4xl lg:text-6xl">
+							Cloud you <br /> can actually trust.
 						</h1>
-						<p className="text-muted-foreground max-w-sm text-base md:text-xl">
+						<p className="text-muted-foreground my-4 max-w-sm text-base md:text-xl">
 							Take charge of your files with a cloud that’s open, secure, and built for you.
 						</p>
 					</div>
