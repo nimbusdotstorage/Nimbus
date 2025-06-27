@@ -66,7 +66,7 @@ export const hexColorSchema = z
 export const createTagSchema = z.object({
 	name: tagNameSchema,
 	color: hexColorSchema,
-	parentId: z.string().optional(),
+	parentId: z.string().nullable().optional(),
 });
 
 export const updateTagSchema = z.object({
