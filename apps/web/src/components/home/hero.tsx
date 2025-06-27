@@ -59,17 +59,17 @@ export default function Hero() {
 					...transitionVariants,
 				}}
 			>
-				<div className="ml-0 min-w-[300vw] sm:mx-auto sm:max-w-7xl sm:min-w-0 sm:translate-x-0">
+				<div className="border-border w-[70rem] rounded-xl border bg-gray-50/5 p-3 backdrop-blur-xs">
 					<Image
 						src={HeroDark}
 						alt="Hero"
-						className="ml-0 hidden rounded-lg shadow-[0_0_20px_rgba(30,30,30,0.8)] sm:mx-auto dark:block"
+						className="z-50 ml-0 hidden rounded-lg shadow-[0_0_20px_rgba(30,30,30,0.8)] sm:mx-auto dark:block"
 						unoptimized
 					/>
 					<Image
 						src={HeroLight}
 						alt="Hero"
-						className="ml-0 block rounded-lg shadow-[0_0_20px_rgba(30,30,30,0.2)] sm:mx-auto dark:hidden"
+						className="z-50 ml-0 block rounded-lg shadow-[0_0_20px_rgba(30,30,30,0.2)] sm:mx-auto dark:hidden"
 						unoptimized
 					/>
 				</div>
