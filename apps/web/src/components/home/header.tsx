@@ -6,6 +6,7 @@ import { Discord } from "@/components/icons/discord";
 import Logo from "@/components/icons/brand/logo";
 import { XPlatform } from "@/components/icons/x";
 import { Button } from "@/components/ui/button";
+import { GitHub } from "../icons/github";
 import { Users } from "lucide-react";
 import Link from "next/link";
 
@@ -13,7 +14,7 @@ export default function Header() {
 	return (
 		<header className="border-border bg-surface/80 fixed top-4 left-1/2 z-50 mx-auto flex w-full max-w-2xl -translate-x-1/2 items-center justify-between rounded-lg border px-4 py-2 backdrop-blur-xs">
 			<h1>
-				<Link href="/" className="hover:text-primary/80 flex items-center gap-2 transition-colors">
+				<Link href="/" className="hover:text-primary/80 flex items-center gap-2 font-bold transition-colors">
 					<span>
 						<Logo className="h-9 w-9" aria-hidden="true" />
 					</span>
@@ -40,6 +41,16 @@ export default function Header() {
 						</Button>
 					</TooltipTrigger>
 					<TooltipContent>Discord</TooltipContent>
+				</Tooltip>
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<Button variant="ghost" asChild>
+							<a href="https://github.com/nimbusdotstorage/Nimbus" target="_blank" rel="noopener noreferrer">
+								<GitHub />
+							</a>
+						</Button>
+					</TooltipTrigger>
+					<TooltipContent>Github</TooltipContent>
 				</Tooltip>
 				<Tooltip>
 					<TooltipTrigger asChild>
