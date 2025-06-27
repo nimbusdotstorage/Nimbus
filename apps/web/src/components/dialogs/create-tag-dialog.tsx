@@ -80,7 +80,11 @@ export function CreateTagDialog({ isOpen, onClose, onCreate, tags, initialParent
 			parentId: parentId === "none" ? undefined : parentId,
 		});
 		if (validationResult.success) {
-			onCreate(validationResult.data);
+			onCreate({
+				name: validationResult.data.name,
+				color: validationResult.data.color,
+				parentId: validationResult.data.parentId ?? undefined,
+			});
 			onClose();
 		} else {
 			// Update errors for final validation
