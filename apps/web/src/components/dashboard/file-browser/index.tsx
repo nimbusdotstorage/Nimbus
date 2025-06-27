@@ -1,9 +1,9 @@
 "use client";
 
-import { FileBrowserData } from "@/components/file-browser/file-browser-data";
+import { FileBrowserData } from "@/components/dashboard/file-browser/file-browser-data";
+import { FilePreview } from "@/components/dashboard/file-browser/file-preview";
 import { ErrorMessageWithRetry } from "@/components/error-message/with-retry";
-import { FilePreview } from "@/components/file-browser/file-preview";
-import { FileTabs } from "@/components/file-browser/file-tabs";
+import { FileTabs } from "@/components/dashboard/file-browser/file-tabs";
 import { createRequest } from "@/hooks/createRequest";
 import { useSearchParams } from "next/navigation";
 import { useRequest } from "@/hooks/useRequest";
@@ -36,7 +36,7 @@ export function FileBrowser() {
 			) : error ? (
 				<ErrorMessageWithRetry error={error} retryFn={refetch} />
 			) : (
-				data && <FileBrowserData data={data} />
+				data && <FileBrowserData data={data} refetch={refetch} />
 			)}
 
 			<FilePreview />

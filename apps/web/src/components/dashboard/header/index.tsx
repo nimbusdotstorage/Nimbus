@@ -11,10 +11,10 @@ import { SearchDialog } from "@/components/search/search-dialog";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { authClient } from "@nimbus/auth/auth-client";
 import { ModeToggle } from "@/components/mode-toggle";
+import Profile from "@/components/user-profile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useSignOut } from "@/hooks/useAuth";
-import Profile from "./user-profile";
 import { useState } from "react";
 import Link from "next/link";
 

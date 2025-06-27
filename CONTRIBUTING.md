@@ -104,7 +104,7 @@ instructions on the first step of this [guide](https://www.better-auth.com/docs/
   (i.e. all Microsoft account users).
 
 - Under <b>Redirect URI</b>, select <b>Web</b> and enter:  
-  `http://localhost:1284/api/auth/callback/azure-ad`  
+  `http://localhost:1284/api/auth/callback/microsoft`  
   (Also add `http://localhost:3000` under front-end origins if needed.)
 
 - After registration, go to the app's <b>Overview</b> to copy your <b>Application (client) ID</b>.

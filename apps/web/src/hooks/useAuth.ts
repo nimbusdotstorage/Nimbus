@@ -119,18 +119,6 @@ export const useSignUp = () => {
 							callbackURL: clientEnv.NEXT_PUBLIC_CALLBACK_URL,
 						});
 
-						// Handle profile image if provided
-						if (data.image) {
-							try {
-								// TODO: Implement profile image upload
-								console.log("Profile image will be uploaded:", data.image);
-								toast.info("Profile image upload will be supported soon!");
-							} catch (error) {
-								console.error("Failed to upload profile image:", error);
-								toast.warning("Profile picture couldn't be uploaded. You can add it later in settings.");
-							}
-						}
-
 						router.push("/app");
 					})(),
 					{
