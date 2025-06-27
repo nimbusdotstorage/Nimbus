@@ -24,14 +24,14 @@ interface ProfileProps extends VariantProps<typeof iconvVariants> {
 }
 
 const getInitials = (name?: string | null) => {
-	if (!name) return "SG";
+	if (!name) return "...";
 	const parts = name.trim().split(/\s+/);
-	if (parts.length === 0) return "SG";
+	if (parts.length === 0) return "...";
 
 	const firstInitial = parts[0]?.[0] || "";
 	const lastInitial = parts.length > 1 ? parts[parts.length - 1]?.[0] || "" : "";
 
-	return (firstInitial + lastInitial).toUpperCase() || "SG";
+	return (firstInitial + lastInitial).toUpperCase() || "...";
 };
 
 const Profile = ({ className, url, name, size }: ProfileProps) => {
