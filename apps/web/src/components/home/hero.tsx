@@ -60,22 +60,9 @@ export default function Hero() {
 					)}
 
 					<div className="relative mx-auto w-full max-w-3xl sm:max-w-4xl md:max-w-5xl lg:max-w-6xl">
-						<div
-							className="absolute top-1/2 left-1/2 z-0 block h-[60vw] w-[120vw] -translate-x-1/2 -translate-y-1/2 sm:h-[80%] sm:w-[120%] dark:hidden"
-							style={{
-								background: "radial-gradient(ellipse at center, rgba(255,255,255,0.7) 60%, rgba(255,255,255,0.2) 100%)",
-								filter: "blur(100px)",
-								pointerEvents: "none",
-							}}
-						/>
-						<div
-							className="absolute top-1/2 left-1/2 z-0 hidden h-[60vw] w-[120vw] -translate-x-1/2 -translate-y-1/2 sm:h-[80%] sm:w-[120%] dark:block"
-							style={{
-								background: "radial-gradient(ellipse at center, rgba(10,10,20,0.7) 60%, rgba(10,10,20,0.2) 100%)",
-								filter: "blur(100px)",
-								pointerEvents: "none",
-							}}
-						/>
+						<div className="pointer-events-none absolute top-1/2 left-1/2 z-0 block h-[60vw] w-[120vw] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.7)_60%,rgba(255,255,255,0.2)_100%)] blur-[100px] sm:h-[80%] sm:w-[120%] dark:hidden" />
+
+						<div className="pointer-events-none absolute top-1/2 left-1/2 z-0 hidden h-[60vw] w-[120vw] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,rgba(10,10,20,0.7)_60%,rgba(10,10,20,0.2)_100%)] blur-[100px] sm:h-[80%] sm:w-[120%] dark:block" />
 
 						<div className="absolute bottom-[-100%] left-[-100px] z-0 hidden sm:block">
 							<Image
@@ -131,30 +118,37 @@ export default function Hero() {
 				</div>
 			</AnimatedGroup>
 
-			<div className="border-border mx-auto w-full max-w-3xl rounded-xl border bg-gray-50/5 p-1 backdrop-blur-xs sm:max-w-4xl sm:p-2 md:max-w-5xl md:p-3 lg:max-w-6xl">
-				<div
-					className="absolute inset-0 -z-10 rounded-xl"
-					style={{
-						background: "linear-gradient(135deg, black 0%, #7FBEE4 100%)",
-						filter: "blur(60px)",
-						opacity: 0.3,
-					}}
-				/>
-				<Image
-					src={HeroDark}
-					alt="Hero"
-					className="z-10 ml-0 hidden h-auto w-full rounded-lg object-cover sm:mx-auto dark:block"
-					unoptimized
-					sizes="(max-width: 768px) 100vw, 80vw"
-				/>
-				<Image
-					src={HeroLight}
-					alt="Hero"
-					className="z-10 ml-0 block h-auto w-full rounded-lg object-cover sm:mx-auto dark:hidden"
-					unoptimized
-					sizes="(max-width: 768px) 100vw, 80vw"
-				/>
-			</div>
+			<AnimatedGroup
+				variants={{
+					container: {
+						visible: {
+							transition: {
+								staggerChildren: 0.05,
+								delayChildren: 0.25,
+							},
+						},
+					},
+					...transitionVariants,
+				}}
+			>
+				<div className="border-border mx-auto w-full max-w-3xl rounded-xl border bg-gray-50/5 p-1 backdrop-blur-xs sm:max-w-4xl sm:p-2 md:max-w-5xl md:p-3 lg:max-w-6xl">
+					<div className="absolute inset-0 -z-10 rounded-xl bg-gradient-to-br from-black to-[#7FBEE4] opacity-30 blur-[60px]" />
+					<Image
+						src={HeroDark}
+						alt="Hero"
+						className="z-10 ml-0 hidden h-auto w-full rounded-lg object-cover sm:mx-auto dark:block"
+						unoptimized
+						sizes="(max-width: 768px) 100vw, 80vw"
+					/>
+					<Image
+						src={HeroLight}
+						alt="Hero"
+						className="z-10 ml-0 block h-auto w-full rounded-lg object-cover sm:mx-auto dark:hidden"
+						unoptimized
+						sizes="(max-width: 768px) 100vw, 80vw"
+					/>
+				</div>
+			</AnimatedGroup>
 		</div>
 	);
 }
