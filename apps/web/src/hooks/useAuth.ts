@@ -15,6 +15,13 @@ export const signInWithGoogle = async () => {
 	});
 };
 
+export const signInWithBox = async () => {
+	await authClient.signIn.oauth2({
+		providerId: "box",
+		callbackURL: clientEnv.NEXT_PUBLIC_CALLBACK_URL,
+	});
+};
+
 export const useGoogleAuth = () => {
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -37,10 +44,33 @@ export const useGoogleAuth = () => {
 	return { signInWithGoogleProvider, isLoading };
 };
 
+export const useBoxAuth = () => {
+	const [isLoading, setIsLoading] = useState(false);
+
+	const signInWithBoxProvider = useCallback(async () => {
+		setIsLoading(true);
+		try {
+			toast.promise(signInWithBox(), {
+				loading: "Signing in with Box...",
+				success: "Signed in with Box",
+				error: error => (error instanceof Error ? error.message : "Box authentication failed"),
+			});
+		} catch (error) {
+			const errorMessage = error instanceof Error ? error.message : "Box authentication failed";
+			toast.error(errorMessage);
+		} finally {
+			setIsLoading(false);
+		}
+	}, []);
+
+	return { signInWithBoxProvider, isLoading };
+};
+
 export const useSignIn = () => {
 	const router = useRouter();
 	const [state, setState] = useState<AuthState>({ isLoading: false, error: null });
 	const { signInWithGoogleProvider } = useGoogleAuth();
+	const { signInWithBoxProvider } = useBoxAuth();
 
 	// Get redirect URL from search params
 	const getRedirectUrl = () => {
@@ -95,6 +125,7 @@ export const useSignIn = () => {
 		...state,
 		signInWithCredentials,
 		signInWithGoogleProvider,
+		signInWithBoxProvider,
 	};
 };
 
@@ -102,6 +133,7 @@ export const useSignUp = () => {
 	const router = useRouter();
 	const [state, setState] = useState<AuthState>({ isLoading: false, error: null });
 	const { signInWithGoogleProvider } = useGoogleAuth();
+	const { signInWithBoxProvider } = useBoxAuth();
 
 	const signUpWithCredentials = useCallback(
 		async (data: SignUpFormData) => {
@@ -179,6 +211,7 @@ export const useSignUp = () => {
 		...state,
 		signUpWithCredentials,
 		signInWithGoogleProvider,
+		signInWithBoxProvider,
 	};
 };
 

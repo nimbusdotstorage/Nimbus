@@ -77,7 +77,7 @@ export interface CreateFolderParams {
 	parentId?: string;
 }
 
-export type SocialProvider = "google";
+export type SocialProvider = "google" | "box";
 export type AuthAction = "signin" | "signup";
 
 export interface SocialAuthButtonProps extends Omit<ComponentProps<typeof Button>, "children" | "variant" | "type"> {
