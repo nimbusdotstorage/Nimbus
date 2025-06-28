@@ -197,7 +197,7 @@ function FileTags({ file, availableTags, refetch }: { file: File; availableTags:
 }
 
 function FileActions({ id }: { id: string }) {
-	const { handleDeleteFile } = useFileOperations();
+	const { deleteFile } = useFileOperations();
 
 	return (
 		<DropdownMenu>
@@ -217,7 +217,7 @@ function FileActions({ id }: { id: string }) {
 					className="text-destructive"
 					onClick={e => {
 						e.preventDefault();
-						handleDeleteFile(id);
+						deleteFile.mutate({ id });
 					}}
 				>
 					Delete

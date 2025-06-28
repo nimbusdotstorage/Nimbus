@@ -15,14 +15,14 @@ export class GoogleDriveProvider implements Provider {
 
 	/**
 	 * List files in the user's Google Drive.
-	 * @param parents The IDs of the parent folders to query files from
+	 * @param parent The IDs of the parent folder to query files from
 	 * @param pageSize The number of files to return per page
 	 * @param returnedValues The values the file object will contain
 	 * @param pageToken The next page token or URL for pagination
 	 * @returns An array of files of type File, and the next page token
 	 */
 	async listFiles(
-		parents: string[],
+		parent: string,
 		pageSize: number,
 		returnedValues: string,
 		pageToken?: string
@@ -32,7 +32,7 @@ export class GoogleDriveProvider implements Provider {
 			fields: returnedValues,
 			pageSize,
 			pageToken,
-			q: parents?.length > 0 ? `'${parents[0]}' in parents` : undefined, // the ${parents[0]}' in parents specifies the folder to get the files from.
+			q: parent ? `'${parent}' in parents` : undefined,
 		});
 
 		if (!response.data.files) {
@@ -67,19 +67,19 @@ export class GoogleDriveProvider implements Provider {
 	 *
 	 * @param name
 	 * @param mimeType
-	 * @param parents
+	 * @param parent
 	 * @returns
 	 */
 	async createFile(
 		name: string,
 		mimeType: string,
-		parents?: string[] | undefined
+		parent?: string
 		// filePath?: string or something to get the file from the user file system
 	): Promise<File | null> {
-		const fileMetadata: { name: string; mimeType: string; parents?: string[] } = {
+		const fileMetadata: { name: string; mimeType: string; parent?: string } = {
 			name,
 			mimeType,
-			parents,
+			parent,
 		};
 
 		const response = await this.drive.files.create({
@@ -145,6 +145,8 @@ export class GoogleDriveProvider implements Provider {
 
 	// Export (download as MIME type) file method
 
+	async createFolder(name: string, mimeType: string, parent?: string): Promise<File | null> {}
+
 	// Drive methods
 
 	async getDriveInfo(): Promise<DriveInfo | null> {
@@ -166,10 +168,11 @@ export class GoogleDriveProvider implements Provider {
 
 function convertGoogleDriveFileToProviderFile(file: drive_v3.Schema$File): File {
 	return {
-		id: file.id || "",
-		name: file.name || "",
-		parents: file.parents || [],
+		id: file.id ?? "",
+		name: file.name ?? "",
+		parent: file.parents?.[0] ?? "",
 		size: file.size ?? null,
+		mimeType: file.mimeType ?? "",
 		creationDate: file.createdTime ?? null,
 		modificationDate: file.modifiedTime ?? null,
 	};

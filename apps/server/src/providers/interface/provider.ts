@@ -3,14 +3,14 @@ import type { DriveInfo, File } from "@/providers/interface/types";
 export interface Provider {
 	/**
 	 * List files in the user's drive.
-	 * @param parents The IDs of the parent folders to query files from
+	 * @param parent The ID of the parent folder to query files from
 	 * @param pageSize The number of files to return per page
 	 * @param pageToken The next page token or URL for pagination
 	 * @param returnedValues The values the file object will contain. (https://learn.microsoft.com/en-us/onedrive/developer/rest-api/concepts/optional-query-parameters?view=odsp-graph-online) (https://developers.google.com/workspace/drive/api/guides/fields-parameter)
 	 * @returns An array of files of type File, and the next page token
 	 */
 	listFiles(
-		parents: string[],
+		parent: string,
 		pageSize: number,
 		returnedValues: string,
 		pageToken?: string
@@ -28,10 +28,10 @@ export interface Provider {
 	 * Create file or folder
 	 * @param name The name of the file or folder
 	 * @param mimeType The MIME type of the file
-	 * @param parents The parent folder IDs
+	 * @param parent The parent folder ID
 	 * @returns The created file of type File
 	 */
-	createFile(name: string, mimeType: string, parents?: string[]): Promise<File | null>;
+	createFolder(name: string, mimeType: string, parent?: string): Promise<File | null>;
 
 	/**
 	 * Update a file
@@ -49,7 +49,7 @@ export interface Provider {
 	deleteFile(fileId: string): Promise<boolean>;
 
 	// Future methods:
-	// copyFile(fileId: string, newName?: string, parents?: string[]): Promise<File | null>;
+	// copyFile(fileId: string, newName?: string, parent?: string): Promise<File | null>;
 	// exportFile(fileId: string, mimeType: string): Promise<Blob | null>;
 	getDriveInfo(): Promise<DriveInfo | null>;
 }

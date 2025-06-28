@@ -4,16 +4,24 @@ import { clientEnv } from "@/lib/env/client-env";
 import axios, { type AxiosError } from "axios";
 import { toast } from "sonner";
 
-export function useFileOperations(parentId: string, nextPageToken?: string) {
+const API_BASE = `${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api/files`;
+const defaultAxiosConfig = {
+	headers: {
+		"Content-Type": "application/json",
+	},
+	withCredentials: true,
+	signal: new AbortController().signal,
+};
+
+export function useFileOperations(parentId: string, pageSize: number, returnedValues: string, nextPageToken?: string) {
 	const queryClient = useQueryClient();
-	const filesQuery = useQuery({
-		queryKey: ["files", parentId, nextPageToken],
+
+	const getFiles = useQuery({
+		queryKey: ["files", parentId, nextPageToken, pageSize],
 		queryFn: async () => {
-			const response = await axios.get(`${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api/files`, {
-				headers: {
-					"Content-Type": "application/json",
-				},
-				withCredentials: true,
+			const response = await axios.get(API_BASE, {
+				params: { pageSize, nextPageToken, parentId, returnedValues },
+				...defaultAxiosConfig,
 			});
 			return response.data;
 		},
@@ -21,15 +29,24 @@ export function useFileOperations(parentId: string, nextPageToken?: string) {
 		retry: 2,
 	});
 
-	const deleteFileMutation = useMutation({
+	const getFile = useQuery({
+		queryKey: ["file", parentId, returnedValues],
+		queryFn: async () => {
+			const response = await axios.get(API_BASE, {
+				params: { parentId, returnedValues },
+				...defaultAxiosConfig,
+			});
+			return response.data;
+		},
+		staleTime: 5 * 60 * 1000, // 5 minutes
+		retry: 2,
+	});
+
+	const deleteFile = useMutation({
 		mutationFn: async ({ id }: DeleteFileParams) => {
-			const response = await axios.delete(`${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api/files`, {
+			const response = await axios.delete(API_BASE, {
 				params: { id },
-				headers: {
-					"Content-Type": "application/json",
-				},
-				withCredentials: true,
-				signal: new AbortController().signal,
+				...defaultAxiosConfig,
 			});
 			return response.data;
 		},
@@ -45,12 +62,9 @@ export function useFileOperations(parentId: string, nextPageToken?: string) {
 		},
 	});
 
-	const handleDeleteFile = (id: string) => {
-		deleteFileMutation.mutate({ id });
-	};
-
 	return {
-		filesQuery,
-		handleDeleteFile,
+		getFiles,
+		getFile,
+		deleteFile,
 	};
 }

@@ -31,7 +31,7 @@ export function useUpload() {
 	const createFolderMutation = useMutation({
 		mutationFn: async ({ name, parentId }: CreateFolderParams) => {
 			const response = await axios.post(`${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api/files`, null, {
-				params: { name, mimeType: "application/vnd.google-apps.folder", parents: parentId },
+				params: { name, mimeType: "application/vnd.google-apps.folder", parent: parentId },
 				headers: {
 					"Content-Type": "application/json",
 				},

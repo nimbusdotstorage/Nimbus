@@ -13,7 +13,7 @@ const tagService = new TagService();
 // Get all files in a specific folder. Folder ID will be passed via the url (optional). Defaults to root.
 // When navigating, use the url to manage the state of which folders contents to display.
 // folderId is parent folder id. Pass it as an array to the .get() method
-filesRouter.get("/:folderId?", async (c: Context) => {
+filesRouter.get("/", async (c: Context) => {
 	const user = c.get("user");
 	if (!user) {
 		return c.json<ApiResponse>({ success: false, message: "User not authenticated" }, 401);
@@ -36,7 +36,7 @@ filesRouter.get("/:folderId?", async (c: Context) => {
 	}
 
 	const drive = await getDriveManagerForUser(user, c.req.raw.headers);
-	const res = await drive.listFiles(data.parents, data.pageSize, data.returnedValues, data.pageToken);
+	const res = await drive.listFiles(data.parent, data.pageSize, data.returnedValues, data.pageToken);
 
 	if (!res.files) {
 		return c.json<ApiResponse>({ success: false, message: "Files not found" }, 404);
@@ -65,6 +65,11 @@ filesRouter.get("/:id", async (c: Context) => {
 		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
 	}
 
+	const accessToken = account.accessToken;
+	if (!accessToken) {
+		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
+	}
+
 	// Validation
 	const { error, data } = getFileByIdSchema.safeParse(c.req.param());
 	if (error) {
@@ -76,12 +81,7 @@ filesRouter.get("/:id", async (c: Context) => {
 		return c.json<ApiResponse>({ success: false, message: "File ID not provided" }, 400);
 	}
 
-	const accessToken = account.accessToken;
-	if (!accessToken) {
-		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
-	}
-
-	const returnedValues = "";
+	const returnedValues = data.returnedValues;
 
 	const drive = await getDriveManagerForUser(user, c.req.raw.headers);
 	const file = await drive.getFileById(fileId, returnedValues);
@@ -199,9 +199,9 @@ filesRouter.post("/", async (c: Context) => {
 
 	const name = data.name;
 	const mimeType = data.mimeType;
-	const parents = data.parents ? [data.parents] : undefined;
+	const parent = data.parent ? data.parent : undefined;
 	const drive = await getDriveManagerForUser(user, c.req.raw.headers);
-	const success = await drive.createFile(name, mimeType, parents);
+	const success = await drive.createFile(name, mimeType, parent);
 
 	if (!success) {
 		return c.json<ApiResponse>({ success: false, message: "Failed to create file" }, 500);

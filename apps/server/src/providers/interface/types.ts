@@ -4,8 +4,9 @@ export type ProviderName = "google" | "microsoft";
 export interface File {
 	id: string;
 	name: string;
+	mimeType: string;
 	// TODO: determine if OneDrive and Google Drive need parents, oronly just one.
-	parents: string[];
+	parent: string;
 	// TODO: (string or number): determine how Google, OneDrive, etc format their size and how to convert them. a string that represent bytes might make sense
 	size: string | null;
 	// TODO: (format): determine how Google, OneDrive, etc format their dates

@@ -13,8 +13,8 @@ export function FileBrowser() {
 	const type = searchParams.get("type");
 	const id = searchParams.get("id");
 
-	const { filesQuery } = useFileOperations();
-	const { data, refetch, isLoading, error } = filesQuery;
+	const { getFiles } = useFileOperations();
+	const { data, refetch, isLoading, error } = getFiles;
 
 	return (
 		<div className={`flex flex-1 flex-col space-y-4 ${id ? "blur-sm transition-all" : ""}`}>

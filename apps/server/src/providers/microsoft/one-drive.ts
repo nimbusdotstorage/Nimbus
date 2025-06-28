@@ -13,8 +13,8 @@ export class OneDriveProvider implements Provider {
 	}
 
 	// Create file or folder
-	async createFile(name: string, mimeType: string, parents?: string[]): Promise<File | null> {
-		const parentId = parents?.[0] || "root";
+	async createFile(name: string, mimeType: string, parent: string): Promise<File | null> {
+		const parentId = parent || "root";
 
 		const res: Response = await this.drive.post(`/me/drive/items/${parentId}/children`, {
 			body: {

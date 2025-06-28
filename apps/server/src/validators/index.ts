@@ -37,7 +37,7 @@ export const emailSchema = z.object({
 export const getFilesSchema = () =>
 	z.object({
 		// TODO: remove the returnedValues default
-		parents: z.string().min(1).array().default(["root"]),
+		parent: z.string().min(1).default("root"),
 		pageSize: z.number().min(10).max(100).default(20),
 		returnedValues: z.string().optional().default("files(id, name, mimeType, size, modifiedTime, parents)"),
 		pageToken: z.string().optional(),
@@ -60,7 +60,7 @@ export const updateFileSchema = z.object({
 export const createFileSchema = z.object({
 	name: z.string().min(1, "Name cannot be empty").max(100, "Name cannot be longer than 100 characters"),
 	mimeType: z.string().min(1, "MIME type cannot be empty").max(100, "MIME type cannot be longer than 100 characters"),
-	parents: fileIdSchema.optional(),
+	parent: fileIdSchema.optional(),
 });
 
 // Tag schemas
