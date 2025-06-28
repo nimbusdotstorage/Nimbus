@@ -91,4 +91,18 @@ export class GoogleDriveProvider {
 	// Copy file method
 
 	// Export (download as MIME type) file method
+
+	// Drive methods //
+
+	async getDriveUsageLimit() {
+		const driveAbout = await this.drive.about.retrieve({
+			fields: "storageQuota(limit, usage)",
+		});
+
+		if (!driveAbout) {
+			return null;
+		}
+
+		return driveAbout.storageQuota;
+	}
 }

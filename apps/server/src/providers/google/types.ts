@@ -422,8 +422,3 @@ export interface File {
 export interface FileListResponse {
 	files: File[];
 }
-
-export interface FileOperationResponse {
-	success: boolean;
-	message?: string;
-}

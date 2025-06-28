@@ -31,7 +31,6 @@ const baseSignUpSchema = z.object({
 	email: z.string().email("Please enter a valid email address"),
 	password: createPasswordSchema(),
 	confirmPassword: z.string(),
-	image: z.instanceof(File).optional(),
 });
 
 export const signUpSchema = createConfirmPasswordSchema()(baseSignUpSchema);
@@ -51,3 +50,31 @@ export type SignInFormData = z.infer<typeof signInSchema>;
 export type SignUpFormData = z.infer<typeof signUpSchema>;
 export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
+
+// Tag validation schemas
+export const tagNameSchema = z
+	.string()
+	.min(1, "Tag name is required")
+	.max(50, "Tag name must be less than 50 characters")
+	.regex(/^[a-zA-Z0-9-_\s]+$/, "Tag name must contain only alphabetic characters, numbers and spaces")
+	.trim();
+
+export const hexColorSchema = z
+	.string()
+	.regex(/^#[0-9A-Fa-f]{6}$/, "Color must be a valid 6-digit hex code (e.g., #FF0000)");
+
+export const createTagSchema = z.object({
+	name: tagNameSchema,
+	color: hexColorSchema,
+	parentId: z.string().nullable().optional(),
+});
+
+export const updateTagSchema = z.object({
+	id: z.string(),
+	name: tagNameSchema.optional(),
+	color: hexColorSchema.optional(),
+	parentId: z.string().nullable().optional(),
+});
+
+export type CreateTagInput = z.infer<typeof createTagSchema>;
+export type UpdateTagInput = z.infer<typeof updateTagSchema>;
