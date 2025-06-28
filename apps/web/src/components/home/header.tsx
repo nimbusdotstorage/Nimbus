@@ -24,7 +24,7 @@ export default function Header() {
 			<div className="flex items-center gap-1">
 				<Tooltip>
 					<TooltipTrigger asChild>
-						<Button variant="ghost" asChild aria-label="Contributors">
+						<Button variant="ghost" asChild aria-label="Contributors" className="h-9 w-9">
 							<Link href="/contributors" className="hover:text-primary/80 transition-colors">
 								<Users className="h-5 w-5" />
 							</Link>
@@ -34,7 +34,7 @@ export default function Header() {
 				</Tooltip>
 				<Tooltip>
 					<TooltipTrigger asChild>
-						<Button variant="ghost" aria-label="Discord">
+						<Button variant="ghost" aria-label="Discord" className="h-9 w-9">
 							<a href="https://discord.gg/c9nWy26ubK" target="_blank" rel="noopener noreferrer">
 								<Discord />
 							</a>
@@ -44,7 +44,7 @@ export default function Header() {
 				</Tooltip>
 				<Tooltip>
 					<TooltipTrigger asChild>
-						<Button variant="ghost" asChild>
+						<Button variant="ghost" asChild className="h-9 w-9">
 							<a href="https://github.com/nimbusdotstorage/Nimbus" target="_blank" rel="noopener noreferrer">
 								<GitHub />
 							</a>
@@ -54,7 +54,7 @@ export default function Header() {
 				</Tooltip>
 				<Tooltip>
 					<TooltipTrigger asChild>
-						<Button variant="ghost" aria-label="X (Twitter)">
+						<Button variant="ghost" aria-label="X (Twitter)" className="h-9 w-9">
 							<a href="https://x.com/nimbusdotcloud" target="_blank" rel="noopener noreferrer">
 								<XPlatform />
 							</a>

@@ -14,7 +14,6 @@ const transitionVariants: { item: Variants } = {
 	item: {
 		hidden: {
 			opacity: 0,
-			filter: "blur(12px)",
 			y: 12,
 		},
 		visible: {
@@ -130,8 +129,9 @@ export default function Hero() {
 					},
 					...transitionVariants,
 				}}
+				className="flex w-full justify-start sm:justify-center"
 			>
-				<div className="border-border mx-auto w-full max-w-3xl rounded-xl border bg-gray-50/5 p-1 backdrop-blur-xs sm:max-w-4xl sm:p-2 md:max-w-5xl md:p-3 lg:max-w-6xl">
+				<div className="border-border mx-auto w-full max-w-3xl min-w-[300vw] rounded-3xl border bg-gray-50/5 p-3 backdrop-blur-xs sm:max-w-4xl sm:min-w-0 sm:translate-x-0 sm:rounded-xl sm:p-2">
 					<div className="absolute inset-0 -z-10 rounded-xl bg-gradient-to-br from-black to-[#7FBEE4] opacity-30 blur-[60px]" />
 					<Image
 						src={HeroDark}
