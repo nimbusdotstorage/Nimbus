@@ -3,38 +3,26 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { useSignUp, useCheckEmailExists, useGoogleAuth } from "@/hooks/useAuth";
 import { SocialAuthButton } from "@/components/auth/shared/social-auth-button";
-import { useState, type ComponentProps, type ChangeEvent } from "react";
 import { SegmentedProgress } from "@/components/ui/segmented-progress";
-import { ArrowLeft, Eye, EyeClosed, Loader2, X } from "lucide-react";
+import { ArrowLeft, Eye, EyeClosed, Loader2 } from "lucide-react";
 import { signUpSchema, type SignUpFormData } from "@/schemas";
 import { FieldError } from "@/components/ui/field-error";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState, type ComponentProps } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import { toast } from "sonner";
 import Link from "next/link";
-import React from "react";
-
-// async function convertImageToBase64(file: File): Promise<string> {
-// 	return new Promise((resolve, reject) => {
-// 		const reader = new FileReader();
-// 		reader.onloadend = () => resolve(reader.result as string);
-// 		reader.onerror = reject;
-// 		reader.readAsDataURL(file);
-// 	});
-// }
 
 export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 	const searchParams = useSearchParams();
 	const urlEmail = searchParams.get("email");
 	const [showPasswordAndTos, setShowPasswordAndTos] = useState(false);
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-	const [imagePreview, setImagePreview] = useState<string | null>(null);
 	const { isLoading, signUpWithCredentials } = useSignUp();
 	const { signInWithGoogleProvider } = useGoogleAuth();
 	const checkEmailMutation = useCheckEmailExists();
@@ -43,7 +31,6 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 		register,
 		handleSubmit,
 		formState: { errors },
-		setValue,
 		trigger,
 		getValues,
 		setError,
@@ -57,18 +44,6 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 			confirmPassword: "",
 		},
 	});
-
-	const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files?.[0];
-		if (file) {
-			setValue("image", file);
-			const reader = new FileReader();
-			reader.onloadend = () => {
-				setImagePreview(reader.result as string);
-			};
-			reader.readAsDataURL(file);
-		}
-	};
 
 	const handleContinue = async () => {
 		const isValid = await trigger(["firstName", "lastName", "email"]);
@@ -174,35 +149,6 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 									<FieldError error={errors.email?.message as string} />
 								</div>
 
-								<div className="grid gap-2">
-									<Label htmlFor="image">Profile Image (optional)</Label>
-									<div className="flex items-end gap-4">
-										{imagePreview && (
-											<div className="relative h-16 w-16 overflow-hidden rounded-sm">
-												<Image src={imagePreview} alt="Profile preview" layout="fill" objectFit="cover" />
-											</div>
-										)}
-										<div className="flex w-full items-center gap-2">
-											<Input
-												id="image"
-												type="file"
-												accept="image/*"
-												onChange={handleImageChange}
-												className="w-full shadow-md"
-											/>
-											{imagePreview && (
-												<X
-													className="cursor-pointer"
-													onClick={() => {
-														setValue("image", undefined);
-														setImagePreview(null);
-													}}
-												/>
-											)}
-										</div>
-									</div>
-								</div>
-
 								<Button
 									type="button"
 									className="w-full cursor-pointer font-semibold"
@@ -276,7 +222,6 @@ export function SignupForm({ className, ...props }: ComponentProps<"div">) {
 						)}
 					</form>
 				</CardContent>
-
 				<CardFooter className="px-6 py-4">
 					<p className="w-full text-center text-sm text-neutral-600">
 						By signing up, you agree to our{" "}

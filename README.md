@@ -21,14 +21,26 @@ bun i
 
 We use Docker to run a PostgreSQL database and Valkey for local development. Follow these steps to set it up:
 
-1. **Start the database and valkey**:
+1. Copy .env.development.example to .env
+
+```bash
+cp .env.development.example .env
+```
+
+Copy .env to child directories
+
+```bash
+bun run env:sync
+```
+
+2. **Start the database and valkey**:
 
    ```bash
    bun db:up
+   bun cache:up
    ```
 
    This will start a Postgres container with default credentials:
-
    - Host: `localhost`
    - Port: `5432`
    - Database: `nimbus`
@@ -36,28 +48,28 @@ We use Docker to run a PostgreSQL database and Valkey for local development. Fol
    - Password: `postgres`
 
    And a Valkey container with credentials:
-
    - Host: `localhost`
    - Port: `6379`
    - Username: `valkey`
    - Password: `valkey`
 
-2. **Verify the database and valkey is running if running a detached container**:
+3. **Verify the database and valkey is running if running a detached container**:
 
    ```bash
-   docker compose ps
+   docker ps
    ```
 
-   You should see the `nimbus-db` and `nimbus-valkey` containers in the list with a status of "Up".
+   You should see the `nimbus-db-local-compose` and `nimbus-cache-local-compose` containers in the list with a status of
+   "Up".
 
-3. **Connect to the database** (optional):
+4. **Connect to the database** (optional):
 
    ```bash
    # Using psql client inside the container
    docker compose exec postgres psql -U postgres -d nimbus
    ```
 
-4. **Connect to the valkey** (optional):
+5. **Connect to the valkey** (optional):
 
    ```bash
    # Using valkey-cli inside the container
@@ -66,8 +78,7 @@ We use Docker to run a PostgreSQL database and Valkey for local development. Fol
 
 ### 4. Environment Setup
 
-Copy the `.env.example` file to `.env` using this command, `cp .env.example .env` and fill in these values. Follow the
-instructions on the first step of this [guide](https://www.better-auth.com/docs/authentication/google).
+Follow the instructions on the first step of this [guide](https://www.better-auth.com/docs/authentication/google).
 
 <details>
 <summary>How to setup Google keys?</summary>
@@ -85,9 +96,47 @@ instructions on the first step of this [guide](https://www.better-auth.com/docs/
 - Now navigate to <b>Audience</b> and add <b>Test users</b>.
 </details>
 
+<details>
+<summary>How to setup Microsoft keys?</summary>
+<br>
+
+- Go to the <a href="https://portal.azure.com/" target="_blank"><b>Microsoft Azure Portal</b></a>.
+
+- Navigate to <b>Azure Active Directory</b> → <b>App registrations</b> → click <b>New registration</b>.
+
+- Enter a name for your app.
+
+- Under <b>Supported account types</b>, choose:  
+  <b>Accounts in any organizational directory and personal Microsoft accounts</b>  
+  (i.e. all Microsoft account users).
+
+- Under <b>Redirect URI</b>, select <b>Web</b> and enter:  
+  `http://localhost:1284/api/auth/callback/microsoft`  
+  (Also add `http://localhost:3000` under front-end origins if needed.)
+
+- After registration, go to the app's <b>Overview</b> to copy your <b>Application (client) ID</b>.
+
+- Then go to <b>Certificates & secrets</b> → <b>New client secret</b> → add a description and expiry → click <b>Add</b>
+  → copy the generated secret value.
+
+- Now, go to <b>API permissions</b> and make sure these **delegated Microsoft Graph** permissions are added and granted:
+  - `email` – View users' email address
+  - `offline_access` – Maintain access to data you have given it access to
+  - `openid` – Sign users in
+  - `profile` – View users' basic profile
+  - `User.Read` – Sign in and read user profile
+  - `Files.ReadWrite` – Have full access to user files (OneDrive access)
+
+- Click <b>Grant admin consent</b> to apply the permissions.
+
+</details>
+
 ```bash
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
+
+MICROSOFT_CLIENT_ID=
+MICROSOFT_CLIENT_SECRET=
 
 # To generate a secret, just run `openssl rand -base64 32`
 BETTER_AUTH_SECRET=
@@ -115,7 +164,7 @@ BETTER_AUTH_SECRET=
 After setting up the database, run the migrations:
 
 ```bash
-bun db:migrate
+bun db:push
 ```
 
 ### 6. Enable Google Drive API
@@ -161,6 +210,10 @@ to work properly. Additionally, configure your Resend API key for the forgot pas
 
 If you want to contribute, please refer to the
 [contributing guide](https://github.com/nimbusdotstorage/Nimbus/blob/main/CONTRIBUTING.md)
+
+## Deploying Docker images (ex. Fly.io)
+
+Follow the [DEPLOYMENT.md](DEPLOYMENT.md) file for instructions on how to deploy to Fly.
 
 ## Our Amazing Contributors
 

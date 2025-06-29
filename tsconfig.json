@@ -1,4 +1,3 @@
 {
-	"extends": "@nimbus/tsconfig/base",
-	"include": [".*.ts", "*.ts"]
+	"extends": "@nimbus/tsconfig/base"
 }

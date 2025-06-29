@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
+        uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
@@ -32,5 +32,6 @@ jobs:
           NODE_ENV: production
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/github-actions
           NEXT_PUBLIC_BACKEND_URL: http://localhost:1284
-          NEXT_PUBLIC_CALLBACK_URL: http://localhost:3000
+          NEXT_PUBLIC_FRONTEND_URL: http://localhost:3000
+          NEXT_PUBLIC_CALLBACK_URL: http://localhost:3000/app
         run: bun run build

@@ -4,6 +4,7 @@ import {
   timestamp,
   boolean,
   integer,
+  type AnyPgColumn,
 } from "drizzle-orm/pg-core";
 
 // Auth schema
@@ -67,6 +68,39 @@ export const verification = pgTable("verification", {
   ),
 });
 
+// Tags schema
+export const tag = pgTable("tag", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  color: text("color").notNull().default("#808080"), // Default grey color
+  parentId: text("parent_id").references((): AnyPgColumn => tag.id, { onDelete: "cascade" }),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+  updatedAt: timestamp("updated_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+});
+
+// File-Tags junction table for many-to-many relationship
+export const fileTag = pgTable("file_tag", {
+  id: text("id").primaryKey(),
+  // Can't use foreign key here since we don't store all files locally(example: external files from cloud providers)
+  fileId: text("file_id").notNull(),
+  tagId: text("tag_id")
+    .notNull()
+    .references(() => tag.id, { onDelete: "cascade" }),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+});
+
 // Waitlist Schema
 export const waitlist = pgTable("waitlist", {
   id: text("id").primaryKey(),
@@ -88,6 +122,8 @@ const schema = {
   session,
   account,
   verification,
+  tag,
+  fileTag,
   waitlist,
   rateLimitAttempts,
 };
