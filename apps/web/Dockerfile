@@ -1,21 +1,53 @@
-FROM oven/bun:alpine
 
+# Builder stage
+FROM oven/bun AS builder
 WORKDIR /app
+
+# Copy package files for dependency installation
+COPY package.json bun.lock ./
+COPY apps/web/package.json ./apps/web/
+COPY packages/ ./packages/
+
+# Install dependencies
+RUN bun install
+
+# Copy source code
+COPY . .
+
+# Set environment variables for build
+ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
-# Copy contents of standalone to (app/web{.env, .next, server.js}, node_modules, package.json)
-COPY .next/standalone ./
+# Build the application
+RUN bun run --cwd apps/web build
 
-# Remove .env from /app/apps/web/.env if it exists
-RUN if [ -f /app/apps/web/.env ]; then rm /app/apps/web/.env; fi
+# Create production directories
+RUN mkdir -p /app/dist/apps/web/.next/static /app/dist/apps/web/public
 
-# Copy static to /app/.next
-COPY .next/static ./apps/web/.next/static
+# Copy built assets
+RUN cp -r /app/node_modules /app/dist/ && \
+    cp -r /app/apps/web/.next/standalone/* /app/dist/ && \
+    cp -r /app/apps/web/.next/static /app/dist/apps/web/.next/ && \
+    cp -r /app/apps/web/public/* /app/dist/apps/web/public/
 
-# Copy public to /app
-COPY public ./apps/web/public
+# Production image
+FROM oven/bun AS runner
+WORKDIR /app
 
-EXPOSE 3000
+# Set environment variables
+ENV NODE_ENV=production
+ENV PORT=3000
 
-# Based on apps/web workspace path from root package.json
+# Create non-root user
+RUN groupadd -r nodejs && useradd -r -g nodejs nodejs
+
+# Copy built application
+COPY --from=builder --chown=nodejs:nodejs /app/dist/ .
+
+# Switch to non-root user
+USER nodejs
+
+EXPOSE ${PORT}
+
+# Start the application
 CMD ["bun", "apps/web/server.js"]

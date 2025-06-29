@@ -8,8 +8,8 @@
 	},
 	"scripts": {
 		"dev": "next dev --turbopack",
-		"build": "next build && bash scripts/handle-nextjs-standalone-build.sh",
-		"start": "bun run .next/build-start-folder/apps/web/server.js",
+		"build": "next build",
+		"start": "next start",
 		"lint": "next lint",
 		"docker:build": "bun run build && docker build -t nimbus-web-manual .",
 		"docker:run": "source .env && docker run --name nimbus-web-manual --env-file .env -p $WEB_PORT:$WEB_PORT nimbus-web-manual:latest",
