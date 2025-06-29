@@ -1,7 +1,6 @@
 "use client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { GitHub } from "@/components/icons/github";
 import { clientEnv } from "@/lib/env/client-env";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -132,7 +131,7 @@ export function WaitlistForm({ className }: WaitlistFormProps) {
 	}
 
 	return (
-		<div className={cn("mx-auto flex w-full max-w-3xl flex-col items-center justify-center gap-3", className)}>
+		<div className={cn("mx-auto flex w-full max-w-3xl flex-col items-center justify-center gap-4", className)}>
 			{waitlist.success ? (
 				<div className="flex flex-col items-center justify-center gap-4 text-center">
 					<p className="text-xl font-semibold">Welcome to the waitlist! 🎉</p>
@@ -142,31 +141,26 @@ export function WaitlistForm({ className }: WaitlistFormProps) {
 				</div>
 			) : (
 				<form
-					className="mx-auto flex w-full max-w-lg flex-col gap-3 sm:flex-row"
+					className="mx-auto flex w-full max-w-md flex-col gap-3 sm:flex-row"
 					onSubmit={handleSubmit(handleJoinWaitlist)}
 				>
 					<Input
 						placeholder="example@0.email"
-						className="placeholder:text-muted-foreground h-11 w-full rounded-lg bg-white px-4 text-base font-medium outline outline-neutral-200 placeholder:font-medium md:text-base"
+						className="placeholder:text-muted-foreground h-11 w-full rounded-lg bg-white/50 px-4 text-base font-medium outline outline-neutral-200 backdrop-blur-3xl placeholder:font-medium md:text-base dark:bg-black/50"
 						{...register("email")}
 					/>
 					<Button
-						className="relative h-11 w-full overflow-hidden rounded-lg pr-3 pl-4 text-base before:absolute before:inset-0 before:translate-x-[-100%] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent before:transition-transform before:duration-1000 before:ease-in-out hover:before:translate-x-[100%] sm:w-fit"
+						className="relative h-11 w-full cursor-pointer overflow-hidden rounded-lg pr-3 pl-4 text-base drop-shadow-[0_0_8px_rgba(0,0,0,0.3)] transition-all duration-300 before:absolute before:inset-0 before:translate-x-[-100%] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent before:transition-transform before:duration-1000 before:ease-in-out hover:drop-shadow-[0_0_12px_rgba(0,0,0,0.4)] hover:before:translate-x-[100%] sm:w-fit dark:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] dark:hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]"
 						type="submit"
 					>
 						Join Waitlist
 					</Button>
 				</form>
 			)}
-			<div className="relative flex flex-row items-center justify-center gap-3">
-				<span className="text-sm text-orange-500 sm:text-base dark:text-orange-400">
-					<NumberFlow value={waitlist.count} /> people already joined the waitlist
-				</span>
-				<Button variant="ghost" asChild>
-					<a href="https://github.com/nimbusdotstorage/Nimbus" target="_blank" rel="noopener noreferrer">
-						<GitHub />
-					</a>
-				</Button>
+			<div className="relative mt-3 flex flex-row items-center justify-center gap-3 text-sm sm:text-base">
+				<span className="size-2 animate-pulse rounded-full bg-green-600 dark:bg-green-400" />
+				<span className="absolute left-0 size-2 animate-pulse rounded-full bg-green-600 blur-xs dark:bg-green-400" />
+				<NumberFlow value={waitlist.count} /> people already joined the waitlist
 			</div>
 		</div>
 	);
