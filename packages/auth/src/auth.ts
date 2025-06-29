@@ -61,6 +61,8 @@ export const auth = betterAuth({
 					clientSecret: process.env.BOX_CLIENT_SECRET as string,
 					authorizationUrl: "https://account.box.com/api/oauth2/authorize",
 					tokenUrl: "https://api.box.com/oauth2/token",
+					userInfoUrl: "https://api.box.com/2.0/users/me",
+					scopes: ["root_readwrite"],
 				},
 			],
 		}),
