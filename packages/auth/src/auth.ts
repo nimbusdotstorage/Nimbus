@@ -62,6 +62,11 @@ export const auth = betterAuth({
 					authorizationUrl: "https://account.box.com/api/oauth2/authorize",
 					tokenUrl: "https://api.box.com/oauth2/token",
 					userInfoUrl: "https://api.box.com/2.0/users/me",
+					mapProfileToUser: profile => ({
+						id: profile.id,
+						name: profile.name,
+						email: profile.login,
+					}),
 					scopes: ["root_readwrite"],
 				},
 			],
