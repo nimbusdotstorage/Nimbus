@@ -18,6 +18,11 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
+# Set public environment variables
+ENV NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL:-http://localhost:1284}
+ENV NEXT_PUBLIC_FRONTEND_URL=${NEXT_PUBLIC_FRONTEND_URL:-http://localhost:3000}
+ENV NEXT_PUBLIC_CALLBACK_URL=${NEXT_PUBLIC_CALLBACK_URL:-http://localhost:3000/app}
+
 # Install production dependencies only
 RUN bun install
 
