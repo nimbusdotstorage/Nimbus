@@ -64,11 +64,11 @@ export class GoogleDriveProvider implements Provider {
 	}
 
 	/**
-	 *
-	 * @param name
-	 * @param mimeType
-	 * @param parent
-	 * @returns
+	 * Create a file in the user's Google Drive.
+	 * @param name The name of the file
+	 * @param mimeType The MIME type of the file
+	 * @param parent The parent folder ID
+	 * @returns The created file of type File
 	 */
 	async createFile(
 		name: string,
@@ -113,7 +113,7 @@ export class GoogleDriveProvider implements Provider {
 			requestBody: {
 				name,
 			},
-			fields: "id, name, mimeType, parents", // this returns the file object with the specified fields
+			fields: "id, name, mimeType, parents",
 		});
 
 		if (!response) {
@@ -145,7 +145,9 @@ export class GoogleDriveProvider implements Provider {
 
 	// Export (download as MIME type) file method
 
-	async createFolder(name: string, mimeType: string, parent?: string): Promise<File | null> {}
+	async createFolder(name: string, parent?: string): Promise<File | null> {
+		return this.createFile(name, "application/vnd.google-apps.folder", parent);
+	}
 
 	// Drive methods
 
@@ -165,6 +167,8 @@ export class GoogleDriveProvider implements Provider {
 		} as DriveInfo;
 	}
 }
+
+// Helper functions
 
 function convertGoogleDriveFileToProviderFile(file: drive_v3.Schema$File): File {
 	return {

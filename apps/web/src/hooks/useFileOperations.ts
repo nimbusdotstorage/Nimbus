@@ -1,5 +1,4 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { DeleteFileParams } from "@/lib/types";
 import { clientEnv } from "@/lib/env/client-env";
 import axios, { type AxiosError } from "axios";
 import { toast } from "sonner";
@@ -13,10 +12,8 @@ const defaultAxiosConfig = {
 	signal: new AbortController().signal,
 };
 
-export function useFileOperations(parentId: string, pageSize: number, returnedValues: string, nextPageToken?: string) {
-	const queryClient = useQueryClient();
-
-	const getFiles = useQuery({
+export function useGetFiles(parentId?: string, pageSize?: number, returnedValues?: string, nextPageToken?: string) {
+	return useQuery({
 		queryKey: ["files", parentId, nextPageToken, pageSize],
 		queryFn: async () => {
 			const response = await axios.get(API_BASE, {
@@ -28,8 +25,10 @@ export function useFileOperations(parentId: string, pageSize: number, returnedVa
 		staleTime: 5 * 60 * 1000, // 5 minutes
 		retry: 2,
 	});
+}
 
-	const getFile = useQuery({
+export function useGetFile(parentId: string, returnedValues: string) {
+	return useQuery({
 		queryKey: ["file", parentId, returnedValues],
 		queryFn: async () => {
 			const response = await axios.get(API_BASE, {
@@ -41,18 +40,20 @@ export function useFileOperations(parentId: string, pageSize: number, returnedVa
 		staleTime: 5 * 60 * 1000, // 5 minutes
 		retry: 2,
 	});
+}
 
-	const deleteFile = useMutation({
-		mutationFn: async ({ id }: DeleteFileParams) => {
+export function useDeleteFile(fileId: string) {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async () => {
 			const response = await axios.delete(API_BASE, {
-				params: { id },
+				params: { fileId },
 				...defaultAxiosConfig,
 			});
 			return response.data;
 		},
 		onSuccess: async () => {
 			toast.success("File deleted successfully");
-			// Invalidate files queries to refetch the data
 			await queryClient.invalidateQueries({ queryKey: ["files"] });
 		},
 		onError: (error: AxiosError) => {
@@ -61,10 +62,26 @@ export function useFileOperations(parentId: string, pageSize: number, returnedVa
 			toast.error(errorMessage);
 		},
 	});
+}
 
-	return {
-		getFiles,
-		getFile,
-		deleteFile,
-	};
+export function useUpdateFile(fileId: string, name: string) {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async () => {
+			const response = await axios.put(API_BASE, {
+				params: { fileId, name },
+				...defaultAxiosConfig,
+			});
+			return response.data;
+		},
+		onSuccess: async () => {
+			toast.success("File updated successfully");
+			await queryClient.invalidateQueries({ queryKey: ["files"] });
+		},
+		onError: (error: AxiosError) => {
+			console.error("Error updating file:", error);
+			const errorMessage = error.message || "Failed to update file";
+			toast.error(errorMessage);
+		},
+	});
 }

@@ -158,12 +158,12 @@ filesRouter.delete("/", async (c: Context) => {
 	try {
 		// Delete all fileTag associations for the file
 		// Has to be done manually since we don't store all files locally
-		await tagService.deleteFileTagsByFileId(data.id, user.id);
+		await tagService.deleteFileTagsByFileId(data.fileId, user.id);
 	} catch {
 		return c.json<ApiResponse>({ success: false, message: "Failed to delete file tag relationships." });
 	}
 
-	const fileId = data.id;
+	const fileId = data.fileId;
 	const drive = await getDriveManagerForUser(user, c.req.raw.headers);
 	const success = await drive.deleteFile(fileId);
 

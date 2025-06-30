@@ -49,7 +49,7 @@ export const getFileByIdSchema = z.object({
 });
 
 export const deleteFileSchema = z.object({
-	id: fileIdSchema,
+	fileId: fileIdSchema,
 });
 
 export const updateFileSchema = z.object({

@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { CreateTagDialog } from "@/components/dialogs/create-tag-dialog";
 import { FileText, Folder, MoreVertical, Plus, X } from "lucide-react";
-import { useFileOperations } from "@/hooks/useFileOperations";
+import { useDeleteFile } from "@/hooks/useFileOperations";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -197,7 +197,13 @@ function FileTags({ file, availableTags, refetch }: { file: File; availableTags:
 }
 
 function FileActions({ id }: { id: string }) {
-	const { deleteFile } = useFileOperations();
+	const { mutate: deleteFile, isPending } = useDeleteFile(id);
+
+	const handleDelete = (e: React.MouseEvent) => {
+		e.preventDefault();
+		e.stopPropagation();
+		deleteFile(undefined);
+	};
 
 	return (
 		<DropdownMenu>
@@ -213,13 +219,7 @@ function FileActions({ id }: { id: string }) {
 				<DropdownMenuItem>Download</DropdownMenuItem>
 				<DropdownMenuItem>Rename</DropdownMenuItem>
 				<DropdownMenuSeparator />
-				<DropdownMenuItem
-					className="text-destructive"
-					onClick={e => {
-						e.preventDefault();
-						deleteFile.mutate({ id });
-					}}
-				>
+				<DropdownMenuItem className="text-destructive" onClick={handleDelete} disabled={isPending}>
 					Delete
 				</DropdownMenuItem>
 			</DropdownMenuContent>
