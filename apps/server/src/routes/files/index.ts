@@ -33,8 +33,10 @@ filesRouter.get("/", async (c: Context) => {
 		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
 	}
 
+	const { parentId } = c.req.query();
+
 	// * The GoogleDriveProvider will be replaced by a general provider in the future
-	const files = await new GoogleDriveProvider(accessToken).listFiles();
+	const files = await new GoogleDriveProvider(accessToken).listFiles({ parentId });
 	if (!files) {
 		return c.json<ApiResponse>({ success: false, message: "Files not found" }, 404);
 	}

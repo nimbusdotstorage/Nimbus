@@ -1,37 +1,28 @@
 "use client";
 
-import {
-	SidebarGroup,
-	SidebarGroupContent,
-	SidebarGroupLabel,
-	SidebarMenu,
-	SidebarMenuItem,
-	SidebarMenuButton,
-	SidebarMenuSub,
-	SidebarMenuSubButton,
-	SidebarMenuSubItem,
-} from "@/components/ui/sidebar";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { ChevronDown, Folder, ImageIcon, Video, FolderOpen, FileText } from "lucide-react";
+import { SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu } from "@/components/ui/sidebar";
 import { convertToTreeNodes, updateNodeChildren } from "@/lib/utils/tree-utils";
 import { useRouter, useSearchParams } from "next/navigation";
+import { SidebarFolderNode } from "./sidebar-folder-node";
 import type { FileItem, FileTreeNode } from "@/lib/types";
 import { createRequest } from "@/hooks/createRequest";
+import { useState, useEffect, useRef } from "react";
 import { useRequest } from "@/hooks/useRequest";
 import { Loader } from "@/components/loader";
-import { useState, useEffect } from "react";
 
 export default function SidebarFolders() {
 	const searchParams = useSearchParams();
 	const router = useRouter();
 	const type = searchParams.get("type");
+	const selectedFolderId = searchParams.get("folderId");
 	const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
 	const [treeData, setTreeData] = useState<FileTreeNode[]>([]);
 	const [prefetchingNodes, setPrefetchingNodes] = useState<Set<string>>(new Set());
+	const folderRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
 	const fetchFiles = createRequest({
 		path: "/files",
-		queryParams: { type },
+		queryParams: { type, parentId: "root" },
 	});
 
 	const { data, refetch, isLoading, error } = useRequest<FileItem[]>({
@@ -45,6 +36,12 @@ export default function SidebarFolders() {
 			setTreeData(nodes);
 		}
 	}, [data, treeData.length]);
+
+	useEffect(() => {
+		if (selectedFolderId && folderRefs.current[selectedFolderId]) {
+			folderRefs.current[selectedFolderId]?.scrollIntoView({ behavior: "smooth", block: "center" });
+		}
+	}, [selectedFolderId, expandedNodes]);
 
 	const fetchChildren = async (parentId: string): Promise<FileTreeNode[]> => {
 		const request = createRequest({
@@ -112,20 +109,6 @@ export default function SidebarFolders() {
 
 	const folders = treeData.length > 0 ? treeData : data ? convertToTreeNodes(data) : [];
 
-	const getIcon = (type: string, expanded: boolean) => {
-		switch (type) {
-			case "folder":
-				return expanded ? <FolderOpen className="size-4" /> : <Folder className="size-4" />;
-			case "image":
-				return <ImageIcon className="size-4" />;
-			case "video":
-				return <Video className="size-4" />;
-			case "document":
-			default:
-				return <FileText className="size-4" />;
-		}
-	};
-
 	return (
 		<>
 			<SidebarGroup>
@@ -145,52 +128,17 @@ export default function SidebarFolders() {
 					) : (
 						<SidebarMenu>
 							{folders.map(folder => (
-								<Collapsible key={folder.id} className="group/collapsible" open={expandedNodes.has(folder.id)}>
-									<SidebarMenuItem>
-										<CollapsibleTrigger asChild>
-											<SidebarMenuButton
-												className="cursor-pointer px-3"
-												tooltip={folder.name}
-												onClick={() => {
-													handleFolderClick(folder.id);
-													if (folder.type === "folder") {
-														if (expandedNodes.has(folder.id)) {
-															void handleNodeCollapse(folder.id);
-														} else {
-															void handleNodeExpand(folder.id);
-														}
-													}
-												}}
-												onMouseEnter={() => {
-													if (folder.type === "folder") {
-														void handleFolderHover(folder.id);
-													}
-												}}
-											>
-												{getIcon(folder.type, expandedNodes.has(folder.id))}
-
-												<span className="group-data-[collapsible=icon]:sr-only">{folder.name}</span>
-												{folder.type === "folder" && (
-													<ChevronDown className="ml-auto size-4 transition-transform duration-300 group-data-[state=open]/collapsible:rotate-180" />
-												)}
-											</SidebarMenuButton>
-										</CollapsibleTrigger>
-
-										{folder.children && folder.children.length > 0 && (
-											<CollapsibleContent>
-												<SidebarMenuSub className="group-data-[collapsible=icon]:hidden">
-													{folder.children.map(subfolder => (
-														<SidebarMenuSubItem key={subfolder.id}>
-															<SidebarMenuSubButton className="w-full cursor-pointer">
-																<span>{subfolder.name}</span>
-															</SidebarMenuSubButton>
-														</SidebarMenuSubItem>
-													))}
-												</SidebarMenuSub>
-											</CollapsibleContent>
-										)}
-									</SidebarMenuItem>
-								</Collapsible>
+								<SidebarFolderNode
+									key={folder.id}
+									node={folder}
+									expandedNodes={expandedNodes}
+									folderRefs={folderRefs}
+									handleFolderClick={handleFolderClick}
+									handleNodeExpand={handleNodeExpand}
+									handleNodeCollapse={handleNodeCollapse}
+									handleFolderHover={handleFolderHover}
+									prefetchingNodes={prefetchingNodes}
+								/>
 							))}
 						</SidebarMenu>
 					)}
