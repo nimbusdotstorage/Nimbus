@@ -59,6 +59,19 @@ export interface FileItem {
 	tags?: Tag[]; // Tags associated with this file
 }
 
+export interface FileTreeNode extends FileItem {
+	parentId?: string;
+	children?: FileTreeNode[];
+	isExpanded?: boolean;
+	isLoading?: boolean;
+}
+
+export interface TreeState {
+	expandedNodes: Set<string>;
+	selectedNode?: string;
+	cachedData: Map<string, FileTreeNode[]>;
+}
+
 export interface CreateFolderDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;

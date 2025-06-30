@@ -14,15 +14,17 @@ export function FileBrowser() {
 	const searchParams = useSearchParams();
 	const type = searchParams.get("type");
 	const id = searchParams.get("id");
+	const folderId = searchParams.get("folderId");
 
 	const fetchFiles = createRequest({
-		path: "/files",
-		queryParams: { type },
+		path: folderId ? "/files/children/:parentId" : "/files",
+		pathParams: folderId ? { parentId: folderId } : undefined,
+		queryParams: type ? { type } : undefined,
 	});
 
 	const { data, refetch, isLoading, error } = useRequest<FileItem[]>({
 		request: fetchFiles,
-		triggers: [type],
+		triggers: [type, folderId],
 	});
 
 	return (
@@ -43,3 +45,5 @@ export function FileBrowser() {
 		</div>
 	);
 }
+
+export default FileBrowser;

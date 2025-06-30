@@ -41,6 +41,25 @@ export class GoogleDriveProvider {
 		return response.files as File[];
 	}
 
+	/**
+	 * Get files by parent ID (for tree navigation)
+	 * @param parentId The ID of the parent folder
+	 * @returns An array of files in the specified folder
+	 */
+	async getFilesByParentId(parentId: string): Promise<File[]> {
+		const response = await this.drive.files.list({
+			fields: "files(id, name, mimeType, size, createdTime, modifiedTime, trashed, parents)",
+			q: `'${parentId}' in parents and trashed=false`,
+			pageSize: 50,
+		});
+
+		if (!response.files) {
+			return [];
+		}
+
+		return response.files as File[];
+	}
+
 	async getFileById(id: string): Promise<File | null> {
 		const response = await this.drive.files.retrieve(id, {
 			fields: "id, name, mimeType, size, createdTime, modifiedTime, trashed, parents",

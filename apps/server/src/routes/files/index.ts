@@ -4,6 +4,7 @@ import { TagService } from "@/routes/tags/tag-service";
 import type { File } from "@/providers/google/types";
 import { getAccount } from "@/lib/utils/accounts";
 import type { ApiResponse } from "@/routes/types";
+import { TreeCache } from "@/utils/tree-cache";
 import type { Context } from "hono";
 import { Hono } from "hono";
 
@@ -203,6 +204,95 @@ filesRouter.post("/", async (c: Context) => {
 	}
 
 	return c.json<ApiResponse>({ success: true, message: "File created successfully" });
+});
+
+filesRouter.get("/children/:parentId", async (c: Context) => {
+	const user = c.get("user");
+	if (!user) {
+		return c.json<ApiResponse>({ success: false, message: "User not authenticated" }, 401);
+	}
+
+	const account = await getAccount(user, c.req.raw.headers);
+	if (!account) {
+		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
+	}
+
+	const parentId = c.req.param("parentId");
+	if (!parentId) {
+		return c.json<ApiResponse>({ success: false, message: "Parent ID not provided" }, 400);
+	}
+
+	const accessToken = account.accessToken;
+	if (!accessToken) {
+		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
+	}
+
+	// Check cache first
+	const cachedChildren = await TreeCache.getChildren(parentId);
+	if (cachedChildren) {
+		// Add tags to cached children
+		const childrenWithTags = await Promise.all(
+			cachedChildren.map(async (file: any) => {
+				const tags = await tagService.getFileTags(file.id!, user.id);
+				return { ...file, tags };
+			})
+		);
+		return c.json(childrenWithTags as File[]);
+	}
+
+	// Fetch from Google Drive if not cached
+	const provider = new GoogleDriveProvider(accessToken);
+	const files = await provider.getFilesByParentId(parentId);
+
+	if (!files) {
+		return c.json<ApiResponse>({ success: false, message: "Files not found" }, 404);
+	}
+
+	// Cache the raw files (without tags for better performance)
+	await TreeCache.setChildren(parentId, files);
+
+	// Add tags to files
+	const filesWithTags = await Promise.all(
+		files.map(async file => {
+			const tags = await tagService.getFileTags(file.id!, user.id);
+			return { ...file, tags };
+		})
+	);
+
+	return c.json(filesWithTags as File[]);
+});
+
+filesRouter.post("/children/:parentId/prefetch", async (c: Context) => {
+	const user = c.get("user");
+	if (!user) {
+		return c.json<ApiResponse>({ success: false, message: "User not authenticated" }, 401);
+	}
+
+	const account = await getAccount(user, c.req.raw.headers);
+	if (!account) {
+		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
+	}
+
+	const parentId = c.req.param("parentId");
+	if (!parentId) {
+		return c.json<ApiResponse>({ success: false, message: "Parent ID not provided" }, 400);
+	}
+
+	const accessToken = account.accessToken;
+	if (!accessToken) {
+		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
+	}
+
+	const provider = new GoogleDriveProvider(accessToken);
+	const fetchFunction = () => provider.getFilesByParentId(parentId);
+
+	try {
+		await TreeCache.prefetchChildren(parentId, fetchFunction);
+		return c.json<ApiResponse>({ success: true, message: "Children prefetched successfully" });
+	} catch (error) {
+		console.error("Error prefetching children:", error);
+		return c.json<ApiResponse>({ success: false, message: "Failed to prefetch children" }, 500);
+	}
 });
 
 export default filesRouter;
