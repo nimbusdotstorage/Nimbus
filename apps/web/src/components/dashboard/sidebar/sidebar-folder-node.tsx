@@ -2,6 +2,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { SidebarMenuButton, SidebarMenuItem, SidebarMenuSub } from "@/components/ui/sidebar";
 import { ChevronDown, FileText, Folder, FolderOpen, ImageIcon, Video } from "lucide-react";
 import type { FileTreeNode } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 export function SidebarFolderNode({
 	node,
@@ -23,6 +24,16 @@ export function SidebarFolderNode({
 	prefetchingNodes: Set<string>;
 }) {
 	const isExpanded = expandedNodes.has(node.id);
+
+	const handleOpenChange = (isOpen: boolean) => {
+		if (node.type !== "folder") return;
+		if (isOpen) {
+			void handleNodeExpand(node.id);
+		} else {
+			void handleNodeCollapse(node.id);
+		}
+	};
+
 	const getIcon = (type: string, expanded: boolean) => {
 		switch (type) {
 			case "folder":
@@ -38,7 +49,7 @@ export function SidebarFolderNode({
 	};
 
 	return (
-		<Collapsible key={node.id} className="group/collapsible" open={isExpanded}>
+		<Collapsible key={node.id} className="group/collapsible" open={isExpanded} onOpenChange={handleOpenChange}>
 			<SidebarMenuItem>
 				<CollapsibleTrigger asChild>
 					<div
@@ -52,13 +63,6 @@ export function SidebarFolderNode({
 							tooltip={node.name}
 							onClick={() => {
 								handleFolderClick(node.id);
-								if (node.type === "folder") {
-									if (isExpanded) {
-										void handleNodeCollapse(node.id);
-									} else {
-										void handleNodeExpand(node.id);
-									}
-								}
 							}}
 							onMouseEnter={() => {
 								if (node.type === "folder") {
@@ -69,7 +73,11 @@ export function SidebarFolderNode({
 							{getIcon(node.type, isExpanded)}
 							<span className="group-data-[collapsible=icon]:sr-only">{node.name}</span>
 							{node.type === "folder" && (
-								<ChevronDown className="ml-auto size-4 transition-transform duration-300 group-data-[state=open]/collapsible:rotate-180" />
+								<ChevronDown
+									className={cn("ml-auto size-4 transition-transform duration-300", {
+										"rotate-180": isExpanded,
+									})}
+								/>
 							)}
 						</SidebarMenuButton>
 					</div>
