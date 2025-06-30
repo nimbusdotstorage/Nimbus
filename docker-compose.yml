@@ -98,8 +98,10 @@ services:
     environment:
       NODE_ENV: production
       PORT: ${WEB_PORT:-3000}
-      NEXT_PUBLIC_BACKEND_URL: http://localhost:${SERVER_PORT:-1284}
-      BACKEND_URL: http://server:${SERVER_PORT:-1284}
+      BACKEND_URL: ${BACKEND_URL}
+      NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
+      NEXT_PUBLIC_FRONTEND_URL: ${NEXT_PUBLIC_FRONTEND_URL}
+      NEXT_PUBLIC_CALLBACK_URL: ${NEXT_PUBLIC_CALLBACK_URL}
     ports:
       - "${WEB_PORT:-3000}:${WEB_PORT:-3000}"
     depends_on:
