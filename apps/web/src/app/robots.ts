@@ -1,8 +1,8 @@
 import type { MetadataRoute } from "next";
-import { getBaseUrl } from "@/lib/utils";
+// import { getBaseUrl } from "@/lib/utils";
 
 export default function robots(): MetadataRoute.Robots {
-	const baseUrl = getBaseUrl();
+	// const baseUrl = getBaseUrl();
 
 	return {
 		rules: [
@@ -12,6 +12,6 @@ export default function robots(): MetadataRoute.Robots {
 				disallow: ["/app/*", "/api/auth/*", "/reset-password"],
 			},
 		],
-		sitemap: `${baseUrl}/sitemap.xml`,
+		// sitemap: `${baseUrl}/sitemap.xml`,
 	};
 }
