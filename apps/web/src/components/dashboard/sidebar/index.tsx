@@ -1,6 +1,6 @@
 "use client";
 
-import { type ComponentProps } from "react";
+import { Suspense, type ComponentProps } from "react";
 
 import { Sidebar, SidebarContent, SidebarHeader } from "@/components/ui/sidebar";
 import SidebarFolders from "@/components/dashboard/sidebar/sidebar-folders";
@@ -21,7 +21,9 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
 				{/* Notification Button
 				Starred Button */}
 
-				<SidebarFolders />
+				<Suspense>
+					<SidebarFolders />
+				</Suspense>
 
 				{/* Tags */}
 				<TagMenu />
