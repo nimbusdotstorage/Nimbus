@@ -56,7 +56,14 @@ export interface FileItem {
 	type: "folder" | "document" | "image" | "video";
 	size?: string;
 	modified: string;
-	tags?: Tag[]; // Tags associated with this file
+	modifiedTime?: string;
+	mimeType?: string;
+	thumbnailLink?: string;
+	hasThumbnail?: boolean;
+	webContentLink?: string;
+	webViewLink?: string;
+	iconLink?: string;
+	tags?: Tag[];
 }
 
 export interface CreateFolderDialogProps {

@@ -65,9 +65,19 @@ export default function UploadButton() {
 					/>
 
 					<CreateFolderDialog
-						open={createFolderOpen}
-						onOpenChange={setCreateFolderOpen}
-						onCreateFolder={handleCreateFolder}
+						isOpen={createFolderOpen}
+						onClose={() => setCreateFolderOpen(false)}
+						onCreate={async (folderName: string) => {
+							return new Promise<void>((resolve, reject) => {
+								try {
+									handleCreateFolder(folderName, undefined);
+									// The mutation will handle success/error via toast
+									resolve();
+								} catch (error) {
+									reject(error);
+								}
+							});
+						}}
 					/>
 				</div>
 			</SidebarGroupContent>

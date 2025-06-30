@@ -31,7 +31,9 @@ export class GoogleDriveProvider {
 	 */
 	async listFiles(): Promise<File[]> {
 		const response = await this.drive.files.list({
-			fields: "files(id, name, mimeType, size, createdTime, modifiedTime, trashed, parents)",
+			fields:
+				"files(id, name, mimeType, size, createdTime, modifiedTime, trashed, parents, thumbnailLink, hasThumbnail, webContentLink, webViewLink, iconLink)",
+			q: "trashed=false", // Filter out trashed files
 		});
 
 		if (!response.files) {
@@ -43,7 +45,8 @@ export class GoogleDriveProvider {
 
 	async getFileById(id: string): Promise<File | null> {
 		const response = await this.drive.files.retrieve(id, {
-			fields: "id, name, mimeType, size, createdTime, modifiedTime, trashed, parents",
+			fields:
+				"id, name, mimeType, size, createdTime, modifiedTime, trashed, parents, thumbnailLink, hasThumbnail, webContentLink, webViewLink, iconLink",
 		});
 
 		if (!response) {
@@ -51,6 +54,54 @@ export class GoogleDriveProvider {
 		}
 
 		return response as File;
+	}
+
+	/**
+	 * Get file content/binary data for preview
+	 * @param fileId The ID of the file to retrieve content for
+	 * @returns Binary content of the file
+	 */
+	async getFileContent(fileId: string): Promise<ArrayBuffer | Buffer | string | null> {
+		try {
+			const response = await this.drive.files.retrieve(fileId, { alt: "media" });
+			return response as ArrayBuffer | Buffer | string;
+		} catch (error) {
+			console.error("Error getting file content:", error);
+			return null;
+		}
+	}
+
+	/**
+	 * Check if a MIME type represents a Google Workspace document
+	 * @param mimeType The MIME type to check
+	 * @returns True if it's a Google Workspace document
+	 */
+	static isGoogleWorkspaceDoc(mimeType?: string): boolean {
+		if (!mimeType) return false;
+
+		const googleWorkspaceMimeTypes = [
+			"application/vnd.google-apps.document", // Google Docs
+			"application/vnd.google-apps.spreadsheet", // Google Sheets
+			"application/vnd.google-apps.presentation", // Google Slides
+		];
+
+		return googleWorkspaceMimeTypes.includes(mimeType);
+	}
+
+	/**
+	 * Get the appropriate export MIME type for a Google Workspace document
+	 * @param mimeType The Google Workspace MIME type
+	 * @returns The export MIME type (e.g., PDF)
+	 */
+	static getExportMimeType(mimeType: string): string {
+		const exportMimeTypes: { [key: string]: string } = {
+			"application/vnd.google-apps.document": "application/pdf",
+			"application/vnd.google-apps.spreadsheet": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+			"application/vnd.google-apps.presentation":
+				"application/vnd.openxmlformats-officedocument.presentationml.presentation",
+		};
+
+		return exportMimeTypes[mimeType] || "application/pdf";
 	}
 
 	/**
@@ -88,21 +139,27 @@ export class GoogleDriveProvider {
 		}
 	}
 
-	// Copy file method
+	/**
+	 * Get drive usage and storage limits
+	 * @returns Drive storage details including usage and limit
+	 */
+	async getDriveUsageLimit(): Promise<{ limit: number; usage: number } | null> {
+		try {
+			const response = await this.drive.about.retrieve({
+				fields: "storageQuota",
+			});
 
-	// Export (download as MIME type) file method
+			if (!response.storageQuota) {
+				return null;
+			}
 
-	// Drive methods //
+			const limit = response.storageQuota.limit ? parseInt(response.storageQuota.limit) : 0;
+			const usage = response.storageQuota.usage ? parseInt(response.storageQuota.usage) : 0;
 
-	async getDriveUsageLimit() {
-		const driveAbout = await this.drive.about.retrieve({
-			fields: "storageQuota(limit, usage)",
-		});
-
-		if (!driveAbout) {
+			return { limit, usage };
+		} catch (error) {
+			console.error("Error getting drive usage:", error);
 			return null;
 		}
-
-		return driveAbout.storageQuota;
 	}
 }
