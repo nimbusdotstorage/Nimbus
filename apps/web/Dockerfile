@@ -18,8 +18,13 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
+# Install production dependencies only
+RUN bun install
+
 # Build the application
-RUN bun run --cwd apps/web build
+WORKDIR /app/apps/web
+RUN bun run build
+WORKDIR /app
 
 # Create production directories
 RUN mkdir -p /app/dist/apps/web/.next/static /app/dist/apps/web/public
