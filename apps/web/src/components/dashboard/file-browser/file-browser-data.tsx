@@ -29,7 +29,6 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { PdfIcon } from "@/components/icons";
 import type { FileItem } from "@/lib/types";
-import { useTags } from "@/hooks/useTags";
 import { fileSize } from "@/lib/utils";
 import { FileTags } from "./file-tags";
 import { useState } from "react";
@@ -38,193 +37,190 @@ import { toast } from "sonner";
 import Link from "next/link";
 
 // TODO: Typing of the file data needs to be updated
-export function FileBrowserData({
-	data,
-	refetch,
-	onOptimisticDelete,
-	onOptimisticRename,
-	onRollback,
-}: {
-	data: FileItem[];
-	refetch: () => void;
-	onOptimisticDelete?: (fileId: string) => void;
-	onOptimisticRename?: (fileId: string, newName: string) => void;
-	onRollback?: () => void;
-}) {
-	return (
-		<FilesList
-			data={data}
-			refetch={refetch}
-			onOptimisticDelete={onOptimisticDelete}
-			onOptimisticRename={onOptimisticRename}
-			onRollback={onRollback}
-		/>
-	);
+export function FileBrowserData({ data }: { data: FileItem[] }) {
+	return <FilesList data={data} />;
 }
 
-function FilesList({
-	data,
-	refetch,
-	onOptimisticDelete,
-	onOptimisticRename,
-	onRollback,
-}: {
-	data: FileItem[];
-	refetch: () => void;
-	onOptimisticDelete?: (fileId: string) => void;
-	onOptimisticRename?: (fileId: string, newName: string) => void;
-	onRollback?: () => void;
-}) {
+function FilesList({ data }: { data: FileItem[] }) {
 	const searchParams = useSearchParams();
-	const { tags } = useTags();
 
 	return (
 		<div className="overflow-hidden rounded-md border">
 			<table className="w-full">
 				<colgroup>
-					<col className="w-2/5" />
-					<col className="w-1/5" />
-					<col className="w-1/6" />
-					<col className="w-1/8" />
-					<col className="w-1/8" />
+					<col key="name" className="w-2/5" />
+					<col key="modified" className="w-1/5" />
+					<col key="size" className="w-1/6" />
+					<col key="actions" className="w-1/8" />
+					<col key="tags" className="w-1/8" />
 				</colgroup>
 				<thead className="text-muted-foreground bg-muted/50 text-left text-xs font-medium">
-					<tr>
-						<th className="p-3 font-semibold">Name</th>
-						<th className="p-3 font-semibold">Modified</th>
-						<th className="p-3 font-semibold">Size</th>
-						<th className="p-3 font-semibold">Actions</th>
-						<th className="p-3 font-semibold">Tags</th>
+					<tr key="header-row">
+						<th key="name-header" className="p-3 font-semibold">
+							Name
+						</th>
+						<th key="modified-header" className="p-3 font-semibold">
+							Modified
+						</th>
+						<th key="size-header" className="p-3 font-semibold">
+							Size
+						</th>
+						<th key="actions-header" className="p-3 font-semibold">
+							Actions
+						</th>
+						<th key="tags-header" className="p-3 font-semibold">
+							Tags
+						</th>
 					</tr>
 				</thead>
 				<tbody>
-					{data.map(file => {
-						// Use new formatFileSize if size is a number, otherwise fallback to existing logic
-						const size = file.size
-							? typeof file.size === "number"
-								? formatFileSize(file.size)
-								: fileSize(file.size)
-							: "—";
+					{data
+						.filter(file => file && file.id && typeof file.id === "string")
+						.map(file => {
+							// Use new formatFileSize if size is a number, otherwise fallback to existing logic
+							const size = file.size
+								? typeof file.size === "number"
+									? formatFileSize(file.size)
+									: fileSize(file.size)
+								: "—";
 
-						const params = new URLSearchParams(searchParams.toString());
-						params.set("id", file.id);
+							const params = new URLSearchParams(searchParams.toString());
+							params.set("id", file.id);
 
-						// Format modified date better
-						const modifiedDate = file.modifiedTime
-							? new Date(file.modifiedTime).toLocaleDateString("en-US", {
-									year: "numeric",
-									month: "short",
-									day: "numeric",
-									hour: "2-digit",
-									minute: "2-digit",
-								})
-							: file.modified;
+							// Format modified date better
+							const modifiedDate = file.modifiedTime
+								? new Date(file.modifiedTime).toLocaleDateString("en-US", {
+										year: "numeric",
+										month: "short",
+										day: "numeric",
+										hour: "2-digit",
+										minute: "2-digit",
+									})
+								: file.modified;
 
-						// Determine file type for dialogs
-						const fileType =
-							file.mimeType === "application/vnd.google-apps.folder" || file.type === "folder" ? "folder" : "file";
+							// Determine file type for dialogs
+							const fileType =
+								file.mimeType === "application/vnd.google-apps.folder" || file.type === "folder" ? "folder" : "file";
 
-						return (
-							<tr
-								key={file.id}
-								className="hover:bg-accent/10 relative cursor-pointer border-t transition-colors"
-								tabIndex={0}
-								onKeyDown={e => {
-									if (e.key === "Enter" || e.key === " ") {
-										// Navigate to file preview
-										window.location.href = "?" + params.toString();
-									}
-								}}
-							>
-								<td className="p-4">
-									<Link href={"?" + params.toString()} className="absolute inset-0" />
-									<div className="relative z-10 flex min-w-0 items-center gap-3">
-										<div className="flex-shrink-0">{getModernFileIcon(file.mimeType, file.name)}</div>
-										<span className="truncate text-sm font-medium">{file.name}</span>
-									</div>
-								</td>
-								<td className="text-muted-foreground p-3 text-sm">{modifiedDate}</td>
-								<td className="text-muted-foreground p-3 text-sm">{size}</td>
-								<td className="relative p-3">
-									<FileActions
-										file={file}
-										fileType={fileType}
-										onRefetch={refetch}
-										onOptimisticDelete={onOptimisticDelete}
-										onOptimisticRename={onOptimisticRename}
-										onRollback={onRollback}
-									/>
-								</td>
-								<td className="relative p-3">
-									<FileTags file={file} availableTags={tags} refetch={refetch} />
-								</td>
-							</tr>
-						);
-					})}
+							return (
+								<FileRow
+									key={`file-${file.id}`}
+									file={file}
+									fileType={fileType}
+									size={size}
+									modifiedDate={modifiedDate}
+									params={params}
+								/>
+							);
+						})}
 				</tbody>
 			</table>
 		</div>
 	);
 }
 
-function FileActions({
+function FileRow({
 	file,
 	fileType,
-	onRefetch,
-	onOptimisticDelete,
-	onOptimisticRename,
-	onRollback,
+	size,
+	modifiedDate,
+	params,
 }: {
 	file: FileItem;
 	fileType: "file" | "folder";
-	onRefetch: () => void;
-	onOptimisticDelete?: (fileId: string) => void;
-	onOptimisticRename?: (fileId: string, newName: string) => void;
-	onRollback?: () => void;
+	size: string;
+	modifiedDate: string;
+	params: URLSearchParams;
 }) {
-	const { handleRenameFile, handleDeleteFile } = useFileOperations();
 	const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 	const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
 
+	const handleKeyDown = (e: React.KeyboardEvent) => {
+		// Don't trigger navigation if any dialog is open
+		if (isDeleteDialogOpen || isRenameDialogOpen) {
+			return;
+		}
+
+		if (e.key === "Enter" || e.key === " ") {
+			// Navigate to file preview
+			window.location.href = "?" + params.toString();
+		}
+	};
+
+	return (
+		<tr
+			className="hover:bg-accent/10 relative cursor-pointer border-t transition-colors"
+			tabIndex={0}
+			onKeyDown={handleKeyDown}
+		>
+			<td key={`${file.id}-name`} className="p-4">
+				<Link href={"?" + params.toString()} className="absolute inset-0" />
+				<div className="relative z-10 flex min-w-0 items-center gap-3">
+					<div key={`${file.id}-icon`} className="flex-shrink-0">
+						{getModernFileIcon(file.mimeType, file.name)}
+					</div>
+					<span key={`${file.id}-filename`} className="truncate text-sm font-medium">
+						{file.name}
+					</span>
+				</div>
+			</td>
+			<td key={`${file.id}-modified`} className="text-muted-foreground p-3 text-sm">
+				{modifiedDate}
+			</td>
+			<td key={`${file.id}-size`} className="text-muted-foreground p-3 text-sm">
+				{size}
+			</td>
+			<td key={`${file.id}-actions`} className="relative p-3">
+				<FileActions
+					file={file}
+					fileType={fileType}
+					isDeleteDialogOpen={isDeleteDialogOpen}
+					setIsDeleteDialogOpen={setIsDeleteDialogOpen}
+					isRenameDialogOpen={isRenameDialogOpen}
+					setIsRenameDialogOpen={setIsRenameDialogOpen}
+				/>
+			</td>
+			<td key={`${file.id}-tags`} className="relative p-3">
+				<FileTags file={file} />
+			</td>
+		</tr>
+	);
+}
+
+function FileActions({
+	file,
+	fileType,
+	isDeleteDialogOpen,
+	setIsDeleteDialogOpen,
+	isRenameDialogOpen,
+	setIsRenameDialogOpen,
+}: {
+	file: FileItem;
+	fileType: "file" | "folder";
+	isDeleteDialogOpen: boolean;
+	setIsDeleteDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+	isRenameDialogOpen: boolean;
+	setIsRenameDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+	const { handleRenameFile, handleDeleteFile } = useFileOperations();
+
 	const handleDelete = async () => {
-		// Optimistic update: remove file from UI immediately
-		onOptimisticDelete?.(file.id);
-
 		try {
-			// Use the hook function that returns a promise
-			await new Promise<void>((resolve, reject) => {
-				// The handleDeleteFile function triggers the mutation
-				handleDeleteFile(file.id);
-
-				// Since the mutation has success/error callbacks via toast,
-				// we'll wait a bit and then refetch to ensure UI is updated
-				setTimeout(async () => {
-					try {
-						await onRefetch();
-						resolve();
-					} catch (error) {
-						reject(error);
-					}
-				}, 1000);
-			});
-		} catch (error) {
-			// Rollback on error
-			onRollback?.();
-			throw error;
+			await handleDeleteFile(file.id);
+			setIsDeleteDialogOpen(false);
+		} catch {
+			// Error handling is done in the mutation, just close dialog
+			setIsDeleteDialogOpen(false);
 		}
 	};
 
 	const handleRename = async (newName: string) => {
-		// Optimistic update: change name in UI immediately
-		onOptimisticRename?.(file.id, newName);
-
 		try {
 			await handleRenameFile(file.id, newName);
-			onRefetch();
-		} catch (error) {
-			// Rollback on error
-			onRollback?.();
-			throw error;
+			setIsRenameDialogOpen(false);
+		} catch {
+			// Error handling is done in the mutation, just close dialog
+			setIsRenameDialogOpen(false);
 		}
 	};
 
@@ -265,29 +261,37 @@ function FileActions({
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end">
 						{file.webViewLink && (
-							<DropdownMenuItem onClick={handleOpenInDrive} className="cursor-pointer">
+							<DropdownMenuItem key={`${file.id}-open-drive`} onClick={handleOpenInDrive} className="cursor-pointer">
 								<ExternalLink className="mr-2 h-4 w-4" />
 								Open in Google Drive
 							</DropdownMenuItem>
 						)}
 						{file.webContentLink && fileType === "file" && (
-							<DropdownMenuItem onClick={handleDownload} className="cursor-pointer">
+							<DropdownMenuItem key={`${file.id}-download`} onClick={handleDownload} className="cursor-pointer">
 								<Download className="mr-2 h-4 w-4" />
 								Download
 							</DropdownMenuItem>
 						)}
 						{file.webViewLink && (
-							<DropdownMenuItem onClick={handleCopyLink} className="cursor-pointer">
+							<DropdownMenuItem key={`${file.id}-copy-link`} onClick={handleCopyLink} className="cursor-pointer">
 								<Copy className="mr-2 h-4 w-4" />
 								Copy link
 							</DropdownMenuItem>
 						)}
-						<DropdownMenuSeparator />
-						<DropdownMenuItem onClick={() => setIsRenameDialogOpen(true)} className="cursor-pointer">
+						<DropdownMenuSeparator key={`${file.id}-separator-1`} />
+						<DropdownMenuItem
+							key={`${file.id}-rename`}
+							onClick={() => setIsRenameDialogOpen(true)}
+							className="cursor-pointer"
+						>
 							Rename
 						</DropdownMenuItem>
-						<DropdownMenuSeparator />
-						<DropdownMenuItem className="text-destructive cursor-pointer" onClick={() => setIsDeleteDialogOpen(true)}>
+						<DropdownMenuSeparator key={`${file.id}-separator-2`} />
+						<DropdownMenuItem
+							key={`${file.id}-delete`}
+							className="text-destructive cursor-pointer"
+							onClick={() => setIsDeleteDialogOpen(true)}
+						>
 							Delete
 						</DropdownMenuItem>
 					</DropdownMenuContent>

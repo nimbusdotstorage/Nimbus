@@ -19,6 +19,9 @@ export function formatFileSize(bytes: number): string {
  * @returns File extension without the dot (e.g., "pdf")
  */
 export function getFileExtension(filename: string): string {
+	if (!filename || typeof filename !== "string") {
+		return "";
+	}
 	const lastDotIndex = filename.lastIndexOf(".");
 	if (lastDotIndex === -1 || lastDotIndex === filename.length - 1) {
 		return "";

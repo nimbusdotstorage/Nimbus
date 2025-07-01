@@ -4,59 +4,16 @@ import { FileBrowserData } from "@/components/dashboard/file-browser/file-browse
 import { FilePreview } from "@/components/dashboard/file-browser/file-preview";
 import { ErrorMessageWithRetry } from "@/components/error-message/with-retry";
 import { FileTabs } from "@/components/dashboard/file-browser/file-tabs";
-import { createRequest } from "@/hooks/createRequest";
+import { useFiles } from "@/hooks/useFileOperations";
 import { useSearchParams } from "next/navigation";
-import { useRequest } from "@/hooks/useRequest";
 import { Loader } from "@/components/loader";
-import type { FileItem } from "@/lib/types";
-import { useState, useEffect } from "react";
 
 export function FileBrowser() {
 	const searchParams = useSearchParams();
 	const type = searchParams.get("type");
 	const id = searchParams.get("id");
 
-	const fetchFiles = createRequest({
-		path: "/files",
-		queryParams: { type },
-	});
-
-	const { data, refetch, isLoading, error } = useRequest<FileItem[]>({
-		request: fetchFiles,
-		triggers: [type],
-	});
-
-	// Local state for optimistic updates
-	const [localFiles, setLocalFiles] = useState<FileItem[]>([]);
-	const [originalFiles, setOriginalFiles] = useState<FileItem[]>([]);
-
-	// Update local state when server data changes
-	useEffect(() => {
-		if (data) {
-			setLocalFiles(data);
-			setOriginalFiles(data);
-		}
-	}, [data]);
-
-	// Optimistic delete handler
-	const handleOptimisticDelete = (fileId: string) => {
-		setLocalFiles(prev => prev.filter(file => file.id !== fileId));
-	};
-
-	// Optimistic rename handler
-	const handleOptimisticRename = (fileId: string, newName: string) => {
-		setLocalFiles(prev => prev.map(file => (file.id === fileId ? { ...file, name: newName } : file)));
-	};
-
-	// Rollback handler for errors
-	const handleRollback = () => {
-		setLocalFiles(originalFiles);
-	};
-
-	// Update original files when refetch happens
-	const handleRefetch = async () => {
-		await refetch();
-	};
+	const { data: files, isLoading, error, refetch } = useFiles(type);
 
 	return (
 		<div className={`flex flex-1 flex-col space-y-4 ${id ? "blur-sm transition-all" : ""}`}>
@@ -67,17 +24,9 @@ export function FileBrowser() {
 			{isLoading ? (
 				<Loader />
 			) : error ? (
-				<ErrorMessageWithRetry error={error} retryFn={handleRefetch} />
+				<ErrorMessageWithRetry error={error} retryFn={refetch} />
 			) : (
-				localFiles.length > 0 && (
-					<FileBrowserData
-						data={localFiles}
-						refetch={handleRefetch}
-						onOptimisticDelete={handleOptimisticDelete}
-						onOptimisticRename={handleOptimisticRename}
-						onRollback={handleRollback}
-					/>
-				)
+				files && files.length > 0 && <FileBrowserData data={files} />
 			)}
 
 			<FilePreview />

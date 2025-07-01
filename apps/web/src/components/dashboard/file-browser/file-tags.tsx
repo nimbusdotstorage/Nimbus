@@ -14,20 +14,18 @@ import { useState } from "react";
 
 interface FileTagsProps {
 	file: FileItem;
-	availableTags: Tag[];
-	refetch: () => void;
 }
 
-export function FileTags({ file, availableTags, refetch }: FileTagsProps) {
-	const { addTagsToFile, removeTagsFromFile, createTag } = useTags();
+export function FileTags({ file }: FileTagsProps) {
+	const { tags: availableTags, addTagsToFile, removeTagsFromFile, createTag } = useTags();
 	const [isCreateTagOpen, setIsCreateTagOpen] = useState(false);
 
 	const handleAddTag = (tagId: string) => {
-		addTagsToFile({ fileId: file.id, tagIds: [tagId], onSuccess: refetch });
+		addTagsToFile({ fileId: file.id, tagIds: [tagId] });
 	};
 
 	const handleRemoveTag = (tagId: string) => {
-		removeTagsFromFile({ fileId: file.id, tagIds: [tagId], onSuccess: refetch });
+		removeTagsFromFile({ fileId: file.id, tagIds: [tagId] });
 	};
 
 	const handleCreateTag = async (data: { name: string; color: string; parentId?: string }) => {
@@ -37,7 +35,6 @@ export function FileTags({ file, availableTags, refetch }: FileTagsProps) {
 				setIsCreateTagOpen(false);
 				// Add the new tag to the file
 				handleAddTag(newTag.id);
-				refetch();
 			},
 			onError: error => {
 				console.error("Failed to create tag:", error);
@@ -88,16 +85,18 @@ export function FileTags({ file, availableTags, refetch }: FileTagsProps) {
 	return (
 		<div className="flex max-w-full items-center gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
 			{updatedFileTags.map(tag => (
-				<div key={tag.id} className="group relative cursor-pointer">
+				<div key={`tag-${tag.id}`} className="group relative cursor-pointer">
 					<Badge
 						className="text-muted-foreground hover:bg-muted/80 group relative gap-1 overflow-hidden rounded-md border-0 px-2 py-1 text-xs font-medium transition-all duration-200 group-hover:pr-6"
 						style={{ backgroundColor: tag.color + "20" }}
 					>
-						<div className="flex items-center gap-1.5">
-							<div className="h-2 w-2 rounded-full" style={{ backgroundColor: tag.color }} />
-							<span className="truncate">{tag.name}</span>
+						<div key={`${tag.id}-content`} className="flex items-center gap-1.5">
+							<div key={`${tag.id}-color`} className="h-2 w-2 rounded-full" style={{ backgroundColor: tag.color }} />
+							<span key={`${tag.id}-name`} className="truncate">
+								{tag.name}
+							</span>
 						</div>
-						<div className="absolute top-1/2 right-1.5 h-3 w-3 -translate-y-1/2 transform">
+						<div key={`${tag.id}-remove`} className="absolute top-1/2 right-1.5 h-3 w-3 -translate-y-1/2 transform">
 							<X
 								className={`h-3 w-3 rounded-xs opacity-0 transition-opacity duration-200 group-hover:opacity-70 hover:bg-neutral-100 hover:opacity-100 dark:hover:bg-neutral-700`}
 								onClick={() => handleRemoveTag(tag.id)}
@@ -119,15 +118,23 @@ export function FileTags({ file, availableTags, refetch }: FileTagsProps) {
 				<DropdownMenuContent align="start">
 					{flattenedAvailableTags.length > 0 ? (
 						flattenedAvailableTags.map(tag => (
-							<DropdownMenuItem key={tag.id} onClick={() => handleAddTag(tag.id)} className="cursor-pointer">
-								<div className="flex items-center gap-2">
-									<div className="h-3 w-3 rounded-full" style={{ backgroundColor: tag.color }} />
-									{tag.name}
+							<DropdownMenuItem
+								key={`available-tag-${tag.id}`}
+								onClick={() => handleAddTag(tag.id)}
+								className="cursor-pointer"
+							>
+								<div key={`${tag.id}-dropdown-content`} className="flex items-center gap-2">
+									<div
+										key={`${tag.id}-dropdown-color`}
+										className="h-3 w-3 rounded-full"
+										style={{ backgroundColor: tag.color }}
+									/>
+									<span key={`${tag.id}-dropdown-name`}>{tag.name}</span>
 								</div>
 							</DropdownMenuItem>
 						))
 					) : (
-						<DropdownMenuItem onClick={() => setIsCreateTagOpen(true)} className="cursor-pointer">
+						<DropdownMenuItem key="create-new-tag" onClick={() => setIsCreateTagOpen(true)} className="cursor-pointer">
 							Create new tag
 						</DropdownMenuItem>
 					)}

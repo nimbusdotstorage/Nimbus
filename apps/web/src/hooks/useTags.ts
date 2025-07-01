@@ -1,8 +1,8 @@
 import { createTagSchema, updateTagSchema, type CreateTagInput, type UpdateTagInput } from "@/schemas";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { clientEnv } from "@/lib/env/client-env";
+import type { Tag, FileItem } from "@/lib/types";
 import axios, { type AxiosError } from "axios";
-import type { Tag } from "@/lib/types";
 import { toast } from "sonner";
 
 const TAGS_QUERY_KEY = "tags";
@@ -139,7 +139,7 @@ export function useTags() {
 		mutationFn: addTagsToFile,
 		onSuccess: (_data, variables) => {
 			toast.success("Tag added to file successfully");
-			// Update cache locally by incrementing count for each added tag
+			// Update tag cache locally by incrementing count for each added tag
 			queryClient.setQueryData<Tag[]>([TAGS_QUERY_KEY], (oldData = []) => {
 				const updateCountRecursive = (tags: Tag[]): Tag[] => {
 					return tags.map(tag => {
@@ -154,6 +154,45 @@ export function useTags() {
 				};
 				return updateCountRecursive(oldData);
 			});
+
+			// Update file cache to add tags to the file
+			queryClient.setQueriesData<FileItem[]>({ queryKey: ["files"] }, (oldFiles = []) => {
+				return oldFiles.map(file => {
+					if (file.id === variables.fileId) {
+						const allTags = queryClient.getQueryData<Tag[]>([TAGS_QUERY_KEY]) || [];
+						const flattenTags = (tags: Tag[]): Tag[] => {
+							const flattened: Tag[] = [];
+							const flattenRecursive = (tagList: Tag[]) => {
+								tagList.forEach(tag => {
+									flattened.push(tag);
+									if (tag.children && tag.children.length > 0) {
+										flattenRecursive(tag.children);
+									}
+								});
+							};
+							flattenRecursive(tags);
+							return flattened;
+						};
+						const flatTags = flattenTags(allTags);
+						const existingTagIds = file.tags?.map((t: Tag) => t.id) || [];
+						const newTags = variables.tagIds
+							.filter(tagId => !existingTagIds.includes(tagId))
+							.map(tagId => flatTags.find((t: Tag) => t.id === tagId))
+							.filter(Boolean) as Tag[];
+
+						// Only update if there are actually new tags to add
+						if (newTags.length === 0) {
+							return file;
+						}
+
+						return {
+							...file,
+							tags: [...(file.tags || []), ...newTags],
+						};
+					}
+					return file;
+				});
+			});
 			variables.onSuccess?.();
 		},
 		onError: (error: AxiosError<{ message: string }>) => {
@@ -165,7 +204,7 @@ export function useTags() {
 		mutationFn: removeTagsFromFile,
 		onSuccess: (_data, variables) => {
 			toast.success("Tag removed from file successfully");
-			// Update cache locally by decrementing count for each removed tag
+			// Update tag cache locally by decrementing count for each removed tag
 			queryClient.setQueryData<Tag[]>([TAGS_QUERY_KEY], (oldData = []) => {
 				const updateCountRecursive = (tags: Tag[]): Tag[] => {
 					return tags.map(tag => {
@@ -179,6 +218,26 @@ export function useTags() {
 					});
 				};
 				return updateCountRecursive(oldData);
+			});
+
+			// Update file cache to remove tags from the file
+			queryClient.setQueriesData<FileItem[]>({ queryKey: ["files"] }, (oldFiles = []) => {
+				return oldFiles.map(file => {
+					if (file.id === variables.fileId) {
+						const filteredTags = file.tags?.filter((tag: Tag) => !variables.tagIds.includes(tag.id)) || [];
+
+						// Only update if tags were actually removed
+						if (filteredTags.length === (file.tags?.length || 0)) {
+							return file;
+						}
+
+						return {
+							...file,
+							tags: filteredTags,
+						};
+					}
+					return file;
+				});
 			});
 			variables.onSuccess?.();
 		},
