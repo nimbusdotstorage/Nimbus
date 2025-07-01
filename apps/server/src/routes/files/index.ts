@@ -115,7 +115,7 @@ filesRouter.put("/", async (c: Context) => {
 		return c.json<ApiResponse>({ success: false, message: error.errors[0]?.message }, 400);
 	}
 
-	const fileId = data.id;
+	const fileId = data.fileId;
 	const name = data.name;
 
 	const accessToken = account.accessToken;

@@ -46,7 +46,13 @@ export function UploadButton() {
 
 			<UploadFolderDialog open={uploadFolderOpen} onOpenChange={setUploadFolderOpen} />
 
-			<CreateFolderDialog open={createFolderOpen} onOpenChange={setCreateFolderOpen} />
+			<CreateFolderDialog
+				open={createFolderOpen}
+				onOpenChange={setCreateFolderOpen}
+				// TODO: Delete "root". We will pass the parentFolderId from the upload-button.tsx component.
+				// Grab it from the url which will be shaped something like "/<providerId>/<folderId>"
+				parentFolderId={"root"}
+			/>
 		</>
 	);
 }

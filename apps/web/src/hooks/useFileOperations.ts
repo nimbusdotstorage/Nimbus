@@ -1,5 +1,5 @@
+import type { CreateFolderParams, DeleteFileParams, RenameFileParams } from "@/lib/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { CreateFolderParams, DeleteFileParams } from "@/lib/types";
 import { clientEnv } from "@/lib/env/client-env";
 import axios, { type AxiosError } from "axios";
 import { toast } from "sonner";
@@ -54,12 +54,36 @@ export function useDeleteFile() {
 			return response.data;
 		},
 		onSuccess: async () => {
-			toast.success("File deleted successfully");
 			await queryClient.invalidateQueries({ queryKey: ["files"] });
 		},
 		onError: (error: AxiosError) => {
 			console.error("Error deleting file:", error);
 			const errorMessage = error.message || "Failed to delete file";
+			toast.error(errorMessage);
+		},
+	});
+}
+
+export function useRenameFile() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async ({ fileId, name }: RenameFileParams) => {
+			const response = await axios.put(API_BASE, null, {
+				params: { fileId, name },
+				headers: {
+					"Content-Type": "application/json",
+				},
+				withCredentials: true,
+				signal: new AbortController().signal,
+			});
+			return response.data;
+		},
+		onSuccess: async () => {
+			await queryClient.invalidateQueries({ queryKey: ["files"] });
+		},
+		onError: (error: AxiosError) => {
+			console.error("Error renaming file:", error);
+			const errorMessage = error.message || "Failed to rename file";
 			toast.error(errorMessage);
 		},
 	});

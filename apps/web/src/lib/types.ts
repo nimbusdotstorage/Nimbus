@@ -7,6 +7,7 @@ export interface File {
 	id: string;
 	name: string;
 	parent: string;
+	mimeType: string;
 	// TODO: (string or number): determine how Google, OneDrive, etc format their size and how to convert them. a string that represent bytes might make sense
 	size: string | null;
 	// TODO: (format): determine how Google, OneDrive, etc format their dates
@@ -32,6 +33,7 @@ export interface Tag {
 export interface CreateFolderDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
+	parentFolderId: string;
 }
 
 export interface UploadFileDialogProps {
@@ -48,6 +50,11 @@ export interface DeleteFileParams {
 export interface CreateFolderParams {
 	name: string;
 	parentId?: string;
+}
+
+export interface RenameFileParams {
+	fileId: string;
+	name: string;
 }
 
 export interface AuthState {

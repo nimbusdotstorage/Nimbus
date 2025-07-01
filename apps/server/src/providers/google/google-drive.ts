@@ -29,10 +29,10 @@ export class GoogleDriveProvider implements Provider {
 	): Promise<{ files: File[]; nextPageToken?: string }> {
 		const response = await this.drive.files.list({
 			// TODO: add query filtering for sort/filter functionality
-			fields: `files(${returnedValuesToFields(returnedValues)})`,
+			fields: `files(${returnedValuesToFields(returnedValues)}), nextPageToken`,
 			pageSize,
 			pageToken,
-			q: parent ? `'${parent}' in parents` : undefined,
+			q: parent ? `'${parent}' in parents and trashed=false` : undefined,
 		});
 
 		if (!response.data.files) {
@@ -142,10 +142,6 @@ export class GoogleDriveProvider implements Provider {
 			return false;
 		}
 	}
-
-	// Copy file method
-
-	// Export (download as MIME type) file method
 
 	async createFolder(name: string, parent?: string): Promise<File | null> {
 		return this.createFile(name, "application/vnd.google-apps.folder", parent);

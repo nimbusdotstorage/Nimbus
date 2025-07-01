@@ -1,3 +1,4 @@
+// ! This file needs a huge revamp
 // import { FileText, Folder, Image as ImageIcon, Video, X } from "lucide-react";
 // import type { FileItem, FolderContentItem } from "@/lib/types";
 import { useSearchParams } from "next/navigation";

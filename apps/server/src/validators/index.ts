@@ -61,7 +61,7 @@ export const deleteFileSchema = z.object({
 });
 
 export const updateFileSchema = z.object({
-	id: fileIdSchema,
+	fileId: fileIdSchema,
 	name: z.string().min(1, "Name cannot be empty").max(100, "Name cannot be longer than 100 characters"),
 });
 

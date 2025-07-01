@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardTitle, CardDescription } from "@/components/ui/card";
-import { GitHub } from "@/components/icons/github";
 import { useQuery } from "@tanstack/react-query";
+import { GitHub } from "@/components/icons";
 import { GitCommit } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";

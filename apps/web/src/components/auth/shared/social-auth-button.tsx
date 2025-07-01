@@ -1,9 +1,9 @@
 "use client";
 
-import { Microsoft } from "@/components/icons/microsoft";
 import type { SocialAuthButtonProps } from "@/lib/types";
-import { Google } from "@/components/icons/google";
 import { Button } from "@/components/ui/button";
+import { Microsoft } from "@/components/icons";
+import { Google } from "@/components/icons";
 
 const providerConfig = {
 	google: {
