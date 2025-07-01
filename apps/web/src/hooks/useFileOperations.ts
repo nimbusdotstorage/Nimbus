@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { CreateFolderParams, DeleteFileParams } from "@/lib/types";
 import { clientEnv } from "@/lib/env/client-env";
 import axios, { type AxiosError } from "axios";
 import { toast } from "sonner";
@@ -27,12 +28,12 @@ export function useGetFiles(parentId?: string, pageSize?: number, returnedValues
 	});
 }
 
-export function useGetFile(parentId: string, returnedValues: string) {
+export function useGetFile(fileId: string, returnedValues: string) {
 	return useQuery({
-		queryKey: ["file", parentId, returnedValues],
+		queryKey: ["file", fileId, returnedValues],
 		queryFn: async () => {
-			const response = await axios.get(API_BASE, {
-				params: { parentId, returnedValues },
+			const response = await axios.get(`${API_BASE}/${fileId}`, {
+				params: { returnedValues },
 				...defaultAxiosConfig,
 			});
 			return response.data;
@@ -42,10 +43,10 @@ export function useGetFile(parentId: string, returnedValues: string) {
 	});
 }
 
-export function useDeleteFile(fileId: string) {
+export function useDeleteFile() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: async () => {
+		mutationFn: async ({ fileId }: DeleteFileParams) => {
 			const response = await axios.delete(API_BASE, {
 				params: { fileId },
 				...defaultAxiosConfig,
@@ -64,10 +65,10 @@ export function useDeleteFile(fileId: string) {
 	});
 }
 
-export function useUpdateFile(fileId: string, name: string) {
+export function useUpdateFile() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: async () => {
+		mutationFn: async ({ fileId, name }: { fileId: string; name: string }) => {
 			const response = await axios.put(API_BASE, {
 				params: { fileId, name },
 				...defaultAxiosConfig,
@@ -85,3 +86,35 @@ export function useUpdateFile(fileId: string, name: string) {
 		},
 	});
 }
+
+export function useCreateFolder() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async ({ name, parentId }: CreateFolderParams) => {
+			const response = await axios.post(API_BASE, null, {
+				...defaultAxiosConfig,
+				params: {
+					name,
+					mimeType: "folder",
+					parent: parentId,
+				},
+			});
+			return response.data;
+		},
+		onSuccess: async () => {
+			toast.success("Folder created successfully");
+			await queryClient.invalidateQueries({ queryKey: ["files"] });
+		},
+		onError: (error: AxiosError) => {
+			console.error("Error creating folder:", error);
+			const errorMessage = error.message || "Failed to create folder";
+			toast.error(errorMessage);
+		},
+	});
+}
+
+// TODO: Implement file upload hooks
+
+export function useUploadFile() {}
+
+export function useUploadFolder() {}

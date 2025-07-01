@@ -12,7 +12,7 @@ import type { UploadFileDialogProps } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-export function UploadFileDialog({ open, onOpenChange, onUpload }: UploadFileDialogProps) {
+export function UploadFileDialog({ open, onOpenChange }: UploadFileDialogProps) {
 	const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
 	const [isUploading, setIsUploading] = useState(false);
 	const [uploadProgress, setUploadProgress] = useState(0);
@@ -36,7 +36,6 @@ export function UploadFileDialog({ open, onOpenChange, onUpload }: UploadFileDia
 				clearInterval(interval);
 				setTimeout(() => {
 					if (selectedFiles) {
-						onUpload(selectedFiles);
 						toast.success(
 							`Successfully uploaded ${selectedFiles.length} ${selectedFiles.length === 1 ? "file" : "files"}`
 						);
@@ -48,6 +47,8 @@ export function UploadFileDialog({ open, onOpenChange, onUpload }: UploadFileDia
 			}
 		}, 100);
 	};
+
+	// TODO: Implement upload file handler using the mutation hooks in "useFileOperations"
 
 	const handleUploadFile = (event: FormEvent) => {
 		event.preventDefault();

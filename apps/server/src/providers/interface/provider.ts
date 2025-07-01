@@ -12,7 +12,7 @@ export interface Provider {
 	listFiles(
 		parent: string,
 		pageSize: number,
-		returnedValues: string,
+		returnedValues: string[],
 		pageToken?: string
 	): Promise<{ files: File[]; nextPageToken?: string }>;
 
@@ -22,7 +22,7 @@ export interface Provider {
 	 * @param returnedValues The values the file object will contain. (https://learn.microsoft.com/en-us/onedrive/developer/rest-api/concepts/optional-query-parameters?view=odsp-graph-online) (https://developers.google.com/workspace/drive/api/guides/fields-parameter)
 	 * @returns The file of type File
 	 */
-	getFileById(id: string, returnedValues: string): Promise<File | null>;
+	getFileById(id: string, returnedValues: string[]): Promise<File | null>;
 
 	/**
 	 * Create file or folder

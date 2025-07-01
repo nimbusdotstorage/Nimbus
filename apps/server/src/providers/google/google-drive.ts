@@ -24,12 +24,12 @@ export class GoogleDriveProvider implements Provider {
 	async listFiles(
 		parent: string,
 		pageSize: number,
-		returnedValues: string,
+		returnedValues: string[],
 		pageToken?: string
 	): Promise<{ files: File[]; nextPageToken?: string }> {
 		const response = await this.drive.files.list({
-			// TODO: returnedValues when passed in will be an array of strings. Write a helper to convert it to the proper parameter for G Drive and OneDrive
-			fields: returnedValues,
+			// TODO: add query filtering for sort/filter functionality
+			fields: `files(${returnedValuesToFields(returnedValues)})`,
 			pageSize,
 			pageToken,
 			q: parent ? `'${parent}' in parents` : undefined,
@@ -48,10 +48,10 @@ export class GoogleDriveProvider implements Provider {
 		};
 	}
 
-	async getFileById(id: string, returnedValues: string): Promise<File | null> {
+	async getFileById(id: string, returnedValues: string[]): Promise<File | null> {
 		const response = this.drive.files.get({
 			fileId: id,
-			fields: returnedValues,
+			fields: returnedValuesToFields(returnedValues),
 		});
 
 		if (!response) {
@@ -78,13 +78,15 @@ export class GoogleDriveProvider implements Provider {
 	): Promise<File | null> {
 		const fileMetadata: { name: string; mimeType: string; parent?: string } = {
 			name,
-			mimeType,
+			//mimeType for the file itself
+			mimeType: genericTypeToProviderMimeType(mimeType),
 			parent,
 		};
 
 		const response = await this.drive.files.create({
 			media: {
-				mimeType,
+				// Mimetype for the data being uploaded
+				mimeType: genericTypeToProviderMimeType(mimeType),
 				// body: fs.createReadStream(filePath),
 			},
 			requestBody: fileMetadata,
@@ -180,4 +182,24 @@ function convertGoogleDriveFileToProviderFile(file: drive_v3.Schema$File): File 
 		creationDate: file.createdTime ?? null,
 		modificationDate: file.modifiedTime ?? null,
 	};
+}
+
+function returnedValuesToFields(returnedValues: string[]) {
+	// Handle undefined behavior
+	return returnedValues.join(", ");
+}
+
+function genericTypeToProviderMimeType(type: string) {
+	switch (type) {
+		case "document":
+			return "application/vnd.google-apps.document";
+		case "spreadsheet":
+			return "application/vnd.google-apps.spreadsheet";
+		case "presentation":
+			return "application/vnd.google-apps.presentation";
+		case "folder":
+			return "application/vnd.google-apps.folder";
+		default:
+			return type;
+	}
 }

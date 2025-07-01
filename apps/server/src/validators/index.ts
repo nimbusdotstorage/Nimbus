@@ -39,13 +39,21 @@ export const getFilesSchema = () =>
 		// TODO: remove the returnedValues default
 		parent: z.string().min(1).default("root"),
 		pageSize: z.number().min(10).max(100).default(20),
-		returnedValues: z.string().optional().default("files(id, name, mimeType, size, modifiedTime, parents)"),
+		returnedValues: z
+			.string()
+			.array()
+			// Remove later
+			.default(["id", "name", "mimeType", "size", "modifiedTime", "parents"]),
 		pageToken: z.string().optional(),
 	});
 
 export const getFileByIdSchema = z.object({
-	id: fileIdSchema,
-	returnedValues: z.string().optional().default("files(id, name, mimeType, size, modifiedTime, parents)"),
+	fileId: fileIdSchema,
+	returnedValues: z
+		.string()
+		.array()
+		// Remove later
+		.default(["id", "name", "mimeType", "size", "modifiedTime", "parents"]),
 });
 
 export const deleteFileSchema = z.object({

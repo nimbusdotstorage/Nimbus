@@ -27,16 +27,27 @@ export interface Tag {
 	children?: Tag[]; // For nested tags
 }
 
+// Dialog prop types
+
 export interface CreateFolderDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	onCreateFolder: (folderName: string, parentId?: string | undefined) => void;
 }
 
 export interface UploadFileDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	onUpload: (files: FileList) => void;
+}
+
+// File operation hook types
+
+export interface DeleteFileParams {
+	fileId: string;
+}
+
+export interface CreateFolderParams {
+	name: string;
+	parentId?: string;
 }
 
 export interface AuthState {
@@ -44,20 +55,11 @@ export interface AuthState {
 	error: string | null;
 }
 
-export interface DeleteFileParams {
-	id: string;
-}
-
 export interface AuthCardProps extends ComponentProps<"div"> {
 	title: string;
 	description: string;
 	navigationType: "signin" | "signup";
 	children: ReactNode;
-}
-
-export interface CreateFolderParams {
-	name: string;
-	parentId?: string;
 }
 
 type SocialProvider = "google" | "microsoft";

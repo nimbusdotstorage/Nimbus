@@ -54,6 +54,7 @@ filesRouter.get("/", async (c: Context) => {
 });
 
 // Get a specific file from
+// TODO: Grab fileId from url path, not the params
 filesRouter.get("/:id", async (c: Context) => {
 	const user = c.get("user");
 	if (!user) {
@@ -76,7 +77,7 @@ filesRouter.get("/:id", async (c: Context) => {
 		return c.json<ApiResponse>({ success: false, message: error.errors[0]?.message }, 400);
 	}
 
-	const fileId = data.id;
+	const fileId = data.fileId;
 	if (!fileId) {
 		return c.json<ApiResponse>({ success: false, message: "File ID not provided" }, 400);
 	}
@@ -189,7 +190,7 @@ filesRouter.post("/", async (c: Context) => {
 	//Validation
 	const { error, data } = createFileSchema.safeParse(c.req.query());
 	if (error) {
-		return c.json<ApiResponse>({ success: false, message: error.errors[0]?.message }, 400);
+		return c.json<ApiResponse>({ success: false, message: error.message }, 400);
 	}
 
 	const accessToken = account.accessToken;
@@ -200,6 +201,7 @@ filesRouter.post("/", async (c: Context) => {
 	const name = data.name;
 	const mimeType = data.mimeType;
 	const parent = data.parent ? data.parent : undefined;
+
 	const drive = await getDriveManagerForUser(user, c.req.raw.headers);
 	const success = await drive.createFile(name, mimeType, parent);
 

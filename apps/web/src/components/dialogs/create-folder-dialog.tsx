@@ -6,15 +6,19 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import { useCreateFolder } from "@/hooks/useFileOperations";
 import type { CreateFolderDialogProps } from "@/lib/types";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
-export function CreateFolderDialog({ open, onOpenChange, onCreateFolder }: CreateFolderDialogProps) {
+export function CreateFolderDialog({ open, onOpenChange }: CreateFolderDialogProps) {
+	const queryClient = useQueryClient();
 	const [folderName, setFolderName] = useState("");
+	const { mutate: createFolderMutation, isPending } = useCreateFolder();
 
 	// We will get the parentId from the url. When a folder is clicked, it will enter the folder and display the files in that folder.
 	const parentId = undefined;
@@ -24,7 +28,16 @@ export function CreateFolderDialog({ open, onOpenChange, onCreateFolder }: Creat
 		if (!folderName.trim()) return;
 
 		try {
-			await onCreateFolder(folderName.trim(), parentId);
+			createFolderMutation(
+				{ name: folderName, parentId },
+				{
+					onSuccess: async () => {
+						onOpenChange(false);
+						setFolderName("");
+						await queryClient.invalidateQueries({ queryKey: ["files"] });
+					},
+				}
+			);
 		} catch {
 			toast.error("Failed to create folder");
 		}
@@ -67,7 +80,7 @@ export function CreateFolderDialog({ open, onOpenChange, onCreateFolder }: Creat
 						>
 							Cancel
 						</Button>
-						<Button type="submit" disabled={!folderName.trim()} className="cursor-pointer">
+						<Button type="submit" disabled={!folderName.trim() || isPending} className="cursor-pointer">
 							Create
 						</Button>
 					</DialogFooter>

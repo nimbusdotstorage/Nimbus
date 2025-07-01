@@ -15,7 +15,7 @@ export interface File {
 	tags?: Tag[];
 }
 
-export interface Tag {
+interface Tag {
 	id: string;
 	name: string;
 	color: string;

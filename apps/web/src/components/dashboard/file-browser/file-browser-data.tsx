@@ -197,12 +197,13 @@ function FileTags({ file, availableTags, refetch }: { file: File; availableTags:
 }
 
 function FileActions({ id }: { id: string }) {
-	const { mutate: deleteFile, isPending } = useDeleteFile(id);
+	const { mutate: deleteFile, isPending } = useDeleteFile();
 
 	const handleDelete = (e: React.MouseEvent) => {
 		e.preventDefault();
 		e.stopPropagation();
-		deleteFile(undefined);
+		// Do something here with the on success/on error stuff. Maybe some better user experience stuff.
+		deleteFile({ fileId: id }, {});
 	};
 
 	return (
