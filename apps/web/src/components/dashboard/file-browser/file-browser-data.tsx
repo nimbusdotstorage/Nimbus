@@ -23,13 +23,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { RenameFileDialog } from "@/components/dialogs/rename-file-dialog";
 import { DeleteFileDialog } from "@/components/dialogs/delete-file-dialog";
-import { useDeleteFile, useRenameFile } from "@/hooks/useFileOperations";
+import { useDeleteFile, useUpdateFile } from "@/hooks/useFileOperations";
 import { useRouter, useSearchParams } from "next/navigation";
 import { formatFileSize } from "@/lib/file-utils";
 import { Button } from "@/components/ui/button";
 import { PdfIcon } from "@/components/icons";
 import { useTags } from "@/hooks/useTags";
-import type { File } from "@/lib/types";
+import type { _File } from "@/lib/types";
 import { fileSize } from "@/lib/utils";
 import { FileTags } from "./file-tags";
 import { useState } from "react";
@@ -43,11 +43,11 @@ export function FileBrowserData({
 	onOptimisticRename,
 	onRollback,
 }: {
-	data: File[];
+	data: _File[];
 	refetch: () => void;
 	onOptimisticDelete?: (fileId: string) => void;
 	onOptimisticRename?: (fileId: string, newName: string) => void;
-	onRollback?: () => void;
+	onRollback: () => void;
 }) {
 	return (
 		<FilesList
@@ -67,11 +67,11 @@ function FilesList({
 	onOptimisticRename,
 	onRollback,
 }: {
-	data: File[];
+	data: _File[];
 	refetch: () => void;
 	onOptimisticDelete?: (fileId: string) => void;
 	onOptimisticRename?: (fileId: string, newName: string) => void;
-	onRollback?: () => void;
+	onRollback: () => void;
 }) {
 	const { tags } = useTags();
 	const router = useRouter();
@@ -117,7 +117,8 @@ function FilesList({
 							: file.creationDate;
 
 						// Determine file type for dialogs
-						// TODO: Adjust this to use the provder agnostic "folder"
+						// TODO: Adjust this to use the provider agnostic "folder". This is a big one. Do this ASAP
+						// TODO: Will need to create two-way functions in G Drive and OneDrive providers to translate generic folder/file type to provider specific type
 						const fileType =
 							file.mimeType === "application/vnd.google-apps.folder" || file.mimeType === "folder" ? "folder" : "file";
 
@@ -170,14 +171,14 @@ function FileActions({
 	onOptimisticRename,
 	onRollback,
 }: {
-	file: File;
+	file: _File;
 	fileType: "file" | "folder";
 	onOptimisticDelete?: (fileId: string) => void;
 	onOptimisticRename?: (fileId: string, newName: string) => void;
-	onRollback?: () => void;
+	onRollback: () => void;
 }) {
 	const { mutate: deleteFile } = useDeleteFile();
-	const { mutate: renameFile } = useRenameFile();
+	const { mutate: renameFile } = useUpdateFile();
 	const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 	const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
 
@@ -189,7 +190,7 @@ function FileActions({
 			{ fileId: file.id },
 			{
 				onError: () => {
-					onRollback?.();
+					onRollback();
 				},
 			}
 		);

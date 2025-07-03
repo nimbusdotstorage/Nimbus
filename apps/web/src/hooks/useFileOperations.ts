@@ -1,4 +1,4 @@
-import type { CreateFolderParams, DeleteFileParams, RenameFileParams } from "@/lib/types";
+import type { CreateFolderParams, DeleteFileParams, UpdateFileParams, UploadFileParams } from "@/lib/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { clientEnv } from "@/lib/env/client-env";
 import axios, { type AxiosError } from "axios";
@@ -64,37 +64,12 @@ export function useDeleteFile() {
 	});
 }
 
-export function useRenameFile() {
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationFn: async ({ fileId, name }: RenameFileParams) => {
-			const response = await axios.put(API_BASE, null, {
-				params: { fileId, name },
-				headers: {
-					"Content-Type": "application/json",
-				},
-				withCredentials: true,
-				signal: new AbortController().signal,
-			});
-			return response.data;
-		},
-		onSuccess: async () => {
-			await queryClient.invalidateQueries({ queryKey: ["files"] });
-		},
-		onError: (error: AxiosError) => {
-			console.error("Error renaming file:", error);
-			const errorMessage = error.message || "Failed to rename file";
-			toast.error(errorMessage);
-		},
-	});
-}
-
 export function useUpdateFile() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: async ({ fileId, name }: { fileId: string; name: string }) => {
-			const response = await axios.put(API_BASE, {
-				params: { fileId, name },
+		mutationFn: async ({ fileId, ...dataToUpdate }: UpdateFileParams) => {
+			const response = await axios.put(`${API_BASE}`, dataToUpdate, {
+				params: { fileId },
 				...defaultAxiosConfig,
 			});
 			return response.data;
@@ -137,8 +112,42 @@ export function useCreateFolder() {
 	});
 }
 
-// TODO: Implement file upload hooks
+export function useUploadFile() {
+	const queryClient = useQueryClient();
 
-export function useUploadFile() {}
+	return useMutation({
+		mutationFn: async ({ file, parentId, onProgress, returnedValues }: UploadFileParams) => {
+			// ? Maybe look into Tanstack Form for this implementation
+			const formData = new FormData();
+			formData.append("file", file);
+
+			const response = await axios.post(`${API_BASE}/upload`, formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+				withCredentials: true,
+				params: {
+					parentId,
+					returnedValues,
+				},
+				onUploadProgress: progressEvent => {
+					if (onProgress && progressEvent.total) {
+						const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+						onProgress(percentCompleted);
+					}
+				},
+			});
+
+			return response.data;
+		},
+		onSuccess: async () => {
+			// Invalidate the files query to refetch the updated list
+			await queryClient.invalidateQueries({ queryKey: ["files"] });
+		},
+		onError: (error: AxiosError<{ message?: string }>) => {
+			console.error("Error uploading file:", error);
+		},
+	});
+}
 
 export function useUploadFolder() {}

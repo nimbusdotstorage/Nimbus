@@ -2,7 +2,7 @@ import type { DriveInfo, File } from "@/providers/interface/types";
 import type { Provider } from "@/providers/interface/provider";
 import { OAuth2Client } from "google-auth-library";
 import { drive_v3 } from "@googleapis/drive";
-// import fs from "fs";
+import { Readable } from "stream";
 
 export class GoogleDriveProvider implements Provider {
 	private drive: drive_v3.Drive;
@@ -76,11 +76,11 @@ export class GoogleDriveProvider implements Provider {
 		parent?: string
 		// filePath?: string or something to get the file from the user file system
 	): Promise<File | null> {
-		const fileMetadata: { name: string; mimeType: string; parent?: string } = {
+		const fileMetadata: drive_v3.Schema$File = {
 			name,
 			//mimeType for the file itself
 			mimeType: genericTypeToProviderMimeType(mimeType),
-			parent,
+			parents: parent ? [parent] : ["root"],
 		};
 
 		const response = await this.drive.files.create({
@@ -147,6 +147,59 @@ export class GoogleDriveProvider implements Provider {
 		return this.createFile(name, "application/vnd.google-apps.folder", parent);
 	}
 
+	/**
+	 * Upload a file to Google Drive
+	 * @param name The name of the file
+	 * @param mimeType The MIME type of the file
+	 * @param fileContent The file content as a Buffer or Readable stream
+	 * @param returnedValues The file values you want to return
+	 * @param parent The parent folder ID. Optional. Defaults to root.
+	 * @returns The uploaded file information
+	 */
+	async uploadFile(
+		name: string,
+		mimeType: string,
+		fileContent: Buffer | Readable,
+		returnedValues: string[],
+		parent?: string
+	): Promise<File | null> {
+		let contentStream: Readable;
+		if (Buffer.isBuffer(fileContent)) {
+			contentStream = new Readable();
+			contentStream.push(fileContent);
+			contentStream.push(null);
+		} else {
+			contentStream = fileContent;
+		}
+		try {
+			const fileMetadata: drive_v3.Schema$File = {
+				name,
+				mimeType: genericTypeToProviderMimeType(mimeType),
+				parents: parent ? [parent] : ["root"],
+			};
+
+			const media = {
+				mimeType: genericTypeToProviderMimeType(mimeType),
+				body: contentStream,
+			};
+
+			const response = await this.drive.files.create({
+				requestBody: fileMetadata,
+				media,
+				fields: returnedValuesToFields(returnedValues),
+			});
+
+			if (!response.data) {
+				return null;
+			}
+
+			return convertGoogleDriveFileToProviderFile(response.data);
+		} catch (error) {
+			console.error("Error uploading file to Google Drive:", error);
+			throw error;
+		}
+	}
+
 	// Drive methods
 
 	async getDriveInfo(): Promise<DriveInfo | null> {
@@ -188,17 +241,13 @@ function returnedValuesToFields(returnedValues: string[]) {
 	return returnedValues.join(", ");
 }
 
-function genericTypeToProviderMimeType(type: string) {
-	switch (type) {
-		case "document":
-			return "application/vnd.google-apps.document";
-		case "spreadsheet":
-			return "application/vnd.google-apps.spreadsheet";
-		case "presentation":
-			return "application/vnd.google-apps.presentation";
-		case "folder":
-			return "application/vnd.google-apps.folder";
-		default:
-			return type;
-	}
+function genericTypeToProviderMimeType(type: string): string {
+	const mimeTypeMap: Record<string, string> = {
+		document: "application/vnd.google-apps.document",
+		spreadsheet: "application/vnd.google-apps.spreadsheet",
+		presentation: "application/vnd.google-apps.presentation",
+		folder: "application/vnd.google-apps.folder",
+	};
+
+	return mimeTypeMap[type] || type;
 }

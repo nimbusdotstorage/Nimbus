@@ -8,13 +8,13 @@ import { CreateTagDialog } from "@/components/dialogs/create-tag-dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useTags } from "@/hooks/useTags";
+import type { _File } from "@/lib/types";
 import { Plus, X } from "lucide-react";
 import type { Tag } from "@/lib/types";
-import type { File } from "@/lib/types";
 import { useState } from "react";
 
 interface FileTagsProps {
-	file: File;
+	file: _File;
 	availableTags: Tag[];
 	refetch: () => void;
 }

@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
-export function CreateFolderDialog({ open, onOpenChange, parentFolderId }: CreateFolderDialogProps) {
+export function CreateFolderDialog({ open, onOpenChange, parentId }: CreateFolderDialogProps) {
 	const [folderName, setFolderName] = useState("");
 	const { mutate: createFolder, isPending } = useCreateFolder();
 
@@ -26,7 +26,7 @@ export function CreateFolderDialog({ open, onOpenChange, parentFolderId }: Creat
 
 		try {
 			createFolder(
-				{ name: folderName, parentId: parentFolderId },
+				{ name: folderName, parentId: parentId },
 				{
 					onSuccess: async () => {
 						onOpenChange(false);
@@ -60,7 +60,7 @@ export function CreateFolderDialog({ open, onOpenChange, parentFolderId }: Creat
 					<DialogTitle>Create New Folder</DialogTitle>
 					<DialogDescription>
 						Enter a name for the new folder.
-						{parentFolderId && " It will be created in the current folder."}
+						{parentId && " It will be created in the current folder."}
 					</DialogDescription>
 				</DialogHeader>
 				<div className="space-y-2">

@@ -55,10 +55,51 @@ export const updateFileSchema = z.object({
 	name: z.string().min(1, "Name cannot be empty").max(100, "Name cannot be longer than 100 characters"),
 });
 
+// Maximum file size: 100MB
+export const MAX_FILE_SIZE = 1000 * 1024 * 1024;
+// Allowed MIME types
+// TODO: Determine a better way to handle mimeType enforcement.
+export const ALLOWED_MIME_TYPES = [
+	"image/jpeg",
+	"image/png",
+	"image/gif",
+	"image/webp",
+	"image/avif",
+	"image/bmp",
+	"image/svg+xml",
+	"image/tiff",
+	"image/webp",
+	"image/x-icon",
+	"video/mp4",
+	"video/mpeg",
+	"video/quicktime",
+	"video/webm",
+	"video/x-msvideo",
+	"video/x-ms-wmv",
+	"application/pdf",
+	"text/plain",
+	"application/msword",
+	"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+	"application/vnd.ms-excel",
+	"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+	"application/vnd.ms-powerpoint",
+	"application/vnd.openxmlformats-officedocument.presentationml.presentation",
+];
+
 export const createFileSchema = z.object({
 	name: z.string().min(1, "Name cannot be empty").max(100, "Name cannot be longer than 100 characters"),
 	mimeType: z.string().min(1, "MIME type cannot be empty").max(100, "MIME type cannot be longer than 100 characters"),
 	parent: fileIdSchema.optional(),
+});
+
+export const uploadFileSchema = z.object({
+	parentId: fileIdSchema,
+	// File size and mime is validated here and on the backend
+	file: z
+		.custom<File>(file => file instanceof File, { message: "Invalid file" })
+		.refine(file => file.size <= MAX_FILE_SIZE, { message: "File size must be less than 100MB" })
+		.refine(file => ALLOWED_MIME_TYPES.includes(file.type), { message: "Invalid file type" }),
+	returnedValues: z.string().array(),
 });
 
 // Tag schemas

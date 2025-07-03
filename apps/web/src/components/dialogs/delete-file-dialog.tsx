@@ -37,9 +37,16 @@ export function DeleteFileDialog({ isOpen, onClose, onDelete, fileName, fileType
 		}
 	};
 
+	const handleKeyDown = async (e: React.KeyboardEvent) => {
+		if (e.key === "Enter") {
+			e.preventDefault();
+			await handleDelete();
+		}
+	};
+
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
-			<DialogContent>
+			<DialogContent onKeyDown={handleKeyDown}>
 				<DialogHeader>
 					<DialogTitle>Delete {fileType === "folder" ? "Folder" : "File"}</DialogTitle>
 					<DialogDescription>

@@ -3,7 +3,7 @@ import type { ChangeEvent, ComponentProps, ReactNode } from "react";
 import type { Button } from "@/components/ui/button";
 import type { Input } from "@/components/ui/input";
 
-export interface File {
+export interface _File {
 	id: string;
 	name: string;
 	parent: string;
@@ -36,12 +36,13 @@ export interface Tag {
 export interface CreateFolderDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	parentFolderId: string;
+	parentId: string;
 }
 
 export interface UploadFileDialogProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
+	parentId: string;
 }
 
 // File operation hook types
@@ -55,10 +56,20 @@ export interface CreateFolderParams {
 	parentId?: string;
 }
 
-export interface RenameFileParams {
+export interface UpdateFileParams {
 	fileId: string;
-	name: string;
+	name?: string;
+	// Add other update properties like descriptions later
 }
+
+export interface UploadFileParams {
+	file: File; // Node file type
+	parentId: string;
+	onProgress?: (progress: number) => void;
+	returnedValues: string[];
+}
+
+// Auth types
 
 export interface AuthState {
 	isLoading: boolean;
@@ -84,6 +95,8 @@ export interface PasswordInputProps extends Omit<ComponentProps<typeof Input>, "
 	value?: string;
 	onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
+
+// Drive route types
 
 export interface DriveInfo {
 	usage: string;

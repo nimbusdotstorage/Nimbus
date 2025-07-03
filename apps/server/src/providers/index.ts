@@ -16,6 +16,9 @@ const createDriveManager = (providerName: ProviderName, accessToken: string) => 
 };
 
 export const getDriveManagerForUser = async (user: Session["user"] | null, headers: Headers) => {
+	if (!user) {
+		throw new Error("User not authenticated");
+	}
 	const account = await getAccount(user, headers);
 
 	if (!account.accessToken || !account.providerId) {

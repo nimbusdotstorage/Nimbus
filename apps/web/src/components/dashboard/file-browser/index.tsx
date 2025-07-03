@@ -8,7 +8,7 @@ import { useGetFiles } from "@/hooks/useFileOperations";
 import { useSearchParams } from "next/navigation";
 import { Loader } from "@/components/loader";
 import { useState, useEffect } from "react";
-import type { File } from "@/lib/types";
+import type { _File } from "@/lib/types";
 
 export function FileBrowser() {
 	const searchParams = useSearchParams();
@@ -19,13 +19,13 @@ export function FileBrowser() {
 		folderId,
 		30,
 		// TODO: implement sorting, filtering, pagination, and a generalized web content/view interfaces
-		["id", "name", "mimeType", "size", "webContentLink", "webViewLink"],
+		["id", "name", "mimeType", "size", "modifiedTime", "webContentLink", "webViewLink"],
 		undefined
 	);
 
 	// Local state for optimistic updates
-	const [localFiles, setLocalFiles] = useState<File[]>([]);
-	const [originalFiles, setOriginalFiles] = useState<File[]>([]);
+	const [localFiles, setLocalFiles] = useState<_File[]>([]);
+	const [originalFiles, setOriginalFiles] = useState<_File[]>([]);
 
 	// Update local state when server data changes
 	useEffect(() => {
