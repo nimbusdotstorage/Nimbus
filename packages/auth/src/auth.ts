@@ -1,5 +1,6 @@
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { extractTokenFromUrl } from "@/utils/extract-token";
+import { genericOAuth } from "better-auth/plugins";
 import { sendMail } from "@/utils/send-mail";
 import { betterAuth } from "better-auth";
 import schema from "@nimbus/db/schema";
@@ -50,6 +51,27 @@ export const auth = betterAuth({
 			prompt: "consent",
 		},
 	},
+
+	plugins: [
+		genericOAuth({
+			config: [
+				{
+					providerId: "box",
+					clientId: process.env.BOX_CLIENT_ID as string,
+					clientSecret: process.env.BOX_CLIENT_SECRET as string,
+					authorizationUrl: "https://account.box.com/api/oauth2/authorize",
+					tokenUrl: "https://api.box.com/oauth2/token",
+					userInfoUrl: "https://api.box.com/2.0/users/me",
+					mapProfileToUser: profile => ({
+						id: profile.id,
+						name: profile.name,
+						email: profile.login,
+					}),
+					scopes: ["root_readwrite"],
+				},
+			],
+		}),
+	],
 });
 
 export type Session = typeof auth.$Infer.Session;

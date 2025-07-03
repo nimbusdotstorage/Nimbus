@@ -3,11 +3,16 @@
 import type { SocialAuthButtonProps } from "@/lib/types";
 import { Google } from "@/components/icons/google";
 import { Button } from "@/components/ui/button";
+import { Box } from "@/components/icons/box";
 
 const providerConfig = {
 	google: {
 		icon: Google,
 		name: "Google",
+	},
+	box: {
+		icon: Box,
+		name: "Box",
 	},
 } as const;
 
