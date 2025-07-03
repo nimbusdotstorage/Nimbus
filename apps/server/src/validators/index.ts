@@ -34,26 +34,16 @@ export const emailSchema = z.object({
 		}, "Invalid email, please try again"),
 });
 
-export const getFilesSchema = () =>
-	z.object({
-		// TODO: remove the returnedValues default
-		parent: z.string().min(1).default("root"),
-		pageSize: z.number().min(10).max(100).default(20),
-		returnedValues: z
-			.string()
-			.array()
-			// Remove later
-			.default(["id", "name", "mimeType", "size", "modifiedTime", "parents"]),
-		pageToken: z.string().optional(),
-	});
+export const getFilesSchema = z.object({
+	parentId: z.string().min(1).default("root"),
+	pageSize: z.coerce.number().int().min(1).max(100).default(30),
+	returnedValues: z.string().array(),
+	pageToken: z.string().optional(),
+});
 
 export const getFileByIdSchema = z.object({
 	fileId: fileIdSchema,
-	returnedValues: z
-		.string()
-		.array()
-		// Remove later
-		.default(["id", "name", "mimeType", "size", "modifiedTime", "parents"]),
+	returnedValues: z.string().array(),
 });
 
 export const deleteFileSchema = z.object({

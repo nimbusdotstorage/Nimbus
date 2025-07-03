@@ -13,6 +13,9 @@ export interface File {
 	creationDate: string | null;
 	modificationDate: string | null;
 	tags?: Tag[];
+	// ! these are temporary Google drive specific properties. Remove them when we have a better implementation
+	webContentLink: string | null;
+	webViewLink: string | null;
 }
 
 interface Tag {

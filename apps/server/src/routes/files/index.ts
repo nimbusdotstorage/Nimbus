@@ -29,14 +29,19 @@ filesRouter.get("/", async (c: Context) => {
 		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
 	}
 
-	const { data, error } = getFilesSchema().safeParse(c.req.query());
+	const { data, error } = getFilesSchema.safeParse({
+		parentId: c.req.query("parentId"),
+		pageSize: c.req.query("pageSize"),
+		returnedValues: c.req.queries("returnedValues[]"),
+		pageToken: c.req.query("pageToken") ?? undefined,
+	});
 
 	if (error) {
 		return c.json<ApiResponse>({ success: false, message: error.errors[0]?.message }, 400);
 	}
 
 	const drive = await getDriveManagerForUser(user, c.req.raw.headers);
-	const res = await drive.listFiles(data.parent, data.pageSize, data.returnedValues, data.pageToken);
+	const res = await drive.listFiles(data.parentId, data.pageSize, data.returnedValues, data.pageToken);
 
 	if (!res.files) {
 		return c.json<ApiResponse>({ success: false, message: "Files not found" }, 404);

@@ -177,6 +177,9 @@ function convertGoogleDriveFileToProviderFile(file: drive_v3.Schema$File): File 
 		mimeType: file.mimeType ?? "",
 		creationDate: file.createdTime ?? null,
 		modificationDate: file.modifiedTime ?? null,
+		// ! these are temporary Google drive specific properties. Remove them when we have a better implementation
+		webContentLink: file.webContentLink ?? null,
+		webViewLink: file.webViewLink ?? null,
 	};
 }
 

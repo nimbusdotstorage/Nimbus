@@ -4,7 +4,7 @@ import {
 	MoreVertical,
 	ExternalLink,
 	Copy,
-	Download,
+	// Download,
 	Image as ImageIcon,
 	Video,
 	Music,
@@ -24,6 +24,7 @@ import {
 import { RenameFileDialog } from "@/components/dialogs/rename-file-dialog";
 import { DeleteFileDialog } from "@/components/dialogs/delete-file-dialog";
 import { useDeleteFile, useRenameFile } from "@/hooks/useFileOperations";
+import { useRouter, useSearchParams } from "next/navigation";
 import { formatFileSize } from "@/lib/file-utils";
 import { Button } from "@/components/ui/button";
 import { PdfIcon } from "@/components/icons";
@@ -33,6 +34,7 @@ import { fileSize } from "@/lib/utils";
 import { FileTags } from "./file-tags";
 import { useState } from "react";
 import type { JSX } from "react";
+import { toast } from "sonner";
 
 export function FileBrowserData({
 	data,
@@ -72,6 +74,8 @@ function FilesList({
 	onRollback?: () => void;
 }) {
 	const { tags } = useTags();
+	const router = useRouter();
+	const searchParams = useSearchParams();
 
 	return (
 		<div className="overflow-hidden rounded-md border">
@@ -122,6 +126,13 @@ function FilesList({
 								key={file.id}
 								className="hover:bg-accent/10 relative cursor-pointer border-t transition-colors"
 								tabIndex={0}
+								onClick={() => {
+									if (fileType === "folder") {
+										const params = new URLSearchParams(searchParams);
+										params.set("folderId", file.id);
+										router.push(`?${params.toString()}`);
+									}
+								}}
 							>
 								<td className="p-4">
 									<div className="relative z-10 flex min-w-0 items-center gap-3">
@@ -199,22 +210,22 @@ function FileActions({
 	};
 
 	// TODO: Implement these later
-	// const handleCopyLink = async () => {
-	// 	if (file.webViewLink) {
-	// 		await navigator.clipboard.writeText(file.webViewLink);
-	// 		toast.success("Link copied to clipboard");
-	// 	} else {
-	// 		toast.error("No shareable link available");
-	// 	}
-	// };
+	const handleCopyLink = async () => {
+		if (file.webViewLink) {
+			await navigator.clipboard.writeText(file.webViewLink);
+			toast.success("Link copied to clipboard");
+		} else {
+			toast.error("No shareable link available");
+		}
+	};
 
-	// const handleOpenInDrive = () => {
-	// 	if (file.webViewLink) {
-	// 		window.open(file.webViewLink, "_blank");
-	// 	} else {
-	// 		toast.error("Cannot open in Google Drive");
-	// 	}
-	// };
+	const handleOpenInDrive = () => {
+		if (file.webViewLink) {
+			window.open(file.webViewLink, "_blank");
+		} else {
+			toast.error("Cannot open file or folder");
+		}
+	};
 
 	// const handleDownload = () => {
 	// 	if (file.webContentLink) {
@@ -235,33 +246,24 @@ function FileActions({
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align="end">
-						{/* {file.webViewLink && ( */}
-						<DropdownMenuItem
-							// onClick={handleOpenInDrive}
-							className="cursor-pointer"
-						>
-							<ExternalLink className="mr-2 h-4 w-4" />
-							Open in Google Drive
-						</DropdownMenuItem>
-						{/* )}
-						 {file.webContentLink && fileType === "file" && ( */}
-						<DropdownMenuItem
-							// onClick={handleDownload}
-							className="cursor-pointer"
-						>
-							<Download className="mr-2 h-4 w-4" />
-							Download
-						</DropdownMenuItem>
-						{/* )}
-						{file.webViewLink && ( */}
-						<DropdownMenuItem
-							// onClick={handleCopyLink}
-							className="cursor-pointer"
-						>
-							<Copy className="mr-2 h-4 w-4" />
-							Copy link
-						</DropdownMenuItem>
-						{/* )} */}
+						{file.webViewLink && (
+							<DropdownMenuItem onClick={handleOpenInDrive} className="cursor-pointer">
+								<ExternalLink className="mr-2 h-4 w-4" />
+								Open in Google Drive
+							</DropdownMenuItem>
+						)}
+						{/* {file.webContentLink && fileType === "file" && (
+							<DropdownMenuItem onClick={handleDownload} className="cursor-pointer">
+								<Download className="mr-2 h-4 w-4" />
+								Download
+							</DropdownMenuItem>
+						)} */}
+						{file.webViewLink && (
+							<DropdownMenuItem onClick={handleCopyLink} className="cursor-pointer">
+								<Copy className="mr-2 h-4 w-4" />
+								Copy link
+							</DropdownMenuItem>
+						)}
 						<DropdownMenuSeparator />
 						<DropdownMenuItem onClick={() => setIsRenameDialogOpen(true)} className="cursor-pointer">
 							Rename

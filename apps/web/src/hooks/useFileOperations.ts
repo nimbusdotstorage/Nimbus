@@ -13,12 +13,12 @@ const defaultAxiosConfig = {
 	signal: new AbortController().signal,
 };
 
-export function useGetFiles(parentId?: string, pageSize?: number, returnedValues?: string, nextPageToken?: string) {
+export function useGetFiles(parentId: string, pageSize: number, returnedValues: string[], nextPageToken?: string) {
 	return useQuery({
 		queryKey: ["files", parentId, nextPageToken, pageSize],
 		queryFn: async () => {
 			const response = await axios.get(API_BASE, {
-				params: { pageSize, nextPageToken, parentId, returnedValues },
+				params: { parentId, pageSize, returnedValues, nextPageToken },
 				...defaultAxiosConfig,
 			});
 			return response.data;
@@ -28,7 +28,7 @@ export function useGetFiles(parentId?: string, pageSize?: number, returnedValues
 	});
 }
 
-export function useGetFile(fileId: string, returnedValues: string) {
+export function useGetFile(fileId: string, returnedValues: string[]) {
 	return useQuery({
 		queryKey: ["file", fileId, returnedValues],
 		queryFn: async () => {

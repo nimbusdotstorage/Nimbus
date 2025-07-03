@@ -13,8 +13,15 @@ import type { File } from "@/lib/types";
 export function FileBrowser() {
 	const searchParams = useSearchParams();
 	const type = searchParams.get("type");
+	const folderId = searchParams.get("folderId") ?? "root";
 
-	const { data, refetch, isLoading, error } = useGetFiles();
+	const { data, refetch, isLoading, error } = useGetFiles(
+		folderId,
+		30,
+		// TODO: implement sorting, filtering, pagination, and a generalized web content/view interfaces
+		["id", "name", "mimeType", "size", "webContentLink", "webViewLink"],
+		undefined
+	);
 
 	// Local state for optimistic updates
 	const [localFiles, setLocalFiles] = useState<File[]>([]);
