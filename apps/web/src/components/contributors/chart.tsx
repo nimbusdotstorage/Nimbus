@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Area, AreaChart, XAxis } from "recharts";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp } from "lucide-react";
+import { useTheme } from "next-themes";
 
 const chartConfig = {
 	commits: {
@@ -60,10 +61,10 @@ export function ActivityChart({ data }: { data: Data[] }) {
 						<ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
 						<Area
 							dataKey="commits"
-							type="natural"
-							fill="var(--color-commits)"
-							fillOpacity={0.4}
-							stroke="var(--color-commits)"
+							type="monotone"
+							fill="transparent"
+							fillOpacity={1}
+							stroke={useTheme().theme === "dark" ? "#e5e5e5" : "#262626"}
 							strokeWidth={2}
 						/>
 					</AreaChart>
