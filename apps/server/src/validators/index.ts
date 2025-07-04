@@ -1,7 +1,5 @@
 import { z } from "zod";
 
-const ALLOWED_DOMAINS = ["gmail.com", "outlook.com", "yahoo.com", "proton.me"];
-
 const fileIdSchema = z
 	.string()
 	.min(1, "File ID cannot be empty")
@@ -21,17 +19,21 @@ export const emailSchema = z.object({
 			const [, domain] = email.split("@");
 			if (!domain) return false;
 
-			const allowed = ALLOWED_DOMAINS.some(allowed => domain === allowed || domain.endsWith(`.${allowed}`));
-			if (!allowed) return false;
-
 			const labels = domain.split(".");
-			if (labels.length < 2 || labels.length > 3) return false;
+			if (labels.length < 2) return false;
 
+			// Check each label
+			const validLabel = /^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?$/;
+			if (!labels.every(label => label.length > 0 && label.length <= 15 && validLabel.test(label))) {
+				return false;
+			}
+
+			// TLD validation
 			const tld = labels.at(-1);
-			if (!tld) return false;
+			if (!tld || tld.length < 2 || !/^[a-zA-Z]{2,}$/.test(tld)) return false;
 
-			return /^[a-z]{2,63}$/i.test(tld);
-		}, "Invalid email, please try again"),
+			return true;
+		}, "Please enter a valid email address and try again"),
 });
 
 export const getFileByIdSchema = z.object({

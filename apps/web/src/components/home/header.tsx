@@ -25,7 +25,7 @@ export default function Header() {
 				<Tooltip>
 					<TooltipTrigger asChild>
 						<Button variant="ghost" asChild aria-label="Contributors" className="h-9 w-9">
-							<Link href="/contributors" className="hover:text-primary/80 transition-colors">
+							<Link href="/contributors">
 								<Users className="h-5 w-5" />
 							</Link>
 						</Button>
