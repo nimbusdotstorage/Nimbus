@@ -142,3 +142,13 @@ export interface DriveStorageDetails {
 	limit: number;
 	usage: number;
 }
+
+export interface PinnedFolder {
+	id: string;
+	userId: string;
+	folderId: string;
+	name: string;
+	provider: string;
+	createdAt: string;
+	updatedAt: string;
+}

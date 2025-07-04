@@ -101,6 +101,23 @@ export const fileTag = pgTable("file_tag", {
     .notNull(),
 });
 
+// Pinned Folders schema
+export const pinnedFolder = pgTable("pinned_folder", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  folderId: text("folder_id").notNull(),
+  name: text("name").notNull(),
+  provider: text("provider").notNull(),
+  createdAt: timestamp("created_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+  updatedAt: timestamp("updated_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+});
+
 // Waitlist Schema
 export const waitlist = pgTable("waitlist", {
   id: text("id").primaryKey(),
@@ -124,6 +141,7 @@ const schema = {
   verification,
   tag,
   fileTag,
+  pinnedFolder,
   waitlist,
   rateLimitAttempts,
 };

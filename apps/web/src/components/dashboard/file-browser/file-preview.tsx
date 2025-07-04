@@ -6,13 +6,15 @@ import { createRequest } from "@/hooks/createRequest";
 import { Button } from "@/components/ui/button";
 import { useRequest } from "@/hooks/useRequest";
 import { Loader } from "@/components/loader";
+import { useEffect, useState } from "react";
 import { parseError } from "@/utils/error";
-import { useEffect } from "react";
 
 export function FilePreview() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const id = searchParams.get("id");
+
+	const [isFile, setIsFile] = useState(false);
 
 	const fetchFile = createRequest({
 		path: "/files/:id",
@@ -49,6 +51,12 @@ export function FilePreview() {
 	}, [id, data?.id]);
 
 	useEffect(() => {
+		if (data) {
+			setIsFile(data.type !== "folder");
+		}
+	}, [data]);
+
+	useEffect(() => {
 		if (data?.type === "folder") {
 			void refetchFolderContents();
 		}
@@ -76,7 +84,7 @@ export function FilePreview() {
 	};
 
 	return (
-		<Sheet open={!!id} onOpenChange={handleClose}>
+		<Sheet open={!!id && isFile} onOpenChange={handleClose}>
 			<SheetContent className="w-[400px] overflow-y-auto sm:w-[540px]" closeButton={false}>
 				<SheetHeader className="mb-4">
 					<div className="flex items-center justify-between">
