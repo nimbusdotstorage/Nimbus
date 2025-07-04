@@ -56,7 +56,7 @@ export const updateFileSchema = z.object({
 });
 
 // Maximum file size: 100MB
-export const MAX_FILE_SIZE = 1000 * 1024 * 1024;
+export const MAX_FILE_SIZE = 100 * 1024 * 1024;
 // Allowed MIME types
 // TODO: Determine a better way to handle mimeType enforcement.
 export const ALLOWED_MIME_TYPES = [
@@ -68,7 +68,6 @@ export const ALLOWED_MIME_TYPES = [
 	"image/bmp",
 	"image/svg+xml",
 	"image/tiff",
-	"image/webp",
 	"image/x-icon",
 	"video/mp4",
 	"video/mpeg",

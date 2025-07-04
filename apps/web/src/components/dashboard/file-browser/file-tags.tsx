@@ -12,6 +12,7 @@ import type { _File } from "@/lib/types";
 import { Plus, X } from "lucide-react";
 import type { Tag } from "@/lib/types";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface FileTagsProps {
 	file: _File;
@@ -42,6 +43,7 @@ export function FileTags({ file, availableTags, refetch }: FileTagsProps) {
 			},
 			onError: error => {
 				console.error("Failed to create tag:", error);
+				toast.message("Failed to create tag. Please try again.");
 			},
 		});
 	};
@@ -92,7 +94,7 @@ export function FileTags({ file, availableTags, refetch }: FileTagsProps) {
 				<div key={tag.id} className="group relative cursor-pointer">
 					<Badge
 						className="text-muted-foreground hover:bg-muted/80 group relative gap-1 overflow-hidden rounded-md border-0 px-2 py-1 text-xs font-medium transition-all duration-200 group-hover:pr-6"
-						style={{ backgroundColor: tag.color + "20" }}
+						style={{ backgroundColor: `${tag.color}20` }}
 					>
 						<div className="flex items-center gap-1.5">
 							<div className="h-2 w-2 rounded-full" style={{ backgroundColor: tag.color }} />

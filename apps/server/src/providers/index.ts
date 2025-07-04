@@ -25,5 +25,10 @@ export const getDriveManagerForUser = async (user: Session["user"] | null, heade
 		throw new Error("Missing account tokens");
 	}
 
-	return createDriveManager(account.providerId as ProviderName, account.accessToken);
+	const providerName = account.providerId as ProviderName;
+	if (!["google", "microsoft"].includes(providerName)) {
+		throw new Error(`Invalid provider: ${account.providerId}`);
+	}
+
+	return createDriveManager(providerName, account.accessToken);
 };

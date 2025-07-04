@@ -250,7 +250,7 @@ function FileActions({
 						{file.webViewLink && (
 							<DropdownMenuItem onClick={handleOpenInDrive} className="cursor-pointer">
 								<ExternalLink className="mr-2 h-4 w-4" />
-								Open in Google Drive
+								Open
 							</DropdownMenuItem>
 						)}
 						{/* {file.webContentLink && fileType === "file" && (

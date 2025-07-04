@@ -59,7 +59,7 @@ export function UploadFileDialog({ open, onOpenChange, parentId }: UploadFileDia
 						// Calculate overall progress across all files
 						const progressPerFile = Math.floor(100 / files.length);
 						const currentFileProgress = (progress / 100) * progressPerFile;
-						const previousFilesProgress = completedUploads / files.length;
+						const previousFilesProgress = (completedUploads * 100) / files.length;
 						setUploadProgress(previousFilesProgress + currentFileProgress);
 					},
 					returnedValues: ["name"],

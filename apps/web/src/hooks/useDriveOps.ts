@@ -5,7 +5,7 @@ import axios from "axios";
 
 export const useDriveInfo = () => {
 	return useQuery<DriveInfo>({
-		queryKey: ["storageDetails"],
+		queryKey: ["driveInfo"],
 		queryFn: async () => {
 			const response = await axios.get(`${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api/drives/about`, {
 				withCredentials: true,

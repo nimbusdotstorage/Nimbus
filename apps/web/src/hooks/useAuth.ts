@@ -31,16 +31,21 @@ export const useGoogleAuth = () => {
 			const isLoggedIn = await authClient.getSession();
 
 			if (isLoggedIn) {
-				await authClient.linkSocial({ provider: "google", callbackURL: clientEnv.NEXT_PUBLIC_CALLBACK_URL });
+				await toast.promise(
+					authClient.linkSocial({ provider: "google", callbackURL: clientEnv.NEXT_PUBLIC_CALLBACK_URL }),
+					{
+						loading: "Linking Google account...",
+						success: "Successfully linked Google account",
+						error: error => (error instanceof Error ? error.message : "Failed to link Google account"),
+					}
+				);
 			} else {
-				await authClient.signIn.social({ provider: "google", callbackURL: clientEnv.NEXT_PUBLIC_CALLBACK_URL });
+				await toast.promise(signInWithGoogle(), {
+					loading: "Signing in with Google...",
+					success: "Signed in with Google",
+					error: error => (error instanceof Error ? error.message : "Google authentication failed"),
+				});
 			}
-
-			toast.promise(signInWithGoogle(), {
-				loading: "Signing in with Google...",
-				success: "Signed in with Google",
-				error: error => (error instanceof Error ? error.message : "Google authentication failed"),
-			});
 		} catch (error) {
 			const errorMessage = error instanceof Error ? error.message : "Google authentication failed";
 			toast.error(errorMessage);
@@ -61,18 +66,23 @@ export const useMicrosoftAuth = () => {
 			const isLoggedIn = await authClient.getSession();
 
 			if (isLoggedIn) {
-				await authClient.linkSocial({ provider: "microsoft", callbackURL: clientEnv.NEXT_PUBLIC_CALLBACK_URL });
+				await toast.promise(
+					authClient.linkSocial({ provider: "microsoft", callbackURL: clientEnv.NEXT_PUBLIC_CALLBACK_URL }),
+					{
+						loading: "Linking Microsoft account...",
+						success: "Successfully linked Microsoft account",
+						error: error => (error instanceof Error ? error.message : "Failed to link Microsoft account"),
+					}
+				);
 			} else {
-				await authClient.signIn.social({ provider: "microsoft", callbackURL: clientEnv.NEXT_PUBLIC_CALLBACK_URL });
+				await toast.promise(signInWithMicrosoft(), {
+					loading: "Signing in with Microsoft...",
+					success: "Signed in with Microsoft",
+					error: error => (error instanceof Error ? error.message : "Microsoft authentication failed"),
+				});
 			}
-
-			toast.promise(signInWithMicrosoft(), {
-				loading: "Signing in with Microsoft...",
-				success: "Signed in with Microsoft",
-				error: error => (error instanceof Error ? error.message : "Microsoft authentication failed"),
-			});
 		} catch (error) {
-			const errorMessage = error instanceof Error ? error.message : "Google authentication failed";
+			const errorMessage = error instanceof Error ? error.message : "Microsoft authentication failed";
 			toast.error(errorMessage);
 		} finally {
 			setIsLoading(false);

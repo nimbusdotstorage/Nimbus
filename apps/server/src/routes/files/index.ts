@@ -20,8 +20,8 @@ import { TagService } from "@/routes/tags/tag-service";
 import { getDriveManagerForUser } from "@/providers";
 import { securityMiddleware } from "@/middleware";
 import { type Session } from "@nimbus/auth/auth";
+import { Readable } from "node:stream";
 import type { Context } from "hono";
-import { Readable } from "stream";
 import { Hono } from "hono";
 
 const filesRouter = new Hono();
@@ -60,7 +60,8 @@ filesRouter.get(
 		// Add tags to files
 		const filesWithTags = await Promise.all(
 			res.files.map(async file => {
-				const tags = await tagService.getFileTags(file.id!, user.id);
+				if (!file.id) return { ...file, tags: [] };
+				const tags = await tagService.getFileTags(file.id, user.id);
 				return { ...file, tags };
 			})
 		);
@@ -123,7 +124,7 @@ filesRouter.put(
 	async (c: Context) => {
 		const user: Session["user"] = c.get("user");
 
-		const { fileId } = c.req.param();
+		const fileId = c.req.query("fileId");
 		const reqName = (await c.req.json()).name;
 
 		// Validation
@@ -274,7 +275,6 @@ filesRouter.post(
 				);
 			}
 
-			// Get the Google Drive manager with error handling
 			let drive;
 			try {
 				drive = await getDriveManagerForUser(user, c.req.raw.headers);

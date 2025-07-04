@@ -18,7 +18,7 @@ export function useGetFiles(parentId: string, pageSize: number, returnedValues: 
 		queryKey: ["files", parentId, nextPageToken, pageSize],
 		queryFn: async () => {
 			const response = await axios.get(API_BASE, {
-				params: { parentId, pageSize, returnedValues, nextPageToken },
+				params: { parentId, pageSize, returnedValues, pageToken: nextPageToken },
 				...defaultAxiosConfig,
 			});
 			return response.data;

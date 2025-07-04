@@ -2,7 +2,7 @@ import type { DriveInfo, File } from "@/providers/interface/types";
 import type { Provider } from "@/providers/interface/provider";
 import { OAuth2Client } from "google-auth-library";
 import { drive_v3 } from "@googleapis/drive";
-import { Readable } from "stream";
+import { Readable } from "node:stream";
 
 export class GoogleDriveProvider implements Provider {
 	private drive: drive_v3.Drive;
@@ -49,18 +49,16 @@ export class GoogleDriveProvider implements Provider {
 	}
 
 	async getFileById(id: string, returnedValues: string[]): Promise<File | null> {
-		const response = this.drive.files.get({
+		const response = await this.drive.files.get({
 			fileId: id,
 			fields: returnedValuesToFields(returnedValues),
 		});
 
-		if (!response) {
+		if (!response.data) {
 			return null;
 		}
 
-		const file: File = convertGoogleDriveFileToProviderFile((await response).data);
-
-		return file;
+		return convertGoogleDriveFileToProviderFile(response.data);
 	}
 
 	/**
@@ -93,13 +91,11 @@ export class GoogleDriveProvider implements Provider {
 			fields: "id, name, mimeType, parents", // this returns the file object with the specified fields
 		});
 
-		if (!response) {
+		if (!response.data) {
 			return null;
 		}
 
-		const file: File = convertGoogleDriveFileToProviderFile(response.data);
-
-		return file;
+		return convertGoogleDriveFileToProviderFile(response.data);
 	}
 
 	/**
@@ -118,13 +114,11 @@ export class GoogleDriveProvider implements Provider {
 			fields: "id, name, mimeType, parents",
 		});
 
-		if (!response) {
+		if (!response.data) {
 			return null;
 		}
 
-		const file: File = convertGoogleDriveFileToProviderFile(response.data);
-
-		return file;
+		return convertGoogleDriveFileToProviderFile(response.data);
 	}
 
 	/**
