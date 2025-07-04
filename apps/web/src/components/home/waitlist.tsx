@@ -5,14 +5,14 @@ import { clientEnv } from "@/lib/env/client-env";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import NumberFlow from "@number-flow/react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
-	email: z.string().email(),
+	email: z.string().email("Invalid email. Please check the spelling and try again"),
 });
 
 // this is a copy of Analogs waitlist component with some changes
@@ -43,18 +43,26 @@ async function joinWaitlist(email: string): Promise<void> {
 	}
 }
 
-const LOCAL_STORAGE_KEY = "waitlist_count";
+const COUNT_STORAGE_KEY = "waitlist_count";
+const SUCCESS_STORAGE_KEY = "waitlist_success";
 const CACHE_DURATION = 2 * 60 * 60 * 1000;
 
 function useWaitlistCount() {
 	const queryClient = useQueryClient();
 	const [success, setSuccess] = useState(false);
 
+	useEffect(() => {
+		const successState = localStorage.getItem(SUCCESS_STORAGE_KEY);
+		if (successState === "true") {
+			setSuccess(true);
+		}
+	}, []);
+
 	const query = useQuery({
 		queryKey: ["waitlist", "count"],
 		queryFn: async () => {
 			// Try to get cached data from localStorage
-			const cachedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+			const cachedData = localStorage.getItem(COUNT_STORAGE_KEY);
 			if (cachedData) {
 				try {
 					const { count, timestamp } = JSON.parse(cachedData);
@@ -75,7 +83,7 @@ function useWaitlistCount() {
 
 			// set localStorage with fresh data
 			localStorage.setItem(
-				LOCAL_STORAGE_KEY,
+				COUNT_STORAGE_KEY,
 				JSON.stringify({
 					count: data.count,
 					timestamp: Date.now(),
@@ -92,11 +100,13 @@ function useWaitlistCount() {
 		mutationFn: (email: string) => joinWaitlist(email),
 		onSuccess: () => {
 			setSuccess(true);
+			localStorage.setItem(SUCCESS_STORAGE_KEY, "true");
+
 			const newCount = (query.data?.count ?? 0) + 1;
 			queryClient.setQueryData(["waitlist", "count"], { count: newCount });
 			// set localStorage with the new count
 			localStorage.setItem(
-				LOCAL_STORAGE_KEY,
+				COUNT_STORAGE_KEY,
 				JSON.stringify({
 					count: newCount,
 					timestamp: Date.now(),
@@ -122,6 +132,7 @@ export function WaitlistForm({ className }: WaitlistFormProps) {
 		defaultValues: {
 			email: "",
 		},
+		mode: "onSubmit",
 	});
 
 	const waitlist = useWaitlistCount();
@@ -133,7 +144,7 @@ export function WaitlistForm({ className }: WaitlistFormProps) {
 	return (
 		<div className={cn("mx-auto flex w-full max-w-3xl flex-col items-center justify-center gap-4", className)}>
 			{waitlist.success ? (
-				<div className="flex flex-col items-center justify-center gap-4 text-center">
+				<div className="flex flex-col items-center justify-center gap-4 rounded-xl border-1 border-dashed border-neutral-500 bg-neutral-900 p-4 text-center">
 					<p className="text-xl font-semibold">Welcome to the waitlist! 🎉</p>
 					<p className="text-muted-foreground text-base">
 						We&apos;ll let you know when we&#39;re ready to show you what we&#39;ve been working on.
@@ -142,7 +153,11 @@ export function WaitlistForm({ className }: WaitlistFormProps) {
 			) : (
 				<form
 					className="mx-auto flex w-full max-w-md flex-col gap-3 sm:flex-row"
-					onSubmit={handleSubmit(handleJoinWaitlist)}
+					onSubmit={handleSubmit(handleJoinWaitlist, errors => {
+						if (errors.email) {
+							toast.error(errors.email.message);
+						}
+					})}
 				>
 					<Input
 						placeholder="example@0.email"
