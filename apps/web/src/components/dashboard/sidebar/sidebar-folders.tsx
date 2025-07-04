@@ -8,11 +8,12 @@ import {
 	SidebarMenuItem,
 	SidebarMenuButton,
 } from "@/components/ui/sidebar";
-import { ChevronDown, Folder, ImageIcon, Video, Music, Archive, Loader2, PinOff } from "lucide-react";
-import { usePinnedFolders, useUnpinFolder } from "@/hooks/useDriveOps";
-import { AnimatePresence, motion, type Variants } from "motion/react";
+import { ChevronDown, Folder, ImageIcon, Video, Music, Archive, PinOff, FileText } from "lucide-react";
+import { AnimatePresence, motion, type Variants } from "framer-motion";
+import { usePinnedFiles, useUnpinFile } from "@/hooks/useDriveOps";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Loader } from "@/components/loader";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
@@ -58,104 +59,109 @@ const itemVariants: Variants = {
 	},
 };
 
-// Helper to get a custom icon based on folder name
-function getFolderIcon(name: string) {
-	const lower = name.toLowerCase();
-	if (lower.includes("image")) return ImageIcon;
-	if (lower.includes("video")) return Video;
-	if (lower.includes("music")) return Music;
-	if (lower.includes("archive")) return Archive;
-	if (lower.includes("document")) return Folder;
-	if (lower.includes("download")) return Folder;
-	return Folder;
+// Helper to get a custom icon based on file type
+function getFileIcon(type: string) {
+	switch (type) {
+		case "image":
+			return ImageIcon;
+		case "video":
+			return Video;
+		case "music":
+			return Music;
+		case "archive":
+			return Archive;
+		case "document":
+			return FileText;
+		case "folder":
+		default:
+			return Folder;
+	}
 }
 
-export default function SidebarFolders() {
+export default function SidebarPinnedFiles() {
 	const searchParams = useSearchParams();
 	const router = useRouter();
 	const [isOpen, setIsOpen] = useState(true);
-	const { data: pinnedFolders, isLoading } = usePinnedFolders();
-	const unpinFolder = useUnpinFolder();
+	const { data: pinnedFiles, isLoading } = usePinnedFiles();
+	const unpinFile = useUnpinFile();
 
 	const handleUnpin = (id: string) => {
-		unpinFolder.mutate(id);
+		unpinFile.mutate(id);
 	};
 
-	const handleNavigate = (folderId: string) => {
+	const handleNavigate = (fileId: string, type: string) => {
 		const params = new URLSearchParams(searchParams.toString());
-		params.set("folderId", folderId);
+		if (type === "folder") {
+			params.set("folderId", fileId);
+		} else {
+			params.set("id", fileId);
+		}
 		router.push(`?${params.toString()}`);
 	};
 
 	return (
 		<SidebarGroup>
 			<SidebarGroupLabel asChild>
-				<Button
-					variant="ghost"
+				<button
 					onClick={() => setIsOpen(!isOpen)}
-					className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-xs font-medium transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-700"
+					className="hover:bg-accent hover:text-accent-foreground flex w-full cursor-pointer items-center justify-between rounded-md px-3 py-2 text-sm font-medium"
 				>
 					Favorites
-					<motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2, ease: "easeInOut" }}>
-						<ChevronDown className="size-4" />
-					</motion.div>
-				</Button>
+					<ChevronDown className={cn("ml-auto transition-transform", isOpen && "rotate-180")} />
+				</button>
 			</SidebarGroupLabel>
 			<AnimatePresence>
 				{isOpen && (
 					<motion.div
+						key="sidebar-pinned-files"
 						initial="closed"
 						animate="open"
 						exit="closed"
 						variants={containerVariants}
 						style={{ overflow: "hidden" }}
 					>
-						<SidebarGroupContent className="max-h-64 overflow-y-auto pr-1">
+						<SidebarGroupContent>
 							<SidebarMenu>
-								{isLoading ? (
-									<div className="flex items-center justify-center py-4">
-										<Loader2 className="animate-spin" />
-									</div>
-								) : pinnedFolders && pinnedFolders.length > 0 ? (
-									pinnedFolders.map(folder => {
-										const Icon = getFolderIcon(folder.name);
-										return (
-											<motion.div key={folder.id} variants={itemVariants}>
-												<SidebarMenuItem>
-													<SidebarMenuButton
-														className={cn(
-															"group relative flex w-full cursor-pointer items-center justify-between gap-2 px-3 py-1.5 hover:bg-neutral-200 dark:hover:bg-neutral-700"
-														)}
-														tooltip={folder.name}
-														onClick={() => handleNavigate(folder.folderId)}
-													>
-														<div className="flex min-w-0 items-center gap-2">
-															<Icon className="size-4" />
-															<span className="truncate">{folder.name}</span>
-														</div>
-														<span
-															className={cn(
-																"flex-shrink-0 cursor-pointer opacity-0 transition-opacity group-hover:opacity-100",
-																unpinFolder.status === "pending" ? "pointer-events-none" : ""
-															)}
-															onClick={e => {
-																e.stopPropagation();
-																handleUnpin(folder.id);
-															}}
-															aria-label={`Unpin ${folder.name}`}
-															tabIndex={-1}
-															role="button"
+								<motion.div variants={containerVariants} initial="closed" animate="open" exit="closed">
+									{isLoading ? (
+										<Loader />
+									) : pinnedFiles && pinnedFiles.length > 0 ? (
+										pinnedFiles.map(file => {
+											const Icon = getFileIcon(file.type);
+											return (
+												<motion.div key={file.id} className="relative" variants={itemVariants}>
+													<SidebarMenuItem className="group/menu-item relative">
+														<SidebarMenuButton
+															tooltip={file.name}
+															onClick={() => handleNavigate(file.fileId, file.type)}
 														>
-															<PinOff className="text-muted-foreground hover:text-destructive size-3" />
-														</span>
-													</SidebarMenuButton>
-												</SidebarMenuItem>
-											</motion.div>
-										);
-									})
-								) : (
-									<div className="text-muted-foreground px-3 py-2 text-xs">No pinned folders</div>
-								)}
+															<div className="relative flex w-full cursor-pointer items-center gap-2">
+																<Icon className="size-4" />
+																<span>{file.name}</span>
+															</div>
+														</SidebarMenuButton>
+														<div className="absolute top-0 -right-1 z-50 flex translate-x-full transition-transform group-hover/menu-item:translate-x-0">
+															<Button
+																variant="ghost"
+																size="sm"
+																className="cursor-pointer rounded-md p-1.5"
+																onClick={e => {
+																	e.preventDefault();
+																	e.stopPropagation();
+																	handleUnpin(file.id);
+																}}
+															>
+																<PinOff className="size-3" />
+															</Button>
+														</div>
+													</SidebarMenuItem>
+												</motion.div>
+											);
+										})
+									) : (
+										<div className="text-muted-foreground px-3 py-2 text-xs">Your Favorites seems empty.</div>
+									)}
+								</motion.div>
 							</SidebarMenu>
 						</SidebarGroupContent>
 					</motion.div>

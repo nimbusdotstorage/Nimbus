@@ -3,7 +3,7 @@
 import { Suspense, type ComponentProps } from "react";
 
 import { Sidebar, SidebarContent, SidebarHeader } from "@/components/ui/sidebar";
-import SidebarFolders from "@/components/dashboard/sidebar/sidebar-folders";
+import SidebarPinnedFiles from "@/components/dashboard/sidebar/sidebar-folders";
 import StorageFooter from "@/components/dashboard/sidebar/sidebar-footer";
 import UserAccount from "@/components/dashboard/sidebar/user-account";
 import { SearchBar } from "@/components/dashboard/sidebar/search-bar";
@@ -22,7 +22,7 @@ export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
 				Starred Button */}
 
 				<Suspense>
-					<SidebarFolders />
+					<SidebarPinnedFiles />
 				</Suspense>
 
 				{/* Tags */}

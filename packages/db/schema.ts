@@ -101,14 +101,16 @@ export const fileTag = pgTable("file_tag", {
     .notNull(),
 });
 
-// Pinned Folders schema
-export const pinnedFolder = pgTable("pinned_folder", {
+// Pinned Files schema
+export const pinnedFile = pgTable("pinned_file", {
   id: text("id").primaryKey(),
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  folderId: text("folder_id").notNull(),
+  fileId: text("file_id").notNull(),
   name: text("name").notNull(),
+  type: text("type").notNull().default("folder"),
+  mimeType: text("mime_type"),
   provider: text("provider").notNull(),
   createdAt: timestamp("created_at")
     .$defaultFn(() => new Date())
@@ -141,7 +143,7 @@ const schema = {
   verification,
   tag,
   fileTag,
-  pinnedFolder,
+  pinnedFile,
   waitlist,
   rateLimitAttempts,
 };

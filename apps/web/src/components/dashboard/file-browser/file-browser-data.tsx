@@ -5,16 +5,18 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { FileText, Folder, MoreVertical, Plus, X, Pin } from "lucide-react";
 import { CreateTagDialog } from "@/components/dialogs/create-tag-dialog";
-import { FileText, Folder, MoreVertical, Plus, X } from "lucide-react";
 import { useFileOperations } from "@/hooks/useFileOperations";
+import { fileSize, mimeTypeToFileType } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
+import { usePinFile } from "@/hooks/useDriveOps";
 import type { FileItem, Tag } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useTags } from "@/hooks/useTags";
-import { fileSize } from "@/lib/utils";
 import { useState } from "react";
+import { toast } from "sonner";
 import Link from "next/link";
 
 // TODO: Typing of the file data needs to be updated
@@ -42,12 +44,6 @@ function FilesList({ data, refetch }: { data: FileItem[]; refetch: () => void })
 					{data.map(file => {
 						const size = file.size ? fileSize(file.size) : "—";
 						const params = new URLSearchParams(searchParams.toString());
-						if (file.type === "folder") {
-							params.set("folderId", file.id);
-							params.delete("id"); // Remove preview if navigating
-						} else {
-							params.set("id", file.id);
-						}
 
 						return (
 							<tr key={file.id} className="hover:bg-accent/10 relative cursor-pointer border-t transition-colors">
@@ -63,7 +59,7 @@ function FilesList({ data, refetch }: { data: FileItem[]; refetch: () => void })
 								<td className="text-muted-foreground p-3 text-sm">{file.modified}</td>
 								<td className="text-muted-foreground p-3 text-sm">{size}</td>
 								<td className="relative p-3">
-									<FileActions id={file.id} />
+									<FileActions file={file} />
 								</td>
 								<td className="relative p-3">
 									<FileTags file={file} availableTags={tags} refetch={refetch} />
@@ -203,8 +199,32 @@ function FileTags({ file, availableTags, refetch }: { file: FileItem; availableT
 	);
 }
 
-function FileActions({ id }: { id: string }) {
+function FileActions({ file }: { file: FileItem }) {
 	const { handleDeleteFile } = useFileOperations();
+	const pinFileMutation = usePinFile();
+
+	const handlePinFile = () => {
+		// Use MIME type if available, otherwise fall back to the file type
+		const fileType = file.mimeType ? mimeTypeToFileType(file.mimeType) : file.type;
+
+		pinFileMutation.mutate(
+			{
+				fileId: file.id,
+				name: file.name,
+				type: fileType,
+				mimeType: file.mimeType,
+				provider: "google", // TODO: Get actual provider from context
+			},
+			{
+				onSuccess: () => {
+					toast.success("File pinned successfully");
+				},
+				onError: () => {
+					toast.error("Failed to pin file");
+				},
+			}
+		);
+	};
 
 	return (
 		<DropdownMenu>
@@ -219,12 +239,16 @@ function FileActions({ id }: { id: string }) {
 				<DropdownMenuItem>Share</DropdownMenuItem>
 				<DropdownMenuItem>Download</DropdownMenuItem>
 				<DropdownMenuItem>Rename</DropdownMenuItem>
+				<DropdownMenuItem onClick={handlePinFile} disabled={pinFileMutation.isPending}>
+					<Pin className="mr-2 h-4 w-4" />
+					{pinFileMutation.isPending ? "Pinning..." : "Pin to Favorites"}
+				</DropdownMenuItem>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem
 					className="text-destructive"
 					onClick={e => {
 						e.preventDefault();
-						handleDeleteFile(id);
+						handleDeleteFile(file.id);
 					}}
 				>
 					Delete

@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import type { DriveStorageDetails, PinnedFolder } from "@/lib/types";
+import type { DriveStorageDetails, PinnedFile } from "@/lib/types";
 import { clientEnv } from "@/lib/env/client-env";
 import axios from "axios";
 
@@ -16,38 +16,38 @@ export const useStorageDetails = () => {
 	});
 };
 
-const PINNED_FOLDERS_QUERY_KEY = "pinnedFolders";
+const PINNED_FILES_QUERY_KEY = "pinnedFiles";
 
-export const usePinnedFolders = () => {
-	return useQuery<PinnedFolder[]>({
-		queryKey: [PINNED_FOLDERS_QUERY_KEY],
+export const usePinnedFiles = () => {
+	return useQuery<PinnedFile[]>({
+		queryKey: [PINNED_FILES_QUERY_KEY],
 		queryFn: async () => {
 			const response = await axios.get(`${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api/drives/pinned`, {
 				withCredentials: true,
 			});
-			// The backend returns folders as a JSON string in the message field
-			const folders = JSON.parse(response.data.message) as PinnedFolder[];
-			return folders;
+			// The backend returns files as a JSON string in the message field
+			const files = JSON.parse(response.data.message) as PinnedFile[];
+			return files;
 		},
 	});
 };
 
-export const usePinFolder = () => {
+export const usePinFile = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: async (data: { folderId: string; name: string; provider: string }) => {
+		mutationFn: async (data: { fileId: string; name: string; type: string; mimeType?: string; provider: string }) => {
 			const response = await axios.post(`${clientEnv.NEXT_PUBLIC_BACKEND_URL}/api/drives/pinned`, data, {
 				withCredentials: true,
 			});
 			return response.data.message as string;
 		},
 		onSuccess: () => {
-			void queryClient.invalidateQueries({ queryKey: [PINNED_FOLDERS_QUERY_KEY] });
+			void queryClient.invalidateQueries({ queryKey: [PINNED_FILES_QUERY_KEY] });
 		},
 	});
 };
 
-export const useUnpinFolder = () => {
+export const useUnpinFile = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: async (id: string) => {
@@ -57,7 +57,7 @@ export const useUnpinFolder = () => {
 			return response.data.message as string;
 		},
 		onSuccess: () => {
-			void queryClient.invalidateQueries({ queryKey: [PINNED_FOLDERS_QUERY_KEY] });
+			void queryClient.invalidateQueries({ queryKey: [PINNED_FILES_QUERY_KEY] });
 		},
 	});
 };

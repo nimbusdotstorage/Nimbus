@@ -1,7 +1,7 @@
 import { GoogleDriveProvider } from "@/providers/google/google-drive";
 import { getAccount } from "@/lib/utils/accounts";
 import type { ApiResponse } from "@/routes/types";
-import { pinnedFolder } from "@nimbus/db/schema";
+import { pinnedFile } from "@nimbus/db/schema";
 import { eq, and } from "drizzle-orm";
 import type { Context } from "hono";
 import { db } from "@nimbus/db";
@@ -35,41 +35,43 @@ drivesRouter.get("/about", async (c: Context) => {
 	return c.json(drive);
 });
 
-// List all pinned folders
+// List all pinned files
 drivesRouter.get("/pinned", async (c: Context) => {
 	const user = c.get("user");
 	if (!user) {
 		return c.json<ApiResponse>({ success: false, message: "User not authenticated" }, 401);
 	}
-	const folders = await db.select().from(pinnedFolder).where(eq(pinnedFolder.userId, user.id));
-	return c.json<ApiResponse>({ success: true, message: JSON.stringify(folders) });
+	const files = await db.select().from(pinnedFile).where(eq(pinnedFile.userId, user.id));
+	return c.json<ApiResponse>({ success: true, message: JSON.stringify(files) });
 });
 
-// Pin a folder
+// Pin a file
 drivesRouter.post("/pinned", async (c: Context) => {
 	const user = c.get("user");
 	if (!user) {
 		return c.json<ApiResponse>({ success: false, message: "User not authenticated" }, 401);
 	}
 	const body = await c.req.json();
-	const { folderId, name, provider } = body;
-	if (!folderId || !name || !provider) {
+	const { fileId, name, type, mimeType, provider } = body;
+	if (!fileId || !name || !provider) {
 		return c.json<ApiResponse>({ success: false, message: "Missing required fields" }, 400);
 	}
 
 	const existing = await db
 		.select()
-		.from(pinnedFolder)
-		.where(and(eq(pinnedFolder.userId, user.id), eq(pinnedFolder.folderId, folderId)));
+		.from(pinnedFile)
+		.where(and(eq(pinnedFile.userId, user.id), eq(pinnedFile.fileId, fileId)));
 	if (existing.length > 0) {
-		return c.json<ApiResponse>({ success: false, message: "Folder already pinned" }, 409);
+		return c.json<ApiResponse>({ success: false, message: "File already pinned" }, 409);
 	}
 	const id = crypto.randomUUID();
-	await db.insert(pinnedFolder).values({
+	await db.insert(pinnedFile).values({
 		id,
 		userId: user.id,
-		folderId,
+		fileId,
 		name,
+		type: type || "folder",
+		mimeType,
 		provider,
 		createdAt: new Date(),
 		updatedAt: new Date(),
@@ -77,7 +79,7 @@ drivesRouter.post("/pinned", async (c: Context) => {
 	return c.json<ApiResponse>({ success: true, message: id });
 });
 
-// Unpin a folder
+// Unpin a file
 drivesRouter.delete("/pinned/:id", async (c: Context) => {
 	const user = c.get("user");
 	if (!user) {
@@ -85,14 +87,14 @@ drivesRouter.delete("/pinned/:id", async (c: Context) => {
 	}
 	const id = c.req.param("id");
 	if (!id) {
-		return c.json<ApiResponse>({ success: false, message: "Missing pinned folder id" }, 400);
+		return c.json<ApiResponse>({ success: false, message: "Missing pinned file id" }, 400);
 	}
 
-	const result = await db.delete(pinnedFolder).where(and(eq(pinnedFolder.id, id), eq(pinnedFolder.userId, user.id)));
+	const result = await db.delete(pinnedFile).where(and(eq(pinnedFile.id, id), eq(pinnedFile.userId, user.id)));
 	if (result.rowCount === 0) {
-		return c.json<ApiResponse>({ success: false, message: "Pinned folder not found" }, 404);
+		return c.json<ApiResponse>({ success: false, message: "Pinned file not found" }, 404);
 	}
-	return c.json<ApiResponse>({ success: true, message: "Pinned folder deleted" });
+	return c.json<ApiResponse>({ success: true, message: "Pinned file deleted" });
 });
 
 export default drivesRouter;

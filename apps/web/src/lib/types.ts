@@ -53,7 +53,8 @@ export interface FileTag {
 export interface FileItem {
 	id: string;
 	name: string;
-	type: "folder" | "document" | "image" | "video";
+	type: "folder" | "document" | "image" | "video" | "music" | "archive";
+	mimeType?: string;
 	size?: string;
 	modified: string;
 	tags?: Tag[]; // Tags associated with this file
@@ -143,11 +144,13 @@ export interface DriveStorageDetails {
 	usage: number;
 }
 
-export interface PinnedFolder {
+export interface PinnedFile {
 	id: string;
 	userId: string;
-	folderId: string;
+	fileId: string;
 	name: string;
+	type: string;
+	mimeType?: string;
 	provider: string;
 	createdAt: string;
 	updatedAt: string;
