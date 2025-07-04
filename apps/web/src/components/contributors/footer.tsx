@@ -2,7 +2,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Star, GitFork, Calendar } from "lucide-react";
 import Link from "next/link";
 
-export function ContributorFooter({ repoName, createdAt }: { repoName: string; createdAt: string }) {
+export function ContributorFooter({
+	repoName,
+	repoUrl,
+	createdAt,
+}: {
+	repoName: string;
+	repoUrl: string;
+	createdAt: string;
+}) {
 	return (
 		<Card className="bg-muted/30 rounded-sm border-dashed">
 			<CardContent className="flex flex-col items-center space-y-4 py-8 text-center">
@@ -14,7 +22,7 @@ export function ContributorFooter({ repoName, createdAt }: { repoName: string; c
 				</div>
 				<div className="flex flex-wrap items-center justify-center gap-4 text-sm">
 					<Link
-						href="https://github.com/nimbusdotstorage/Nimbus"
+						href={repoUrl}
 						target="_blank"
 						rel="noopener noreferrer"
 						className="text-primary inline-flex items-center gap-2 font-medium hover:underline"
@@ -24,7 +32,7 @@ export function ContributorFooter({ repoName, createdAt }: { repoName: string; c
 					</Link>
 					<span className="text-muted-foreground">•</span>
 					<Link
-						href="https://github.com/nimbusdotstorage/Nimbus"
+						href={repoUrl}
 						target="_blank"
 						rel="noopener noreferrer"
 						className="text-primary inline-flex items-center gap-2 font-medium hover:underline"

@@ -7,16 +7,6 @@ import { StatCard } from "@/components/contributors/stats";
 import useContributors from "@/hooks/useContributors";
 import { Badge } from "@/components/ui/badge";
 
-interface RepoStats {
-	name: string;
-	full_name: string;
-	description: string;
-	stargazers_count: number;
-	forks_count: number;
-	watchers_count: number;
-	created_at: string;
-}
-
 export default function Contributors() {
 	const {
 		contributorsLoading,
@@ -51,7 +41,6 @@ export default function Contributors() {
 		);
 	}
 	const sortedContributors = [...(contributors as Contributor[])].sort((a, b) => b.contributions - a.contributions);
-	const repo = repoStats as RepoStats;
 	const totalContributions = sortedContributors.reduce((sum, c) => sum + c.contributions, 0);
 
 	return (
@@ -65,13 +54,13 @@ export default function Contributors() {
 							</span>
 						</h1>
 						<p className="text-muted-foreground mx-auto max-w-2xl text-lg md:text-xl">
-							Meet the incredible developers who make {repo?.name || "Nimbus"} possible
+							Meet the incredible developers who make {repoStats?.name || "Nimbus"} possible
 						</p>
 					</div>
 					<div className="grid grid-cols-2 gap-4 md:grid-cols-4">
 						<StatCard
 							title="Stars"
-							value={repo?.stargazers_count || 0}
+							value={repoStats?.stargazers_count || 0}
 							description="Community love"
 							icon={Star}
 							color="text-yellow-500"
@@ -79,7 +68,7 @@ export default function Contributors() {
 						/>
 						<StatCard
 							title="Forks"
-							value={repo?.forks_count || 0}
+							value={repoStats?.forks_count || 0}
 							description="Active forks"
 							icon={GitFork}
 							color="text-blue-500"
@@ -104,7 +93,7 @@ export default function Contributors() {
 					</div>
 
 					<div className="mx-auto w-full max-w-3xl">
-						<ActivityChart data={activityData!} />
+						<ActivityChart data={activityData || []} />
 					</div>
 
 					<div className="space-y-6">
@@ -128,7 +117,11 @@ export default function Contributors() {
 						</div>
 					</div>
 
-					<ContributorFooter repoName={repo?.name || "Nimbus"} createdAt={repo?.created_at || ""} />
+					<ContributorFooter
+						repoName={repoStats?.name || "Nimbus"}
+						repoUrl={repoStats?.html_url}
+						createdAt={repoStats?.created_at || ""}
+					/>
 				</div>
 			</div>
 		</div>

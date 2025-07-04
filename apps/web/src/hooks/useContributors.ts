@@ -64,8 +64,10 @@ export default function useContributors() {
 
 			const allKeys = Object.keys(commitsByMonth)
 				.map(key => {
-					const [year, month] = key.split("-").map(Number);
-					return new Date(year!, month!, 1);
+					const parts = key.split("-");
+					const year = Number(parts[0]);
+					const month = Number(parts[1]);
+					return new Date(year, month, 1);
 				})
 				.sort((a, b) => a.getTime() - b.getTime());
 
