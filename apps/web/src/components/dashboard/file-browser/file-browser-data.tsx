@@ -42,7 +42,12 @@ function FilesList({ data, refetch }: { data: FileItem[]; refetch: () => void })
 					{data.map(file => {
 						const size = file.size ? fileSize(file.size) : "—";
 						const params = new URLSearchParams(searchParams.toString());
-						params.set("id", file.id);
+						if (file.type === "folder") {
+							params.set("folderId", file.id);
+							params.delete("id"); // Remove preview if navigating
+						} else {
+							params.set("id", file.id);
+						}
 
 						return (
 							<tr key={file.id} className="hover:bg-accent/10 relative cursor-pointer border-t transition-colors">

@@ -13,16 +13,17 @@ import type { FileItem } from "@/lib/types";
 export function FileBrowser() {
 	const searchParams = useSearchParams();
 	const type = searchParams.get("type");
+	const folderId = searchParams.get("folderId");
 	const id = searchParams.get("id");
 
 	const fetchFiles = createRequest({
 		path: "/files",
-		queryParams: { type },
+		queryParams: { type, parentId: folderId },
 	});
 
 	const { data, refetch, isLoading, error } = useRequest<FileItem[]>({
 		request: fetchFiles,
-		triggers: [type],
+		triggers: [type, folderId],
 	});
 
 	return (

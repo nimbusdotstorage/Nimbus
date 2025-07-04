@@ -29,15 +29,17 @@ export class GoogleDriveProvider {
 	 * List files in the user's Google Drive.
 	 * @returns An array of files of type File
 	 */
-	async listFiles(): Promise<File[]> {
-		const response = await this.drive.files.list({
+	async listFiles(parentId?: string): Promise<File[]> {
+		const query: any = {
 			fields: "files(id, name, mimeType, size, createdTime, modifiedTime, trashed, parents)",
-		});
-
+		};
+		if (parentId) {
+			query.q = `'${parentId}' in parents`;
+		}
+		const response = await this.drive.files.list(query);
 		if (!response.files) {
 			return [];
 		}
-
 		return response.files as File[];
 	}
 

@@ -17,39 +17,46 @@ const tagService = new TagService();
 
 // Get all files
 filesRouter.get("/", async (c: Context) => {
-	const user = c.get("user");
-	if (!user) {
-		return c.json<ApiResponse>({ success: false, message: "User not authenticated" }, 401);
+	try {
+		const user = c.get("user");
+		if (!user) {
+			return c.json<ApiResponse>({ success: false, message: "User not authenticated" }, 401);
+		}
+
+		const account = await getAccount(user, c.req.raw.headers);
+		if (!account) {
+			return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
+		}
+
+		const accessToken = account.accessToken;
+		if (!accessToken) {
+			return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
+		}
+
+		const parentId = c.req.query("parentId");
+
+		// * The GoogleDriveProvider will be replaced by a general provider in the future
+		const files = await new GoogleDriveProvider(accessToken).listFiles(parentId);
+		if (!files) {
+			return c.json<ApiResponse>({ success: false, message: "Files not found" }, 404);
+		}
+
+		// Add tags to files
+		const filesWithTags = await Promise.all(
+			files.map(async file => {
+				const tags = await tagService.getFileTags(file.id!, user.id);
+				return { ...file, tags };
+			})
+		);
+
+		// Set cache headers for the list of files
+		// c.header("Cache-Control", CACHE_HEADER);
+		// c.header("Vary", "Authorization"); // Vary cache by Authorization header
+		return c.json(filesWithTags as File[]);
+	} catch (err: any) {
+		// Always return JSON for errors
+		return c.json<ApiResponse>({ success: false, message: err?.message || "Internal Server Error" }, 500);
 	}
-
-	const account = await getAccount(user, c.req.raw.headers);
-	if (!account) {
-		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
-	}
-
-	const accessToken = account.accessToken;
-	if (!accessToken) {
-		return c.json<ApiResponse>({ success: false, message: "Unauthorized access" }, 401);
-	}
-
-	// * The GoogleDriveProvider will be replaced by a general provider in the future
-	const files = await new GoogleDriveProvider(accessToken).listFiles();
-	if (!files) {
-		return c.json<ApiResponse>({ success: false, message: "Files not found" }, 404);
-	}
-
-	// Add tags to files
-	const filesWithTags = await Promise.all(
-		files.map(async file => {
-			const tags = await tagService.getFileTags(file.id!, user.id);
-			return { ...file, tags };
-		})
-	);
-
-	// Set cache headers for the list of files
-	// c.header("Cache-Control", CACHE_HEADER);
-	// c.header("Vary", "Authorization"); // Vary cache by Authorization header
-	return c.json(filesWithTags as File[]);
 });
 
 // Get a specific file from
