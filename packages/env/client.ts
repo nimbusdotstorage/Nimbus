@@ -2,12 +2,7 @@ import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod";
 
 const env = createEnv({
-	runtimeEnv: {
-		VITE_BACKEND_URL: import.meta.env.VITE_BACKEND_URL,
-		VITE_FRONTEND_URL: import.meta.env.VITE_FRONTEND_URL,
-		VITE_POSTHOG_KEY: import.meta.env.VITE_POSTHOG_KEY,
-		VITE_POSTHOG_HOST: import.meta.env.VITE_POSTHOG_HOST,
-	},
+	runtimeEnv: import.meta.env,
 
 	clientPrefix: "VITE_",
 	client: {
