@@ -1,0 +1,14 @@
+{
+	"name": "@nimbus/cli",
+	"version": "0.1.0",
+	"type": "module",
+	"bin": {
+		"nimbus": "./src/index.ts"
+	},
+	"scripts": {
+		"dev": "bun run src/index.ts"
+	},
+	"dependencies": {
+		"commander": "^12.0.0"
+	}
+}
